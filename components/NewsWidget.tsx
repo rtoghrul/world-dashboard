@@ -15,7 +15,7 @@ type NewsItem = {
   source: string
 }
 
-export default function NewsWidget() {
+export default function NewsWidget({ searchQuery = '' }: { searchQuery?: string }) {
   const { tr } = useLang()
   const [tab, setTab] = useState<'war' | 'ai'>('war')
 
@@ -67,7 +67,13 @@ export default function NewsWidget() {
 
         {error && <div className="p-8 text-center text-red-400">{tr.error}</div>}
 
-        {data?.map((item, i) => (
+        {(searchQuery
+          ? data?.filter(item =>
+              item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+          : data
+        )?.map((item, i) => (
           <a
             key={i}
             href={item.link}
