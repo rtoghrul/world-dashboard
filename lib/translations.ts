@@ -68,6 +68,12 @@ type Translations = {
   bigMovers: string
   largeBets: string
   region: string
+  stocks: string
+  stocksDesc: string
+  education: string
+  educationDesc: string
+  freeCourses: string
+  latestResearch: string
 }
 
 const t: Record<Lang, Translations> = {
@@ -124,6 +130,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Big Movers',
     largeBets: 'Largest Bets',
     region: 'Region',
+    stocks: 'Stock Markets',
+    stocksDesc: 'US indices & top stocks live',
+    education: 'Education',
+    educationDesc: 'Free courses & science news',
+    freeCourses: 'Free Courses',
+    latestResearch: 'Latest Research',
   },
   az: {
     title: 'Dünya Paneli',
@@ -178,6 +190,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Böyük Hərəkətlər',
     largeBets: 'Ən Böyük Mərcler',
     region: 'Region',
+    stocks: 'Səhm Bazarları',
+    stocksDesc: 'ABŞ indeksləri & top səhmlər',
+    education: 'Təhsil',
+    educationDesc: 'Pulsuz kurslar & elm xəbərləri',
+    freeCourses: 'Pulsuz Kurslar',
+    latestResearch: 'Son Tədqiqatlar',
   },
   ru: {
     title: 'Мировая Панель',
@@ -232,6 +250,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Крупные движения',
     largeBets: 'Крупные ставки',
     region: 'Регион',
+    stocks: 'Фондовые Рынки',
+    stocksDesc: 'Индексы США и топ акции',
+    education: 'Образование',
+    educationDesc: 'Бесплатные курсы и новости науки',
+    freeCourses: 'Бесплатные Курсы',
+    latestResearch: 'Последние Исследования',
   },
   de: {
     title: 'Welt-Dashboard',
@@ -286,6 +310,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Große Beweger',
     largeBets: 'Größte Wetten',
     region: 'Region',
+    stocks: 'Aktienmärkte',
+    stocksDesc: 'US-Indizes und Top-Aktien live',
+    education: 'Bildung',
+    educationDesc: 'Kostenlose Kurse & Wissenschaftsnews',
+    freeCourses: 'Kostenlose Kurse',
+    latestResearch: 'Neueste Forschung',
   },
   tr: {
     title: 'Dünya Paneli',
@@ -340,6 +370,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Büyük Hareketler',
     largeBets: 'En Büyük Bahisler',
     region: 'Bölge',
+    stocks: 'Hisse Piyasaları',
+    stocksDesc: 'ABD endeksleri ve top hisseler',
+    education: 'Eğitim',
+    educationDesc: 'Ücretsiz kurslar & bilim haberleri',
+    freeCourses: 'Ücretsiz Kurslar',
+    latestResearch: 'Son Araştırmalar',
   },
   fr: {
     title: 'Tableau de Bord Mondial',
@@ -394,6 +430,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Grands Mouvements',
     largeBets: 'Plus Grands Paris',
     region: 'Région',
+    stocks: 'Marchés Boursiers',
+    stocksDesc: 'Indices américains et meilleures actions',
+    education: 'Éducation',
+    educationDesc: 'Cours gratuits & actualités scientifiques',
+    freeCourses: 'Cours Gratuits',
+    latestResearch: 'Dernières Recherches',
   },
   es: {
     title: 'Panel Mundial',
@@ -448,6 +490,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Grandes Movimientos',
     largeBets: 'Apuestas Grandes',
     region: 'Región',
+    stocks: 'Mercados Bursátiles',
+    stocksDesc: 'Índices de EEUU y mejores acciones',
+    education: 'Educación',
+    educationDesc: 'Cursos gratuitos y noticias de ciencia',
+    freeCourses: 'Cursos Gratuitos',
+    latestResearch: 'Últimas Investigaciones',
   },
   zh: {
     title: '世界仪表板',
@@ -502,6 +550,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: '大幅波动',
     largeBets: '最大投注',
     region: '地区',
+    stocks: '股票市场',
+    stocksDesc: '美国指数和热门股票',
+    education: '教育',
+    educationDesc: '免费课程与科学新闻',
+    freeCourses: '免费课程',
+    latestResearch: '最新研究',
   },
   ar: {
     title: 'لوحة العالم',
@@ -556,6 +610,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'أكبر الحركات',
     largeBets: 'أكبر الرهانات',
     region: 'المنطقة',
+    stocks: 'أسواق الأسهم',
+    stocksDesc: 'المؤشرات الأمريكية وأبرز الأسهم',
+    education: 'التعليم',
+    educationDesc: 'دورات مجانية وأخبار علمية',
+    freeCourses: 'دورات مجانية',
+    latestResearch: 'أحدث الأبحاث',
   },
   ja: {
     title: 'ワールドダッシュボード',
@@ -610,6 +670,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: '大きな動き',
     largeBets: '最大の賭け',
     region: '地域',
+    stocks: '株式市場',
+    stocksDesc: '米国指数とトップ株',
+    education: '教育',
+    educationDesc: '無料コース＆科学ニュース',
+    freeCourses: '無料コース',
+    latestResearch: '最新研究',
   },
   it: {
     title: 'Dashboard Mondiale',
@@ -664,6 +730,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Grandi Movimenti',
     largeBets: 'Scommesse Grandi',
     region: 'Regione',
+    stocks: 'Mercati Azionari',
+    stocksDesc: 'Indici USA e top azioni live',
+    education: 'Istruzione',
+    educationDesc: 'Corsi gratuiti e notizie scientifiche',
+    freeCourses: 'Corsi Gratuiti',
+    latestResearch: 'Ultime Ricerche',
   },
   pt: {
     title: 'Painel Mundial',
@@ -718,6 +790,12 @@ const t: Record<Lang, Translations> = {
     bigMovers: 'Grandes Movimentos',
     largeBets: 'Maiores Apostas',
     region: 'Região',
+    stocks: 'Mercados de Ações',
+    stocksDesc: 'Índices dos EUA e melhores ações',
+    education: 'Educação',
+    educationDesc: 'Cursos gratuitos e notícias científicas',
+    freeCourses: 'Cursos Gratuitos',
+    latestResearch: 'Últimas Pesquisas',
   },
 }
 

@@ -1,0 +1,163 @@
+'use client'
+import useSWR from 'swr'
+import { useState } from 'react'
+import { ExternalLink, ChevronDown, GraduationCap, BookOpen } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+type Article = {
+  title: string
+  link: string
+  pubDate: string
+  description: string
+}
+
+const SUBJECTS = [
+  { id: 'math',      label: 'Mathematics', emoji: '📐' },
+  { id: 'geometry',  label: 'Geometry',    emoji: '📏' },
+  { id: 'physics',   label: 'Physics',     emoji: '⚛️' },
+  { id: 'chemistry', label: 'Chemistry',   emoji: '🧪' },
+  { id: 'biology',   label: 'Biology',     emoji: '🧬' },
+  { id: 'anatomy',   label: 'Anatomy',     emoji: '🫀' },
+  { id: 'astronomy', label: 'Astronomy',   emoji: '🔭' },
+  { id: 'languages', label: 'Languages',   emoji: '🗣️' },
+]
+
+const FREE_COURSES = [
+  { name: 'Khan Academy', url: 'https://www.khanacademy.org', desc: 'Free K-12 & university', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+  { name: 'MIT OpenCourseWare', url: 'https://ocw.mit.edu', desc: 'Free MIT lectures & materials', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+  { name: 'Coursera (free)', url: 'https://www.coursera.org/courses?query=free', desc: 'Audit for free', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
+  { name: 'edX', url: 'https://www.edx.org/search?q=free', desc: 'Harvard, MIT & more', color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
+  { name: 'Paul\'s Online Math', url: 'https://tutorial.math.lamar.edu', desc: 'Calculus, algebra, DE', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
+  { name: 'Duolingo', url: 'https://www.duolingo.com', desc: 'Learn any language free', color: 'text-lime-400', bg: 'bg-lime-500/10 border-lime-500/20' },
+  { name: 'arXiv', url: 'https://arxiv.org', desc: 'Free science preprints', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+  { name: 'OpenStax', url: 'https://openstax.org', desc: 'Free peer-reviewed textbooks', color: 'text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20' },
+  { name: 'Brilliant.org', url: 'https://brilliant.org', desc: 'Interactive STEM learning', color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
+  { name: 'Wolfram MathWorld', url: 'https://mathworld.wolfram.com', desc: 'Math encyclopedia', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+]
+
+export default function EducationWidget() {
+  const { tr } = useLang()
+  const [collapsed, setCollapsed] = useState(true)
+  const [subject, setSubject] = useState('physics')
+
+  const { data, isLoading, error } = useSWR<Article[]>(
+    `/api/education?subject=${subject}`,
+    fetcher,
+    { refreshInterval: 3600000 }
+  )
+
+  const currentSubject = SUBJECTS.find(s => s.id === subject)!
+
+  return (
+    <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+      {/* Header */}
+      <div
+        className="px-5 py-3 flex items-center justify-between border-b border-gray-800 cursor-pointer select-none hover:bg-gray-800/20 transition"
+        onClick={() => setCollapsed(c => !c)}
+      >
+        <div className="flex items-center gap-2">
+          <GraduationCap className="w-4 h-4 text-violet-400" />
+          <div>
+            <h2 className="text-white font-semibold text-sm">{tr.education}</h2>
+            <p className="text-gray-500 text-xs">{tr.educationDesc}</p>
+          </div>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+      </div>
+
+      {/* Collapsed preview */}
+      {collapsed && (
+        <div className="px-5 py-3 flex items-center gap-3 flex-wrap">
+          {SUBJECTS.slice(0, 5).map(s => (
+            <span key={s.id} className="text-xs text-gray-400 flex items-center gap-1">
+              {s.emoji} {s.label}
+            </span>
+          ))}
+          <span className="text-gray-600 text-xs">· Khan Academy, MIT OCW & more</span>
+        </div>
+      )}
+
+      {/* Expanded content */}
+      {!collapsed && (
+        <div className="p-4 space-y-4">
+          {/* Subject Tabs */}
+          <div className="flex flex-wrap gap-1.5">
+            {SUBJECTS.map(s => (
+              <button
+                key={s.id}
+                onClick={() => setSubject(s.id)}
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition border ${
+                  subject === s.id
+                    ? 'bg-violet-500/20 text-violet-300 border-violet-500/40'
+                    : 'text-gray-400 hover:text-white border-transparent hover:bg-gray-800'
+                }`}
+              >
+                {s.emoji} {s.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Latest Research News */}
+          <div>
+            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <BookOpen className="w-3 h-3" /> {tr.latestResearch} — {currentSubject.emoji} {currentSubject.label}
+            </p>
+            <div className="space-y-2">
+              {isLoading && Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="animate-pulse p-3 bg-gray-800/40 rounded-xl">
+                  <div className="h-3 bg-gray-700 rounded w-3/4 mb-1.5" />
+                  <div className="h-2 bg-gray-700 rounded w-full" />
+                </div>
+              ))}
+              {error && <div className="p-4 text-center text-red-400 text-sm">{tr.error}</div>}
+              {data?.map((article, i) => (
+                <a
+                  key={i}
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-2 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</p>
+                    {article.description && (
+                      <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{article.description}</p>
+                    )}
+                    <p className="text-gray-600 text-xs mt-1">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · ScienceDaily</p>
+                  </div>
+                  <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Free Courses */}
+          <div>
+            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <GraduationCap className="w-3 h-3" /> {tr.freeCourses}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {FREE_COURSES.map(c => (
+                <a
+                  key={c.url}
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-between p-3 rounded-xl border transition hover:opacity-80 group ${c.bg}`}
+                >
+                  <div>
+                    <p className={`text-xs font-semibold ${c.color}`}>{c.name}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">{c.desc}</p>
+                  </div>
+                  <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

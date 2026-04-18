@@ -13,6 +13,8 @@ import HotelsWidget from '@/components/HotelsWidget'
 import ViralWidget from '@/components/ViralWidget'
 import WhaleWidget from '@/components/WhaleWidget'
 import SocialWidget from '@/components/SocialWidget'
+import StocksWidget from '@/components/StocksWidget'
+import EducationWidget from '@/components/EducationWidget'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 
@@ -33,6 +35,8 @@ export default function HomePage() {
     { id: 'flights', label: `✈️ ${tr.flights}` },
     { id: 'viral', label: `🔥 ${tr.viral}` },
     { id: 'social', label: `📱 ${tr.social}` },
+    { id: 'stocks', label: `📈 ${tr.stocks}` },
+    { id: 'education', label: `🎓 ${tr.education}` },
   ]
 
   const handleRefresh = useCallback(() => setRefreshKey(k => k + 1), [])
@@ -169,6 +173,16 @@ export default function HomePage() {
         {/* Social */}
         <section id="social">
           <SocialWidget />
+        </section>
+
+        {/* Stocks */}
+        <section id="stocks">
+          <StocksWidget />
+        </section>
+
+        {/* Education */}
+        <section id="education">
+          <EducationWidget />
         </section>
 
         <footer className="text-center text-gray-600 text-xs py-4 border-t border-gray-800">
