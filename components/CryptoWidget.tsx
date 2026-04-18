@@ -1,6 +1,7 @@
 'use client'
 import useSWR from 'swr'
-import { TrendingUp, TrendingDown } from 'lucide-react'
+import { useState } from 'react'
+import { TrendingUp, TrendingDown, Search } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -43,20 +44,37 @@ function Sparkline({ data }: { data: number[] }) {
   )
 }
 
-export default function CryptoWidget({ searchQuery = '' }: { searchQuery?: string }) {
+export default function CryptoWidget() {
   const { tr } = useLang()
+  const [query, setQuery] = useState('')
   const { data, error, isLoading, mutate } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
+
+  const filtered = data
+    ? (query ? data.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.symbol.toLowerCase().includes(query.toLowerCase())) : data)
+    : []
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-      <div className="px-5 py-4 flex items-center justify-between border-b border-gray-800">
+      <div className="px-5 py-4 flex items-center justify-between border-b border-gray-800 gap-3">
         <div>
           <h2 className="text-white font-semibold text-base">₿ {tr.crypto}</h2>
           <p className="text-gray-500 text-xs mt-0.5">{tr.cryptoDesc}</p>
         </div>
-        <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
-          {tr.refresh}
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1.5">
+            <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="BTC, Ethereum..."
+              className="bg-transparent text-white text-xs outline-none w-24 placeholder-gray-600"
+            />
+          </div>
+          <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition flex-shrink-0">
+            {tr.refresh}
+          </button>
+        </div>
       </div>
 
       {isLoading && (
@@ -80,7 +98,7 @@ export default function CryptoWidget({ searchQuery = '' }: { searchQuery?: strin
               </tr>
             </thead>
             <tbody>
-              {(searchQuery ? data.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.symbol.toLowerCase().includes(searchQuery.toLowerCase())) : data).map((coin, i) => {
+              {filtered.map((coin) => {
                 const up = coin.price_change_percentage_24h >= 0
                 return (
                   <tr key={coin.id} className="border-t border-gray-800/50 hover:bg-gray-800/30 transition">

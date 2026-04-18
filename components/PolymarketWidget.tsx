@@ -1,6 +1,7 @@
 'use client'
 import useSWR from 'swr'
-import { ExternalLink } from 'lucide-react'
+import { useState } from 'react'
+import { ExternalLink, Search } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -28,26 +29,39 @@ function parseOutcomes(market: Market): { yes: number; no: number } | null {
   return null
 }
 
-export default function PolymarketWidget({ searchQuery = '' }: { searchQuery?: string }) {
+export default function PolymarketWidget() {
   const { tr } = useLang()
+  const [query, setQuery] = useState('')
   const { data, error, isLoading, mutate } = useSWR<Market[]>('/api/polymarket', fetcher, {
     refreshInterval: 120000,
   })
 
   const markets = Array.isArray(data)
-    ? data.filter(m => m.question && (!searchQuery || m.question.toLowerCase().includes(searchQuery.toLowerCase())))
+    ? data.filter(m => m.question && (!query || m.question.toLowerCase().includes(query.toLowerCase())))
     : []
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-      <div className="px-5 py-4 flex items-center justify-between border-b border-gray-800">
+      <div className="px-5 py-4 flex items-center justify-between border-b border-gray-800 gap-3">
         <div>
           <h2 className="text-white font-semibold text-base">🎯 {tr.polymarket}</h2>
           <p className="text-gray-500 text-xs mt-0.5">{tr.polymarketDesc}</p>
         </div>
-        <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
-          {tr.refresh}
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1.5">
+            <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder={tr.search}
+              className="bg-transparent text-white text-xs outline-none w-24 placeholder-gray-600"
+            />
+          </div>
+          <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition flex-shrink-0">
+            {tr.refresh}
+          </button>
+        </div>
       </div>
 
       <div className="divide-y divide-gray-800/50">

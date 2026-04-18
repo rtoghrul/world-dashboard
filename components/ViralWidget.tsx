@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Play, TrendingUp, ExternalLink } from 'lucide-react'
+import { Play, TrendingUp, ExternalLink, Search } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const PLATFORMS = [
@@ -38,7 +38,7 @@ const PLATFORMS = [
     icon: '◉',
     color: 'text-purple-400',
     bg: 'bg-purple-500/10 border-purple-500/20',
-    activeBg: 'bg-purple-500/20 border-purple-500/40',
+    activeBg: 'bg-purple-500/20 border-pink-500/40',
     trending: [
       { title: 'Instagram Reels', url: 'https://www.instagram.com/reels/', views: 'Live' },
       { title: 'Instagram Explore', url: 'https://www.instagram.com/explore/', views: 'Explore' },
@@ -50,12 +50,16 @@ const PLATFORMS = [
 
 const YOUTUBE_TRENDING_EMBED = 'https://www.youtube.com/embed?listType=most_popular&list=PL4fGSI1pDJn6puJdseH2Rt9sMvt9E2M4i'
 
-export default function ViralWidget({ searchQuery = '' }: { searchQuery?: string }) {
+export default function ViralWidget() {
   const { tr } = useLang()
   const [platform, setPlatform] = useState('youtube')
   const [showEmbed, setShowEmbed] = useState(false)
+  const [query, setQuery] = useState('')
 
   const current = PLATFORMS.find(p => p.id === platform)!
+  const filtered = query
+    ? current.trending.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
+    : current.trending
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
@@ -68,15 +72,27 @@ export default function ViralWidget({ searchQuery = '' }: { searchQuery?: string
             </h2>
             <p className="text-gray-500 text-xs mt-0.5">{tr.viralDesc}</p>
           </div>
-          {platform === 'youtube' && (
-            <button
-              onClick={() => setShowEmbed(!showEmbed)}
-              className="text-xs text-red-400 hover:text-red-300 transition flex items-center gap-1"
-            >
-              <Play className="w-3 h-3" />
-              {showEmbed ? 'Hide' : 'Preview'}
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1.5">
+              <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+              <input
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder={tr.search}
+                className="bg-transparent text-white text-xs outline-none w-20 placeholder-gray-600"
+              />
+            </div>
+            {platform === 'youtube' && (
+              <button
+                onClick={() => setShowEmbed(!showEmbed)}
+                className="text-xs text-red-400 hover:text-red-300 transition flex items-center gap-1"
+              >
+                <Play className="w-3 h-3" />
+                {showEmbed ? 'Hide' : 'Preview'}
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="flex gap-2">
@@ -108,7 +124,7 @@ export default function ViralWidget({ searchQuery = '' }: { searchQuery?: string
         )}
 
         <div className="space-y-2 mb-5">
-          {(searchQuery ? current.trending.filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase())) : current.trending).map((item, i) => (
+          {filtered.map((item, i) => (
             <a
               key={i}
               href={item.url}

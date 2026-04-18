@@ -1,7 +1,7 @@
 'use client'
 import useSWR from 'swr'
 import { useState } from 'react'
-import { ExternalLink, Newspaper, Cpu } from 'lucide-react'
+import { ExternalLink, Newspaper, Cpu, Search } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -15,9 +15,10 @@ type NewsItem = {
   source: string
 }
 
-export default function NewsWidget({ searchQuery = '' }: { searchQuery?: string }) {
+export default function NewsWidget() {
   const { tr } = useLang()
   const [tab, setTab] = useState<'war' | 'ai'>('war')
+  const [query, setQuery] = useState('')
 
   const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(
     `/api/news?category=${tab}`,
@@ -25,14 +26,33 @@ export default function NewsWidget({ searchQuery = '' }: { searchQuery?: string 
     { refreshInterval: 300000 }
   )
 
+  const filtered = query
+    ? data?.filter(item =>
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.description?.toLowerCase().includes(query.toLowerCase())
+      )
+    : data
+
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
       <div className="px-5 py-4 border-b border-gray-800">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-white font-semibold text-base">📰 {tr.news}</h2>
-          <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
-            {tr.refresh}
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1.5">
+              <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+              <input
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder={tr.search}
+                className="bg-transparent text-white text-xs outline-none w-24 placeholder-gray-600"
+              />
+            </div>
+            <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
+              {tr.refresh}
+            </button>
+          </div>
         </div>
         <div className="flex gap-2">
           <button
@@ -67,13 +87,7 @@ export default function NewsWidget({ searchQuery = '' }: { searchQuery?: string 
 
         {error && <div className="p-8 text-center text-red-400">{tr.error}</div>}
 
-        {(searchQuery
-          ? data?.filter(item =>
-              item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              item.description?.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-          : data
-        )?.map((item, i) => (
+        {filtered?.map((item, i) => (
           <a
             key={i}
             href={item.link}
