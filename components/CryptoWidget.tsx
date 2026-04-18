@@ -43,7 +43,7 @@ function Sparkline({ data }: { data: number[] }) {
   )
 }
 
-export default function CryptoWidget() {
+export default function CryptoWidget({ searchQuery = '' }: { searchQuery?: string }) {
   const { tr } = useLang()
   const { data, error, isLoading, mutate } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
 
@@ -80,7 +80,7 @@ export default function CryptoWidget() {
               </tr>
             </thead>
             <tbody>
-              {data.map((coin, i) => {
+              {(searchQuery ? data.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.symbol.toLowerCase().includes(searchQuery.toLowerCase())) : data).map((coin, i) => {
                 const up = coin.price_change_percentage_24h >= 0
                 return (
                   <tr key={coin.id} className="border-t border-gray-800/50 hover:bg-gray-800/30 transition">

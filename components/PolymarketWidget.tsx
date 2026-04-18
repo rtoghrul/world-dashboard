@@ -28,13 +28,15 @@ function parseOutcomes(market: Market): { yes: number; no: number } | null {
   return null
 }
 
-export default function PolymarketWidget() {
+export default function PolymarketWidget({ searchQuery = '' }: { searchQuery?: string }) {
   const { tr } = useLang()
   const { data, error, isLoading, mutate } = useSWR<Market[]>('/api/polymarket', fetcher, {
     refreshInterval: 120000,
   })
 
-  const markets = Array.isArray(data) ? data.filter(m => m.question) : []
+  const markets = Array.isArray(data)
+    ? data.filter(m => m.question && (!searchQuery || m.question.toLowerCase().includes(searchQuery.toLowerCase())))
+    : []
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">

@@ -50,7 +50,7 @@ const PLATFORMS = [
 
 const YOUTUBE_TRENDING_EMBED = 'https://www.youtube.com/embed?listType=most_popular&list=PL4fGSI1pDJn6puJdseH2Rt9sMvt9E2M4i'
 
-export default function ViralWidget() {
+export default function ViralWidget({ searchQuery = '' }: { searchQuery?: string }) {
   const { tr } = useLang()
   const [platform, setPlatform] = useState('youtube')
   const [showEmbed, setShowEmbed] = useState(false)
@@ -108,7 +108,7 @@ export default function ViralWidget() {
         )}
 
         <div className="space-y-2 mb-5">
-          {current.trending.map((item, i) => (
+          {(searchQuery ? current.trending.filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase())) : current.trending).map((item, i) => (
             <a
               key={i}
               href={item.url}

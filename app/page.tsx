@@ -134,16 +134,16 @@ export default function HomePage() {
       </div>
 
       <main className="max-w-screen-2xl mx-auto px-4 py-6 space-y-6" key={refreshKey}>
-        <section id="crypto"><CryptoWidget /></section>
+        <section id="crypto"><CryptoWidget searchQuery={searchQuery} /></section>
         <section id="news" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <NewsWidget searchQuery={searchQuery} />
-          <div id="polymarket"><PolymarketWidget /></div>
+          <div id="polymarket"><PolymarketWidget searchQuery={searchQuery} /></div>
         </section>
         <section id="flights" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <FlightsWidget />
           <div id="hotels"><HotelsWidget /></div>
         </section>
-        <section id="viral"><ViralWidget /></section>
+        <section id="viral"><ViralWidget searchQuery={searchQuery} /></section>
         <footer className="text-center text-gray-600 text-xs py-4 border-t border-gray-800">
           World Dashboard · Real-time data from CoinGecko, Polymarket, BBC, TechCrunch, YouTube & more
         </footer>
