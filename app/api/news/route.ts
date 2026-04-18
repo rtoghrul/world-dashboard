@@ -13,8 +13,25 @@ const RSS_FEEDS: Record<string, string[]> = {
   ],
 }
 
+function extractThumbnail(block: string): string | null {
+  const patterns = [
+    /media:thumbnail[^>]+url="([^"]+)"/i,
+    /media:content[^>]+url="([^"]+)"/i,
+    /<enclosure[^>]+url="([^"]+)"[^>]+type="image/i,
+    /og:image[^>]+content="([^"]+)"/i,
+    /<img[^>]+src="([^"]+)"/i,
+  ]
+  for (const p of patterns) {
+    const m = block.match(p)
+    if (m && m[1] && m[1].startsWith('http')) return m[1]
+  }
+  const descImg = block.match(/<description[^>]*>[\s\S]*?<img[^>]+src="([^"]+)"/i)
+  if (descImg && descImg[1]?.startsWith('http')) return descImg[1]
+  return null
+}
+
 function parseRSS(xml: string, source: string, category: string) {
-  const items: { title: string; link: string; pubDate: string; description: string; source: string; category: string }[] = []
+  const items: { title: string; link: string; pubDate: string; description: string; thumbnail: string | null; source: string; category: string }[] = []
   const itemRegex = /<item>([\s\S]*?)<\/item>/g
   let match
   while ((match = itemRegex.exec(xml)) !== null) {
@@ -29,6 +46,7 @@ function parseRSS(xml: string, source: string, category: string) {
       link: linkMatch ? linkMatch[1].trim() : '',
       pubDate: get('pubDate') || get('dc:date'),
       description: get('description').replace(/<[^>]*>/g, '').slice(0, 150) + '...',
+      thumbnail: extractThumbnail(block),
       source,
       category,
     })

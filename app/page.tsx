@@ -10,40 +10,34 @@ import PolymarketWidget from '@/components/PolymarketWidget'
 import FlightsWidget from '@/components/FlightsWidget'
 import HotelsWidget from '@/components/HotelsWidget'
 import ViralWidget from '@/components/ViralWidget'
+import WhaleWidget from '@/components/WhaleWidget'
+import SocialWidget from '@/components/SocialWidget'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
-
-const SECTIONS = [
-  { id: 'crypto', label: '₿ Crypto' },
-  { id: 'news', label: '📰 News' },
-  { id: 'polymarket', label: '🎯 Polymarket' },
-  { id: 'flights', label: '✈️ Flights' },
-  { id: 'hotels', label: '🏨 Hotels' },
-  { id: 'viral', label: '🔥 Viral' },
-]
 
 export default function HomePage() {
   const { tr } = useLang()
   const router = useRouter()
   const [refreshKey, setRefreshKey] = useState(0)
   const [activeSection, setActiveSection] = useState<string | null>(null)
-  const [userEmail, setUserEmail] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchRef = useRef<HTMLInputElement>(null)
 
+  const SECTIONS = [
+    { id: 'crypto', label: `₿ ${tr.crypto}` },
+    { id: 'whale', label: `🐋 ${tr.whaleActivity}` },
+    { id: 'news', label: `📰 ${tr.news}` },
+    { id: 'flights', label: `✈️ ${tr.flights}` },
+    { id: 'viral', label: `🔥 ${tr.viral}` },
+    { id: 'social', label: `📱 ${tr.social}` },
+  ]
+
   const handleRefresh = useCallback(() => setRefreshKey(k => k + 1), [])
 
-  const openSearch = () => {
-    setSearchOpen(true)
-    setTimeout(() => searchRef.current?.focus(), 50)
-  }
-
-  const closeSearch = () => {
-    setSearchOpen(false)
-    setSearchQuery('')
-  }
+  const openSearch = () => { setSearchOpen(true); setTimeout(() => searchRef.current?.focus(), 50) }
+  const closeSearch = () => { setSearchOpen(false); setSearchQuery('') }
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -61,7 +55,6 @@ export default function HomePage() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        setUserEmail(user.email ?? null)
         setIsAdmin(user.email === 'eagleeye385@gmail.com')
         fetch('/api/pageview', { method: 'POST' })
       }
@@ -83,9 +76,7 @@ export default function HomePage() {
                   key={s.id}
                   onClick={() => scrollTo(s.id)}
                   className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                    activeSection === s.id
-                      ? 'bg-indigo-600 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                    activeSection === s.id ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
                   }`}
                 >
                   {s.label}
@@ -101,7 +92,7 @@ export default function HomePage() {
                     type="text"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Axtar..."
+                    placeholder={tr.search + '...'}
                     className="bg-transparent text-white text-xs outline-none w-32 placeholder-gray-500"
                     onKeyDown={e => e.key === 'Escape' && closeSearch()}
                   />
@@ -110,10 +101,7 @@ export default function HomePage() {
                   </button>
                 </div>
               ) : (
-                <button
-                  onClick={openSearch}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition"
-                >
+                <button onClick={openSearch} className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
                   <Search className="w-4 h-4" />
                 </button>
               )}
@@ -122,11 +110,8 @@ export default function HomePage() {
                   Admin
                 </Link>
               )}
-              <button
-                onClick={handleLogout}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition"
-              >
-                Çıxış
+              <button onClick={handleLogout} className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition">
+                {tr.logout}
               </button>
             </div>
           </div>
@@ -134,18 +119,41 @@ export default function HomePage() {
       </div>
 
       <main className="max-w-screen-2xl mx-auto px-4 py-6 space-y-6" key={refreshKey}>
-        <section id="crypto"><CryptoWidget /></section>
+        {/* Crypto */}
+        <section id="crypto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <CryptoWidget />
+            <div id="polymarket"><PolymarketWidget /></div>
+          </div>
+        </section>
+
+        {/* Whale Activity */}
+        <section id="whale">
+          <h2 className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-3">🐋 {tr.whaleActivity} — {tr.whaleDesc}</h2>
+          <WhaleWidget />
+        </section>
+
+        {/* News */}
         <section id="news" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <NewsWidget />
-          <div id="polymarket"><PolymarketWidget /></div>
+          <div id="flights" className="space-y-4">
+            <FlightsWidget />
+            <div id="hotels"><HotelsWidget /></div>
+          </div>
         </section>
-        <section id="flights" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <FlightsWidget />
-          <div id="hotels"><HotelsWidget /></div>
+
+        {/* Viral / YouTube */}
+        <section id="viral">
+          <ViralWidget />
         </section>
-        <section id="viral"><ViralWidget /></section>
+
+        {/* Social */}
+        <section id="social">
+          <SocialWidget />
+        </section>
+
         <footer className="text-center text-gray-600 text-xs py-4 border-t border-gray-800">
-          World Dashboard · Real-time data from CoinGecko, Polymarket, BBC, TechCrunch, YouTube & more
+          World Dashboard · CoinGecko, Polymarket, BBC, TechCrunch, YouTube & more
         </footer>
       </main>
     </div>
