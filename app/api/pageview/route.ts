@@ -1,22 +1,24 @@
-import { createServerClient, type CookieMethodsServer } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function POST() {
-  const cookieStore = cookies()
-  const cookieMethods: CookieMethodsServer = {
-    getAll() { return cookieStore.getAll() },
-    setAll(cookiesToSet) {
-      cookiesToSet.forEach(({ name, value, options }) => {
-        try { cookieStore.set(name, value, options) } catch {}
-      })
-    },
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const cookieStore = cookies() as any
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: cookieMethods }
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll() },
+        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            try { cookieStore.set(name, value, options) } catch {}
+          })
+        },
+      },
+    }
   )
 
   const { data: { user } } = await supabase.auth.getUser()
