@@ -16,14 +16,17 @@ export default function RegisterPage() {
     setLoading(true)
     setError('')
     const supabase = createClient()
-    const { error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({ email, password })
     if (error) {
       setError(error.message)
       setLoading(false)
-    } else {
-      router.push('/')
-      router.refresh()
+      return
     }
+    if (data.user) {
+      await supabase.from('profiles').upsert({ id: data.user.id, email: data.user.email })
+    }
+    router.push('/')
+    router.refresh()
   }
 
   return (
