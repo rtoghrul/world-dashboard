@@ -42,12 +42,13 @@ export default function EducationWidget() {
   const [collapsed, setCollapsed] = useState(true)
   const [subject, setSubject] = useState('physics')
 
-  const { data, isLoading, error } = useSWR<Article[]>(
+  const { data: rawData, isLoading, error } = useSWR<Article[]>(
     `/api/education?subject=${subject}`,
     fetcher,
     { refreshInterval: 3600000 }
   )
 
+  const data = Array.isArray(rawData) ? rawData : []
   const currentSubject = SUBJECTS.find(s => s.id === subject)!
 
   return (
@@ -112,7 +113,7 @@ export default function EducationWidget() {
                 </div>
               ))}
               {error && <div className="p-4 text-center text-red-400 text-sm">{tr.error}</div>}
-              {data?.map((article, i) => (
+              {data.map((article, i) => (
                 <a
                   key={i}
                   href={article.link}

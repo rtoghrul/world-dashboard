@@ -128,7 +128,7 @@ export default function NewsWidget() {
               </div>
             ))}
             {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
-            {filtered?.slice(0, 4).map((item, i) => <NewsCard key={i} item={item} />)}
+            {filtered.slice(0, 4).map((item, i) => <NewsCard key={i} item={item} />)}
           </div>
           <div className="px-5 py-3 border-t border-gray-800/50">
             <Link href="/news" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
