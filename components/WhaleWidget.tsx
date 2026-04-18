@@ -24,19 +24,19 @@ export default function WhaleWidget() {
     { refreshInterval: 120000 }
   )
 
-  const topMovers = cryptoData
+  const topMovers = Array.isArray(cryptoData)
     ? [...cryptoData]
         .sort((a, b) => Math.abs(b.price_change_percentage_24h) - Math.abs(a.price_change_percentage_24h))
         .slice(0, 5)
     : []
 
-  const topVolume = cryptoData
+  const topVolume = Array.isArray(cryptoData)
     ? [...cryptoData]
         .sort((a, b) => b.market_cap - a.market_cap)
         .slice(0, 5)
     : []
 
-  const whaleBets = polyData
+  const whaleBets = Array.isArray(polyData)
     ? [...polyData]
         .filter(m => m.question && m.volume)
         .sort((a, b) => (b.volume || 0) - (a.volume || 0))

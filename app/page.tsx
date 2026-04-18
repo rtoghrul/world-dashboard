@@ -50,19 +50,23 @@ export default function HomePage() {
   }
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+    } catch {}
     router.push('/login')
   }
 
   useEffect(() => {
     const init = async () => {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setIsAdmin(user.email === 'eagleeye385@gmail.com')
-        fetch('/api/pageview', { method: 'POST' })
-      }
+      try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          setIsAdmin(user.email === 'eagleeye385@gmail.com')
+          fetch('/api/pageview', { method: 'POST' })
+        }
+      } catch {}
     }
     init()
   }, [])

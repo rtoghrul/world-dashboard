@@ -105,11 +105,12 @@ export default function CryptoWidget() {
   const [collapsed, setCollapsed] = useState(true)
   const { data, error, isLoading, mutate } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
 
-  const filtered = data
-    ? (query ? data.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.symbol.toLowerCase().includes(query.toLowerCase())) : data)
-    : []
+  const coins = Array.isArray(data) ? data : []
+  const filtered = query
+    ? coins.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.symbol.toLowerCase().includes(query.toLowerCase()))
+    : coins
 
-  const btc = data?.find(c => c.id === 'bitcoin') ?? data?.[0]
+  const btc = coins.find(c => c.id === 'bitcoin') ?? coins[0]
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">

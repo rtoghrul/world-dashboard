@@ -50,11 +50,12 @@ export default function ViralWidget() {
     { refreshInterval: 3600000 }
   )
 
+  const videos = Array.isArray(data) ? data : []
   const filtered = query
-    ? data?.filter(v => v.title.toLowerCase().includes(query.toLowerCase()) || v.channel.toLowerCase().includes(query.toLowerCase()))
-    : data
+    ? videos.filter(v => v.title.toLowerCase().includes(query.toLowerCase()) || v.channel.toLowerCase().includes(query.toLowerCase()))
+    : videos
 
-  const top = data?.[0]
+  const top = videos[0]
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">

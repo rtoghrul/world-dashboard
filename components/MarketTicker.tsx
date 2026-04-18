@@ -42,8 +42,9 @@ export default function MarketTicker() {
   const { data: market } = useSWR<MarketData>('/api/market', fetcher, { refreshInterval: 300000 })
   const { data: coins } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
 
-  const btc = coins?.find(c => c.id === 'bitcoin')
-  const eth = coins?.find(c => c.id === 'ethereum')
+  const coinList = Array.isArray(coins) ? coins : []
+  const btc = coinList.find(c => c.id === 'bitcoin')
+  const eth = coinList.find(c => c.id === 'ethereum')
 
   if (!market && !btc) return null
 
