@@ -47,11 +47,12 @@ export default function NewsWidget() {
 
   const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(`/api/news?category=${tab}`, fetcher, { refreshInterval: 300000 })
 
+  const items = Array.isArray(data) ? data : []
   const filtered = query
-    ? data?.filter(item => item.title.toLowerCase().includes(query.toLowerCase()) || item.description?.toLowerCase().includes(query.toLowerCase()))
-    : data
+    ? items.filter(item => item.title.toLowerCase().includes(query.toLowerCase()) || item.description?.toLowerCase().includes(query.toLowerCase()))
+    : items
 
-  const top = data?.[0]
+  const top = items[0]
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">

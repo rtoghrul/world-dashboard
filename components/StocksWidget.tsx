@@ -26,9 +26,9 @@ export default function StocksWidget() {
   const [collapsed, setCollapsed] = useState(true)
   const { data, error, isLoading } = useSWR<Quote[]>('/api/stocks', fetcher, { refreshInterval: 60000 })
 
-  const indices = data?.filter(q => INDICES.includes(q.symbol)) ?? []
-  const stocks = data?.filter(q => !INDICES.includes(q.symbol)) ?? []
-  const sp500 = indices.find(q => q.symbol === '^GSPC')
+  const quotes = Array.isArray(data) ? data : []
+  const indices = quotes.filter(q => INDICES.includes(q.symbol))
+  const stocks = quotes.filter(q => !INDICES.includes(q.symbol))
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
