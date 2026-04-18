@@ -145,7 +145,7 @@ export default function ViralWidget() {
         )}
 
         <div className="mt-4 pt-4 border-t border-gray-800">
-          <p className="text-gray-500 text-xs mb-2">Digər platformalar</p>
+          <p className="text-gray-500 text-xs mb-2">{tr.otherPlatforms}</p>
           <div className="flex gap-2">
             {SOCIAL.map(s => (
               <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"

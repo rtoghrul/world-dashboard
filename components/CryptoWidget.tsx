@@ -139,7 +139,7 @@ export default function CryptoWidget() {
 
       <div className="px-5 py-3 border-t border-gray-800/50">
         <Link href="/crypto" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
-          Hamısını gör <ArrowRight className="w-3 h-3" />
+          {tr.viewAll} <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
     </div>

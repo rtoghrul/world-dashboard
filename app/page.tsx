@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, X } from 'lucide-react'
 import Header from '@/components/Header'
+import MarketTicker from '@/components/MarketTicker'
 import CryptoWidget from '@/components/CryptoWidget'
 import NewsWidget from '@/components/NewsWidget'
 import PolymarketWidget from '@/components/PolymarketWidget'
@@ -62,9 +63,28 @@ export default function HomePage() {
     init()
   }, [])
 
+  useEffect(() => {
+    const sectionIds = SECTIONS.map(s => s.id)
+    const observers: IntersectionObserver[] = []
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id)
+      if (!el) return
+      const observer = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id) },
+        { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+
+    return () => observers.forEach(o => o.disconnect())
+  }, [refreshKey])
+
   return (
     <div className="min-h-screen bg-gray-950">
       <Header onRefresh={handleRefresh} />
+      <MarketTicker />
 
       {/* Quick Nav */}
       <div className="sticky top-[57px] z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/50">
