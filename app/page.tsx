@@ -149,7 +149,6 @@ export default function HomePage() {
 
         {/* Whale Activity */}
         <section id="whale">
-          <h2 className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-3">🐋 {tr.whaleActivity} — {tr.whaleDesc}</h2>
           <WhaleWidget />
         </section>
 

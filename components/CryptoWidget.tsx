@@ -2,7 +2,7 @@
 import useSWR from 'swr'
 import { useState } from 'react'
 import Link from 'next/link'
-import { TrendingUp, TrendingDown, Search, ArrowRight } from 'lucide-react'
+import { TrendingUp, TrendingDown, Search, ArrowRight, ChevronDown } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -102,46 +102,78 @@ export function CryptoTable({ coins }: { coins: Coin[] }) {
 export default function CryptoWidget() {
   const { tr } = useLang()
   const [query, setQuery] = useState('')
+  const [collapsed, setCollapsed] = useState(true)
   const { data, error, isLoading, mutate } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
 
   const filtered = data
     ? (query ? data.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.symbol.toLowerCase().includes(query.toLowerCase())) : data)
     : []
 
+  const btc = data?.find(c => c.id === 'bitcoin') ?? data?.[0]
+
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-      <div className="px-5 py-3 flex items-center justify-between border-b border-gray-800 gap-3">
+      {/* Header — always visible, clickable */}
+      <div
+        className="px-5 py-3 flex items-center justify-between border-b border-gray-800 gap-3 cursor-pointer select-none hover:bg-gray-800/20 transition"
+        onClick={() => setCollapsed(c => !c)}
+      >
         <div>
           <h2 className="text-white font-semibold text-sm">₿ {tr.crypto}</h2>
           <p className="text-gray-500 text-xs">{tr.cryptoDesc}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
-            <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
-            <input
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="BTC..."
-              className="bg-transparent text-white text-xs outline-none w-16 placeholder-gray-600"
-            />
-          </div>
-          <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
-            {tr.refresh}
-          </button>
+        <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+          {!collapsed && (
+            <>
+              <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
+                <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="BTC..."
+                  className="bg-transparent text-white text-xs outline-none w-16 placeholder-gray-600"
+                />
+              </div>
+              <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
+                {tr.refresh}
+              </button>
+            </>
+          )}
         </div>
+        <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
       </div>
 
-      {isLoading && <div className="p-6 text-center text-gray-500 animate-pulse text-sm">{tr.loading}</div>}
-      {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
+      {/* Collapsed preview */}
+      {collapsed && (
+        <div className="px-5 py-3 flex items-center gap-3">
+          {isLoading && <div className="h-4 bg-gray-800 rounded w-48 animate-pulse" />}
+          {btc && (
+            <>
+              <img src={btc.image} alt="BTC" className="w-6 h-6 rounded-full flex-shrink-0" />
+              <span className="text-white text-sm font-medium">{btc.name}</span>
+              <span className="text-white font-mono text-sm">${btc.current_price.toLocaleString()}</span>
+              <span className={`text-xs font-semibold ${btc.price_change_percentage_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {btc.price_change_percentage_24h >= 0 ? '+' : ''}{btc.price_change_percentage_24h.toFixed(2)}%
+              </span>
+            </>
+          )}
+        </div>
+      )}
 
-      {data && !error && <CryptoTable coins={filtered.slice(0, 8)} />}
-
-      <div className="px-5 py-3 border-t border-gray-800/50">
-        <Link href="/crypto" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
-          {tr.viewAll} <ArrowRight className="w-3 h-3" />
-        </Link>
-      </div>
+      {/* Expanded content */}
+      {!collapsed && (
+        <>
+          {isLoading && <div className="p-6 text-center text-gray-500 animate-pulse text-sm">{tr.loading}</div>}
+          {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
+          {data && !error && <CryptoTable coins={filtered.slice(0, 8)} />}
+          <div className="px-5 py-3 border-t border-gray-800/50">
+            <Link href="/crypto" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
+              {tr.viewAll} <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   )
 }
