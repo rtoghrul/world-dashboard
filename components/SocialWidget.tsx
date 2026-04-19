@@ -162,8 +162,8 @@ export default function SocialWidget() {
               <div className="mt-4 p-3 rounded-xl border border-gray-800 bg-gray-800/50">
                 <p className="text-gray-400 text-xs">
                   {platform === 'tiktok'
-                    ? '⚠️ TikTok public API mövcud deyil. Trenddəki videolara birbaşa keçid üçün linklərə baxın.'
-                    : '⚠️ Instagram public API bağlanıb. Reels və kəşf üçün birbaşa linklərdən istifadə edin.'}
+                    ? '⚠️ TikTok does not provide a public trending API. Use the links above to browse trending content directly.'
+                    : '⚠️ Instagram public API is restricted. Use the direct links above to explore Reels and trending posts.'}
                 </p>
               </div>
             </div>

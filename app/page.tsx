@@ -1,8 +1,7 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, X } from 'lucide-react'
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import CryptoWidget from '@/components/CryptoWidget'
@@ -24,9 +23,6 @@ export default function HomePage() {
   const [refreshKey, setRefreshKey] = useState(0)
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const searchRef = useRef<HTMLInputElement>(null)
 
   const SECTIONS = [
     { id: 'crypto', label: `₿ ${tr.crypto}` },
@@ -40,9 +36,6 @@ export default function HomePage() {
   ]
 
   const handleRefresh = useCallback(() => setRefreshKey(k => k + 1), [])
-
-  const openSearch = () => { setSearchOpen(true); setTimeout(() => searchRef.current?.focus(), 50) }
-  const closeSearch = () => { setSearchOpen(false); setSearchQuery('') }
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -112,27 +105,6 @@ export default function HomePage() {
               ))}
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              {searchOpen ? (
-                <div className="flex items-center gap-1 bg-gray-800 rounded-lg px-2 py-1">
-                  <Search className="w-3 h-3 text-gray-400 flex-shrink-0" />
-                  <input
-                    ref={searchRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder={tr.search + '...'}
-                    className="bg-transparent text-white text-xs outline-none w-32 placeholder-gray-500"
-                    onKeyDown={e => e.key === 'Escape' && closeSearch()}
-                  />
-                  <button onClick={closeSearch} className="text-gray-400 hover:text-white">
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ) : (
-                <button onClick={openSearch} className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
-                  <Search className="w-4 h-4" />
-                </button>
-              )}
               {isAdmin && (
                 <Link href="/admin" className="px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 transition">
                   Admin
