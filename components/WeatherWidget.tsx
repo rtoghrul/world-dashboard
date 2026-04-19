@@ -46,52 +46,55 @@ export default function WeatherWidget() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    if (!navigator.geolocation) { setStatus('error'); return }
     setStatus('loading')
+
+    async function fetchWeather(lat: number, lon: number, city?: string) {
+      const [geoRes, wxRes] = await Promise.all([
+        city ? Promise.resolve(null) :
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=${lang}`, {
+            headers: { 'User-Agent': 'WorldDashboard/1.0' },
+          }),
+        fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+          `&current=temperature_2m,windspeed_10m,relativehumidity_2m,weathercode` +
+          `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
+          `&timezone=auto&forecast_days=7`
+        ),
+      ])
+      const geo = geoRes ? await geoRes.json() : null
+      const wx = await wxRes.json()
+      const resolvedCity = city || geo?.address?.city || geo?.address?.town || geo?.address?.village || geo?.address?.county || '—'
+      const cur = wx.current
+      const daily: DayForecast[] = wx.daily.time.map((date: string, i: number) => ({
+        date,
+        code: wx.daily.weathercode[i],
+        max: Math.round(wx.daily.temperature_2m_max[i]),
+        min: Math.round(wx.daily.temperature_2m_min[i]),
+        rain: wx.daily.precipitation_probability_max[i],
+      }))
+      setWeather({ city: resolvedCity, temp: Math.round(cur.temperature_2m), code: cur.weathercode, wind: Math.round(cur.windspeed_10m), humidity: cur.relativehumidity_2m, daily })
+      setStatus('idle')
+    }
+
+    async function tryIpLocation() {
+      try {
+        const res = await fetch('https://ipapi.co/json/')
+        const d = await res.json()
+        if (d.latitude && d.longitude) {
+          await fetchWeather(d.latitude, d.longitude, d.city)
+        } else setStatus('error')
+      } catch { setStatus('error') }
+    }
+
+    if (!navigator.geolocation) { tryIpLocation(); return }
+
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
-        try {
-          const { latitude: lat, longitude: lon } = coords
-
-          const [geoRes, wxRes] = await Promise.all([
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=${lang}`, {
-              headers: { 'User-Agent': 'WorldDashboard/1.0' },
-            }),
-            fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-              `&current=temperature_2m,windspeed_10m,relativehumidity_2m,weathercode` +
-              `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
-              `&timezone=auto&forecast_days=7`
-            ),
-          ])
-
-          const geo = await geoRes.json()
-          const wx = await wxRes.json()
-
-          const city = geo?.address?.city || geo?.address?.town || geo?.address?.village || geo?.address?.county || '—'
-          const cur = wx.current
-          const daily: DayForecast[] = wx.daily.time.map((date: string, i: number) => ({
-            date,
-            code: wx.daily.weathercode[i],
-            max: Math.round(wx.daily.temperature_2m_max[i]),
-            min: Math.round(wx.daily.temperature_2m_min[i]),
-            rain: wx.daily.precipitation_probability_max[i],
-          }))
-
-          setWeather({
-            city,
-            temp: Math.round(cur.temperature_2m),
-            code: cur.weathercode,
-            wind: Math.round(cur.windspeed_10m),
-            humidity: cur.relativehumidity_2m,
-            daily,
-          })
-          setStatus('idle')
-        } catch {
-          setStatus('error')
-        }
+        try { await fetchWeather(coords.latitude, coords.longitude) }
+        catch { setStatus('error') }
       },
-      () => setStatus('error')
+      () => tryIpLocation(),
+      { timeout: 8000 }
     )
   }, [lang])
 
@@ -107,7 +110,18 @@ export default function WeatherWidget() {
     )
   }
 
-  if (status === 'error' || !weather) return null
+  if (status === 'error') {
+    return (
+      <div className="fixed bottom-5 right-5 z-50">
+        <div className="bg-gray-900 border border-gray-700 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-2">
+          <span className="text-lg">📍</span>
+          <span className="text-gray-400 text-xs">{tr.locationError}</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (!weather) return null
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
