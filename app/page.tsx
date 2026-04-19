@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, X } from 'lucide-react'
+import { Eye, EyeOff, Search, Settings2, Star, X } from 'lucide-react'
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import CryptoWidget from '@/components/CryptoWidget'
@@ -30,6 +30,8 @@ export default function HomePage() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchRef = useRef<HTMLInputElement>(null)
+  const [prefsOpen, setPrefsOpen] = useState(false)
+  const [sectionPrefs, setSectionPrefs] = useState<{ pinned: string[]; hidden: string[] }>({ pinned: [], hidden: [] })
 
   const sections = useMemo(() => [
     { id: 'brief', label: `✦ ${tr.title}`, keywords: ['brief', 'today', 'summary', 'icmal', 'xulase', 'dashboard'] },
@@ -46,15 +48,57 @@ export default function HomePage() {
     { id: 'mechanical', label: `Mechanical ${tr.mechanical}`, keywords: ['mechanical', 'manufacturing', 'cad', 'machine'] },
   ], [tr])
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('dashboard-section-prefs')
+      if (!raw) return
+      const parsed = JSON.parse(raw) as { pinned?: unknown; hidden?: unknown }
+      const pinned = Array.isArray(parsed.pinned) ? parsed.pinned.filter(Boolean).map(String) : []
+      const hidden = Array.isArray(parsed.hidden) ? parsed.hidden.filter(Boolean).map(String) : []
+      setSectionPrefs({ pinned, hidden })
+    } catch {}
+  }, [])
+
+  const savePrefs = useCallback((next: { pinned: string[]; hidden: string[] }) => {
+    setSectionPrefs(next)
+    try {
+      localStorage.setItem('dashboard-section-prefs', JSON.stringify(next))
+    } catch {}
+  }, [])
+
   const normalizedSearch = searchQuery.trim().toLowerCase()
   const visibleSections = useMemo(() => {
-    if (!normalizedSearch) return sections
-    return sections.filter(section => {
-      const haystack = [section.label, ...section.keywords].join(' ').toLowerCase()
-      return haystack.includes(normalizedSearch)
-    })
-  }, [normalizedSearch, sections])
+    const hiddenSet = new Set(sectionPrefs.hidden)
+    let base = sections.filter(section => !hiddenSet.has(section.id))
+
+    if (normalizedSearch) {
+      base = base.filter(section => {
+        const haystack = [section.label, ...section.keywords].join(' ').toLowerCase()
+        return haystack.includes(normalizedSearch)
+      })
+    }
+
+    const pinnedSet = new Set(sectionPrefs.pinned)
+    const pinned = base.filter(section => pinnedSet.has(section.id))
+    const rest = base.filter(section => !pinnedSet.has(section.id))
+    return [...pinned, ...rest]
+  }, [normalizedSearch, sectionPrefs.hidden, sectionPrefs.pinned, sections])
+
   const visibleIds = useMemo(() => new Set(visibleSections.map(section => section.id)), [visibleSections])
+
+  const togglePinned = (id: string) => {
+    const pinnedSet = new Set(sectionPrefs.pinned)
+    if (pinnedSet.has(id)) pinnedSet.delete(id)
+    else pinnedSet.add(id)
+    savePrefs({ pinned: Array.from(pinnedSet), hidden: sectionPrefs.hidden })
+  }
+
+  const toggleHidden = (id: string) => {
+    const hiddenSet = new Set(sectionPrefs.hidden)
+    if (hiddenSet.has(id)) hiddenSet.delete(id)
+    else hiddenSet.add(id)
+    savePrefs({ pinned: sectionPrefs.pinned.filter(p => p !== id), hidden: Array.from(hiddenSet) })
+  }
 
   const handleRefresh = useCallback(() => setRefreshKey(k => k + 1), [])
 
@@ -157,6 +201,14 @@ export default function HomePage() {
                   <Search className="w-4 h-4" aria-hidden="true" />
                 </button>
               )}
+              <button
+                type="button"
+                onClick={() => setPrefsOpen(true)}
+                aria-label="Customize Sections"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              >
+                <Settings2 className="w-4 h-4" aria-hidden="true" />
+              </button>
               {isAdmin && (
                 <Link href="/admin" className="px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
                   Admin
@@ -169,6 +221,80 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {prefsOpen && (
+        <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Customize Sections">
+          <div className="absolute inset-0 bg-black/55" onClick={() => setPrefsOpen(false)} />
+          <div className="absolute inset-x-0 top-16 mx-auto w-[min(720px,calc(100vw-2rem))] rounded-2xl border border-gray-800 bg-gray-950 shadow-2xl">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+              <div>
+                <p className="text-white text-sm font-semibold">Customize</p>
+                <p className="text-gray-500 text-xs">Pin sections to the front, or hide the ones you don’t need.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPrefsOpen(false)}
+                aria-label="Close"
+                className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              >
+                <X className="w-4 h-4" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="max-h-[70vh] overflow-auto">
+              {sections.map(section => {
+                const pinned = sectionPrefs.pinned.includes(section.id)
+                const hidden = sectionPrefs.hidden.includes(section.id)
+                return (
+                  <div key={section.id} className="flex items-center justify-between gap-3 px-5 py-3 border-b border-gray-800/60">
+                    <div className="min-w-0">
+                      <p className="text-white text-sm font-medium truncate">{section.label}</p>
+                      <p className="text-gray-600 text-xs truncate">{section.keywords.slice(0, 5).join(', ')}</p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => togglePinned(section.id)}
+                        className={`p-2 rounded-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                          pinned ? 'bg-indigo-600/20 text-indigo-300' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                        }`}
+                        aria-label={pinned ? 'Unpin section' : 'Pin section'}
+                      >
+                        <Star className="w-4 h-4" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleHidden(section.id)}
+                        className={`p-2 rounded-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                          hidden ? 'bg-gray-800 text-gray-200' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                        }`}
+                        aria-label={hidden ? 'Show section' : 'Hide section'}
+                      >
+                        {hidden ? <Eye className="w-4 h-4" aria-hidden="true" /> : <EyeOff className="w-4 h-4" aria-hidden="true" />}
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="flex items-center justify-between gap-3 px-5 py-4">
+              <button
+                type="button"
+                onClick={() => savePrefs({ pinned: [], hidden: [] })}
+                className="text-xs text-gray-400 hover:text-white transition"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                onClick={() => setPrefsOpen(false)}
+                className="px-3 py-2 rounded-lg text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-500 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-screen-2xl mx-auto px-4 py-6 space-y-6" key={refreshKey}>
         {visibleIds.has('brief') && (
