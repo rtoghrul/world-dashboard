@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { Play, TrendingUp, ExternalLink, Search, Eye, ThumbsUp, ChevronDown } from 'lucide-react'
+import { Play, TrendingUp, ExternalLink, Search, Eye, ThumbsUp, ChevronDown, Flame, Clapperboard } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -15,6 +15,8 @@ type Video = {
   likes: number
   url: string
 }
+
+type VideoCardSize = 'compact' | 'wide'
 
 const REGIONS = [
   { code: 'US', label: '🇺🇸 US' },
@@ -31,6 +33,53 @@ function formatViews(n: number) {
   return n.toString()
 }
 
+function VideoCard({
+  video,
+  showEmbed,
+  onToggleEmbed,
+  size = 'compact',
+}: {
+  video: Video
+  showEmbed: boolean
+  onToggleEmbed: () => void
+  size?: VideoCardSize
+}) {
+  return (
+    <div className="group">
+      <div className="relative rounded-lg overflow-hidden mb-1.5 cursor-pointer" onClick={onToggleEmbed}>
+        <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover group-hover:opacity-80 transition" />
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+          <div className={`${size === 'wide' ? 'w-11 h-11' : 'w-9 h-9'} rounded-full bg-red-600/90 flex items-center justify-center`}>
+            <Play className={`${size === 'wide' ? 'w-5 h-5' : 'w-4 h-4'} text-white ml-0.5`} fill="white" />
+          </div>
+        </div>
+      </div>
+      {showEmbed && (
+        <div className="mb-2 rounded-lg overflow-hidden border border-gray-700">
+          <iframe
+            src={`https://www.youtube.com/embed/${video.id}?autoplay=1`}
+            className="w-full aspect-video"
+            allowFullScreen
+            allow="autoplay"
+            title={video.title}
+          />
+        </div>
+      )}
+      <div className="flex items-start justify-between gap-1">
+        <p className={`text-white font-medium flex-1 ${size === 'wide' ? 'text-sm line-clamp-2' : 'text-xs line-clamp-2'}`}>{video.title}</p>
+        <a href={video.url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-400 flex-shrink-0 mt-0.5">
+          <ExternalLink className="w-3 h-3" />
+        </a>
+      </div>
+      <p className="text-gray-500 text-xs mt-0.5">{video.channel}</p>
+      <div className="flex items-center gap-2 mt-0.5">
+        <span className="text-gray-600 text-xs flex items-center gap-0.5"><Eye className="w-2.5 h-2.5" />{formatViews(video.views)}</span>
+        <span className="text-gray-600 text-xs flex items-center gap-0.5"><ThumbsUp className="w-2.5 h-2.5" />{formatViews(video.likes)}</span>
+      </div>
+    </div>
+  )
+}
+
 const SOCIAL = [
   { name: 'TikTok', icon: '♪', color: 'text-pink-400', bg: 'bg-pink-500/10 border-pink-500/20', url: 'https://www.tiktok.com/trending' },
   { name: 'Instagram', icon: '◉', color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20', url: 'https://www.instagram.com/reels/' },
@@ -45,7 +94,7 @@ export default function ViralWidget() {
   const [collapsed, setCollapsed] = useState(true)
 
   const { data, error, isLoading } = useSWR<Video[]>(
-    `/api/youtube?region=${region}&maxResults=12`,
+    `/api/youtube?region=${region}&maxResults=24`,
     fetcher,
     { refreshInterval: 3600000 }
   )
@@ -56,6 +105,9 @@ export default function ViralWidget() {
     : videos
 
   const top = videos[0]
+  const featured = filtered[0]
+  const trendingVideos = filtered.slice(1, 9)
+  const moreVideos = filtered.slice(9, 24)
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
@@ -157,41 +209,73 @@ export default function ViralWidget() {
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
 
           {filtered && !error && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {filtered.slice(0, 6).map((video) => (
-                <div key={video.id} className="group">
-                  <div className="relative rounded-lg overflow-hidden mb-1.5 cursor-pointer" onClick={() => setShowEmbed(showEmbed === video.id ? null : video.id)}>
-                    <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover group-hover:opacity-80 transition" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                      <div className="w-9 h-9 rounded-full bg-red-600/90 flex items-center justify-center">
-                        <Play className="w-4 h-4 text-white ml-0.5" fill="white" />
-                      </div>
+            <div className="space-y-5">
+              {featured && (
+                <section>
+                  <div className="mb-2 flex items-center justify-between">
+                    <h3 className="text-white text-xs font-semibold flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 text-red-400" />
+                      Featured video
+                    </h3>
+                    <span className="text-gray-600 text-[11px]">{region}</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.25fr)_minmax(220px,0.75fr)] gap-4">
+                    <VideoCard
+                      video={featured}
+                      showEmbed={showEmbed === featured.id}
+                      onToggleEmbed={() => setShowEmbed(showEmbed === featured.id ? null : featured.id)}
+                      size="wide"
+                    />
+                    <div className="hidden md:flex flex-col justify-center border-l border-gray-800 pl-4">
+                      <p className="text-gray-400 text-xs leading-5">
+                        The most popular YouTube video for the selected region is pinned here, with views and likes visible at a glance.
+                      </p>
+                      <a href={featured.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-red-400 hover:text-red-300">
+                        Open on YouTube
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
                     </div>
                   </div>
-                  {showEmbed === video.id && (
-                    <div className="mb-2 rounded-lg overflow-hidden border border-gray-700">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${video.id}?autoplay=1`}
-                        className="w-full aspect-video"
-                        allowFullScreen
-                        allow="autoplay"
-                        title={video.title}
+                </section>
+              )}
+
+              {trendingVideos.length > 0 && (
+                <section>
+                  <h3 className="mb-2 text-white text-xs font-semibold flex items-center gap-1.5">
+                    <TrendingUp className="w-3.5 h-3.5 text-red-400" />
+                    Trending videos
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {trendingVideos.map((video) => (
+                      <VideoCard
+                        key={video.id}
+                        video={video}
+                        showEmbed={showEmbed === video.id}
+                        onToggleEmbed={() => setShowEmbed(showEmbed === video.id ? null : video.id)}
                       />
-                    </div>
-                  )}
-                  <div className="flex items-start justify-between gap-1">
-                    <p className="text-white text-xs font-medium line-clamp-2 flex-1">{video.title}</p>
-                    <a href={video.url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-400 flex-shrink-0 mt-0.5">
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                    ))}
                   </div>
-                  <p className="text-gray-500 text-xs mt-0.5">{video.channel}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-gray-600 text-xs flex items-center gap-0.5"><Eye className="w-2.5 h-2.5" />{formatViews(video.views)}</span>
-                    <span className="text-gray-600 text-xs flex items-center gap-0.5"><ThumbsUp className="w-2.5 h-2.5" />{formatViews(video.likes)}</span>
+                </section>
+              )}
+
+              {moreVideos.length > 0 && (
+                <section>
+                  <h3 className="mb-2 text-white text-xs font-semibold flex items-center gap-1.5">
+                    <Clapperboard className="w-3.5 h-3.5 text-red-400" />
+                    More to watch
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    {moreVideos.map((video) => (
+                      <VideoCard
+                        key={video.id}
+                        video={video}
+                        showEmbed={showEmbed === video.id}
+                        onToggleEmbed={() => setShowEmbed(showEmbed === video.id ? null : video.id)}
+                      />
+                    ))}
                   </div>
-                </div>
-              ))}
+                </section>
+              )}
             </div>
           )}
 
