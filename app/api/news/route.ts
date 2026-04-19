@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { translateTexts } from '@/lib/translate'
 
 export const revalidate = 300
 
@@ -74,13 +75,27 @@ async function fetchFeed(url: string, category: string) {
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const category = searchParams.get('category') || 'war'
+  const lang = searchParams.get('lang') || 'en'
   const feeds = RSS_FEEDS[category] || RSS_FEEDS.war
 
   const results = await Promise.allSettled(feeds.map(url => fetchFeed(url, category)))
   const items = results
     .filter(r => r.status === 'fulfilled')
     .flatMap(r => (r as PromiseFulfilledResult<unknown[]>).value)
-    .slice(0, 10)
+    .slice(0, 10) as { title: string; description: string; [key: string]: unknown }[]
+
+  if (lang !== 'en' && items.length) {
+    const titles = items.map(i => i.title)
+    const descs = items.map(i => i.description)
+    const [translatedTitles, translatedDescs] = await Promise.all([
+      translateTexts(titles, lang),
+      translateTexts(descs, lang),
+    ])
+    items.forEach((item, i) => {
+      item.title = translatedTitles[i]
+      item.description = translatedDescs[i]
+    })
+  }
 
   return NextResponse.json(items)
 }

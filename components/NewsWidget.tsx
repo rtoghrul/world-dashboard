@@ -40,12 +40,11 @@ export function NewsCard({ item }: { item: NewsItem }) {
 }
 
 export default function NewsWidget() {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   const [tab, setTab] = useState<'war' | 'ai'>('war')
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState(true)
-
-  const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(`/api/news?category=${tab}`, fetcher, { refreshInterval: 300000 })
+  const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(`/api/news?category=${tab}&lang=${lang}`, fetcher, { refreshInterval: 300000 })
 
   const items = Array.isArray(data) ? data : []
   const filtered = query

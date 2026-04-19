@@ -33,11 +33,11 @@ export default function TopicNewsWidget({
   defaultCollapsed?: boolean
   limit?: number
 }) {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   const [collapsed, setCollapsed] = useState(defaultCollapsed)
   const [query, setQuery] = useState('')
 
-  const apiPath = useMemo(() => `/api/engineering?topic=${topic}`, [topic])
+  const apiPath = useMemo(() => `/api/engineering?topic=${topic}&lang=${lang}`, [topic, lang])
   const { data: rawData, isLoading, error, mutate } = useSWR<Item[]>(apiPath, fetcher, { refreshInterval: 900000 })
   const items = Array.isArray(rawData) ? rawData : []
 

@@ -43,14 +43,13 @@ const FREE_COURSES = [
 type Mode = 'science' | 'engineering'
 
 export default function EducationWidget() {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   const [collapsed, setCollapsed] = useState(true)
   const [mode, setMode] = useState<Mode>('science')
   const [subject, setSubject] = useState('physics')
   const [activeEngTopic, setActiveEngTopic] = useState<'automation' | 'electrical' | 'mechanical' | null>(null)
-
   const { data: rawData, isLoading, error } = useSWR<Article[]>(
-    mode === 'science' ? `/api/education?subject=${subject}` : null,
+    mode === 'science' ? `/api/education?subject=${subject}&lang=${lang}` : null,
     fetcher,
     { refreshInterval: 3600000 }
   )
