@@ -213,7 +213,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'Location unavailable',
     feelsLike: 'Feels like',
     wind: 'Wind',
-    humidity: 'Humidity'
+    humidity: 'Humidity',
     loginHeroTitle: 'Track global markets, news and trends in one dashboard.',
     loginHeroDesc: 'Crypto, stocks, world news, flights, education and YouTube trends — all in one place for faster decisions every day.',
     loginFeature1: 'Live markets',
@@ -317,7 +317,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'Məkan tapılmadı',
     feelsLike: 'Hiss edilir',
     wind: 'Külək',
-    humidity: 'Rütubət'
+    humidity: 'Rütubət',
     loginHeroTitle: 'Qlobal bazarları, xəbərləri və trendləri bir paneldə izlə.',
     loginHeroDesc: 'Kripto, səhm bazarı, dünya xəbərləri, uçuşlar, təhsil və YouTube trendləri hər gün daha sürətli qərar vermək üçün bir yerdə.',
     loginFeature1: 'Canlı bazarlar',
@@ -421,7 +421,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'Местоположение недоступно',
     feelsLike: 'Ощущается',
     wind: 'Ветер',
-    humidity: 'Влажность'
+    humidity: 'Влажность',
     loginHeroTitle: 'Следи за мировыми рынками, новостями и трендами в одном дашборде.',
     loginHeroDesc: 'Крипто, акции, мировые новости, авиарейсы, образование и тренды YouTube — всё в одном месте для быстрых решений.',
     loginFeature1: 'Живые рынки',
@@ -525,7 +525,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'Standort nicht verfügbar',
     feelsLike: 'Gefühlt',
     wind: 'Wind',
-    humidity: 'Luftfeuchtigkeit'
+    humidity: 'Luftfeuchtigkeit',
     loginHeroTitle: 'Verfolge globale Märkte, Nachrichten und Trends in einem Dashboard.',
     loginHeroDesc: 'Krypto, Aktien, Weltnachrichten, Flüge, Bildung und YouTube-Trends — alles an einem Ort für schnellere Entscheidungen.',
     loginFeature1: 'Live-Märkte',
@@ -629,7 +629,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'Konum alınamadı',
     feelsLike: 'Hissedilen',
     wind: 'Rüzgar',
-    humidity: 'Nem'
+    humidity: 'Nem',
     loginHeroTitle: 'Küresel piyasaları, haberleri ve trendleri tek bir panelden takip et.',
     loginHeroDesc: 'Kripto, borsa, dünya haberleri, uçuşlar, eğitim ve YouTube trendleri — hızlı kararlar için hepsi bir arada.',
     loginFeature1: 'Canlı piyasalar',
@@ -733,7 +733,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'Position indisponible',
     feelsLike: 'Ressenti',
     wind: 'Vent',
-    humidity: 'Humidité'
+    humidity: 'Humidité',
     loginHeroTitle: "Suivez les marchés mondiaux, l'actualité et les tendances dans un seul tableau de bord.",
     loginHeroDesc: 'Crypto, actions, actualités mondiales, vols, éducation et tendances YouTube — tout en un seul endroit pour décider plus vite.',
     loginFeature1: 'Marchés en direct',
@@ -1052,7 +1052,7 @@ const t: Record<Lang, Translations> = {
     locationError: 'الموقع غير متاح',
     feelsLike: 'يشعر كأنه',
     wind: 'الرياح',
-    humidity: 'الرطوبة'
+    humidity: 'الرطوبة',
     loginHeroTitle: 'تابع الأسواق العالمية والأخبار والاتجاهات في لوحة تحكم واحدة.',
     loginHeroDesc: 'العملات المشفرة، الأسهم، الأخبار العالمية، الرحلات، التعليم واتجاهات يوتيوب — كل شيء في مكان واحد.',
     loginFeature1: 'أسواق مباشرة',
