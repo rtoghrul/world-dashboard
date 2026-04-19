@@ -1,7 +1,7 @@
 'use client'
 import useSWR from 'swr'
 import { useState } from 'react'
-import { ExternalLink, ChevronDown, GraduationCap, BookOpen } from 'lucide-react'
+import { ExternalLink, ChevronDown, GraduationCap, BookOpen, Bot, Zap, Cog } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -11,6 +11,8 @@ type Article = {
   link: string
   pubDate: string
   description: string
+  thumbnail: string | null
+  source: string
 }
 
 const SUBJECTS = [
@@ -50,6 +52,29 @@ export default function EducationWidget() {
 
   const data = Array.isArray(rawData) ? rawData : []
   const currentSubject = SUBJECTS.find(s => s.id === subject)!
+  const engineeringTopics = [
+    {
+      id: 'automation',
+      title: tr.automation,
+      desc: tr.automationDesc,
+      icon: <Bot className="w-4 h-4 text-indigo-300" aria-hidden="true" />,
+      styles: 'bg-indigo-500/10 border-indigo-500/20 hover:border-indigo-400/40 hover:bg-indigo-500/15',
+    },
+    {
+      id: 'electrical',
+      title: tr.electrical,
+      desc: tr.electricalDesc,
+      icon: <Zap className="w-4 h-4 text-amber-300" aria-hidden="true" />,
+      styles: 'bg-amber-500/10 border-amber-500/20 hover:border-amber-400/40 hover:bg-amber-500/15',
+    },
+    {
+      id: 'mechanical',
+      title: tr.mechanical,
+      desc: tr.mechanicalDesc,
+      icon: <Cog className="w-4 h-4 text-emerald-300" aria-hidden="true" />,
+      styles: 'bg-emerald-500/10 border-emerald-500/20 hover:border-emerald-400/40 hover:bg-emerald-500/15',
+    },
+  ]
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
@@ -100,6 +125,29 @@ export default function EducationWidget() {
             ))}
           </div>
 
+          {/* Engineering Topics */}
+          <div>
+            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Cog className="w-3 h-3" /> Engineering Topics
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {engineeringTopics.map(topic => (
+                <a
+                  key={topic.id}
+                  href={`#${topic.id}`}
+                  className={`rounded-xl border p-3 transition group ${topic.styles}`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    {topic.icon}
+                    <ExternalLink className="w-3 h-3 text-gray-500 group-hover:text-gray-300 flex-shrink-0" />
+                  </div>
+                  <p className="text-white text-sm font-semibold mt-2">{topic.title}</p>
+                  <p className="text-gray-400 text-xs mt-1 line-clamp-2">{topic.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
           {/* Latest Research News */}
           <div>
             <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -119,14 +167,27 @@ export default function EducationWidget() {
                   href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-2 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
+                  className="flex items-start gap-3 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
                 >
+                  {article.thumbnail ? (
+                    <img
+                      src={article.thumbnail}
+                      alt=""
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                      loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-lg">
+                      {currentSubject.emoji}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</p>
                     {article.description && (
                       <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{article.description}</p>
                     )}
-                    <p className="text-gray-600 text-xs mt-1">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · ScienceDaily</p>
+                    <p className="text-gray-600 text-xs mt-1">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · {article.source || 'ScienceDaily'}</p>
                   </div>
                   <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5" />
                 </a>
