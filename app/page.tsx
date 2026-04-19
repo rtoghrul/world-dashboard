@@ -16,10 +16,8 @@ import SocialWidget from '@/components/SocialWidget'
 import StocksWidget from '@/components/StocksWidget'
 import EducationWidget from '@/components/EducationWidget'
 import TodayBrief from '@/components/TodayBrief'
-import TopicNewsWidget from '@/components/TopicNewsWidget'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
-import { Bot, Cog, Zap } from 'lucide-react'
 
 export default function HomePage() {
   const { tr } = useLang()
@@ -42,10 +40,7 @@ export default function HomePage() {
     { id: 'viral', label: tr.viral, keywords: ['youtube', 'video', 'viral', 'trend'] },
     { id: 'social', label: tr.social, keywords: ['social', 'tiktok', 'instagram'] },
     { id: 'stocks', label: tr.stocks, keywords: ['stocks', 'stock', 'sehmler', 'səhm', 'market'] },
-    { id: 'education', label: tr.education, keywords: ['education', 'course', 'kurs', 'research'] },
-    { id: 'automation', label: tr.automation, keywords: ['automation', 'robot', 'plc'] },
-    { id: 'electrical', label: tr.electrical, keywords: ['electrical', 'electronics', 'power', 'chip'] },
-    { id: 'mechanical', label: tr.mechanical, keywords: ['mechanical', 'manufacturing', 'cad', 'machine'] },
+    { id: 'education', label: tr.education, keywords: ['education', 'course', 'kurs', 'research', 'automation', 'electrical', 'mechanical', 'engineering'] },
   ], [tr])
 
   useEffect(() => {
@@ -351,42 +346,6 @@ export default function HomePage() {
         {visibleIds.has('education') && (
           <section id="education">
             <EducationWidget />
-          </section>
-        )}
-
-        {visibleIds.has('automation') && (
-          <section id="automation">
-            <TopicNewsWidget
-              topic="automation"
-              title={tr.automation}
-              desc={tr.automationDesc}
-              accentClass="text-indigo-300"
-              icon={<Bot className="w-4 h-4" aria-hidden="true" />}
-            />
-          </section>
-        )}
-
-        {visibleIds.has('electrical') && (
-          <section id="electrical">
-            <TopicNewsWidget
-              topic="electrical"
-              title={tr.electrical}
-              desc={tr.electricalDesc}
-              accentClass="text-amber-300"
-              icon={<Zap className="w-4 h-4" aria-hidden="true" />}
-            />
-          </section>
-        )}
-
-        {visibleIds.has('mechanical') && (
-          <section id="mechanical">
-            <TopicNewsWidget
-              topic="mechanical"
-              title={tr.mechanical}
-              desc={tr.mechanicalDesc}
-              accentClass="text-emerald-300"
-              icon={<Cog className="w-4 h-4" aria-hidden="true" />}
-            />
           </section>
         )}
 

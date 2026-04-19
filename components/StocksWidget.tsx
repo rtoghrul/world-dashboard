@@ -1,7 +1,8 @@
 'use client'
 import useSWR from 'swr'
 import { useState } from 'react'
-import { TrendingUp, TrendingDown, ChevronDown, BarChart2 } from 'lucide-react'
+import Link from 'next/link'
+import { TrendingUp, TrendingDown, ChevronDown, BarChart2, ArrowUpRight } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -44,7 +45,12 @@ export default function StocksWidget() {
             <p className="text-gray-500 text-xs">{tr.stocksDesc}</p>
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+        <div className="flex items-center gap-2">
+          <Link href="/stocks" onClick={e => e.stopPropagation()} className="flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 transition">
+            View All <ArrowUpRight className="w-3 h-3" />
+          </Link>
+          <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+        </div>
       </div>
 
       {/* Collapsed preview */}

@@ -2,24 +2,50 @@ import { NextResponse } from 'next/server'
 
 export const revalidate = 60
 
-const SYMBOLS = [
-  '^GSPC',
-  '^IXIC',
-  '^DJI',
-  'AAPL', 'MSFT', 'NVDA', 'TSLA', 'AMZN', 'GOOG', 'META',
+export const STOCK_GROUPS: Record<string, { label: string; symbols: string[] }> = {
+  indices: {
+    label: 'Major Indices',
+    symbols: ['^GSPC', '^IXIC', '^DJI', '^RUT', '^VIX', '^FTSE', '^GDAXI', '^N225'],
+  },
+  tech: {
+    label: 'Technology',
+    symbols: ['AAPL', 'MSFT', 'NVDA', 'GOOG', 'META', 'AMZN', 'AMD', 'INTC', 'CRM', 'ORCL', 'NFLX', 'ADBE'],
+  },
+  finance: {
+    label: 'Finance',
+    symbols: ['JPM', 'BAC', 'GS', 'MS', 'WFC', 'C', 'BLK', 'V', 'MA', 'PYPL'],
+  },
+  ev_energy: {
+    label: 'EV & Energy',
+    symbols: ['TSLA', 'RIVN', 'NIO', 'XOM', 'CVX', 'ENPH', 'NEE', 'BE'],
+  },
+  crypto_stocks: {
+    label: 'Crypto-linked',
+    symbols: ['COIN', 'MSTR', 'MARA', 'RIOT', 'HUT', 'SQ'],
+  },
+}
+
+export const ALL_SYMBOLS = [
+  ...STOCK_GROUPS.indices.symbols,
+  ...STOCK_GROUPS.tech.symbols,
+  ...STOCK_GROUPS.finance.symbols,
+  ...STOCK_GROUPS.ev_energy.symbols,
+  ...STOCK_GROUPS.crypto_stocks.symbols,
 ]
 
 const SHORT_NAMES: Record<string, string> = {
-  '^GSPC': 'S&P 500',
-  '^IXIC': 'NASDAQ',
-  '^DJI': 'Dow Jones',
-  'AAPL': 'Apple',
-  'MSFT': 'Microsoft',
-  'NVDA': 'NVIDIA',
-  'TSLA': 'Tesla',
-  'AMZN': 'Amazon',
-  'GOOG': 'Alphabet',
-  'META': 'Meta',
+  '^GSPC': 'S&P 500', '^IXIC': 'NASDAQ', '^DJI': 'Dow Jones', '^RUT': 'Russell 2000',
+  '^VIX': 'VIX', '^FTSE': 'FTSE 100', '^GDAXI': 'DAX', '^N225': 'Nikkei 225',
+  'AAPL': 'Apple', 'MSFT': 'Microsoft', 'NVDA': 'NVIDIA', 'GOOG': 'Alphabet',
+  'META': 'Meta', 'AMZN': 'Amazon', 'AMD': 'AMD', 'INTC': 'Intel',
+  'CRM': 'Salesforce', 'ORCL': 'Oracle', 'NFLX': 'Netflix', 'ADBE': 'Adobe',
+  'JPM': 'JPMorgan', 'BAC': 'Bank of America', 'GS': 'Goldman Sachs',
+  'MS': 'Morgan Stanley', 'WFC': 'Wells Fargo', 'C': 'Citigroup',
+  'BLK': 'BlackRock', 'V': 'Visa', 'MA': 'Mastercard', 'PYPL': 'PayPal',
+  'TSLA': 'Tesla', 'RIVN': 'Rivian', 'NIO': 'NIO', 'XOM': 'ExxonMobil',
+  'CVX': 'Chevron', 'ENPH': 'Enphase', 'NEE': 'NextEra Energy', 'BE': 'Bloom Energy',
+  'COIN': 'Coinbase', 'MSTR': 'MicroStrategy', 'MARA': 'MARA Holdings',
+  'RIOT': 'Riot Platforms', 'HUT': 'Hut 8', 'SQ': 'Block (SQ)',
 }
 
 async function fetchQuote(symbol: string) {
@@ -32,28 +58,25 @@ async function fetchQuote(symbol: string) {
   const data = await res.json()
   const meta = data?.chart?.result?.[0]?.meta
   if (!meta) throw new Error(`No meta: ${symbol}`)
-
   const price: number = meta.regularMarketPrice
   const prev: number = meta.previousClose ?? meta.chartPreviousClose ?? price
   const change = price - prev
   const changePercent = prev ? (change / prev) * 100 : 0
-
-  return {
-    symbol,
-    name: SHORT_NAMES[symbol] ?? symbol,
-    price,
-    change,
-    changePercent,
-  }
+  return { symbol, name: SHORT_NAMES[symbol] ?? symbol, price, change, changePercent }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const group = searchParams.get('group')
+  const symbols = group && STOCK_GROUPS[group]
+    ? STOCK_GROUPS[group].symbols
+    : [...STOCK_GROUPS.indices.symbols, ...STOCK_GROUPS.tech.symbols]
+
   try {
-    const results = await Promise.allSettled(SYMBOLS.map(fetchQuote))
+    const results = await Promise.allSettled(symbols.map(fetchQuote))
     const quotes = results
       .filter(r => r.status === 'fulfilled')
-      .map(r => (r as PromiseFulfilledResult<ReturnType<typeof fetchQuote> extends Promise<infer T> ? T : never>).value)
-
+      .map(r => (r as PromiseFulfilledResult<Awaited<ReturnType<typeof fetchQuote>>>).value)
     return NextResponse.json(quotes)
   } catch {
     return NextResponse.json({ error: 'Failed to fetch stock data' }, { status: 500 })

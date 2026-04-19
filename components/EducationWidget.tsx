@@ -3,6 +3,7 @@ import useSWR from 'swr'
 import { useState } from 'react'
 import { ExternalLink, ChevronDown, GraduationCap, BookOpen, Bot, Zap, Cog } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import TopicNewsWidget from '@/components/TopicNewsWidget'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -43,6 +44,7 @@ export default function EducationWidget() {
   const { tr } = useLang()
   const [collapsed, setCollapsed] = useState(true)
   const [subject, setSubject] = useState('physics')
+  const [activeEngTopic, setActiveEngTopic] = useState<'automation' | 'electrical' | 'mechanical' | null>(null)
 
   const { data: rawData, isLoading, error } = useSWR<Article[]>(
     `/api/education?subject=${subject}`,
@@ -132,20 +134,33 @@ export default function EducationWidget() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {engineeringTopics.map(topic => (
-                <a
+                <button
                   key={topic.id}
-                  href={`#${topic.id}`}
-                  className={`rounded-xl border p-3 transition group ${topic.styles}`}
+                  onClick={() => setActiveEngTopic(prev => prev === topic.id ? null : topic.id as 'automation' | 'electrical' | 'mechanical')}
+                  className={`rounded-xl border p-3 transition group text-left ${topic.styles} ${activeEngTopic === topic.id ? 'ring-1 ring-white/20' : ''}`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     {topic.icon}
-                    <ExternalLink className="w-3 h-3 text-gray-500 group-hover:text-gray-300 flex-shrink-0" />
+                    <ChevronDown className={`w-3 h-3 text-gray-500 group-hover:text-gray-300 flex-shrink-0 transition-transform duration-200 ${activeEngTopic === topic.id ? 'rotate-180' : ''}`} />
                   </div>
                   <p className="text-white text-sm font-semibold mt-2">{topic.title}</p>
                   <p className="text-gray-400 text-xs mt-1 line-clamp-2">{topic.desc}</p>
-                </a>
+                </button>
               ))}
             </div>
+            {activeEngTopic && (
+              <div className="mt-3">
+                {activeEngTopic === 'automation' && (
+                  <TopicNewsWidget topic="automation" title={tr.automation} desc={tr.automationDesc} accentClass="text-indigo-300" icon={<Bot className="w-4 h-4" />} defaultCollapsed={false} />
+                )}
+                {activeEngTopic === 'electrical' && (
+                  <TopicNewsWidget topic="electrical" title={tr.electrical} desc={tr.electricalDesc} accentClass="text-amber-300" icon={<Zap className="w-4 h-4" />} defaultCollapsed={false} />
+                )}
+                {activeEngTopic === 'mechanical' && (
+                  <TopicNewsWidget topic="mechanical" title={tr.mechanical} desc={tr.mechanicalDesc} accentClass="text-emerald-300" icon={<Cog className="w-4 h-4" />} defaultCollapsed={false} />
+                )}
+              </div>
+            )}
           </div>
 
           {/* Latest Research News */}
