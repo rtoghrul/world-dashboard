@@ -34,32 +34,6 @@ type Video = {
   url: string
 }
 
-const labels = {
-  az: {
-    title: 'Bugünkü qısa icmal',
-    subtitle: 'Bazar, xəbər və trend siqnalları bir baxışda.',
-    crypto: 'Kripto',
-    stocks: 'Birja',
-    news: 'Xəbər',
-    video: 'Video',
-    loading: 'Yüklənir...',
-    noData: 'Məlumat yoxdur',
-    open: 'Aç',
-    refreshed: 'Canlı mənbələrdən yenilənir',
-  },
-  en: {
-    title: 'Today Brief',
-    subtitle: 'Market, news, and trend signals at a glance.',
-    crypto: 'Crypto',
-    stocks: 'Stocks',
-    news: 'News',
-    video: 'Video',
-    loading: 'Loading...',
-    noData: 'No data',
-    open: 'Open',
-    refreshed: 'Refreshing from live sources',
-  },
-}
 
 function formatCompactNumber(value?: number) {
   if (typeof value !== 'number' || Number.isNaN(value)) return '--'
@@ -129,8 +103,7 @@ function SignalCard({
 }
 
 export default function TodayBrief() {
-  const { lang } = useLang()
-  const copy = lang === 'az' ? labels.az : labels.en
+  const { lang, tr } = useLang()
   const { data: cryptoData, isLoading: cryptoLoading } = useSWR<Coin[]>('/api/crypto?per_page=5', fetcher, { refreshInterval: 60000 })
   const { data: stockData, isLoading: stockLoading } = useSWR<Quote[]>('/api/stocks', fetcher, { refreshInterval: 60000 })
   const { data: newsData, isLoading: newsLoading } = useSWR<NewsItem[]>('/api/news?category=war', fetcher, { refreshInterval: 300000 })
@@ -158,10 +131,10 @@ export default function TodayBrief() {
           <div>
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-indigo-500/20 bg-indigo-500/10 px-2 py-1 text-xs font-medium text-indigo-300">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-              {copy.refreshed}
+              {tr.todayBriefRefreshed}
             </div>
-            <h2 className="text-xl font-bold text-white sm:text-2xl">{copy.title}</h2>
-            <p className="mt-1 text-sm text-gray-400">{copy.subtitle}</p>
+            <h2 className="text-xl font-bold text-white sm:text-2xl">{tr.todayBrief}</h2>
+            <p className="mt-1 text-sm text-gray-400">{tr.todayBriefSubtitle}</p>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -174,31 +147,31 @@ export default function TodayBrief() {
         <SignalCard
           tone={btcUp ? 'emerald' : 'red'}
           icon={btcUp ? <TrendingUp className="h-3.5 w-3.5" aria-hidden="true" /> : <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" />}
-          label={copy.crypto}
-          title={cryptoLoading ? copy.loading : btc ? `${btc.name} ${formatCurrency(btc.current_price)}` : copy.noData}
-          meta={btc ? `${btc.symbol.toUpperCase()} ${formatPercent(btc.price_change_percentage_24h)} / 24h` : copy.noData}
+          label={tr.crypto}
+          title={cryptoLoading ? tr.loading : btc ? `${btc.name} ${formatCurrency(btc.current_price)}` : tr.noData}
+          meta={btc ? `${btc.symbol.toUpperCase()} ${formatPercent(btc.price_change_percentage_24h)} / 24h` : tr.noData}
         />
         <SignalCard
           tone={stockUp ? 'emerald' : 'red'}
           icon={<BarChart2 className="h-3.5 w-3.5" aria-hidden="true" />}
-          label={copy.stocks}
-          title={stockLoading ? copy.loading : topStock ? `${topStock.symbol} ${formatCurrency(topStock.price)}` : copy.noData}
-          meta={topStock ? `${topStock.name ?? topStock.symbol} ${formatPercent(topStock.changePercent)}` : copy.noData}
+          label={tr.stocks}
+          title={stockLoading ? tr.loading : topStock ? `${topStock.symbol} ${formatCurrency(topStock.price)}` : tr.noData}
+          meta={topStock ? `${topStock.name ?? topStock.symbol} ${formatPercent(topStock.changePercent)}` : tr.noData}
         />
         <SignalCard
           tone="sky"
           icon={<Newspaper className="h-3.5 w-3.5" aria-hidden="true" />}
-          label={copy.news}
-          title={newsLoading ? copy.loading : topNews?.title ?? copy.noData}
-          meta={topNews?.source ?? copy.noData}
+          label={tr.news}
+          title={newsLoading ? tr.loading : topNews?.title ?? tr.noData}
+          meta={topNews?.source ?? tr.noData}
           href={topNews?.link}
         />
         <SignalCard
           tone="amber"
           icon={<Play className="h-3.5 w-3.5" aria-hidden="true" />}
-          label={copy.video}
-          title={videoLoading ? copy.loading : topVideo?.title ?? copy.noData}
-          meta={topVideo ? `${topVideo.channel} / ${formatCompactNumber(topVideo.views)} views` : copy.noData}
+          label={tr.viral}
+          title={videoLoading ? tr.loading : topVideo?.title ?? tr.noData}
+          meta={topVideo ? `${topVideo.channel} / ${formatCompactNumber(topVideo.views)} views` : tr.noData}
           href={topVideo?.url}
         />
       </div>

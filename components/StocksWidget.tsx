@@ -76,7 +76,7 @@ export default function StocksWidget() {
             <>
               {/* Major Indices */}
               <div>
-                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Major Indices</p>
+                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">{tr.majorIndices}</p>
                 <div className="grid grid-cols-3 gap-3">
                   {indices.map(q => {
                     const up = q.changePercent >= 0
@@ -96,7 +96,7 @@ export default function StocksWidget() {
 
               {/* Top Stocks */}
               <div>
-                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Top Stocks</p>
+                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">{tr.topStocks}</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead>

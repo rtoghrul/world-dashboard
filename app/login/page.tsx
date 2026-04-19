@@ -45,16 +45,16 @@ export default function LoginPage() {
               World Dashboard
             </div>
             <h1 className="max-w-xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Qlobal bazarları, xəbərləri və trendləri bir paneldə izlə.
+              {tr.loginHeroTitle}
             </h1>
             <p className="mt-5 max-w-lg text-base leading-7 text-gray-300">
-              Kripto, səhm bazarı, dünya xəbərləri, uçuşlar, təhsil və YouTube trendləri hər gün daha sürətli qərar vermək üçün bir yerdə.
+              {tr.loginHeroDesc}
             </p>
             <div className="mt-8 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
               {[
-                { icon: TrendingUp, label: 'Canlı bazarlar' },
-                { icon: BarChart3, label: 'Qısa icmal' },
-                { icon: PlayCircle, label: 'Trend videolar' },
+                { icon: TrendingUp, label: tr.loginFeature1 },
+                { icon: BarChart3, label: tr.loginFeature2 },
+                { icon: PlayCircle, label: tr.loginFeature3 },
               ].map(item => (
                 <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                   <item.icon className="mb-2 h-5 w-5 text-indigo-300" aria-hidden="true" />
