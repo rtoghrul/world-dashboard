@@ -48,16 +48,16 @@ export default function RegisterPage() {
               World Dashboard
             </div>
             <h1 className="max-w-xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Öz qlobal məlumat panelini indi qur.
+              {tr.registerHeroTitle}
             </h1>
             <p className="mt-5 max-w-lg text-base leading-7 text-gray-300">
-              Gündəlik bazar siqnalları, xəbərlər, sosial trendlər və öyrənmə resursları bir yerdə olsun.
+              {tr.registerHeroDesc}
             </p>
             <div className="mt-8 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
               {[
-                { icon: TrendingUp, label: 'Bazar siqnalları' },
-                { icon: BarChart3, label: 'Canlı xülasə' },
-                { icon: PlayCircle, label: 'YouTube trendləri' },
+                { icon: TrendingUp, label: tr.registerFeature1 },
+                { icon: BarChart3, label: tr.registerFeature2 },
+                { icon: PlayCircle, label: tr.registerFeature3 },
               ].map(item => (
                 <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                   <item.icon className="mb-2 h-5 w-5 text-emerald-300" aria-hidden="true" />

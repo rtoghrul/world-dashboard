@@ -115,7 +115,7 @@ export default function HotelsWidget() {
           </div>
 
           <div>
-            <p className="text-gray-500 text-xs mb-2">Popular destinations</p>
+            <p className="text-gray-500 text-xs mb-2">{tr.popularDestinations}</p>
             <div className="flex flex-wrap gap-2">
               {popularCities.map(c => (
                 <button
