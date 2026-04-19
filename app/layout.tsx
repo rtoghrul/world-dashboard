@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from '@/lib/LanguageContext'
+import WeatherWidget from '@/components/WeatherWidget'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} bg-gray-950 min-h-screen`}>
         <LanguageProvider>
           {children}
+          <WeatherWidget />
         </LanguageProvider>
       </body>
     </html>
