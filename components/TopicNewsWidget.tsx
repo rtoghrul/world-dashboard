@@ -22,15 +22,19 @@ export default function TopicNewsWidget({
   desc,
   accentClass,
   icon,
+  defaultCollapsed = true,
+  limit = 6,
 }: {
   topic: 'automation' | 'electrical' | 'mechanical'
   title: string
   desc: string
   accentClass: string
   icon: ReactNode
+  defaultCollapsed?: boolean
+  limit?: number
 }) {
   const { tr } = useLang()
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(defaultCollapsed)
   const [query, setQuery] = useState('')
 
   const apiPath = useMemo(() => `/api/engineering?topic=${topic}`, [topic])
@@ -128,7 +132,7 @@ export default function TopicNewsWidget({
             </div>
           ))}
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
-          {filtered.slice(0, 6).map((item, i) => (
+          {filtered.slice(0, limit).map((item, i) => (
             <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group">
               {item.thumbnail && (
                 <img
