@@ -1,7 +1,7 @@
 'use client'
 import useSWR from 'swr'
 import { useState } from 'react'
-import { ExternalLink, ChevronDown, GraduationCap, BookOpen } from 'lucide-react'
+import { ExternalLink, ChevronDown, GraduationCap, BookOpen, Bot, Zap, Cog } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -52,6 +52,29 @@ export default function EducationWidget() {
 
   const data = Array.isArray(rawData) ? rawData : []
   const currentSubject = SUBJECTS.find(s => s.id === subject)!
+  const engineeringTopics = [
+    {
+      id: 'automation',
+      title: tr.automation,
+      desc: tr.automationDesc,
+      icon: <Bot className="w-4 h-4 text-indigo-300" aria-hidden="true" />,
+      styles: 'bg-indigo-500/10 border-indigo-500/20 hover:border-indigo-400/40 hover:bg-indigo-500/15',
+    },
+    {
+      id: 'electrical',
+      title: tr.electrical,
+      desc: tr.electricalDesc,
+      icon: <Zap className="w-4 h-4 text-amber-300" aria-hidden="true" />,
+      styles: 'bg-amber-500/10 border-amber-500/20 hover:border-amber-400/40 hover:bg-amber-500/15',
+    },
+    {
+      id: 'mechanical',
+      title: tr.mechanical,
+      desc: tr.mechanicalDesc,
+      icon: <Cog className="w-4 h-4 text-emerald-300" aria-hidden="true" />,
+      styles: 'bg-emerald-500/10 border-emerald-500/20 hover:border-emerald-400/40 hover:bg-emerald-500/15',
+    },
+  ]
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
@@ -100,6 +123,29 @@ export default function EducationWidget() {
                 {s.emoji} {s.label}
               </button>
             ))}
+          </div>
+
+          {/* Engineering Topics */}
+          <div>
+            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Cog className="w-3 h-3" /> Engineering Topics
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {engineeringTopics.map(topic => (
+                <a
+                  key={topic.id}
+                  href={`#${topic.id}`}
+                  className={`rounded-xl border p-3 transition group ${topic.styles}`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    {topic.icon}
+                    <ExternalLink className="w-3 h-3 text-gray-500 group-hover:text-gray-300 flex-shrink-0" />
+                  </div>
+                  <p className="text-white text-sm font-semibold mt-2">{topic.title}</p>
+                  <p className="text-gray-400 text-xs mt-1 line-clamp-2">{topic.desc}</p>
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Latest Research News */}
