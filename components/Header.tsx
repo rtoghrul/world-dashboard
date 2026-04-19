@@ -24,6 +24,7 @@ export default function Header({ onRefresh }: { onRefresh?: () => void }) {
         <div className="flex items-center gap-2">
           {onRefresh && (
             <button
+              type="button"
               onClick={onRefresh}
               className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
               title={tr.refresh}
@@ -35,6 +36,7 @@ export default function Header({ onRefresh }: { onRefresh?: () => void }) {
 
           <div className="relative">
             <button
+              type="button"
               onClick={() => setOpen(!open)}
               className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
               aria-expanded={open}
@@ -50,6 +52,7 @@ export default function Header({ onRefresh }: { onRefresh?: () => void }) {
                 <div className="p-1 grid grid-cols-2 gap-1 max-h-64 overflow-y-auto">
                   {LANGUAGES.map(l => (
                     <button
+                      type="button"
                       key={l.code}
                       onClick={() => { setLang(l.code as Lang); setOpen(false) }}
                       className={`flex items-center gap-2 px-2 py-2 rounded-lg text-sm transition ${
