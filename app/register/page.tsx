@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { BarChart3, Globe2, LockKeyhole, Mail, PlayCircle, TrendingUp } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import LanguagePicker from '@/components/LanguagePicker'
+import { useLang } from '@/lib/LanguageContext'
 
 export default function RegisterPage() {
+  const { tr } = useLang()
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -20,7 +22,7 @@ export default function RegisterPage() {
     const supabase = createClient()
     const { data, error } = await supabase.auth.signUp({ email, password })
     if (error) {
-      setError('Qeydiyyat alınmadı. Email və şifrəni yoxlayıb yenidən cəhd et.')
+      setError(tr.authRegisterFailed)
       setLoading(false)
       return
     }
@@ -69,14 +71,14 @@ export default function RegisterPage() {
         <section className="flex items-center justify-center px-6 py-12 sm:px-10">
           <div className="w-full max-w-sm">
             <div className="mb-8">
-              <p className="text-sm font-medium text-emerald-300">Yeni hesab</p>
-              <h2 className="mt-2 text-2xl font-bold text-white">Qeydiyyat</h2>
-              <p className="mt-1 text-sm text-gray-400">Dashboard-a giriş üçün hesab yarat.</p>
+              <p className="text-sm font-medium text-emerald-300">{tr.authRegister}</p>
+              <h2 className="mt-2 text-2xl font-bold text-white">{tr.authRegister}</h2>
+              <p className="mt-1 text-sm text-gray-400">{tr.authRegisterHint}</p>
             </div>
 
             <form onSubmit={handleRegister} className="space-y-4 rounded-2xl border border-gray-800 bg-gray-900/80 p-6 shadow-2xl shadow-black/30">
               <div>
-                <label htmlFor="email" className="mb-1 block text-sm text-gray-300">Email</label>
+                <label htmlFor="email" className="mb-1 block text-sm text-gray-300">{tr.authEmail}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
                   <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
                   <input
@@ -94,7 +96,7 @@ export default function RegisterPage() {
                 </div>
               </div>
               <div>
-                <label htmlFor="password" className="mb-1 block text-sm text-gray-300">Şifrə (min. 6 simvol)</label>
+                <label htmlFor="password" className="mb-1 block text-sm text-gray-300">{tr.authPasswordMin}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
                   <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
                   <input
@@ -117,11 +119,11 @@ export default function RegisterPage() {
                 disabled={loading}
                 className="w-full rounded-lg bg-emerald-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
-                {loading ? 'Yüklənir…' : 'Qeydiyyatdan keç'}
+                {loading ? tr.authLoading : tr.authSubmitRegister}
               </button>
               <p className="text-center text-xs text-gray-500">
-                Artıq hesabın var?{' '}
-                <Link href="/login" className="font-medium text-emerald-300 hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">Daxil ol</Link>
+                {tr.authHaveAccount}{' '}
+                <Link href="/login" className="font-medium text-emerald-300 hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">{tr.authLogin}</Link>
               </p>
             </form>
           </div>
