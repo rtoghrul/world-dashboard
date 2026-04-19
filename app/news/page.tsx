@@ -11,13 +11,13 @@ const fetcher = (url: string) => fetch(url).then(r => r.json())
 const PER_PAGE = 10
 
 export default function NewsPage() {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   const [tab, setTab] = useState<'war' | 'ai'>('war')
   const [page, setPage] = useState(1)
   const [query, setQuery] = useState('')
 
   const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(
-    `/api/news?category=${tab}`,
+    `/api/news?category=${tab}&lang=${lang}`,
     fetcher,
     { refreshInterval: 300000 }
   )
