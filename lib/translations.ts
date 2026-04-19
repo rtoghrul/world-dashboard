@@ -74,6 +74,12 @@ type Translations = {
   educationDesc: string
   freeCourses: string
   latestResearch: string
+  automation: string
+  automationDesc: string
+  electrical: string
+  electricalDesc: string
+  mechanical: string
+  mechanicalDesc: string
 }
 
 const t: Record<Lang, Translations> = {
@@ -136,6 +142,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Free courses & science news',
     freeCourses: 'Free Courses',
     latestResearch: 'Latest Research',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   az: {
     title: 'Dünya Paneli',
@@ -196,6 +208,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Pulsuz kurslar & elm xəbərləri',
     freeCourses: 'Pulsuz Kurslar',
     latestResearch: 'Son Tədqiqatlar',
+    automation: 'Avtomatika',
+    automationDesc: 'Sənaye avtomatikası və robotika xəbərləri',
+    electrical: 'Elektrik/Elektronika',
+    electricalDesc: 'Elektronika, çiplər və enerji sistemləri',
+    mechanical: 'Mexanika',
+    mechanicalDesc: 'Mexanika mühəndisliyi və istehsalat',
   },
   ru: {
     title: 'Мировая Панель',
@@ -256,6 +274,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Бесплатные курсы и новости науки',
     freeCourses: 'Бесплатные Курсы',
     latestResearch: 'Последние Исследования',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   de: {
     title: 'Welt-Dashboard',
@@ -316,6 +340,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Kostenlose Kurse & Wissenschaftsnews',
     freeCourses: 'Kostenlose Kurse',
     latestResearch: 'Neueste Forschung',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   tr: {
     title: 'Dünya Paneli',
@@ -376,6 +406,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Ücretsiz kurslar & bilim haberleri',
     freeCourses: 'Ücretsiz Kurslar',
     latestResearch: 'Son Araştırmalar',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   fr: {
     title: 'Tableau de Bord Mondial',
@@ -436,6 +472,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Cours gratuits & actualités scientifiques',
     freeCourses: 'Cours Gratuits',
     latestResearch: 'Dernières Recherches',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   es: {
     title: 'Panel Mundial',
@@ -496,6 +538,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Cursos gratuitos y noticias de ciencia',
     freeCourses: 'Cursos Gratuitos',
     latestResearch: 'Últimas Investigaciones',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   zh: {
     title: '世界仪表板',
@@ -556,6 +604,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: '免费课程与科学新闻',
     freeCourses: '免费课程',
     latestResearch: '最新研究',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   ar: {
     title: 'لوحة العالم',
@@ -616,6 +670,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'دورات مجانية وأخبار علمية',
     freeCourses: 'دورات مجانية',
     latestResearch: 'أحدث الأبحاث',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   ja: {
     title: 'ワールドダッシュボード',
@@ -676,6 +736,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: '無料コース＆科学ニュース',
     freeCourses: '無料コース',
     latestResearch: '最新研究',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   it: {
     title: 'Dashboard Mondiale',
@@ -736,6 +802,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Corsi gratuiti e notizie scientifiche',
     freeCourses: 'Corsi Gratuiti',
     latestResearch: 'Ultime Ricerche',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
   pt: {
     title: 'Painel Mundial',
@@ -796,6 +868,12 @@ const t: Record<Lang, Translations> = {
     educationDesc: 'Cursos gratuitos e notícias científicas',
     freeCourses: 'Cursos Gratuitos',
     latestResearch: 'Últimas Pesquisas',
+    automation: 'Automation',
+    automationDesc: 'Industrial automation & robotics news',
+    electrical: 'Electrical',
+    electricalDesc: 'Electronics, chips & power systems',
+    mechanical: 'Mechanical',
+    mechanicalDesc: 'Mechanical engineering & manufacturing',
   },
 }
 
