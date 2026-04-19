@@ -11,6 +11,8 @@ type Article = {
   link: string
   pubDate: string
   description: string
+  thumbnail: string | null
+  source: string
 }
 
 const SUBJECTS = [
@@ -119,14 +121,27 @@ export default function EducationWidget() {
                   href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-2 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
+                  className="flex items-start gap-3 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
                 >
+                  {article.thumbnail ? (
+                    <img
+                      src={article.thumbnail}
+                      alt=""
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                      loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-lg">
+                      {currentSubject.emoji}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</p>
                     {article.description && (
                       <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{article.description}</p>
                     )}
-                    <p className="text-gray-600 text-xs mt-1">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · ScienceDaily</p>
+                    <p className="text-gray-600 text-xs mt-1">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · {article.source || 'ScienceDaily'}</p>
                   </div>
                   <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5" />
                 </a>
