@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { BarChart3, Globe2, LockKeyhole, Mail, PlayCircle, TrendingUp } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import LanguagePicker from '@/components/LanguagePicker'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -36,6 +37,9 @@ export default function RegisterPage() {
         <section className="relative flex items-center px-6 py-12 sm:px-10 lg:px-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(79,70,229,0.28),transparent_32%),radial-gradient(circle_at_80%_10%,rgba(16,185,129,0.16),transparent_28%),linear-gradient(135deg,rgba(15,23,42,0.9),rgba(3,7,18,1))]" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-500/60 to-transparent" />
+          <div className="absolute right-6 top-6 z-10">
+            <LanguagePicker />
+          </div>
           <div className="relative max-w-2xl">
             <div className="mb-8 inline-flex items-center gap-2 rounded-lg border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-sm font-medium text-emerald-200">
               <Globe2 className="h-4 w-4" aria-hidden="true" />
