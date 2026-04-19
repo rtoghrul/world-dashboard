@@ -35,17 +35,17 @@ export default function HomePage() {
 
   const sections = useMemo(() => [
     { id: 'brief', label: `✦ ${tr.title}`, keywords: ['brief', 'today', 'summary', 'icmal', 'xulase', 'dashboard'] },
-    { id: 'crypto', label: `BTC ${tr.crypto}`, keywords: ['crypto', 'bitcoin', 'btc', 'kripto'] },
-    { id: 'whale', label: `Whale ${tr.whaleActivity}`, keywords: ['whale', 'balina', 'large', 'wallet'] },
-    { id: 'news', label: `News ${tr.news}`, keywords: ['news', 'xeber', 'xəbər', 'politics', 'ai'] },
-    { id: 'flights', label: `Flights ${tr.flights}`, keywords: ['flight', 'flights', 'ucus', 'uçuş', 'travel', 'hotel'] },
-    { id: 'viral', label: `YouTube ${tr.viral}`, keywords: ['youtube', 'video', 'viral', 'trend'] },
-    { id: 'social', label: `Social ${tr.social}`, keywords: ['social', 'tiktok', 'instagram'] },
-    { id: 'stocks', label: `Stocks ${tr.stocks}`, keywords: ['stocks', 'stock', 'sehmler', 'səhm', 'market'] },
-    { id: 'education', label: `Edu ${tr.education}`, keywords: ['education', 'course', 'kurs', 'research'] },
-    { id: 'automation', label: `Automation ${tr.automation}`, keywords: ['automation', 'robot', 'plc'] },
-    { id: 'electrical', label: `Electrical ${tr.electrical}`, keywords: ['electrical', 'electronics', 'power', 'chip'] },
-    { id: 'mechanical', label: `Mechanical ${tr.mechanical}`, keywords: ['mechanical', 'manufacturing', 'cad', 'machine'] },
+    { id: 'crypto', label: tr.crypto, keywords: ['crypto', 'bitcoin', 'btc', 'kripto'] },
+    { id: 'whale', label: tr.whaleActivity, keywords: ['whale', 'balina', 'large', 'wallet'] },
+    { id: 'news', label: tr.news, keywords: ['news', 'xeber', 'xəbər', 'politics', 'ai'] },
+    { id: 'flights', label: tr.flights, keywords: ['flight', 'flights', 'ucus', 'uçuş', 'travel', 'hotel'] },
+    { id: 'viral', label: tr.viral, keywords: ['youtube', 'video', 'viral', 'trend'] },
+    { id: 'social', label: tr.social, keywords: ['social', 'tiktok', 'instagram'] },
+    { id: 'stocks', label: tr.stocks, keywords: ['stocks', 'stock', 'sehmler', 'səhm', 'market'] },
+    { id: 'education', label: tr.education, keywords: ['education', 'course', 'kurs', 'research'] },
+    { id: 'automation', label: tr.automation, keywords: ['automation', 'robot', 'plc'] },
+    { id: 'electrical', label: tr.electrical, keywords: ['electrical', 'electronics', 'power', 'chip'] },
+    { id: 'mechanical', label: tr.mechanical, keywords: ['mechanical', 'manufacturing', 'cad', 'machine'] },
   ], [tr])
 
   useEffect(() => {
