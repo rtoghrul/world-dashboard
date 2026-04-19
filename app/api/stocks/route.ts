@@ -1,37 +1,7 @@
 import { NextResponse } from 'next/server'
+import { STOCK_GROUPS } from '@/lib/stockGroups'
 
 export const revalidate = 60
-
-export const STOCK_GROUPS: Record<string, { label: string; symbols: string[] }> = {
-  indices: {
-    label: 'Major Indices',
-    symbols: ['^GSPC', '^IXIC', '^DJI', '^RUT', '^VIX', '^FTSE', '^GDAXI', '^N225'],
-  },
-  tech: {
-    label: 'Technology',
-    symbols: ['AAPL', 'MSFT', 'NVDA', 'GOOG', 'META', 'AMZN', 'AMD', 'INTC', 'CRM', 'ORCL', 'NFLX', 'ADBE'],
-  },
-  finance: {
-    label: 'Finance',
-    symbols: ['JPM', 'BAC', 'GS', 'MS', 'WFC', 'C', 'BLK', 'V', 'MA', 'PYPL'],
-  },
-  ev_energy: {
-    label: 'EV & Energy',
-    symbols: ['TSLA', 'RIVN', 'NIO', 'XOM', 'CVX', 'ENPH', 'NEE', 'BE'],
-  },
-  crypto_stocks: {
-    label: 'Crypto-linked',
-    symbols: ['COIN', 'MSTR', 'MARA', 'RIOT', 'HUT', 'SQ'],
-  },
-}
-
-export const ALL_SYMBOLS = [
-  ...STOCK_GROUPS.indices.symbols,
-  ...STOCK_GROUPS.tech.symbols,
-  ...STOCK_GROUPS.finance.symbols,
-  ...STOCK_GROUPS.ev_energy.symbols,
-  ...STOCK_GROUPS.crypto_stocks.symbols,
-]
 
 const SHORT_NAMES: Record<string, string> = {
   '^GSPC': 'S&P 500', '^IXIC': 'NASDAQ', '^DJI': 'Dow Jones', '^RUT': 'Russell 2000',

@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, TrendingDown, BarChart2, RefreshCw } from 'lucide-react'
-import { STOCK_GROUPS } from '@/app/api/stocks/route'
+import { STOCK_GROUPS } from '@/lib/stockGroups'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
