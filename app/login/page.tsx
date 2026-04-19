@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { BarChart3, Globe2, LockKeyhole, Mail, PlayCircle, TrendingUp } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import LanguagePicker from '@/components/LanguagePicker'
+import { useLang } from '@/lib/LanguageContext'
 
 export default function LoginPage() {
+  const { tr } = useLang()
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -20,7 +22,7 @@ export default function LoginPage() {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
-      setError('Email və ya şifrə yanlışdır. Məlumatları yoxlayıb yenidən cəhd et.')
+      setError(tr.authInvalidCreds)
       setLoading(false)
     } else {
       router.push('/')
@@ -66,14 +68,14 @@ export default function LoginPage() {
         <section className="flex items-center justify-center px-6 py-12 sm:px-10">
           <div className="w-full max-w-sm">
             <div className="mb-8">
-              <p className="text-sm font-medium text-indigo-300">Xoş gəlmisən</p>
-              <h2 className="mt-2 text-2xl font-bold text-white">Daxil ol</h2>
-              <p className="mt-1 text-sm text-gray-400">Dashboard-u açmaq üçün hesabına daxil ol.</p>
+              <p className="text-sm font-medium text-indigo-300">{tr.authWelcome}</p>
+              <h2 className="mt-2 text-2xl font-bold text-white">{tr.authLogin}</h2>
+              <p className="mt-1 text-sm text-gray-400">{tr.authLoginHint}</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4 rounded-2xl border border-gray-800 bg-gray-900/80 p-6 shadow-2xl shadow-black/30">
               <div>
-                <label htmlFor="email" className="mb-1 block text-sm text-gray-300">Email</label>
+                <label htmlFor="email" className="mb-1 block text-sm text-gray-300">{tr.authEmail}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/30">
                   <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
                   <input
@@ -91,7 +93,7 @@ export default function LoginPage() {
                 </div>
               </div>
               <div>
-                <label htmlFor="password" className="mb-1 block text-sm text-gray-300">Şifrə</label>
+                <label htmlFor="password" className="mb-1 block text-sm text-gray-300">{tr.authPassword}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/30">
                   <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
                   <input
@@ -113,11 +115,11 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
               >
-                {loading ? 'Yüklənir…' : 'Daxil ol'}
+                {loading ? tr.authLoading : tr.authSubmitLogin}
               </button>
               <p className="text-center text-xs text-gray-500">
-                Hesabın yoxdur?{' '}
-                <Link href="/register" className="font-medium text-indigo-300 hover:text-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Qeydiyyat</Link>
+                {tr.authNoAccount}{' '}
+                <Link href="/register" className="font-medium text-indigo-300 hover:text-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">{tr.authRegister}</Link>
               </p>
             </form>
           </div>
