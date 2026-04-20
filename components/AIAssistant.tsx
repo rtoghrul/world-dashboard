@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -24,6 +24,19 @@ export default function AIAssistant() {
         'Hi! I am your World Dashboard assistant. I can explain the dashboard, suggest which sections to check, and help you understand what to focus on.'
     }
   ])
+  const messagesEndRef = useRef<HTMLDivElement | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading, open])
+
+  useEffect(() => {
+    const textarea = textareaRef.current
+    if (!textarea) return
+    textarea.style.height = '0px'
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 140)}px`
+  }, [input])
 
   const sendMessage = async (text?: string) => {
     const content = (text ?? input).trim()
@@ -98,7 +111,7 @@ export default function AIAssistant() {
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-6 ${
+                className={`max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm leading-6 ${
                   msg.role === 'user'
                     ? 'ml-auto bg-indigo-600 text-white'
                     : 'border border-gray-800 bg-gray-900 text-gray-100'
@@ -113,25 +126,34 @@ export default function AIAssistant() {
                 Thinking...
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
 
-          <div className="flex gap-2 border-t border-gray-800 p-3">
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') void sendMessage()
-              }}
-              placeholder="Ask a question..."
-              className="flex-1 rounded-xl border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500 focus:border-indigo-500"
-            />
-            <button
-              onClick={() => void sendMessage()}
-              disabled={loading}
-              className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              Send
-            </button>
+          <div className="border-t border-gray-800 p-3">
+            <div className="flex items-end gap-2">
+              <textarea
+                ref={textareaRef}
+                rows={1}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    void sendMessage()
+                  }
+                }}
+                placeholder="Ask a question..."
+                className="max-h-[140px] min-h-[44px] flex-1 resize-none overflow-y-auto rounded-xl border border-gray-700 bg-gray-900 px-3 py-2 text-sm leading-6 text-white outline-none placeholder:text-gray-500 focus:border-indigo-500"
+              />
+              <button
+                onClick={() => void sendMessage()}
+                disabled={loading}
+                className="h-11 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Send
+              </button>
+            </div>
+            <p className="mt-2 text-[11px] text-gray-500">Enter to send · Shift + Enter for new line</p>
           </div>
         </div>
       )}
