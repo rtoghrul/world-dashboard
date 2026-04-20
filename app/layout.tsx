@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from '@/lib/LanguageContext'
 import WeatherWidget from '@/components/WeatherWidget'
+import AIAssistant from '@/components/AIAssistant'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           {children}
           <WeatherWidget />
+          <AIAssistant />
         </LanguageProvider>
       </body>
     </html>
