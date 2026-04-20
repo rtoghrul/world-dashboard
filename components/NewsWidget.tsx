@@ -2,8 +2,9 @@
 import useSWR from 'swr'
 import { useState } from 'react'
 import Link from 'next/link'
-import { ExternalLink, Newspaper, Cpu, Search, ArrowRight, ChevronDown } from 'lucide-react'
+import { Newspaper, Cpu, Search, ArrowRight, ChevronDown } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import NewsModal from './NewsModal'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -17,25 +18,29 @@ export type NewsItem = {
 }
 
 export function NewsCard({ item }: { item: NewsItem }) {
+  const [open, setOpen] = useState(false)
   return (
-    <a href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group">
-      {item.thumbnail && (
-        <img src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-      )}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2">
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full text-left flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group"
+      >
+        {item.thumbnail && (
+          <img src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+        )}
+        <div className="flex-1 min-w-0">
           <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
-          <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5" />
+          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-gray-600 text-xs">{item.source}</span>
+            <span className="text-gray-700 text-xs">·</span>
+            <span className="text-gray-600 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
+          </div>
         </div>
-        <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-gray-600 text-xs">{item.source}</span>
-          <span className="text-gray-700 text-xs">·</span>
-          <span className="text-gray-600 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
-        </div>
-      </div>
-    </a>
+      </button>
+      {open && <NewsModal item={item} onClose={() => setOpen(false)} />}
+    </>
   )
 }
 

@@ -1,9 +1,10 @@
 'use client'
 import useSWR from 'swr'
 import { useMemo, useState } from 'react'
-import { ChevronDown, ExternalLink, Search } from 'lucide-react'
+import { ChevronDown, Search } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 import type { ReactNode } from 'react'
+import NewsModal, { type ModalItem } from './NewsModal'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -14,6 +15,38 @@ type Item = {
   description: string
   thumbnail: string | null
   source: string
+}
+
+function TopicNewsCard({ item }: { item: ModalItem }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full text-left flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group"
+      >
+        {item.thumbnail && (
+          <img
+            src={item.thumbnail}
+            alt=""
+            className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+            loading="lazy"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+          />
+        )}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
+          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-gray-600 text-xs">{item.source}</span>
+            <span className="text-gray-700 text-xs">·</span>
+            <span className="text-gray-600 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
+          </div>
+        </div>
+      </button>
+      {open && <NewsModal item={item} onClose={() => setOpen(false)} />}
+    </>
+  )
 }
 
 export default function TopicNewsWidget({
@@ -133,29 +166,7 @@ export default function TopicNewsWidget({
           ))}
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
           {filtered.slice(0, limit).map((item, i) => (
-            <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group">
-              {item.thumbnail && (
-                <img
-                  src={item.thumbnail}
-                  alt=""
-                  className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-                  loading="lazy"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                />
-              )}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
-                  <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                </div>
-                <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-gray-600 text-xs">{item.source}</span>
-                  <span className="text-gray-700 text-xs">·</span>
-                  <span className="text-gray-600 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
-                </div>
-              </div>
-            </a>
+            <TopicNewsCard key={i} item={item} />
           ))}
         </div>
       )}
