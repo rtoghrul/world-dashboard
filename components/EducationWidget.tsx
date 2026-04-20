@@ -133,28 +133,28 @@ function ToolsSection({ toolKey }: { toolKey: string }) {
   )
 }
 
-function ScienceArticleCard({ article, emoji }: { article: ModalItem; emoji: string }) {
+function ScienceArticleCard({ article }: { article: ModalItem }) {
   const [open, setOpen] = useState(false)
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="w-full text-left flex items-start gap-3 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
+        className="w-full text-left flex gap-3 px-2 py-3 hover:bg-gray-800/40 transition group rounded-xl"
       >
         {article.thumbnail ? (
           <img src={article.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0" loading="lazy"
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
         ) : (
-          <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-lg">{emoji}</div>
+          <div className="w-14 h-14 rounded-lg bg-gray-800 flex-shrink-0" />
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</p>
-          {article.description && (
-            <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{article.description}</p>
-          )}
-          <p className="text-gray-600 text-xs mt-1">
-            {article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · {article.source || 'ScienceDaily'}
-          </p>
+          <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</h3>
+          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{article.description}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-gray-600 text-xs">{article.source || 'ScienceDaily'}</span>
+            <span className="text-gray-700 text-xs">·</span>
+            <span className="text-gray-600 text-xs">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''}</span>
+          </div>
         </div>
       </button>
       {open && <NewsModal item={article} onClose={() => setOpen(false)} />}
@@ -292,7 +292,7 @@ export default function EducationWidget() {
                   ))}
                   {error && <div className="p-4 text-center text-red-400 text-sm">{tr.error}</div>}
                   {data.map((article, i) => (
-                    <ScienceArticleCard key={i} article={article} emoji={currentSubject.emoji} />
+                    <ScienceArticleCard key={i} article={article} />
                   ))}
                 </div>
               </div>
