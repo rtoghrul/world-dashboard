@@ -77,7 +77,7 @@ function fallbackReply(message: string) {
   }
 
   if (lang === 'Turkish') {
-    if (text.includes('dashboard') || text.includes('site') || text.includes('site') || text.includes('sitenin')) {
+    if (text.includes('dashboard') || text.includes('site') || text.includes('sitenin')) {
       return 'World Dashboard; kripto, haberler, seyahat, hisseler, viral içerikler ve günlük özet gibi önemli bölümleri tek yerde toplar.'
     }
     if (text.includes('first') || text.includes('start') || text.includes('check') || text.includes('nereden') || text.includes('başla')) {
@@ -123,7 +123,10 @@ export async function POST(req: Request) {
     const body = await req.json()
     const message = String(body?.message || '')
     const history = (body?.history || []) as Message[]
-    const apiKey = process.env.OPENAI_API_KEY
+    const apiKey = process.env.OPENROUTER_API_KEY
+    const model = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-8b-instruct:free'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://world-dashboard-delta-umber.vercel.app'
+    const siteName = 'World Dashboard'
     const detectedLanguage = detectLanguage(message)
 
     if (!apiKey) {
@@ -132,6 +135,8 @@ export async function POST(req: Request) {
 
     const systemPrompt = `You are an AI assistant for World Dashboard.
 Your job is to help users understand the dashboard, what each section is for, and how to interpret it.
+Only answer questions related to this site, its sections, and how to use the information shown here.
+If a user asks something unrelated to the dashboard, politely say that this assistant is limited to World Dashboard topics.
 Always reply in the same language as the user's latest message.
 If the user asks, you may also provide a short translation or alternative version in Azerbaijani, Russian, English, German, or Turkish.
 Be concise, practical, clear, and honest.
@@ -141,14 +146,16 @@ For simple questions, answer briefly.
 For more complex or technical questions, answer step by step with practical guidance.
 The user's latest message language is: ${detectedLanguage}.`
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
+        'HTTP-Referer': siteUrl,
+        'X-Title': siteName,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model,
         temperature: 0.4,
         messages: [
           { role: 'system', content: systemPrompt },
