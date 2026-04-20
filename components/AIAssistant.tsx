@@ -24,12 +24,14 @@ export default function AIAssistant() {
         'Hi! I am your World Dashboard assistant. I can explain the dashboard, suggest which sections to check, and help you understand what to focus on.'
     }
   ])
+  const [animatedReply, setAnimatedReply] = useState('')
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading, open])
+  }, [messages, loading, open, animatedReply])
 
   useEffect(() => {
     const textarea = textareaRef.current
@@ -37,6 +39,40 @@ export default function AIAssistant() {
     textarea.style.height = '0px'
     textarea.style.height = `${Math.min(textarea.scrollHeight, 140)}px`
   }, [input])
+
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current)
+    }
+  }, [])
+
+  const animateAssistantReply = (fullText: string) => {
+    if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current)
+
+    setAnimatedReply('')
+
+    if (!fullText) {
+      setMessages(prev => [...prev, { role: 'assistant', content: fullText }])
+      return
+    }
+
+    let index = 0
+
+    const step = () => {
+      index += Math.max(1, Math.ceil(fullText.length / 80))
+      const next = fullText.slice(0, index)
+      setAnimatedReply(next)
+
+      if (index < fullText.length) {
+        animationTimeoutRef.current = setTimeout(step, 18)
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: fullText }])
+        setAnimatedReply('')
+      }
+    }
+
+    step()
+  }
 
   const sendMessage = async (text?: string) => {
     const content = (text ?? input).trim()
@@ -46,6 +82,7 @@ export default function AIAssistant() {
     setMessages(nextMessages)
     setInput('')
     setLoading(true)
+    setAnimatedReply('')
 
     try {
       const res = await fetch('/api/assistant', {
@@ -55,24 +92,15 @@ export default function AIAssistant() {
       })
 
       const data = await res.json()
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content:
-            data?.reply ||
-            'I could not generate a reply right now. Please try again in a moment.'
-        }
-      ])
+      const reply =
+        data?.reply ||
+        'I could not generate a reply right now. Please try again in a moment.'
+
+      animateAssistantReply(reply)
     } catch {
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content:
-            'There was a connection problem while contacting the assistant. Please try again shortly.'
-        }
-      ])
+      animateAssistantReply(
+        'There was a connection problem while contacting the assistant. Please try again shortly.'
+      )
     } finally {
       setLoading(false)
     }
@@ -121,7 +149,14 @@ export default function AIAssistant() {
               </div>
             ))}
 
-            {loading && (
+            {animatedReply && (
+              <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl border border-gray-800 bg-gray-900 px-3 py-2 text-sm leading-6 text-gray-100">
+                {animatedReply}
+                <span className="ml-1 inline-block h-4 w-[2px] animate-pulse bg-indigo-400 align-middle" />
+              </div>
+            )}
+
+            {loading && !animatedReply && (
               <div className="max-w-[85%] rounded-2xl border border-gray-800 bg-gray-900 px-3 py-2 text-sm text-gray-300">
                 Thinking...
               </div>
