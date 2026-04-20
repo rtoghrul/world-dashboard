@@ -20,28 +20,28 @@ function fallbackReply(message: string) {
   const lang = detectLanguage(message)
 
   if (lang === 'Azerbaijani') {
-    if (text.includes('salam') || text.includes('nec')) return 'Salam 👋 Necəsən? Mən kömək etməyə hazıram. Dashboard barədə nə bilmək istəyirsən?'
-    return 'Mən World Dashboard assistantıyəm. Nə demək istədiyini başa düşməyə çalışaram və kömək edərəm.'
+    if (text.includes('salam') || text.includes('nec')) return 'Salam 👋 Necəsən? Nəyə baxırdın dashboardda?'
+    return 'Yaza bilərsən 👍 birlikdə baxarıq.'
   }
 
   if (lang === 'Russian') {
-    if (text.includes('привет')) return 'Привет 👋 Как дела? Чем могу помочь по dashboard?'
-    return 'Я assistant для World Dashboard. Постараюсь понять тебя и помочь.'
+    if (text.includes('привет')) return 'Привет 👋 Как дела? На что смотришь в dashboard?'
+    return 'Пиши 👍 разберёмся вместе.'
   }
 
   if (lang === 'German') {
-    if (text.includes('hallo') || text.includes('hi')) return 'Hallo 👋 Wie geht’s? Wie kann ich beim Dashboard helfen?'
-    return 'Ich bin der Assistant für World Dashboard und helfe dir gern.'
+    if (text.includes('hallo') || text.includes('hi')) return 'Hallo 👋 Wie geht’s? Was schaust du im Dashboard an?'
+    return 'Schreib einfach 👍 wir schauen zusammen.'
   }
 
   if (lang === 'Turkish') {
-    if (text.includes('merhaba') || text.includes('selam')) return 'Merhaba 👋 Nasılsın? Dashboard ile ilgili nasıl yardımcı olayım?'
-    return 'Ben World Dashboard assistantıyım, yardımcı olmaya hazırım.'
+    if (text.includes('merhaba') || text.includes('selam')) return 'Merhaba 👋 Nasılsın? Dashboardda neye bakıyorsun?'
+    return 'Yaz 👍 birlikte bakalım.'
   }
 
-  if (text.includes('hello') || text.includes('hi')) return 'Hey 👋 How’s it going? How can I help you with the dashboard?'
+  if (text.includes('hello') || text.includes('hi')) return 'Hey 👋 what are you checking on the dashboard?'
 
-  return 'I’m your World Dashboard assistant. I’ll try to understand what you mean and help you out.'
+  return 'Just tell me 👍 I’ll help you figure it out.'
 }
 
 export async function POST(req: Request) {
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     const message = String(body?.message || '')
     const history = (body?.history || []) as Message[]
     const apiKey = process.env.OPENROUTER_API_KEY
-    const model = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-8b-instruct:free'
+    const model = process.env.OPENROUTER_MODEL || 'openrouter/free'
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://world-dashboard-delta-umber.vercel.app'
     const siteName = 'World Dashboard'
     const detectedLanguage = detectLanguage(message)
@@ -59,15 +59,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ reply: fallbackReply(message) })
     }
 
-    const systemPrompt = `You are an AI assistant for World Dashboard.
-Speak like a real human, friendly and natural.
-If the user greets you, greet them back warmly.
-Do not sound robotic or overly strict.
-Still focus on helping users with the dashboard and guide them to sections when needed.
-Understand even short or unclear messages.
-Answer clearly and helpfully.
-Reply in the same language as the user.
-The user's language is: ${detectedLanguage}.`
+    const systemPrompt = `You are a real AI assistant inside a live dashboard.
+
+Talk like a normal human.
+Do NOT sound like a system.
+Do NOT introduce yourself.
+
+Be relaxed, friendly, and natural.
+
+Understand short, messy, or incomplete messages.
+Continue conversation naturally (like "and?", "what else").
+
+Act like you are inside the dashboard and helping user explore it.
+
+Instead of explaining formally, speak casually:
+- suggest what to check
+- react to what user says
+- guide naturally
+
+Examples:
+- "yeah crypto looks interesting today, especially whale activity"
+- "you can also check news, it connects to that"
+- "wanna look at something else?"
+
+If unrelated → gently redirect (no strict answers)
+
+Keep answers short, natural, and human.
+
+Language: ${detectedLanguage}
+`
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -79,7 +99,7 @@ The user's language is: ${detectedLanguage}.`
       },
       body: JSON.stringify({
         model,
-        temperature: 0.7,
+        temperature: 0.95,
         messages: [
           { role: 'system', content: systemPrompt },
           ...history.map(item => ({ role: item.role, content: item.content })),
@@ -92,8 +112,6 @@ The user's language is: ${detectedLanguage}.`
 
     return NextResponse.json({ reply })
   } catch {
-    return NextResponse.json({
-      reply: 'The assistant is having trouble responding right now. Please try again shortly.',
-    })
+    return NextResponse.json({ reply: fallbackReply('') })
   }
 }
