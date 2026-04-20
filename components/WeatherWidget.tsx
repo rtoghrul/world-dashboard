@@ -102,7 +102,7 @@ export default function WeatherWidget() {
 
   if (status === 'loading') {
     return (
-      <div className="fixed bottom-5 right-5 z-50">
+      <div className="fixed right-5 top-20 z-50">
         <div className="bg-gray-900 border border-gray-700 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-2 animate-pulse">
           <span className="text-gray-500 text-xs">{tr.detectingLocation}</span>
         </div>
@@ -112,7 +112,7 @@ export default function WeatherWidget() {
 
   if (status === 'error') {
     return (
-      <div className="fixed bottom-5 right-5 z-50">
+      <div className="fixed right-5 top-20 z-50">
         <div className="bg-gray-900 border border-gray-700 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-2">
           <span className="text-lg">📍</span>
           <span className="text-gray-400 text-xs">{tr.locationError}</span>
@@ -124,8 +124,7 @@ export default function WeatherWidget() {
   if (!weather) return null
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
-      {/* Expanded weekly panel */}
+    <div className="fixed right-5 top-20 z-50">
       {open && (
         <div className="mb-2 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-72 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
@@ -141,7 +140,6 @@ export default function WeatherWidget() {
             </button>
           </div>
 
-          {/* Current details */}
           <div className="px-4 py-3 flex items-center justify-between border-b border-gray-800">
             <span className="text-3xl font-bold text-white">{weather.temp}°C</span>
             <div className="flex flex-col items-end gap-1 text-xs text-gray-400">
@@ -150,7 +148,6 @@ export default function WeatherWidget() {
             </div>
           </div>
 
-          {/* 7-day forecast */}
           <div className="divide-y divide-gray-800/50">
             {weather.daily.map((day, i) => {
               const dateObj = new Date(day.date + 'T12:00:00')
@@ -173,7 +170,6 @@ export default function WeatherWidget() {
         </div>
       )}
 
-      {/* Collapsed pill */}
       <button
         onClick={() => setOpen(o => !o)}
         className="flex items-center gap-2 bg-gray-900 border border-gray-700 hover:border-gray-500 rounded-2xl px-4 py-2.5 shadow-2xl transition group"
