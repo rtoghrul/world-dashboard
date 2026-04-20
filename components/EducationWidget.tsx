@@ -1,19 +1,86 @@
 'use client'
 import useSWR from 'swr'
 import { useState } from 'react'
-import { ExternalLink, ChevronDown, GraduationCap, BookOpen, Bot, Zap, Cog } from 'lucide-react'
+import { ExternalLink, ChevronDown, GraduationCap, BookOpen, Bot, Zap, Cog, Wrench } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 import TopicNewsWidget from '@/components/TopicNewsWidget'
+import NewsModal, { type ModalItem } from '@/components/NewsModal'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
-type Article = {
-  title: string
-  link: string
-  pubDate: string
-  description: string
-  thumbnail: string | null
-  source: string
+type ToolEntry = { name: string; url: string; desc: string; color: string; bg: string }
+
+const USEFUL_TOOLS: Record<string, ToolEntry[]> = {
+  math: [
+    { name: 'Wolfram Alpha', url: 'https://www.wolframalpha.com', desc: 'Compute answers, integrals, equations', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'Desmos', url: 'https://www.desmos.com/calculator', desc: 'Graphing calculator', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'GeoGebra', url: 'https://www.geogebra.org', desc: 'Geometry & algebra combined', color: 'text-violet-400', bg: 'bg-violet-500/10 border-violet-500/20' },
+    { name: 'Symbolab', url: 'https://www.symbolab.com', desc: 'Step-by-step solver', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+    { name: 'Mathway', url: 'https://www.mathway.com', desc: 'Algebra, calculus, stats', color: 'text-pink-400', bg: 'bg-pink-500/10 border-pink-500/20' },
+  ],
+  geometry: [
+    { name: 'GeoGebra Geometry', url: 'https://www.geogebra.org/geometry', desc: 'Interactive geometry builder', color: 'text-violet-400', bg: 'bg-violet-500/10 border-violet-500/20' },
+    { name: 'Desmos Geometry', url: 'https://www.desmos.com/geometry', desc: 'Ruler & compass constructions', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'Euclid: The Game', url: 'https://euclidthegame.com', desc: 'Practice geometric constructions', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
+    { name: 'Wolfram Alpha', url: 'https://www.wolframalpha.com', desc: 'Geometric calculations', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+  ],
+  physics: [
+    { name: 'PhET Simulations', url: 'https://phet.colorado.edu', desc: 'Interactive physics simulations', color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
+    { name: 'Wolfram Alpha', url: 'https://www.wolframalpha.com', desc: 'Physics formulas & calculations', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'The Physics Classroom', url: 'https://www.physicsclassroom.com', desc: 'Tutorials & simulations', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'HyperPhysics', url: 'http://hyperphysics.phy-astr.gsu.edu', desc: 'Physics concept maps', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+  ],
+  chemistry: [
+    { name: 'Ptable', url: 'https://ptable.com', desc: 'Interactive periodic table', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+    { name: 'PubChem', url: 'https://pubchem.ncbi.nlm.nih.gov', desc: 'Chemical compound database', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'ChemCollective', url: 'https://chemcollective.org', desc: 'Virtual chemistry labs', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+    { name: 'Wolfram Alpha', url: 'https://www.wolframalpha.com', desc: 'Chemical equations & properties', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+  ],
+  biology: [
+    { name: 'PubMed', url: 'https://pubmed.ncbi.nlm.nih.gov', desc: 'Biomedical literature search', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+    { name: 'HHMI BioInteractive', url: 'https://www.biointeractive.org', desc: 'Free biology resources', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+    { name: 'UniProt', url: 'https://www.uniprot.org', desc: 'Protein & gene database', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'UCSC Genome Browser', url: 'https://genome.ucsc.edu', desc: 'Genome visualization tool', color: 'text-lime-400', bg: 'bg-lime-500/10 border-lime-500/20' },
+  ],
+  anatomy: [
+    { name: 'Zygote Body', url: 'https://www.zygotebody.com', desc: 'Free 3D body explorer', color: 'text-pink-400', bg: 'bg-pink-500/10 border-pink-500/20' },
+    { name: 'Kenhub', url: 'https://www.kenhub.com', desc: 'Anatomy learning platform', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'Radiopaedia', url: 'https://radiopaedia.org', desc: 'Radiology & anatomy cases', color: 'text-violet-400', bg: 'bg-violet-500/10 border-violet-500/20' },
+    { name: 'InnerBody', url: 'https://www.innerbody.com', desc: 'Interactive anatomy maps', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
+  ],
+  astronomy: [
+    { name: 'Stellarium Web', url: 'https://stellarium-web.org', desc: 'Online planetarium', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
+    { name: 'NASA Eyes', url: 'https://eyes.nasa.gov', desc: '3D solar system explorer', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'NASA APOD', url: 'https://apod.nasa.gov', desc: 'Astronomy picture of the day', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+    { name: 'Sky Map Online', url: 'https://www.skymaponline.net', desc: 'Real-time star map', color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
+  ],
+  languages: [
+    { name: 'Duolingo', url: 'https://www.duolingo.com', desc: 'Gamified language learning', color: 'text-lime-400', bg: 'bg-lime-500/10 border-lime-500/20' },
+    { name: 'Anki', url: 'https://apps.ankiweb.net', desc: 'Spaced repetition flashcards', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'Forvo', url: 'https://forvo.com', desc: 'Native pronunciation guide', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'Linguee', url: 'https://www.linguee.com', desc: 'Translation in context', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+  ],
+  automation: [
+    { name: 'n8n', url: 'https://n8n.io', desc: 'Open-source workflow automation', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'Make', url: 'https://www.make.com', desc: 'Visual automation builder', color: 'text-violet-400', bg: 'bg-violet-500/10 border-violet-500/20' },
+    { name: 'Simulink', url: 'https://www.mathworks.com/products/simulink.html', desc: 'Model-based design & simulation', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
+    { name: 'ROS', url: 'https://www.ros.org', desc: 'Robot Operating System', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'OpenPLC', url: 'https://openplcproject.com', desc: 'Open-source PLC runtime', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+  ],
+  electrical: [
+    { name: 'Falstad Circuit Sim', url: 'https://www.falstad.com/circuit', desc: 'Browser-based circuit simulator', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+    { name: 'Tinkercad Circuits', url: 'https://www.tinkercad.com/circuits', desc: 'Arduino & circuit simulator', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'LTspice', url: 'https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html', desc: 'Free SPICE circuit simulator', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'All About Circuits', url: 'https://www.allaboutcircuits.com', desc: 'EE reference & tutorials', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+    { name: 'CircuitLab', url: 'https://www.circuitlab.com', desc: 'Online schematic editor', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
+  ],
+  mechanical: [
+    { name: 'Onshape', url: 'https://www.onshape.com', desc: 'Free browser-based CAD', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { name: 'FreeCAD', url: 'https://www.freecad.org', desc: 'Open-source 3D parametric CAD', color: 'text-orange-400', bg: 'bg-orange-500/10 border-orange-500/20' },
+    { name: 'SimScale', url: 'https://www.simscale.com', desc: 'CFD & FEA simulation', color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
+    { name: 'eFunda', url: 'https://www.efunda.com', desc: 'Engineering formulas & data', color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
+    { name: 'Engineers Edge', url: 'https://www.engineersedge.com', desc: 'Reference calculators & data', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+  ],
 }
 
 const SUBJECTS = [
@@ -42,13 +109,66 @@ const FREE_COURSES = [
 
 type Mode = 'science' | 'engineering'
 
+function ToolsSection({ toolKey }: { toolKey: string }) {
+  const tools = USEFUL_TOOLS[toolKey] ?? []
+  if (!tools.length) return null
+  return (
+    <div>
+      <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+        <Wrench className="w-3 h-3" /> Useful Tools
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {tools.map(t => (
+          <a key={t.url} href={t.url} target="_blank" rel="noopener noreferrer"
+            className={`flex items-center justify-between p-3 rounded-xl border transition hover:opacity-80 group ${t.bg}`}>
+            <div>
+              <p className={`text-xs font-semibold ${t.color}`}>{t.name}</p>
+              <p className="text-gray-500 text-xs mt-0.5">{t.desc}</p>
+            </div>
+            <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0" />
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ScienceArticleCard({ article, emoji }: { article: ModalItem; emoji: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full text-left flex items-start gap-3 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
+      >
+        {article.thumbnail ? (
+          <img src={article.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0" loading="lazy"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+        ) : (
+          <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-lg">{emoji}</div>
+        )}
+        <div className="flex-1 min-w-0">
+          <p className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</p>
+          {article.description && (
+            <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{article.description}</p>
+          )}
+          <p className="text-gray-600 text-xs mt-1">
+            {article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · {article.source || 'ScienceDaily'}
+          </p>
+        </div>
+      </button>
+      {open && <NewsModal item={article} onClose={() => setOpen(false)} />}
+    </>
+  )
+}
+
 export default function EducationWidget() {
   const { tr, lang } = useLang()
   const [collapsed, setCollapsed] = useState(true)
   const [mode, setMode] = useState<Mode>('science')
   const [subject, setSubject] = useState('physics')
   const [activeEngTopic, setActiveEngTopic] = useState<'automation' | 'electrical' | 'mechanical' | null>(null)
-  const { data: rawData, isLoading, error } = useSWR<Article[]>(
+  const { data: rawData, isLoading, error } = useSWR<ModalItem[]>(
     mode === 'science' ? `/api/education?subject=${subject}&lang=${lang}` : null,
     fetcher,
     { refreshInterval: 3600000 }
@@ -114,7 +234,7 @@ export default function EducationWidget() {
       {!collapsed && (
         <div className="p-4 space-y-4">
 
-          {/* Mode toggle: Science vs Engineering */}
+          {/* Mode toggle */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setMode('science')}
@@ -172,38 +292,13 @@ export default function EducationWidget() {
                   ))}
                   {error && <div className="p-4 text-center text-red-400 text-sm">{tr.error}</div>}
                   {data.map((article, i) => (
-                    <a
-                      key={i}
-                      href={article.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-start gap-3 p-3 rounded-xl bg-gray-800/40 hover:bg-gray-800/70 border border-gray-700/30 hover:border-gray-600/50 transition group"
-                    >
-                      {article.thumbnail ? (
-                        <img
-                          src={article.thumbnail}
-                          alt=""
-                          className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-                          loading="lazy"
-                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                        />
-                      ) : (
-                        <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-lg">
-                          {currentSubject.emoji}
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</p>
-                        {article.description && (
-                          <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{article.description}</p>
-                        )}
-                        <p className="text-gray-600 text-xs mt-1">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''} · {article.source || 'ScienceDaily'}</p>
-                      </div>
-                      <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5" />
-                    </a>
+                    <ScienceArticleCard key={i} article={article} emoji={currentSubject.emoji} />
                   ))}
                 </div>
               </div>
+
+              {/* Useful Tools for current subject */}
+              <ToolsSection toolKey={subject} />
             </>
           )}
 
@@ -227,13 +322,22 @@ export default function EducationWidget() {
                 ))}
               </div>
               {activeEngTopic === 'automation' && (
-                <TopicNewsWidget topic="automation" title={tr.automation} desc={tr.automationDesc} accentClass="text-indigo-300" icon={<Bot className="w-4 h-4" />} defaultCollapsed={false} />
+                <div className="space-y-3">
+                  <TopicNewsWidget topic="automation" title={tr.automation} desc={tr.automationDesc} accentClass="text-indigo-300" icon={<Bot className="w-4 h-4" />} defaultCollapsed={false} />
+                  <ToolsSection toolKey="automation" />
+                </div>
               )}
               {activeEngTopic === 'electrical' && (
-                <TopicNewsWidget topic="electrical" title={tr.electrical} desc={tr.electricalDesc} accentClass="text-amber-300" icon={<Zap className="w-4 h-4" />} defaultCollapsed={false} />
+                <div className="space-y-3">
+                  <TopicNewsWidget topic="electrical" title={tr.electrical} desc={tr.electricalDesc} accentClass="text-amber-300" icon={<Zap className="w-4 h-4" />} defaultCollapsed={false} />
+                  <ToolsSection toolKey="electrical" />
+                </div>
               )}
               {activeEngTopic === 'mechanical' && (
-                <TopicNewsWidget topic="mechanical" title={tr.mechanical} desc={tr.mechanicalDesc} accentClass="text-emerald-300" icon={<Cog className="w-4 h-4" />} defaultCollapsed={false} />
+                <div className="space-y-3">
+                  <TopicNewsWidget topic="mechanical" title={tr.mechanical} desc={tr.mechanicalDesc} accentClass="text-emerald-300" icon={<Cog className="w-4 h-4" />} defaultCollapsed={false} />
+                  <ToolsSection toolKey="mechanical" />
+                </div>
               )}
             </div>
           )}
