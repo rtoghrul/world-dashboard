@@ -69,6 +69,20 @@ export type NewsItem = {
   source: string
 }
 
+function CardImage({ item }: { item: NewsItem }) {
+  const [failed, setFailed] = useState(false)
+  if (item.thumbnail && !failed) {
+    return <img src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gray-800" onError={() => setFailed(true)} />
+  }
+  const first = item.source?.trim()?.charAt(0)?.toUpperCase() || 'N'
+  return (
+    <div className="w-14 h-14 rounded-lg bg-gray-800 border border-gray-700/70 flex flex-col items-center justify-center flex-shrink-0">
+      <span className="text-indigo-300 text-lg font-bold leading-none">{first}</span>
+      <span className="text-gray-500 text-[9px] mt-1">NEWS</span>
+    </div>
+  )
+}
+
 export function NewsCard({ item }: { item: NewsItem }) {
   const [open, setOpen] = useState(false)
   return (
@@ -77,10 +91,7 @@ export function NewsCard({ item }: { item: NewsItem }) {
         onClick={() => setOpen(true)}
         className="w-full text-left flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group"
       >
-        {item.thumbnail && (
-          <img src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-        )}
+        <CardImage item={item} />
         <div className="flex-1 min-w-0">
           <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
           <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
@@ -113,7 +124,6 @@ export default function NewsWidget() {
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-      {/* Header */}
       <div
         className="px-5 py-3 border-b border-gray-800 cursor-pointer select-none hover:bg-gray-800/20 transition"
         onClick={() => setCollapsed(c => !c)}
@@ -157,7 +167,6 @@ export default function NewsWidget() {
         )}
       </div>
 
-      {/* Collapsed preview */}
       {collapsed && (
         <div className="px-5 py-3">
           {isLoading && (
@@ -171,12 +180,7 @@ export default function NewsWidget() {
           )}
           {top && (
             <div className="flex gap-3 items-center">
-              {top.thumbnail ? (
-                <img src={top.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-              ) : (
-                <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-2xl">📰</div>
-              )}
+              <CardImage item={top} />
               <div className="min-w-0">
                 <p className="text-white text-xs font-medium line-clamp-2">{top.title}</p>
                 <p className="text-gray-500 text-xs mt-0.5">{top.source}</p>
@@ -186,7 +190,6 @@ export default function NewsWidget() {
         </div>
       )}
 
-      {/* Expanded content */}
       {!collapsed && (
         <>
           <div className="divide-y divide-gray-800/50">
