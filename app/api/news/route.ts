@@ -4,13 +4,60 @@ import { translateTexts } from '@/lib/translate'
 export const revalidate = 300
 
 const RSS_FEEDS: Record<string, string[]> = {
+  top: [
+    'https://feeds.bbci.co.uk/news/world/rss.xml',
+    'https://www.aljazeera.com/xml/rss/all.xml',
+    'https://rss.cnn.com/rss/edition_world.rss',
+  ],
   war: [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
     'https://www.aljazeera.com/xml/rss/all.xml',
   ],
+  politics: [
+    'https://feeds.bbci.co.uk/news/politics/rss.xml',
+    'https://rss.cnn.com/rss/edition.rss',
+    'https://www.politico.com/rss/politics08.xml',
+  ],
+  economy: [
+    'https://feeds.bbci.co.uk/news/business/rss.xml',
+    'https://www.cnbc.com/id/100003114/device/rss/rss.html',
+    'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
+  ],
+  technology: [
+    'https://techcrunch.com/feed/',
+    'https://www.theverge.com/rss/index.xml',
+  ],
   ai: [
     'https://techcrunch.com/category/artificial-intelligence/feed/',
     'https://feeds.feedburner.com/venturebeat/SZYF',
+  ],
+  industry: [
+    'https://feeds.bbci.co.uk/news/business/rss.xml',
+    'https://www.manufacturing.net/rss.xml',
+  ],
+  social: [
+    'https://www.theverge.com/rss/index.xml',
+    'https://techcrunch.com/category/social/feed/',
+  ],
+  cinema: [
+    'https://variety.com/feed/',
+    'https://www.hollywoodreporter.com/feed/',
+  ],
+  art: [
+    'https://www.theartnewspaper.com/rss.xml',
+    'https://www.smithsonianmag.com/rss/arts-culture/',
+  ],
+  sports: [
+    'https://feeds.bbci.co.uk/sport/rss.xml',
+    'https://www.espn.com/espn/rss/news',
+  ],
+  science: [
+    'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',
+    'https://www.nasa.gov/rss/dyn/breaking_news.rss',
+  ],
+  health: [
+    'https://feeds.bbci.co.uk/news/health/rss.xml',
+    'https://www.who.int/rss-feeds/news-english.xml',
   ],
 }
 
@@ -74,15 +121,15 @@ async function fetchFeed(url: string, category: string) {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const category = searchParams.get('category') || 'war'
+  const category = searchParams.get('category') || 'top'
   const lang = searchParams.get('lang') || 'en'
-  const feeds = RSS_FEEDS[category] || RSS_FEEDS.war
+  const feeds = RSS_FEEDS[category] || RSS_FEEDS.top
 
   const results = await Promise.allSettled(feeds.map(url => fetchFeed(url, category)))
   const items = results
     .filter(r => r.status === 'fulfilled')
     .flatMap(r => (r as PromiseFulfilledResult<unknown[]>).value)
-    .slice(0, 10) as { title: string; description: string; [key: string]: unknown }[]
+    .slice(0, 12) as { title: string; description: string; [key: string]: unknown }[]
 
   if (lang !== 'en' && items.length) {
     const titles = items.map(i => i.title)
