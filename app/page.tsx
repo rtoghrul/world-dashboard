@@ -8,8 +8,7 @@ import MarketTicker from '@/components/MarketTicker'
 import CryptoWidget from '@/components/CryptoWidget'
 import NewsWidget from '@/components/NewsWidget'
 import PolymarketWidget from '@/components/PolymarketWidget'
-import FlightsWidget from '@/components/FlightsWidget'
-import HotelsWidget from '@/components/HotelsWidget'
+import TravelWidget from '@/components/TravelWidget'
 import ViralWidget from '@/components/ViralWidget'
 import WhaleWidget from '@/components/WhaleWidget'
 import SocialWidget from '@/components/SocialWidget'
@@ -36,7 +35,7 @@ export default function HomePage() {
     { id: 'crypto', label: tr.crypto, keywords: ['crypto', 'bitcoin', 'btc', 'kripto'] },
     { id: 'whale', label: tr.whaleActivity, keywords: ['whale', 'balina', 'large', 'wallet'] },
     { id: 'news', label: tr.news, keywords: ['news', 'xeber', 'xəbər', 'politics', 'ai'] },
-    { id: 'flights', label: tr.flights, keywords: ['flight', 'flights', 'ucus', 'uçuş', 'travel', 'hotel'] },
+    { id: 'travel', label: 'Travel Deals', keywords: ['flight', 'flights', 'ucus', 'uçuş', 'travel', 'hotel', 'transport', 'train', 'bus', 'last minute'] },
     { id: 'viral', label: tr.viral, keywords: ['youtube', 'video', 'viral', 'trend'] },
     { id: 'social', label: tr.social, keywords: ['social', 'tiktok', 'instagram'] },
     { id: 'stocks', label: tr.stocks, keywords: ['stocks', 'stock', 'sehmler', 'səhm', 'market'] },
@@ -313,13 +312,12 @@ export default function HomePage() {
           </section>
         )}
 
-        {(visibleIds.has('news') || visibleIds.has('flights')) && (
+        {(visibleIds.has('news') || visibleIds.has('travel')) && (
           <section id="news" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {visibleIds.has('news') && <NewsWidget />}
-            {visibleIds.has('flights') && (
-              <div id="flights" className="space-y-4">
-                <FlightsWidget />
-                <div id="hotels"><HotelsWidget /></div>
+            {visibleIds.has('travel') && (
+              <div id="travel">
+                <TravelWidget />
               </div>
             )}
           </section>
@@ -352,12 +350,12 @@ export default function HomePage() {
         {visibleSections.length === 0 && (
           <section className="rounded-2xl border border-gray-800 bg-gray-900/60 px-5 py-10 text-center">
             <p className="text-sm font-medium text-white">No matching sections</p>
-            <p className="mt-1 text-xs text-gray-500">Try crypto, news, YouTube, stocks, flights, or education.</p>
+            <p className="mt-1 text-xs text-gray-500">Try crypto, news, YouTube, stocks, travel, or education.</p>
           </section>
         )}
 
         <footer className="text-center text-gray-600 text-xs py-4 border-t border-gray-800">
-          World Dashboard · CoinGecko, Polymarket, BBC, TechCrunch, YouTube & more
+          World Dashboard · CoinGecko, Polymarket, BBC, TechCrunch, YouTube & travel deals
         </footer>
       </main>
     </div>
