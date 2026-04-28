@@ -102,21 +102,18 @@ export default function WeatherWidget() {
 
   if (status === 'loading') {
     return (
-      <div className="fixed right-5 top-20 z-50">
-        <div className="bg-gray-900 border border-gray-700 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-2 animate-pulse">
-          <span className="text-gray-500 text-xs">{tr.detectingLocation}</span>
-        </div>
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-2 animate-pulse">
+        <span className="text-lg">📍</span>
+        <span className="text-gray-500 text-xs">{tr.detectingLocation}</span>
       </div>
     )
   }
 
   if (status === 'error') {
     return (
-      <div className="fixed right-5 top-20 z-50">
-        <div className="bg-gray-900 border border-gray-700 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-2">
-          <span className="text-lg">📍</span>
-          <span className="text-gray-400 text-xs">{tr.locationError}</span>
-        </div>
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-2">
+        <span className="text-lg">📍</span>
+        <span className="text-gray-400 text-xs">{tr.locationError}</span>
       </div>
     )
   }
@@ -124,16 +121,27 @@ export default function WeatherWidget() {
   if (!weather) return null
 
   return (
-    <div className="fixed right-5 top-20 z-50">
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-800/40 transition text-left"
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="text-2xl">{weatherIcon(weather.code)}</span>
+          <div className="min-w-0">
+            <p className="text-white text-sm font-semibold leading-none">{tr.weather}: {weather.temp}°C</p>
+            <p className="text-gray-400 text-xs mt-1 truncate">{weather.city} · {tr.wind} {weather.wind} km/h · {tr.humidity} {weather.humidity}%</p>
+          </div>
+        </div>
+        <ChevronUp className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${open ? '' : 'rotate-180'}`} />
+      </button>
+
       {open && (
-        <div className="mb-2 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-72 overflow-hidden">
+        <div className="border-t border-gray-800">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">{weatherIcon(weather.code)}</span>
-              <div>
-                <p className="text-white text-sm font-semibold">{weather.city}</p>
-                <p className="text-gray-400 text-xs">{tr.weeklyForecast}</p>
-              </div>
+            <div>
+              <p className="text-white text-sm font-semibold">{weather.city}</p>
+              <p className="text-gray-400 text-xs">{tr.weeklyForecast}</p>
             </div>
             <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-white transition">
               <X className="w-4 h-4" />
@@ -169,18 +177,6 @@ export default function WeatherWidget() {
           </div>
         </div>
       )}
-
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 bg-gray-900 border border-gray-700 hover:border-gray-500 rounded-2xl px-4 py-2.5 shadow-2xl transition group"
-      >
-        <span className="text-xl">{weatherIcon(weather.code)}</span>
-        <div className="text-left">
-          <p className="text-white text-sm font-semibold leading-none">{weather.temp}°C</p>
-          <p className="text-gray-400 text-xs mt-0.5">{weather.city}</p>
-        </div>
-        <ChevronUp className={`w-3.5 h-3.5 text-gray-500 group-hover:text-gray-300 transition-transform duration-200 ${open ? '' : 'rotate-180'}`} />
-      </button>
     </div>
   )
 }
