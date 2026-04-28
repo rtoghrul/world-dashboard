@@ -1,66 +1,26 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BadgePercent, Bus, CalendarDays, ChevronDown, ExternalLink, Hotel, MapPinned, Minus, Plane, Plus, Search, Sparkles, Train } from 'lucide-react'
 
 type Mode = 'package' | 'flight' | 'hotel' | 'transport'
 type TripType = 'oneway' | 'round'
 type Airport = { label: string; city: string; code: string; country: string }
 
-const airports: Airport[] = [
+const fallbackAirports: Airport[] = [
   { label: 'Frankfurt Main', city: 'Frankfurt', code: 'FRA', country: 'Germany' },
   { label: 'Baku Heydar Aliyev', city: 'Baku', code: 'GYD', country: 'Azerbaijan' },
   { label: 'Istanbul Airport', city: 'Istanbul', code: 'IST', country: 'Türkiye' },
   { label: 'Istanbul Sabiha Gokcen', city: 'Istanbul', code: 'SAW', country: 'Türkiye' },
-  { label: 'Antalya', city: 'Antalya', code: 'AYT', country: 'Türkiye' },
-  { label: 'Ankara Esenboga', city: 'Ankara', code: 'ESB', country: 'Türkiye' },
-  { label: 'Izmir Adnan Menderes', city: 'Izmir', code: 'ADB', country: 'Türkiye' },
   { label: 'Paris Charles de Gaulle', city: 'Paris', code: 'CDG', country: 'France' },
-  { label: 'Paris Orly', city: 'Paris', code: 'ORY', country: 'France' },
   { label: 'London Heathrow', city: 'London', code: 'LHR', country: 'United Kingdom' },
-  { label: 'London Gatwick', city: 'London', code: 'LGW', country: 'United Kingdom' },
-  { label: 'London Stansted', city: 'London', code: 'STN', country: 'United Kingdom' },
   { label: 'Rome Fiumicino', city: 'Rome', code: 'FCO', country: 'Italy' },
-  { label: 'Milan Malpensa', city: 'Milan', code: 'MXP', country: 'Italy' },
   { label: 'Barcelona El Prat', city: 'Barcelona', code: 'BCN', country: 'Spain' },
-  { label: 'Madrid Barajas', city: 'Madrid', code: 'MAD', country: 'Spain' },
   { label: 'Palma de Mallorca', city: 'Mallorca', code: 'PMI', country: 'Spain' },
   { label: 'Vienna', city: 'Vienna', code: 'VIE', country: 'Austria' },
   { label: 'Prague', city: 'Prague', code: 'PRG', country: 'Czechia' },
   { label: 'Dubai', city: 'Dubai', code: 'DXB', country: 'UAE' },
-  { label: 'Abu Dhabi', city: 'Abu Dhabi', code: 'AUH', country: 'UAE' },
   { label: 'Amsterdam Schiphol', city: 'Amsterdam', code: 'AMS', country: 'Netherlands' },
   { label: 'Brussels', city: 'Brussels', code: 'BRU', country: 'Belgium' },
-  { label: 'Berlin Brandenburg', city: 'Berlin', code: 'BER', country: 'Germany' },
-  { label: 'Munich', city: 'Munich', code: 'MUC', country: 'Germany' },
-  { label: 'Dusseldorf', city: 'Dusseldorf', code: 'DUS', country: 'Germany' },
-  { label: 'Cologne Bonn', city: 'Cologne', code: 'CGN', country: 'Germany' },
-  { label: 'Hamburg', city: 'Hamburg', code: 'HAM', country: 'Germany' },
-  { label: 'Stuttgart', city: 'Stuttgart', code: 'STR', country: 'Germany' },
-  { label: 'Zurich', city: 'Zurich', code: 'ZRH', country: 'Switzerland' },
-  { label: 'Geneva', city: 'Geneva', code: 'GVA', country: 'Switzerland' },
-  { label: 'Copenhagen', city: 'Copenhagen', code: 'CPH', country: 'Denmark' },
-  { label: 'Stockholm Arlanda', city: 'Stockholm', code: 'ARN', country: 'Sweden' },
-  { label: 'Oslo', city: 'Oslo', code: 'OSL', country: 'Norway' },
-  { label: 'Helsinki', city: 'Helsinki', code: 'HEL', country: 'Finland' },
-  { label: 'Warsaw Chopin', city: 'Warsaw', code: 'WAW', country: 'Poland' },
-  { label: 'Budapest', city: 'Budapest', code: 'BUD', country: 'Hungary' },
-  { label: 'Lisbon', city: 'Lisbon', code: 'LIS', country: 'Portugal' },
-  { label: 'Athens', city: 'Athens', code: 'ATH', country: 'Greece' },
-  { label: 'Tbilisi', city: 'Tbilisi', code: 'TBS', country: 'Georgia' },
-  { label: 'Yerevan', city: 'Yerevan', code: 'EVN', country: 'Armenia' },
-  { label: 'Doha Hamad', city: 'Doha', code: 'DOH', country: 'Qatar' },
-  { label: 'Riyadh', city: 'Riyadh', code: 'RUH', country: 'Saudi Arabia' },
-  { label: 'Jeddah', city: 'Jeddah', code: 'JED', country: 'Saudi Arabia' },
-  { label: 'New York JFK', city: 'New York', code: 'JFK', country: 'USA' },
-  { label: 'New York Newark', city: 'New York', code: 'EWR', country: 'USA' },
-  { label: 'Los Angeles', city: 'Los Angeles', code: 'LAX', country: 'USA' },
-  { label: 'Miami', city: 'Miami', code: 'MIA', country: 'USA' },
-  { label: 'Toronto Pearson', city: 'Toronto', code: 'YYZ', country: 'Canada' },
-  { label: 'Tokyo Haneda', city: 'Tokyo', code: 'HND', country: 'Japan' },
-  { label: 'Tokyo Narita', city: 'Tokyo', code: 'NRT', country: 'Japan' },
-  { label: 'Seoul Incheon', city: 'Seoul', code: 'ICN', country: 'South Korea' },
-  { label: 'Singapore Changi', city: 'Singapore', code: 'SIN', country: 'Singapore' },
-  { label: 'Bangkok Suvarnabhumi', city: 'Bangkok', code: 'BKK', country: 'Thailand' },
 ]
 
 const deals = [
@@ -74,11 +34,25 @@ const deals = [
 
 const quick = ['Mallorca', 'Istanbul', 'Rome', 'Barcelona', 'Prague', 'Vienna', 'Paris', 'Baku']
 
+function parseCsvLine(line: string) {
+  const out: string[] = []
+  let cur = ''
+  let inQuotes = false
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]
+    if (ch === '"') inQuotes = !inQuotes
+    else if (ch === ',' && !inQuotes) { out.push(cur); cur = '' }
+    else cur += ch
+  }
+  out.push(cur)
+  return out.map(v => v.replace(/^"|"$/g, '').trim())
+}
+
 function optionValue(a: Airport) {
   return `${a.city} (${a.code})`
 }
 
-function resolveAirport(value: string, fallback: Airport): Airport {
+function resolveAirport(value: string, airports: Airport[], fallback: Airport): Airport {
   const raw = value.trim()
   const clean = raw.toLowerCase()
   const codeFromBrackets = raw.match(/\(([A-Za-z]{3})\)/)?.[1]?.toUpperCase()
@@ -100,12 +74,12 @@ function yymmdd(date: string) {
   return `${y.slice(2)}${m}${d}`
 }
 
-function AirportInput({ id, label, value, onChange, placeholder }: { id: string; label: string; value: string; onChange: (value: string) => void; placeholder: string }) {
+function AirportInput({ id, label, value, onChange, placeholder, airports, loading }: { id: string; label: string; value: string; onChange: (value: string) => void; placeholder: string; airports: Airport[]; loading: boolean }) {
   const suggestions = airports.filter(a => {
     const q = value.trim().toLowerCase()
-    if (!q) return true
+    if (!q) return ['FRA', 'GYD', 'IST', 'SAW', 'CDG', 'LHR', 'DXB', 'BCN', 'FCO', 'VIE'].includes(a.code)
     return a.city.toLowerCase().includes(q) || a.code.toLowerCase().includes(q) || a.label.toLowerCase().includes(q) || a.country.toLowerCase().includes(q)
-  }).slice(0, 12)
+  }).slice(0, 25)
 
   return (
     <label className="text-gray-500 text-xs relative">
@@ -120,11 +94,14 @@ function AirportInput({ id, label, value, onChange, placeholder }: { id: string;
       <datalist id={`${id}-list`}>
         {suggestions.map(a => <option key={`${id}-${a.code}-${a.label}`} value={optionValue(a)}>{a.label} · {a.country}</option>)}
       </datalist>
+      <span className="mt-1 block text-[10px] text-gray-600">{loading ? 'Loading global airport list...' : `${airports.length.toLocaleString()} airports available + manual IATA code`}</span>
     </label>
   )
 }
 
 export default function TravelWidget() {
+  const [airports, setAirports] = useState<Airport[]>(fallbackAirports)
+  const [airportLoading, setAirportLoading] = useState(false)
   const [collapsed, setCollapsed] = useState(true)
   const [mode, setMode] = useState<Mode>('package')
   const [tripType, setTripType] = useState<TripType>('round')
@@ -136,8 +113,34 @@ export default function TravelWidget() {
   const [childAges, setChildAges] = useState<number[]>([])
   const [showResults, setShowResults] = useState(false)
 
-  const fromAirport = resolveAirport(from, airports[0])
-  const toAirport = resolveAirport(to, airports[1])
+  useEffect(() => {
+    let cancelled = false
+    const loadAirports = async () => {
+      setAirportLoading(true)
+      try {
+        const res = await fetch('https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat')
+        const text = await res.text()
+        const parsed = text.split('\n').map(parseCsvLine).map(cols => ({
+          label: cols[1],
+          city: cols[2],
+          country: cols[3],
+          code: cols[4],
+        })).filter(a => a.code && a.code !== '\\N' && /^[A-Z0-9]{3}$/.test(a.code) && a.city && a.label)
+        const map = new Map<string, Airport>()
+        ;[...fallbackAirports, ...parsed].forEach(a => map.set(`${a.code}-${a.label}`, a))
+        if (!cancelled) setAirports(Array.from(map.values()).sort((a, b) => a.city.localeCompare(b.city)))
+      } catch {
+        if (!cancelled) setAirports(fallbackAirports)
+      } finally {
+        if (!cancelled) setAirportLoading(false)
+      }
+    }
+    loadAirports()
+    return () => { cancelled = true }
+  }, [])
+
+  const fromAirport = resolveAirport(from, airports, fallbackAirports[0])
+  const toAirport = resolveAirport(to, airports, fallbackAirports[1])
   const totalPeople = adults + childAges.length
 
   const handleDepartChange = (value: string) => {
@@ -210,19 +213,16 @@ export default function TravelWidget() {
       </div>
 
       {collapsed ? (
-        <div className="px-5 py-3 flex flex-wrap gap-2"><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">✈️ {fromAirport.code} → {toAirport.code}</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🏨 Hotels</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🚆 Train / bus</span><span className="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-300 text-xs border border-purple-500/20">🔥 Last minute</span></div>
+        <div className="px-5 py-3 flex flex-wrap gap-2"><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">✈️ {fromAirport.code} → {toAirport.code}</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🌍 Global airports</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🚆 Train / bus</span><span className="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-300 text-xs border border-purple-500/20">🔥 Last minute</span></div>
       ) : (
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">{[{ id: 'package' as Mode, label: 'Flight + Hotel', icon: Sparkles }, { id: 'flight' as Mode, label: 'Flight only', icon: Plane }, { id: 'hotel' as Mode, label: 'Hotel only', icon: Hotel }, { id: 'transport' as Mode, label: 'Transport', icon: Train }].map(x => { const Icon = x.icon; return <button key={x.id} onClick={() => setMode(x.id)} className={`flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition ${mode === x.id ? 'border-cyan-500/40 bg-cyan-500/15 text-cyan-200' : 'border-gray-700 bg-gray-800/50 text-gray-400 hover:text-white hover:bg-gray-800'}`}><Icon className="w-3.5 h-3.5" />{x.label}</button> })}</div>
 
           <div className="bg-gray-950 rounded-xl p-4 border border-gray-800">
             {(mode === 'package' || mode === 'flight') && <div className="grid grid-cols-2 gap-2 mb-3"><button onClick={() => handleTripTypeChange('oneway')} className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${tripType === 'oneway' ? 'border-indigo-500/40 bg-indigo-500/15 text-indigo-200' : 'border-gray-700 bg-gray-800/50 text-gray-400'}`}>One-way</button><button onClick={() => handleTripTypeChange('round')} className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${tripType === 'round' ? 'border-indigo-500/40 bg-indigo-500/15 text-indigo-200' : 'border-gray-700 bg-gray-800/50 text-gray-400'}`}>Round-trip</button></div>}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"><AirportInput id="from-airport" label="From airport / IATA" value={from} onChange={setFrom} placeholder="Frankfurt or FRA" /><AirportInput id="to-airport" label="Destination airport / IATA" value={to} onChange={setTo} placeholder="Baku or GYD" /></div>
-            <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2 mb-3"><p className="text-cyan-200 text-xs">Matched route: <b>{fromAirport.code}</b> → <b>{toAirport.code}</b>. You can type city name or direct IATA code.</p></div>
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"><AirportInput id="from-airport" label="From airport / IATA" value={from} onChange={setFrom} placeholder="Frankfurt or FRA" airports={airports} loading={airportLoading} /><AirportInput id="to-airport" label="Destination airport / IATA" value={to} onChange={setTo} placeholder="Baku or GYD" airports={airports} loading={airportLoading} /></div>
+            <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2 mb-3"><p className="text-cyan-200 text-xs">Matched route: <b>{fromAirport.code}</b> → <b>{toAirport.code}</b>. Type city, airport name, country, or direct IATA code.</p></div>
             <div className={`grid gap-3 mb-3 ${tripType === 'round' || mode === 'hotel' || mode === 'package' ? 'grid-cols-2' : 'grid-cols-1'}`}><div><label className="text-gray-500 text-xs mb-1 block">Departure</label><input type="date" value={depart} onChange={e => handleDepartChange(e.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-500" /></div>{(tripType === 'round' || mode === 'hotel' || mode === 'package') && <div><label className="text-gray-500 text-xs mb-1 block">Return / checkout</label><input type="date" value={ret} onChange={e => setRet(e.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-500" /></div>}</div>
-
             <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-3 mb-3"><p className="text-gray-400 text-xs font-medium mb-2">Travellers</p><div className="grid grid-cols-2 gap-2 mb-2"><div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 px-3 py-2"><span className="text-white text-xs">Adults</span><div className="flex items-center gap-2"><button onClick={() => setAdults(a => Math.max(1, a - 1))} className="p-1 rounded bg-gray-700 text-gray-300"><Minus className="w-3 h-3" /></button><span className="text-white text-sm w-4 text-center">{adults}</span><button onClick={() => setAdults(a => Math.min(9, a + 1))} className="p-1 rounded bg-gray-700 text-gray-300"><Plus className="w-3 h-3" /></button></div></div><div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 px-3 py-2"><span className="text-white text-xs">Children</span><div className="flex items-center gap-2"><button onClick={removeChild} className="p-1 rounded bg-gray-700 text-gray-300"><Minus className="w-3 h-3" /></button><span className="text-white text-sm w-4 text-center">{childAges.length}</span><button onClick={addChild} className="p-1 rounded bg-gray-700 text-gray-300"><Plus className="w-3 h-3" /></button></div></div></div>{childAges.length > 0 && <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">{childAges.map((age, index) => <label key={index} className="text-gray-500 text-xs">Child {index + 1} age<select value={age} onChange={e => updateChildAge(index, Number(e.target.value))} className="mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-2 text-white text-xs focus:outline-none focus:border-cyan-500">{Array.from({ length: 18 }, (_, i) => i).map(value => <option key={value} value={value}>{value}</option>)}</select></label>)}</div>}<p className="text-gray-600 text-[11px] mt-2">Total: {totalPeople} traveller{totalPeople === 1 ? '' : 's'}</p></div>
             <button onClick={() => setShowResults(true)} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg text-sm transition flex items-center justify-center gap-2"><Search className="w-4 h-4" /> Show cheapest search options</button>
           </div>
