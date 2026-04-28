@@ -8,7 +8,8 @@ import MarketTicker from '@/components/MarketTicker'
 import CryptoWidget from '@/components/CryptoWidget'
 import NewsWidget from '@/components/NewsWidget'
 import PolymarketWidget from '@/components/PolymarketWidget'
-import TravelWidget from '@/components/TravelWidget'
+import TravelWidgetI18n from '@/components/TravelWidgetI18n'
+import WeatherWidget from '@/components/WeatherWidget'
 import ViralWidget from '@/components/ViralWidget'
 import WhaleWidget from '@/components/WhaleWidget'
 import SocialWidget from '@/components/SocialWidget'
@@ -19,7 +20,7 @@ import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 
 export default function HomePage() {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   const router = useRouter()
   const [refreshKey, setRefreshKey] = useState(0)
   const [activeSection, setActiveSection] = useState<string | null>(null)
@@ -30,17 +31,20 @@ export default function HomePage() {
   const [prefsOpen, setPrefsOpen] = useState(false)
   const [sectionPrefs, setSectionPrefs] = useState<{ pinned: string[]; hidden: string[] }>({ pinned: [], hidden: [] })
 
+  const travelLabel = lang === 'az' ? 'Səyahət Endirimləri' : lang === 'ru' ? 'Тревел-скидки' : lang === 'de' ? 'Reiseangebote' : lang === 'tr' ? 'Seyahat Fırsatları' : 'Travel Deals'
+
   const sections = useMemo(() => [
     { id: 'brief', label: `✦ ${tr.title}`, keywords: ['brief', 'today', 'summary', 'icmal', 'xulase', 'dashboard'] },
+    { id: 'weather', label: tr.weather, keywords: ['weather', 'hava', 'temperatur', 'погода', 'wetter'] },
     { id: 'crypto', label: tr.crypto, keywords: ['crypto', 'bitcoin', 'btc', 'kripto'] },
     { id: 'whale', label: tr.whaleActivity, keywords: ['whale', 'balina', 'large', 'wallet'] },
     { id: 'news', label: tr.news, keywords: ['news', 'xeber', 'xəbər', 'politics', 'ai'] },
-    { id: 'travel', label: 'Travel Deals', keywords: ['flight', 'flights', 'ucus', 'uçuş', 'travel', 'hotel', 'transport', 'train', 'bus', 'last minute'] },
+    { id: 'travel', label: travelLabel, keywords: ['flight', 'flights', 'ucus', 'uçuş', 'travel', 'hotel', 'transport', 'train', 'bus', 'last minute'] },
     { id: 'viral', label: tr.viral, keywords: ['youtube', 'video', 'viral', 'trend'] },
     { id: 'social', label: tr.social, keywords: ['social', 'tiktok', 'instagram'] },
     { id: 'stocks', label: tr.stocks, keywords: ['stocks', 'stock', 'sehmler', 'səhm', 'market'] },
     { id: 'education', label: tr.education, keywords: ['education', 'course', 'kurs', 'research', 'automation', 'electrical', 'mechanical', 'engineering'] },
-  ], [tr])
+  ], [tr, travelLabel])
 
   useEffect(() => {
     try {
@@ -297,6 +301,12 @@ export default function HomePage() {
           </section>
         )}
 
+        {visibleIds.has('weather') && (
+          <section id="weather">
+            <WeatherWidget />
+          </section>
+        )}
+
         {visibleIds.has('crypto') && (
           <section id="crypto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -317,7 +327,7 @@ export default function HomePage() {
             {visibleIds.has('news') && <NewsWidget />}
             {visibleIds.has('travel') && (
               <div id="travel">
-                <TravelWidget />
+                <TravelWidgetI18n />
               </div>
             )}
           </section>
@@ -350,7 +360,7 @@ export default function HomePage() {
         {visibleSections.length === 0 && (
           <section className="rounded-2xl border border-gray-800 bg-gray-900/60 px-5 py-10 text-center">
             <p className="text-sm font-medium text-white">No matching sections</p>
-            <p className="mt-1 text-xs text-gray-500">Try crypto, news, YouTube, stocks, travel, or education.</p>
+            <p className="mt-1 text-xs text-gray-500">Try crypto, news, YouTube, stocks, travel, weather, or education.</p>
           </section>
         )}
 
