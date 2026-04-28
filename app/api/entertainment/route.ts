@@ -19,7 +19,6 @@ type Item = {
 type Seed = { type: 'movie' | 'series' | 'cartoon'; title: string; year: number; genres: string[]; trend?: boolean; anticipated?: boolean }
 
 const CATALOG: Seed[] = [
-  // Movies — classics and modern, so old year filters are populated
   { type: 'movie', title: 'The Godfather', year: 1972, genres: ['Drama', 'Crime'], trend: true },
   { type: 'movie', title: 'The Godfather Part II', year: 1974, genres: ['Drama', 'Crime'] },
   { type: 'movie', title: 'Star Wars: A New Hope', year: 1977, genres: ['Science-Fiction', 'Adventure', 'Action'] },
@@ -51,8 +50,6 @@ const CATALOG: Seed[] = [
   { type: 'movie', title: 'Mission: Impossible - The Final Reckoning', year: 2025, genres: ['Action', 'Adventure', 'Thriller'], anticipated: true },
   { type: 'movie', title: 'Avatar 3', year: 2025, genres: ['Science-Fiction', 'Adventure', 'Action'], anticipated: true },
   { type: 'movie', title: 'Superman', year: 2025, genres: ['Action', 'Adventure', 'Fantasy'], anticipated: true },
-
-  // Series only
   { type: 'series', title: 'The Sopranos', year: 1999, genres: ['Drama', 'Crime'] },
   { type: 'series', title: 'The Wire', year: 2002, genres: ['Drama', 'Crime'] },
   { type: 'series', title: 'Lost', year: 2004, genres: ['Drama', 'Adventure', 'Fantasy'] },
@@ -70,8 +67,6 @@ const CATALOG: Seed[] = [
   { type: 'series', title: 'Fallout', year: 2024, genres: ['Science-Fiction', 'Action', 'Drama'], trend: true },
   { type: 'series', title: 'Stranger Things Season 5', year: 2025, genres: ['Science-Fiction', 'Drama', 'Fantasy'], anticipated: true },
   { type: 'series', title: 'The Last of Us Season 2', year: 2025, genres: ['Drama', 'Action', 'Adventure'], anticipated: true },
-
-  // Cartoons / animation only
   { type: 'cartoon', title: 'Snow White and the Seven Dwarfs', year: 1937, genres: ['Animation', 'Family', 'Fantasy'] },
   { type: 'cartoon', title: 'The Lion King', year: 1994, genres: ['Animation', 'Family', 'Adventure'], trend: true },
   { type: 'cartoon', title: 'Toy Story', year: 1995, genres: ['Animation', 'Family', 'Comedy'] },
@@ -113,38 +108,12 @@ async function searchItunes(seed: Seed) {
     if (!row) return makeFallback(seed)
     const title = row.trackName || row.collectionName || seed.title
     const image = highResArtwork(row.artworkUrl100 || row.artworkUrl60)
-    return {
-      id: `${seed.type}-${seed.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-      type: seed.type,
-      title: seed.title,
-      originalTitle: title,
-      year: String(seed.year),
-      image,
-      summary: stripHtml(row.longDescription || row.shortDescription || row.description || `${seed.title} · ${seed.genres.join(', ')}`),
-      genres: seed.genres,
-      rating: null,
-      url: row.trackViewUrl || row.collectionViewUrl || `https://www.google.com/search?q=${encodeURIComponent(seed.title)}`,
-      trailerUrl: row.previewUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(seed.title + ' official trailer')}`,
-    } as Item
-  } catch {
-    return makeFallback(seed)
-  }
+    return { id: `${seed.type}-${seed.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`, type: seed.type, title: seed.title, originalTitle: title, year: String(seed.year), image, summary: stripHtml(row.longDescription || row.shortDescription || row.description || `${seed.title} · ${seed.genres.join(', ')}`), genres: seed.genres, rating: null, url: row.trackViewUrl || row.collectionViewUrl || `https://www.google.com/search?q=${encodeURIComponent(seed.title)}`, trailerUrl: row.previewUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(seed.title + ' official trailer')}` } as Item
+  } catch { return makeFallback(seed) }
 }
 
 function makeFallback(seed: Seed): Item {
-  return {
-    id: `${seed.type}-${seed.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-    type: seed.type,
-    title: seed.title,
-    originalTitle: seed.title,
-    year: String(seed.year),
-    image: `https://placehold.co/600x900/1e293b/f8fafc?text=${encodeURIComponent(seed.title)}`,
-    summary: `${seed.title} · ${seed.year} · ${seed.genres.join(', ')}`,
-    genres: seed.genres,
-    rating: null,
-    url: `https://www.google.com/search?q=${encodeURIComponent(seed.title + ' official')}`,
-    trailerUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(seed.title + ' official trailer')}`,
-  }
+  return { id: `${seed.type}-${seed.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`, type: seed.type, title: seed.title, originalTitle: seed.title, year: String(seed.year), image: `https://placehold.co/600x900/1e293b/f8fafc?text=${encodeURIComponent(seed.title)}`, summary: `${seed.title} · ${seed.year} · ${seed.genres.join(', ')}`, genres: seed.genres, rating: null, url: `https://www.google.com/search?q=${encodeURIComponent(seed.title + ' official')}`, trailerUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(seed.title + ' official trailer')}` }
 }
 
 async function translate(texts: string[], lang: string) {
@@ -154,9 +123,7 @@ async function translate(texts: string[], lang: string) {
     const data = await res.json()
     const joined = data?.[0]?.map((x: any) => x?.[0]).join('') || texts.join('\n---\n')
     return joined.split('\n---\n')
-  } catch {
-    return texts
-  }
+  } catch { return texts }
 }
 
 export async function GET(req: Request) {
@@ -165,8 +132,10 @@ export async function GET(req: Request) {
   const genre = searchParams.get('genre') || ''
   const lang = searchParams.get('lang') || 'en'
   const query = searchParams.get('q') || ''
-  const yearFrom = Number(searchParams.get('yearFrom') || '1900')
-  const yearTo = Number(searchParams.get('yearTo') || new Date().getFullYear() + 3)
+  const yearFromRaw = searchParams.get('yearFrom')
+  const yearToRaw = searchParams.get('yearTo')
+  const yearFrom = yearFromRaw ? Number(yearFromRaw) : null
+  const yearTo = yearToRaw ? Number(yearToRaw) : null
   const mode = searchParams.get('mode') || 'default'
 
   let seeds = CATALOG.filter(item => type === 'all' || item.type === type)
@@ -174,7 +143,8 @@ export async function GET(req: Request) {
   if (mode === 'anticipated') seeds = seeds.filter(item => item.anticipated || item.year >= new Date().getFullYear())
   if (query) seeds = seeds.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
   if (genre) seeds = seeds.filter(item => item.genres.some(g => g.toLowerCase() === genre.toLowerCase()))
-  seeds = seeds.filter(item => item.year >= yearFrom && item.year <= yearTo)
+  if (yearFrom) seeds = seeds.filter(item => item.year >= yearFrom)
+  if (yearTo) seeds = seeds.filter(item => item.year <= yearTo)
 
   seeds = seeds.sort((a, b) => {
     if (mode === 'anticipated') return a.year - b.year
@@ -183,12 +153,10 @@ export async function GET(req: Request) {
   }).slice(0, 60)
 
   let items = await Promise.all(seeds.map(searchItunes))
-
   if (lang !== 'en' && items.length) {
     const titles = await translate(items.map(i => i.title), lang)
     const summaries = await translate(items.map(i => i.summary || ''), lang)
     items = items.map((item, index) => ({ ...item, title: titles[index] || item.title, summary: summaries[index] || item.summary }))
   }
-
   return NextResponse.json(items)
 }
