@@ -107,6 +107,7 @@ export default function TravelWidget() {
   const [tripType, setTripType] = useState<TripType>('round')
   const [from, setFrom] = useState('Frankfurt')
   const [to, setTo] = useState('Baku')
+  const [hotelName, setHotelName] = useState('')
   const [depart, setDepart] = useState('')
   const [ret, setRet] = useState('')
   const [adults, setAdults] = useState(1)
@@ -142,6 +143,7 @@ export default function TravelWidget() {
   const fromAirport = resolveAirport(from, airports, fallbackAirports[0])
   const toAirport = resolveAirport(to, airports, fallbackAirports[1])
   const totalPeople = adults + childAges.length
+  const hotelSearchText = hotelName.trim() ? `${hotelName.trim()} ${toAirport.city}` : toAirport.city
 
   const handleDepartChange = (value: string) => {
     setDepart(value)
@@ -165,8 +167,9 @@ export default function TravelWidget() {
     const tCodeLower = tCode.toLowerCase()
     const fCity = encodeURIComponent(fromAirport.city)
     const tCity = encodeURIComponent(toAirport.city)
+    const hotelTarget = encodeURIComponent(hotelSearchText)
     const flightQuery = encodeURIComponent(`${fCode} to ${tCode} ${depart}${tripType === 'round' && ret ? ` return ${ret}` : ' one way'}`)
-    const hotelQuery = encodeURIComponent(`${toAirport.city} hotels ${depart} ${ret || depart}`)
+    const hotelQuery = encodeURIComponent(`${hotelSearchText} hotels ${depart} ${ret || depart}`)
     const skyDepart = yymmdd(depart)
     const skyReturn = tripType === 'round' ? yymmdd(ret) : ''
     const kayakDates = tripType === 'round' && ret ? `${depart}/${ret}` : depart
@@ -177,15 +180,15 @@ export default function TravelWidget() {
       skyscanner: skyDepart ? `https://www.skyscanner.net/transport/flights/${fCodeLower}/${tCodeLower}/${skyDepart}/${skyReturn}/?adultsv2=${adults}&childrenv2=${childAges.join('|')}&cabinclass=economy&rtn=${tripType === 'round' ? 1 : 0}` : `https://www.skyscanner.net/transport/flights/${fCodeLower}/${tCodeLower}/`,
       kayak: `https://www.kayak.com/flights/${fCode}-${tCode}/${kayakDates}/${adults}adults${childAges.length ? `/${childAges.length}children` : ''}?sort=price_a`,
       momondo: `https://www.momondo.com/flight-search/${fCode}-${tCode}/${kayakDates}/${adults}adults?sort=price_a`,
-      booking: `https://www.booking.com/searchresults.html?ss=${tCity}&checkin=${depart}&checkout=${ret || depart}&group_adults=${adults}&group_children=${childAges.length}&order=price`,
-      expedia: `https://www.expedia.com/Hotel-Search?destination=${tCity}&startDate=${depart}&endDate=${ret || depart}&adults=${adults}&sort=PRICE_LOW_TO_HIGH`,
+      booking: `https://www.booking.com/searchresults.html?ss=${hotelTarget}&checkin=${depart}&checkout=${ret || depart}&group_adults=${adults}&group_children=${childAges.length}&order=price`,
+      expedia: `https://www.expedia.com/Hotel-Search?destination=${hotelTarget}&startDate=${depart}&endDate=${ret || depart}&adults=${adults}&sort=PRICE_LOW_TO_HIGH`,
       googleHotels: `https://www.google.com/travel/hotels?q=${hotelQuery}`,
       rome2rio: `https://www.rome2rio.com/map/${fCity}/${tCity}`,
       omio: `https://www.omio.com/search-frontend/results/L/${fCity}/${tCity}/${depart}`,
       trainline: `https://www.thetrainline.com/search?origin=${fCity}&destination=${tCity}&outwardDate=${depart}`,
       flixbus: `https://global.flixbus.com/search?from=${fCity}&to=${tCity}&departureDate=${depart}&adult=${adults}&children=${childAges.length}`,
     }
-  }, [adults, childAges, depart, fromAirport, ret, toAirport, tripType])
+  }, [adults, childAges, depart, fromAirport, hotelSearchText, ret, toAirport, tripType])
 
   const marketplaceLinks = [
     { name: 'Google Flights', url: links.googleFlights, icon: Plane, desc: `${fromAirport.code} → ${toAirport.code}; calendar often shows cheapest days` },
@@ -193,14 +196,15 @@ export default function TravelWidget() {
     { name: 'Kayak', url: links.kayak, icon: Plane, desc: `${fromAirport.code} → ${toAirport.code}; sort by cheapest` },
     { name: 'Momondo', url: links.momondo, icon: Plane, desc: `${fromAirport.code} → ${toAirport.code}; secondary price compare` },
     { name: 'Google Explore', url: links.googleExplore, icon: MapPinned, desc: 'Use when destination is flexible' },
-    { name: 'Booking', url: links.booking, icon: Hotel, desc: `${toAirport.city} hotels sorted by price` },
-    { name: 'Expedia', url: links.expedia, icon: Hotel, desc: 'Hotels and package options' },
+    { name: 'Google Hotels', url: links.googleHotels, icon: Hotel, desc: hotelName.trim() ? `Search ${hotelName.trim()} near ${toAirport.city}` : `${toAirport.city} hotel search` },
+    { name: 'Booking', url: links.booking, icon: Hotel, desc: hotelName.trim() ? `Booking search for ${hotelName.trim()}` : `${toAirport.city} hotels sorted by price` },
+    { name: 'Expedia', url: links.expedia, icon: Hotel, desc: hotelName.trim() ? `Expedia search for ${hotelName.trim()}` : 'Hotels and package options' },
     { name: 'Rome2Rio', url: links.rome2rio, icon: MapPinned, desc: 'Flight, train, bus and car comparison' },
   ]
 
   const visibleMarketplaceLinks = marketplaceLinks.filter(link => {
     if (mode === 'flight') return ['Google Flights', 'Skyscanner', 'Kayak', 'Momondo', 'Google Explore', 'Rome2Rio'].includes(link.name)
-    if (mode === 'hotel') return ['Booking', 'Expedia'].includes(link.name)
+    if (mode === 'hotel') return ['Google Hotels', 'Booking', 'Expedia'].includes(link.name)
     if (mode === 'transport') return ['Rome2Rio'].includes(link.name)
     return true
   })
@@ -213,7 +217,7 @@ export default function TravelWidget() {
       </div>
 
       {collapsed ? (
-        <div className="px-5 py-3 flex flex-wrap gap-2"><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">✈️ {fromAirport.code} → {toAirport.code}</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🌍 Global airports</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🚆 Train / bus</span><span className="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-300 text-xs border border-purple-500/20">🔥 Last minute</span></div>
+        <div className="px-5 py-3 flex flex-wrap gap-2"><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">✈️ {fromAirport.code} → {toAirport.code}</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🏨 {hotelName.trim() || 'Hotels'}</span><span className="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs border border-gray-700">🚆 Train / bus</span><span className="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-300 text-xs border border-purple-500/20">🔥 Last minute</span></div>
       ) : (
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">{[{ id: 'package' as Mode, label: 'Flight + Hotel', icon: Sparkles }, { id: 'flight' as Mode, label: 'Flight only', icon: Plane }, { id: 'hotel' as Mode, label: 'Hotel only', icon: Hotel }, { id: 'transport' as Mode, label: 'Transport', icon: Train }].map(x => { const Icon = x.icon; return <button key={x.id} onClick={() => setMode(x.id)} className={`flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition ${mode === x.id ? 'border-cyan-500/40 bg-cyan-500/15 text-cyan-200' : 'border-gray-700 bg-gray-800/50 text-gray-400 hover:text-white hover:bg-gray-800'}`}><Icon className="w-3.5 h-3.5" />{x.label}</button> })}</div>
@@ -221,6 +225,7 @@ export default function TravelWidget() {
           <div className="bg-gray-950 rounded-xl p-4 border border-gray-800">
             {(mode === 'package' || mode === 'flight') && <div className="grid grid-cols-2 gap-2 mb-3"><button onClick={() => handleTripTypeChange('oneway')} className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${tripType === 'oneway' ? 'border-indigo-500/40 bg-indigo-500/15 text-indigo-200' : 'border-gray-700 bg-gray-800/50 text-gray-400'}`}>One-way</button><button onClick={() => handleTripTypeChange('round')} className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${tripType === 'round' ? 'border-indigo-500/40 bg-indigo-500/15 text-indigo-200' : 'border-gray-700 bg-gray-800/50 text-gray-400'}`}>Round-trip</button></div>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"><AirportInput id="from-airport" label="From airport / IATA" value={from} onChange={setFrom} placeholder="Frankfurt or FRA" airports={airports} loading={airportLoading} /><AirportInput id="to-airport" label="Destination airport / IATA" value={to} onChange={setTo} placeholder="Baku or GYD" airports={airports} loading={airportLoading} /></div>
+            {(mode === 'package' || mode === 'hotel') && <div className="mb-3"><label className="text-gray-500 text-xs mb-1 block">Hotel name optional</label><input value={hotelName} onChange={e => setHotelName(e.target.value)} placeholder="e.g. Hilton, Marriott, Fairmont..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-cyan-500" /><p className="mt-1 text-[10px] text-gray-600">Leave empty to search all hotels in {toAirport.city}; enter a hotel/brand name for targeted hotel search.</p></div>}
             <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2 mb-3"><p className="text-cyan-200 text-xs">Matched route: <b>{fromAirport.code}</b> → <b>{toAirport.code}</b>. Type city, airport name, country, or direct IATA code.</p></div>
             <div className={`grid gap-3 mb-3 ${tripType === 'round' || mode === 'hotel' || mode === 'package' ? 'grid-cols-2' : 'grid-cols-1'}`}><div><label className="text-gray-500 text-xs mb-1 block">Departure</label><input type="date" value={depart} onChange={e => handleDepartChange(e.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-500" /></div>{(tripType === 'round' || mode === 'hotel' || mode === 'package') && <div><label className="text-gray-500 text-xs mb-1 block">Return / checkout</label><input type="date" value={ret} onChange={e => setRet(e.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-500" /></div>}</div>
             <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-3 mb-3"><p className="text-gray-400 text-xs font-medium mb-2">Travellers</p><div className="grid grid-cols-2 gap-2 mb-2"><div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 px-3 py-2"><span className="text-white text-xs">Adults</span><div className="flex items-center gap-2"><button onClick={() => setAdults(a => Math.max(1, a - 1))} className="p-1 rounded bg-gray-700 text-gray-300"><Minus className="w-3 h-3" /></button><span className="text-white text-sm w-4 text-center">{adults}</span><button onClick={() => setAdults(a => Math.min(9, a + 1))} className="p-1 rounded bg-gray-700 text-gray-300"><Plus className="w-3 h-3" /></button></div></div><div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 px-3 py-2"><span className="text-white text-xs">Children</span><div className="flex items-center gap-2"><button onClick={removeChild} className="p-1 rounded bg-gray-700 text-gray-300"><Minus className="w-3 h-3" /></button><span className="text-white text-sm w-4 text-center">{childAges.length}</span><button onClick={addChild} className="p-1 rounded bg-gray-700 text-gray-300"><Plus className="w-3 h-3" /></button></div></div></div>{childAges.length > 0 && <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">{childAges.map((age, index) => <label key={index} className="text-gray-500 text-xs">Child {index + 1} age<select value={age} onChange={e => updateChildAge(index, Number(e.target.value))} className="mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-2 text-white text-xs focus:outline-none focus:border-cyan-500">{Array.from({ length: 18 }, (_, i) => i).map(value => <option key={value} value={value}>{value}</option>)}</select></label>)}</div>}<p className="text-gray-600 text-[11px] mt-2">Total: {totalPeople} traveller{totalPeople === 1 ? '' : 's'}</p></div>
