@@ -2,22 +2,26 @@ import { NextResponse } from 'next/server'
 
 export const revalidate = 3600
 
+type MediaType = 'movie' | 'series' | 'cartoon'
+
 type Item = {
   id: string
-  type: string
+  type: MediaType
   title: string
   originalTitle: string
   year: string
   image: string
+  backdrop?: string
   summary: string
   genres: string[]
   rating: number | null
   url: string
   trailerUrl: string
+  source: string
 }
 
 type Seed = {
-  type: 'movie' | 'series' | 'cartoon'
+  type: MediaType
   title: string
   year: number
   genres: string[]
@@ -25,133 +29,147 @@ type Seed = {
   anticipated?: boolean
 }
 
-const CATALOG: Seed[] = [
-  // Movies
-  { type: 'movie', title: 'Casablanca', year: 1942, genres: ['Drama', 'Romance'] },
-  { type: 'movie', title: '12 Angry Men', year: 1957, genres: ['Drama', 'Crime'] },
-  { type: 'movie', title: 'Psycho', year: 1960, genres: ['Thriller', 'Crime'] },
+const TMDB_API_KEY = process.env.TMDB_API_KEY || ''
+const TMDB_READ_ACCESS_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN || ''
+const OMDB_API_KEY = process.env.OMDB_API_KEY || ''
+
+const TMDB_IMAGE = 'https://image.tmdb.org/t/p/w500'
+const TMDB_BACKDROP = 'https://image.tmdb.org/t/p/w780'
+
+const MOVIE_GENRES: Record<string, number> = {
+  Action: 28,
+  Adventure: 12,
+  Animation: 16,
+  Comedy: 35,
+  Crime: 80,
+  Drama: 18,
+  Family: 10751,
+  Fantasy: 14,
+  Romance: 10749,
+  Thriller: 53,
+  'Science-Fiction': 878,
+}
+
+const TV_GENRES: Record<string, number> = {
+  Action: 10759,
+  Adventure: 10759,
+  Animation: 16,
+  Comedy: 35,
+  Crime: 80,
+  Drama: 18,
+  Family: 10751,
+  Fantasy: 10765,
+  Thriller: 9648,
+  'Science-Fiction': 10765,
+}
+
+const FALLBACK: Seed[] = [
   { type: 'movie', title: 'The Godfather', year: 1972, genres: ['Drama', 'Crime'], trend: true },
   { type: 'movie', title: 'Star Wars: A New Hope', year: 1977, genres: ['Science-Fiction', 'Adventure', 'Action'] },
-  { type: 'movie', title: 'Alien', year: 1979, genres: ['Science-Fiction', 'Thriller'] },
-  { type: 'movie', title: 'Raiders of the Lost Ark', year: 1981, genres: ['Adventure', 'Action'] },
-  { type: 'movie', title: 'Blade Runner', year: 1982, genres: ['Science-Fiction', 'Thriller'] },
   { type: 'movie', title: 'Back to the Future', year: 1985, genres: ['Science-Fiction', 'Comedy', 'Adventure'] },
   { type: 'movie', title: 'Die Hard', year: 1988, genres: ['Action', 'Thriller'] },
-  { type: 'movie', title: 'Goodfellas', year: 1990, genres: ['Crime', 'Drama'] },
-  { type: 'movie', title: 'Terminator 2: Judgment Day', year: 1991, genres: ['Action', 'Science-Fiction'] },
-  { type: 'movie', title: 'Jurassic Park', year: 1993, genres: ['Adventure', 'Science-Fiction'] },
-  { type: 'movie', title: 'The Shawshank Redemption', year: 1994, genres: ['Drama'] },
-  { type: 'movie', title: 'Pulp Fiction', year: 1994, genres: ['Crime', 'Drama'] },
-  { type: 'movie', title: 'Forrest Gump', year: 1994, genres: ['Drama', 'Romance'] },
-  { type: 'movie', title: 'Titanic', year: 1997, genres: ['Drama', 'Romance'] },
   { type: 'movie', title: 'The Matrix', year: 1999, genres: ['Action', 'Science-Fiction'] },
-  { type: 'movie', title: 'Gladiator', year: 2000, genres: ['Action', 'Drama', 'Adventure'] },
-  { type: 'movie', title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001, genres: ['Fantasy', 'Adventure', 'Action'] },
-  { type: 'movie', title: 'Pirates of the Caribbean: The Curse of the Black Pearl', year: 2003, genres: ['Adventure', 'Fantasy', 'Action'] },
   { type: 'movie', title: 'The Dark Knight', year: 2008, genres: ['Action', 'Crime', 'Drama'], trend: true },
-  { type: 'movie', title: 'Avatar', year: 2009, genres: ['Science-Fiction', 'Adventure', 'Action'] },
   { type: 'movie', title: 'Inception', year: 2010, genres: ['Science-Fiction', 'Action', 'Thriller'], trend: true },
   { type: 'movie', title: 'Interstellar', year: 2014, genres: ['Science-Fiction', 'Drama', 'Adventure'], trend: true },
-  { type: 'movie', title: 'Mad Max: Fury Road', year: 2015, genres: ['Action', 'Adventure', 'Science-Fiction'] },
-  { type: 'movie', title: 'Arrival', year: 2016, genres: ['Science-Fiction', 'Drama'] },
-  { type: 'movie', title: 'La La Land', year: 2016, genres: ['Romance', 'Drama'] },
-  { type: 'movie', title: 'Blade Runner 2049', year: 2017, genres: ['Science-Fiction', 'Drama', 'Thriller'] },
-  { type: 'movie', title: 'Joker', year: 2019, genres: ['Drama', 'Crime', 'Thriller'] },
-  { type: 'movie', title: 'Tenet', year: 2020, genres: ['Science-Fiction', 'Action', 'Thriller'] },
   { type: 'movie', title: 'Dune', year: 2021, genres: ['Science-Fiction', 'Adventure', 'Action'], trend: true },
-  { type: 'movie', title: 'Top Gun: Maverick', year: 2022, genres: ['Action', 'Drama'] },
   { type: 'movie', title: 'Oppenheimer', year: 2023, genres: ['Drama', 'Thriller'], trend: true },
-  { type: 'movie', title: 'Barbie', year: 2023, genres: ['Comedy', 'Fantasy'] },
   { type: 'movie', title: 'Dune: Part Two', year: 2024, genres: ['Science-Fiction', 'Adventure', 'Action'], trend: true },
-  { type: 'movie', title: 'Furiosa: A Mad Max Saga', year: 2024, genres: ['Action', 'Adventure', 'Science-Fiction'] },
   { type: 'movie', title: 'Superman', year: 2025, genres: ['Action', 'Adventure', 'Fantasy'], anticipated: true },
-  { type: 'movie', title: 'Avatar: Fire and Ash', year: 2025, genres: ['Science-Fiction', 'Adventure', 'Action'], anticipated: true },
-
-  // Series
-  { type: 'series', title: 'The Twilight Zone', year: 1959, genres: ['Science-Fiction', 'Drama', 'Thriller'] },
-  { type: 'series', title: 'Doctor Who', year: 1963, genres: ['Science-Fiction', 'Adventure', 'Drama'] },
-  { type: 'series', title: 'Star Trek', year: 1966, genres: ['Science-Fiction', 'Adventure'] },
-  { type: 'series', title: 'Friends', year: 1994, genres: ['Comedy', 'Romance'] },
-  { type: 'series', title: 'The X-Files', year: 1993, genres: ['Science-Fiction', 'Drama', 'Thriller'] },
-  { type: 'series', title: 'The Sopranos', year: 1999, genres: ['Drama', 'Crime'] },
-  { type: 'series', title: 'The Wire', year: 2002, genres: ['Drama', 'Crime'] },
-  { type: 'series', title: 'Lost', year: 2004, genres: ['Drama', 'Adventure', 'Fantasy'] },
-  { type: 'series', title: 'Prison Break', year: 2005, genres: ['Action', 'Crime', 'Thriller'] },
-  { type: 'series', title: 'Dexter', year: 2006, genres: ['Crime', 'Drama', 'Thriller'] },
   { type: 'series', title: 'Breaking Bad', year: 2008, genres: ['Drama', 'Crime', 'Thriller'], trend: true },
-  { type: 'series', title: 'Sherlock', year: 2010, genres: ['Crime', 'Drama'] },
-  { type: 'series', title: 'The Walking Dead', year: 2010, genres: ['Drama', 'Thriller'] },
   { type: 'series', title: 'Game of Thrones', year: 2011, genres: ['Fantasy', 'Drama', 'Adventure'], trend: true },
-  { type: 'series', title: 'Black Mirror', year: 2011, genres: ['Science-Fiction', 'Drama', 'Thriller'] },
-  { type: 'series', title: 'True Detective', year: 2014, genres: ['Crime', 'Drama', 'Thriller'] },
-  { type: 'series', title: 'Better Call Saul', year: 2015, genres: ['Crime', 'Drama'] },
   { type: 'series', title: 'Stranger Things', year: 2016, genres: ['Science-Fiction', 'Drama', 'Fantasy'], trend: true },
-  { type: 'series', title: 'The Crown', year: 2016, genres: ['Drama'] },
-  { type: 'series', title: 'Dark', year: 2017, genres: ['Science-Fiction', 'Thriller', 'Drama'] },
-  { type: 'series', title: 'Money Heist', year: 2017, genres: ['Crime', 'Drama', 'Thriller'] },
   { type: 'series', title: 'The Mandalorian', year: 2019, genres: ['Science-Fiction', 'Adventure', 'Action'] },
-  { type: 'series', title: 'The Witcher', year: 2019, genres: ['Fantasy', 'Adventure', 'Action'] },
   { type: 'series', title: 'Squid Game', year: 2021, genres: ['Drama', 'Thriller', 'Action'], trend: true },
-  { type: 'series', title: 'House of the Dragon', year: 2022, genres: ['Fantasy', 'Drama', 'Action'], trend: true },
-  { type: 'series', title: 'Wednesday', year: 2022, genres: ['Comedy', 'Fantasy'] },
   { type: 'series', title: 'The Last of Us', year: 2023, genres: ['Drama', 'Action', 'Adventure'], trend: true },
   { type: 'series', title: 'Fallout', year: 2024, genres: ['Science-Fiction', 'Action', 'Drama'], trend: true },
-  { type: 'series', title: 'Shogun', year: 2024, genres: ['Drama', 'Adventure', 'Action'], trend: true },
   { type: 'series', title: 'Stranger Things Season 5', year: 2025, genres: ['Science-Fiction', 'Drama', 'Fantasy'], anticipated: true },
-
-  // Cartoons / animation
-  { type: 'cartoon', title: 'Snow White and the Seven Dwarfs', year: 1937, genres: ['Animation', 'Family', 'Fantasy'] },
-  { type: 'cartoon', title: 'Pinocchio', year: 1940, genres: ['Animation', 'Family', 'Fantasy'] },
-  { type: 'cartoon', title: 'Cinderella', year: 1950, genres: ['Animation', 'Family', 'Fantasy'] },
-  { type: 'cartoon', title: 'The Jungle Book', year: 1967, genres: ['Animation', 'Family', 'Adventure'] },
-  { type: 'cartoon', title: 'The Little Mermaid', year: 1989, genres: ['Animation', 'Family', 'Fantasy'] },
-  { type: 'cartoon', title: 'Beauty and the Beast', year: 1991, genres: ['Animation', 'Family', 'Fantasy', 'Romance'] },
-  { type: 'cartoon', title: 'Aladdin', year: 1992, genres: ['Animation', 'Family', 'Adventure', 'Fantasy'] },
   { type: 'cartoon', title: 'The Lion King', year: 1994, genres: ['Animation', 'Family', 'Adventure'], trend: true },
   { type: 'cartoon', title: 'Toy Story', year: 1995, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Mulan', year: 1998, genres: ['Animation', 'Family', 'Adventure'] },
-  { type: 'cartoon', title: 'Monsters, Inc.', year: 2001, genres: ['Animation', 'Family', 'Comedy'] },
   { type: 'cartoon', title: 'Shrek', year: 2001, genres: ['Animation', 'Family', 'Comedy', 'Fantasy'] },
   { type: 'cartoon', title: 'Finding Nemo', year: 2003, genres: ['Animation', 'Family', 'Adventure'] },
-  { type: 'cartoon', title: 'The Incredibles', year: 2004, genres: ['Animation', 'Family', 'Action'] },
-  { type: 'cartoon', title: 'Cars', year: 2006, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Ratatouille', year: 2007, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Kung Fu Panda', year: 2008, genres: ['Animation', 'Family', 'Action', 'Comedy'] },
   { type: 'cartoon', title: 'WALL-E', year: 2008, genres: ['Animation', 'Family', 'Science-Fiction'] },
-  { type: 'cartoon', title: 'Up', year: 2009, genres: ['Animation', 'Family', 'Adventure'] },
-  { type: 'cartoon', title: 'How to Train Your Dragon', year: 2010, genres: ['Animation', 'Family', 'Adventure', 'Fantasy'] },
-  { type: 'cartoon', title: 'Despicable Me', year: 2010, genres: ['Animation', 'Family', 'Comedy'] },
   { type: 'cartoon', title: 'Frozen', year: 2013, genres: ['Animation', 'Family', 'Fantasy'] },
-  { type: 'cartoon', title: 'Big Hero 6', year: 2014, genres: ['Animation', 'Family', 'Action'] },
   { type: 'cartoon', title: 'Inside Out', year: 2015, genres: ['Animation', 'Family', 'Comedy'], trend: true },
-  { type: 'cartoon', title: 'Zootopia', year: 2016, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Moana', year: 2016, genres: ['Animation', 'Family', 'Adventure'] },
   { type: 'cartoon', title: 'Coco', year: 2017, genres: ['Animation', 'Family', 'Fantasy'] },
   { type: 'cartoon', title: 'Spider-Man: Into the Spider-Verse', year: 2018, genres: ['Animation', 'Action', 'Adventure'], trend: true },
-  { type: 'cartoon', title: 'Toy Story 4', year: 2019, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Soul', year: 2020, genres: ['Animation', 'Family', 'Drama'] },
-  { type: 'cartoon', title: 'Luca', year: 2021, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Encanto', year: 2021, genres: ['Animation', 'Family', 'Fantasy'] },
-  { type: 'cartoon', title: 'Turning Red', year: 2022, genres: ['Animation', 'Family', 'Comedy'] },
-  { type: 'cartoon', title: 'Puss in Boots: The Last Wish', year: 2022, genres: ['Animation', 'Family', 'Adventure'] },
-  { type: 'cartoon', title: 'Spider-Man: Across the Spider-Verse', year: 2023, genres: ['Animation', 'Action', 'Adventure'], trend: true },
-  { type: 'cartoon', title: 'The Super Mario Bros. Movie', year: 2023, genres: ['Animation', 'Family', 'Adventure', 'Comedy'] },
   { type: 'cartoon', title: 'Inside Out 2', year: 2024, genres: ['Animation', 'Family', 'Comedy'], trend: true },
-  { type: 'cartoon', title: 'Kung Fu Panda 4', year: 2024, genres: ['Animation', 'Family', 'Action', 'Comedy'] },
   { type: 'cartoon', title: 'Toy Story 5', year: 2026, genres: ['Animation', 'Family', 'Comedy'], anticipated: true },
-  { type: 'cartoon', title: 'Frozen 3', year: 2027, genres: ['Animation', 'Family', 'Fantasy'], anticipated: true },
 ]
+
+function langToTmdb(lang: string) {
+  const map: Record<string, string> = { az: 'az-AZ', ru: 'ru-RU', de: 'de-DE', tr: 'tr-TR', en: 'en-US', fr: 'fr-FR', es: 'es-ES', it: 'it-IT' }
+  return map[lang] || 'en-US'
+}
+
+function normalize(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '')
+}
 
 function stripHtml(value?: string) {
   return (value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
 }
 
-function highResArtwork(url?: string) {
-  return (url || '').replace(/100x100bb/i, '1000x1000bb').replace(/60x60bb/i, '1000x1000bb')
+async function tmdbFetch(path: string, params: Record<string, string | number | undefined> = {}) {
+  if (!TMDB_API_KEY && !TMDB_READ_ACCESS_TOKEN) return null
+  const url = new URL(`https://api.themoviedb.org/3${path}`)
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== '') url.searchParams.set(key, String(value))
+  })
+  if (TMDB_API_KEY) url.searchParams.set('api_key', TMDB_API_KEY)
+  const headers: HeadersInit = {}
+  if (TMDB_READ_ACCESS_TOKEN) headers.Authorization = `Bearer ${TMDB_READ_ACCESS_TOKEN}`
+  try {
+    const res = await fetch(url.toString(), { headers, next: { revalidate: 3600 } })
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null
+  }
 }
 
-function normalize(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '')
+async function omdbByTitle(title: string, year?: string) {
+  if (!OMDB_API_KEY) return null
+  try {
+    const url = new URL('https://www.omdbapi.com/')
+    url.searchParams.set('apikey', OMDB_API_KEY)
+    url.searchParams.set('t', title)
+    if (year) url.searchParams.set('y', year)
+    const res = await fetch(url.toString(), { next: { revalidate: 3600 } })
+    if (!res.ok) return null
+    const data = await res.json()
+    if (data?.Response === 'False') return null
+    return data
+  } catch {
+    return null
+  }
+}
+
+async function fetchTvMaze(query: string, type: MediaType): Promise<Item[]> {
+  if (type === 'movie' || type === 'cartoon') return []
+  try {
+    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`, { next: { revalidate: 3600 } })
+    const data = await res.json()
+    return (Array.isArray(data) ? data : []).slice(0, 20).map((row: any) => {
+      const show = row.show
+      return {
+        id: `tvmaze-${show.id}`,
+        type: 'series',
+        title: show.name,
+        originalTitle: show.name,
+        year: show.premiered ? String(show.premiered).slice(0, 4) : '',
+        image: show.image?.original || show.image?.medium || stablePoster({ type: 'series', title: show.name, year: Number(String(show.premiered || '0').slice(0, 4)) || 0, genres: show.genres || [] }),
+        summary: stripHtml(show.summary),
+        genres: show.genres || [],
+        rating: show.rating?.average || null,
+        url: show.officialSite || show.url,
+        trailerUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(show.name + ' official trailer')}`,
+        source: 'TVMaze',
+      }
+    })
+  } catch {
+    return []
+  }
 }
 
 async function fetchItunes(seed: Seed): Promise<Partial<Item> | null> {
@@ -161,7 +179,7 @@ async function fetchItunes(seed: Seed): Promise<Partial<Item> | null> {
     const data = await res.json()
     const rows = Array.isArray(data?.results) ? data.results : []
     const cleanSeed = normalize(seed.title)
-    const scored = rows
+    const best = rows
       .filter((row: any) => row.artworkUrl100 || row.artworkUrl60)
       .map((row: any) => {
         const name = row.trackName || row.collectionName || ''
@@ -173,15 +191,14 @@ async function fetchItunes(seed: Seed): Promise<Partial<Item> | null> {
         if (year && Math.abs(year - seed.year) <= 1) score += 3
         return { row, score }
       })
-      .sort((a: any, b: any) => b.score - a.score)
-    const best = scored[0]?.row
+      .sort((a: any, b: any) => b.score - a.score)[0]?.row
     if (!best) return null
+    const artwork = (best.artworkUrl100 || best.artworkUrl60 || '').replace(/100x100bb/i, '1000x1000bb').replace(/60x60bb/i, '1000x1000bb')
     return {
       originalTitle: best.trackName || best.collectionName || seed.title,
-      image: highResArtwork(best.artworkUrl100 || best.artworkUrl60),
+      image: artwork,
       summary: stripHtml(best.longDescription || best.shortDescription || best.description || ''),
       url: best.trackViewUrl || best.collectionViewUrl,
-      rating: typeof best.contentAdvisoryRating === 'string' ? null : null,
     }
   } catch {
     return null
@@ -199,18 +216,14 @@ async function fetchWiki(seed: Seed): Promise<Partial<Item> | null> {
       const data = await res.json()
       const image = data?.thumbnail?.source || data?.originalimage?.source
       if (!image && !data?.extract) continue
-      return {
-        image,
-        summary: stripHtml(data?.extract || ''),
-        url: data?.content_urls?.desktop?.page,
-      }
+      return { image, summary: stripHtml(data?.extract || ''), url: data?.content_urls?.desktop?.page }
     } catch {}
   }
   return null
 }
 
 function stablePoster(seed: Seed) {
-  const colors: Record<string, [string, string]> = {
+  const colors: Record<MediaType, [string, string]> = {
     movie: ['#7c3aed', '#0f172a'],
     series: ['#0891b2', '#0f172a'],
     cartoon: ['#f59e0b', '#7c2d12'],
@@ -218,8 +231,118 @@ function stablePoster(seed: Seed) {
   const [a, b] = colors[seed.type]
   const safeTitle = seed.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   const safeGenre = seed.genres.slice(0, 2).join(' · ').replace(/&/g, '&amp;')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="600" height="900" fill="url(#g)"/><text x="44" y="95" font-family="Arial" font-size="28" fill="#f8fafc" font-weight="700">${seed.type.toUpperCase()}</text><text x="44" y="150" font-family="Arial" font-size="24" fill="#f8fafc">${seed.year}</text><foreignObject x="44" y="260" width="512" height="340"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Arial;color:#fff;font-size:54px;font-weight:800;line-height:1.05;word-break:break-word">${safeTitle}</div></foreignObject><text x="44" y="760" font-family="Arial" font-size="24" fill="#f8fafc">${safeGenre}</text></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="600" height="900" fill="url(#g)"/><text x="44" y="95" font-family="Arial" font-size="28" fill="#f8fafc" font-weight="700">${seed.type.toUpperCase()}</text><text x="44" y="150" font-family="Arial" font-size="24" fill="#f8fafc">${seed.year || ''}</text><foreignObject x="44" y="260" width="512" height="340"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Arial;color:#fff;font-size:54px;font-weight:800;line-height:1.05;word-break:break-word">${safeTitle}</div></foreignObject><text x="44" y="760" font-family="Arial" font-size="24" fill="#f8fafc">${safeGenre}</text></svg>`
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+}
+
+function tmdbToItem(row: any, type: MediaType, lang: string, genreMap: Record<number, string>): Item {
+  const title = row.title || row.name || row.original_title || row.original_name || 'Untitled'
+  const originalTitle = row.original_title || row.original_name || title
+  const date = row.release_date || row.first_air_date || ''
+  const year = date ? String(date).slice(0, 4) : ''
+  const genres = Array.isArray(row.genre_ids) ? row.genre_ids.map((id: number) => genreMap[id]).filter(Boolean) : []
+  const media = type === 'series' ? 'tv' : 'movie'
+  return {
+    id: `tmdb-${media}-${row.id}`,
+    type,
+    title,
+    originalTitle,
+    year,
+    image: row.poster_path ? `${TMDB_IMAGE}${row.poster_path}` : stablePoster({ type, title, year: Number(year) || 0, genres }),
+    backdrop: row.backdrop_path ? `${TMDB_BACKDROP}${row.backdrop_path}` : undefined,
+    summary: row.overview || `${title} · ${year} · ${genres.join(', ')}`,
+    genres,
+    rating: typeof row.vote_average === 'number' ? Number(row.vote_average.toFixed(1)) : null,
+    url: `https://www.themoviedb.org/${media}/${row.id}`,
+    trailerUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(originalTitle + ' official trailer')}`,
+    source: 'TMDb',
+  }
+}
+
+async function fetchTmdbItems(type: MediaType, mode: string, lang: string, query: string, genre: string, yearFrom: number | null, yearTo: number | null) {
+  const language = langToTmdb(lang)
+  const media = type === 'series' ? 'tv' : 'movie'
+  const genreId = type === 'series' ? TV_GENRES[genre] : MOVIE_GENRES[genre]
+  const allGenres = type === 'series' ? TV_GENRES : MOVIE_GENRES
+  const reverseGenreMap = Object.fromEntries(Object.entries(allGenres).map(([name, id]) => [id, name]))
+
+  let endpoint = `/discover/${media}`
+  const params: Record<string, string | number | undefined> = {
+    language,
+    sort_by: mode === 'anticipated' ? 'popularity.desc' : 'popularity.desc',
+    include_adult: 'false',
+    page: 1,
+  }
+
+  if (query) {
+    endpoint = `/search/${media}`
+    params.query = query
+  } else if (mode === 'trending') {
+    endpoint = `/trending/${media}/week`
+  } else if (mode === 'anticipated') {
+    if (type === 'series') endpoint = '/discover/tv'
+    else endpoint = '/movie/upcoming'
+  }
+
+  if (!query && endpoint.includes('/discover/')) {
+    if (type === 'cartoon') params.with_genres = genreId ? `${MOVIE_GENRES.Animation},${genreId}` : `${MOVIE_GENRES.Animation}`
+    else if (genreId) params.with_genres = genreId
+    if (yearFrom) params[type === 'series' ? 'first_air_date.gte' : 'primary_release_date.gte'] = `${yearFrom}-01-01`
+    if (yearTo) params[type === 'series' ? 'first_air_date.lte' : 'primary_release_date.lte'] = `${yearTo}-12-31`
+  }
+
+  const data = await tmdbFetch(endpoint, params)
+  const rows = Array.isArray(data?.results) ? data.results : []
+  let items = rows.map((row: any) => tmdbToItem(row, type, lang, reverseGenreMap))
+
+  if (query && type === 'cartoon') items = items.filter(item => item.genres.includes('Animation'))
+  if (genre) items = items.filter(item => item.genres.includes(genre) || type === 'cartoon')
+  if (yearFrom) items = items.filter(item => !item.year || Number(item.year) >= yearFrom)
+  if (yearTo) items = items.filter(item => !item.year || Number(item.year) <= yearTo)
+  return items
+}
+
+async function enrichWithOmdb(item: Item) {
+  if (!OMDB_API_KEY) return item
+  const omdb = await omdbByTitle(item.originalTitle || item.title, item.year)
+  if (!omdb) return item
+  return {
+    ...item,
+    image: item.image.startsWith('data:') && omdb.Poster && omdb.Poster !== 'N/A' ? omdb.Poster : item.image,
+    summary: item.summary || omdb.Plot || item.summary,
+    rating: item.rating || (omdb.imdbRating && omdb.imdbRating !== 'N/A' ? Number(omdb.imdbRating) : null),
+    url: omdb.imdbID ? `https://www.imdb.com/title/${omdb.imdbID}/` : item.url,
+    source: `${item.source}+OMDb`,
+  }
+}
+
+async function fallbackItems(type: MediaType, mode: string, lang: string, query: string, genre: string, yearFrom: number | null, yearTo: number | null) {
+  let seeds = FALLBACK.filter(item => item.type === type)
+  if (mode === 'trending') seeds = seeds.filter(item => item.trend)
+  if (mode === 'anticipated') seeds = seeds.filter(item => item.anticipated || item.year >= new Date().getFullYear())
+  if (query) seeds = seeds.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
+  if (genre) seeds = seeds.filter(item => item.genres.some(g => g.toLowerCase() === genre.toLowerCase()))
+  if (yearFrom) seeds = seeds.filter(item => item.year >= yearFrom)
+  if (yearTo) seeds = seeds.filter(item => item.year <= yearTo)
+  const items = await Promise.all(seeds.map(async seed => {
+    const [itunes, wiki] = await Promise.all([fetchItunes(seed), fetchWiki(seed)])
+    return {
+      id: `${seed.type}-${seed.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+      type: seed.type,
+      title: seed.title,
+      originalTitle: itunes?.originalTitle || seed.title,
+      year: String(seed.year),
+      image: itunes?.image || wiki?.image || stablePoster(seed),
+      summary: itunes?.summary || wiki?.summary || `${seed.title} · ${seed.year} · ${seed.genres.join(', ')}`,
+      genres: seed.genres,
+      rating: null,
+      url: itunes?.url || wiki?.url || `https://www.google.com/search?q=${encodeURIComponent(seed.title + ' official where to watch')}`,
+      trailerUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(seed.title + ' official trailer')}`,
+      source: itunes?.image ? 'iTunes' : wiki?.image ? 'Wikipedia' : 'Local',
+    } as Item
+  }))
+  if (type === 'series' && query) return [...items, ...(await fetchTvMaze(query, type))]
+  return items
 }
 
 async function translate(texts: string[], lang: string) {
@@ -234,29 +357,9 @@ async function translate(texts: string[], lang: string) {
   }
 }
 
-async function toItem(seed: Seed): Promise<Item> {
-  const [itunes, wiki] = await Promise.all([fetchItunes(seed), fetchWiki(seed)])
-  const image = itunes?.image || wiki?.image || stablePoster(seed)
-  const summary = itunes?.summary || wiki?.summary || `${seed.title} · ${seed.year} · ${seed.genres.join(', ')}`
-  const url = itunes?.url || wiki?.url || `https://www.google.com/search?q=${encodeURIComponent(seed.title + ' official where to watch')}`
-  return {
-    id: `${seed.type}-${seed.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-    type: seed.type,
-    title: seed.title,
-    originalTitle: itunes?.originalTitle || seed.title,
-    year: String(seed.year),
-    image,
-    summary,
-    genres: seed.genres,
-    rating: null,
-    url,
-    trailerUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(seed.title + ' official trailer')}`,
-  }
-}
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const type = searchParams.get('type') || 'all'
+  const type = (searchParams.get('type') || 'movie') as MediaType | 'all'
   const genre = searchParams.get('genre') || ''
   const lang = searchParams.get('lang') || 'en'
   const query = searchParams.get('q') || ''
@@ -265,27 +368,33 @@ export async function GET(req: Request) {
   const yearFrom = yearFromRaw ? Number(yearFromRaw) : null
   const yearTo = yearToRaw ? Number(yearToRaw) : null
   const mode = searchParams.get('mode') || 'default'
+  const types: MediaType[] = type === 'all' ? ['movie', 'series', 'cartoon'] : [type as MediaType]
 
-  let seeds = CATALOG.filter(item => type === 'all' || item.type === type)
-  if (mode === 'trending') seeds = seeds.filter(item => item.trend)
-  if (mode === 'anticipated') seeds = seeds.filter(item => item.anticipated || item.year >= new Date().getFullYear())
-  if (query) seeds = seeds.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
-  if (genre) seeds = seeds.filter(item => item.genres.some(g => g.toLowerCase() === genre.toLowerCase()))
-  if (yearFrom) seeds = seeds.filter(item => item.year >= yearFrom)
-  if (yearTo) seeds = seeds.filter(item => item.year <= yearTo)
+  let items: Item[] = []
+  for (const t of types) {
+    const tmdbItems = await fetchTmdbItems(t, mode, lang, query, genre, yearFrom, yearTo)
+    const sourceItems = tmdbItems.length ? tmdbItems : await fallbackItems(t, mode, lang, query, genre, yearFrom, yearTo)
+    items.push(...sourceItems)
+  }
 
-  seeds = seeds.sort((a, b) => {
-    if (mode === 'anticipated') return a.year - b.year
-    if (mode === 'trending') return Number(b.trend) - Number(a.trend) || b.year - a.year
-    return b.year - a.year
-  }).slice(0, 80)
+  if (OMDB_API_KEY) items = await Promise.all(items.slice(0, 40).map(enrichWithOmdb))
 
-  let items = await Promise.all(seeds.map(toItem))
-  items = items.sort((a, b) => Number(!a.image.startsWith('data:')) - Number(!b.image.startsWith('data:')) || Number(b.year) - Number(a.year))
+  const seen = new Set<string>()
+  items = items
+    .filter(item => {
+      const key = `${item.type}-${normalize(item.originalTitle || item.title)}-${item.year}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .sort((a, b) => Number(!a.image.startsWith('data:')) - Number(!b.image.startsWith('data:')) || Number(b.year || 0) - Number(a.year || 0))
+    .slice(0, 80)
+
   if (lang !== 'en' && items.length) {
     const titles = await translate(items.map(i => i.title), lang)
     const summaries = await translate(items.map(i => i.summary || ''), lang)
     items = items.map((item, index) => ({ ...item, title: titles[index] || item.title, summary: summaries[index] || item.summary }))
   }
+
   return NextResponse.json(items)
 }
