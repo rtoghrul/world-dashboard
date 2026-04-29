@@ -1,3 +1,0 @@
-const A = 'https://' + 'api.jikan.moe/v4'
-const B = 'https://' + 'api.tvmaze.com'
-const C = 'https://' + 'api.themoviedb.org/3'
