@@ -48,8 +48,8 @@ const subKeyMap: Record<string, string> = {
   engineering:'subEngineering',automation:'subAutomation',electrical:'subElectrical',mechanical:'subMechanical',
   courses:'subCourses',
   instagram:'subInstagram',tiktok:'subTiktok',x:'subX',facebook:'subFacebook',
-  chatbots:'subAI','image-gen':'subAI','video-gen':'subAI',writing:'subAI',coding:'subAI','free-tools':'subAI',
-  android:'subTech',ios:'subTech',windows:'subTech',mac:'subTech','browser-ext':'subTech',
+  chatbots:'subChatbots','image-gen':'subImageGen','video-gen':'subVideoGen',writing:'subWritingAI',coding:'subCodingAI','free-tools':'subFreeTools',
+  android:'subAndroid',ios:'subIOS',windows:'subWindows',mac:'subMac','browser-ext':'subExtensions',
 }
 
 const submenuMap: Record<string, string[]> = {
