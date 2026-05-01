@@ -174,7 +174,7 @@ export default function SectionPage() {
     <div className="min-h-screen relative z-[1] bg-gray-950">
       <Header />
 
-      <div className="border-b border-white/[0.04] bg-[#07070b]/80 backdrop-blur-sm sticky top-14 z-30">
+      <div className="border-b border-white/[0.04] bg-[#07070b]/90 backdrop-blur-xl sticky top-14 z-30">
         <div className="max-w-screen-2xl mx-auto px-5">
           <div className="flex items-center gap-1 py-2 overflow-x-auto scrollbar-thin">
             {subs.map(s => (
@@ -195,15 +195,15 @@ export default function SectionPage() {
       </div>
 
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] transition">
+        <div className="flex items-center gap-3 mb-6 animate-slide-up">
+          <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] hover:border-indigo-500/20 transition-all">
             <ArrowLeft className="w-5 h-5 text-white/80" />
           </Link>
-          <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+          <div className="section-icon bg-indigo-500/10 border border-indigo-500/20">
             <Icon className="w-5 h-5 text-white/80" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">{title}</h1>
+            <h1 className="text-xl font-bold gradient-text-static">{title}</h1>
             <p className="text-xs text-[#6b6b80]">{getSubLabel(sub)}</p>
           </div>
         </div>
