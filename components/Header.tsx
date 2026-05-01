@@ -103,23 +103,6 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
 
 const menuKeys = Object.keys(menuStructure)
 
-function DropdownMenu({ sectionId, section, lang, alignRight, onClose }: { sectionId: string; section: typeof menuStructure[string]; lang: string; alignRight?: boolean; onClose: () => void }) {
-  return (
-    <div className={`absolute top-full mt-1 min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.06] shadow-2xl shadow-black/50 z-50 animate-fade-in ${alignRight ? 'right-0' : 'left-0'}`}>
-      {section.items.map(item => (
-        <Link
-          key={item.id}
-          href={`/section/${sectionId}/${item.id}`}
-          onClick={onClose}
-          className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.04] transition-colors"
-        >
-          {item.label[lang] || item.label.en}
-        </Link>
-      ))}
-    </div>
-  )
-}
-
 export default function Header() {
   const { lang } = useLang()
   const router = useRouter()
@@ -127,7 +110,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const init = async () => {
@@ -140,12 +123,19 @@ export default function Header() {
     init()
   }, [])
 
-  const handleMouseEnter = (id: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setOpenMenu(id)
-  }
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => setOpenMenu(null), 150)
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenMenu(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const toggleMenu = (id: string) => {
+    setOpenMenu(prev => prev === id ? null : id)
   }
 
   const handleLogout = async () => {
@@ -166,24 +156,33 @@ export default function Header() {
               <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center mx-4 flex-1 flex-wrap">
+            {/* Desktop Navigation - click to open */}
+            <nav ref={navRef} className="hidden md:flex items-center mx-4 flex-1 flex-wrap">
               {menuKeys.map((id, index) => {
                 const section = menuStructure[id]
                 const isRightHalf = index >= menuKeys.length - 3
                 return (
-                  <div
-                    key={id}
-                    className="relative shrink-0"
-                    onMouseEnter={() => handleMouseEnter(id)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <button className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-white bg-white/[0.04]' : 'text-[#8b8b9e] hover:text-white'}`}>
+                  <div key={id} className="relative shrink-0">
+                    <button
+                      onClick={() => toggleMenu(id)}
+                      className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-white bg-white/[0.06]' : 'text-[#8b8b9e] hover:text-white'}`}
+                    >
                       {section.label[lang] || section.label.en}
-                      <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === id ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${openMenu === id ? 'rotate-180' : ''}`} />
                     </button>
                     {openMenu === id && (
-                      <DropdownMenu sectionId={id} section={section} lang={lang} alignRight={isRightHalf} onClose={() => setOpenMenu(null)} />
+                      <div className={`absolute top-full mt-1 min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.06] shadow-2xl shadow-black/50 z-[100] ${isRightHalf ? 'right-0' : 'left-0'}`}>
+                        {section.items.map(item => (
+                          <Link
+                            key={item.id}
+                            href={`/section/${id}/${item.id}`}
+                            onClick={() => setOpenMenu(null)}
+                            className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition-colors"
+                          >
+                            {item.label[lang] || item.label.en}
+                          </Link>
+                        ))}
+                      </div>
                     )}
                   </div>
                 )
@@ -229,7 +228,7 @@ export default function Header() {
                     className="w-full flex items-center justify-between px-5 py-3 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.03] transition"
                   >
                     {section.label[lang] || section.label.en}
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileExpandedSection === id ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileExpandedSection === id ? 'rotate-180' : ''}`} />
                   </button>
                   {mobileExpandedSection === id && (
                     <div className="pb-2 pl-5">
