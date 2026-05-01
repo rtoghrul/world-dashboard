@@ -13,6 +13,8 @@ import EntertainmentWidget from '@/components/EntertainmentWidget'
 import SocialWidget from '@/components/SocialWidget'
 import StocksWidget from '@/components/StocksWidget'
 import EducationWidget from '@/components/EducationWidget'
+import AIToolsWidget from '@/components/AIToolsWidget'
+import SoftwareWidget from '@/components/SoftwareWidget'
 import { useLang } from '@/lib/LanguageContext'
 import t from '@/lib/translations'
 
@@ -99,8 +101,8 @@ function Content({ main, sub }: { main: string; sub: string }) {
   if (main === 'entertainment') return <EntertainmentWidget />
   if (main === 'social') return <SocialWidget defaultExpanded />
   if (main === 'stocks') return <StocksWidget defaultExpanded />
-  if (main === 'aitools') return <EducationWidget defaultExpanded initialMode="engineering" />
-  if (main === 'software') return <EducationWidget defaultExpanded initialMode="engineering" />
+  if (main === 'aitools') return <AIToolsWidget defaultExpanded initialCategory={sub === 'chatbots' ? 'chatbots' : sub === 'image-gen' ? 'image' : sub === 'video-gen' ? 'video' : sub === 'writing' ? 'writing' : sub === 'coding' ? 'coding' : 'all'} />
+  if (main === 'software') return <SoftwareWidget defaultExpanded initialPlatform={sub === 'android' ? 'android' : sub === 'ios' ? 'ios' : sub === 'windows' ? 'windows' : sub === 'mac' ? 'mac' : sub === 'browser-ext' ? 'extensions' : 'all'} />
   if (main === 'education') {
     const eduConfig = educationMap[sub] || { mode: 'science', subject: 'physics' }
     return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />
