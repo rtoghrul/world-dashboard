@@ -40,17 +40,19 @@ const AIToolsWidget = dynamic(() => import('@/components/AIToolsWidget'), { ssr:
 const SoftwareWidget = dynamic(() => import('@/components/SoftwareWidget'), { ssr: false, loading: WidgetLoader })
 const WomenWidget = dynamic(() => import('@/components/WomenWidget'), { ssr: false, loading: WidgetLoader })
 const PlatformsWidget = dynamic(() => import('@/components/PlatformsWidget'), { ssr: false, loading: WidgetLoader })
+const ChinesePlatformsWidget = dynamic(() => import('@/components/ChinesePlatformsWidget'), { ssr: false, loading: WidgetLoader })
+const GermanyWidget = dynamic(() => import('@/components/GermanyWidget'), { ssr: false, loading: WidgetLoader })
 
-const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store }
+const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store, chinese: ShoppingBag, germany: Newspaper }
 
 const names: Record<string, Record<string, string>> = {
-  az: { weather: 'Hava', crypto: 'Kripto Bazarları', whale: 'Balina Aktivliyi', news: 'Qlobal Xəbərlər', travel: 'Səyahət', viral: 'Viral Məzmun', entertainment: 'Əyləncə', social: 'Sosial Trendlər', stocks: 'Səhm Bazarları', education: 'Təhsil', markets: 'Bazarlar', aitools: 'AI Alətlər', software: 'Proqramlar', women: 'Qadınlar', shopping: 'Alış-veriş', platforms: 'Platformalar 🇩🇪' },
-  en: { weather: 'Weather', crypto: 'Crypto Markets', whale: 'Whale Activity', news: 'Global News', travel: 'Travel', viral: 'Viral Content', entertainment: 'Entertainment', social: 'Social Trends', stocks: 'Stocks', education: 'Education', markets: 'Markets', aitools: 'AI Tools', software: 'Software', women: 'Women', shopping: 'Shopping', platforms: 'Platforms 🇩🇪' },
-  ru: { weather: 'Погода', crypto: 'Крипто рынки', whale: 'Активность китов', news: 'Мировые новости', travel: 'Путешествия', viral: 'Вирусный контент', entertainment: 'Развлечения', social: 'Социальные тренды', stocks: 'Акции', education: 'Образование', markets: 'Рынки', aitools: 'ИИ Инструменты', software: 'Софт', women: 'Женщинам', shopping: 'Покупки', platforms: 'Платформы 🇩🇪' },
-  tr: { weather: 'Hava', crypto: 'Kripto', whale: 'Balina', news: 'Haberler', travel: 'Seyahat', viral: 'Viral', entertainment: 'Eğlence', social: 'Sosyal', stocks: 'Hisseler', education: 'Eğitim', markets: 'Piyasalar', aitools: 'YZ Araçları', software: 'Yazılım', women: 'Kadınlar', shopping: 'Alışveriş', platforms: 'Platformlar 🇩🇪' },
-  de: { weather: 'Wetter', crypto: 'Krypto', whale: 'Wale', news: 'Nachrichten', travel: 'Reisen', viral: 'Viral', entertainment: 'Unterhaltung', social: 'Sozial', stocks: 'Aktien', education: 'Lernen', markets: 'Märkte', aitools: 'KI-Tools', software: 'Software', women: 'Frauen', shopping: 'Einkaufen', platforms: 'Plattformen 🇩🇪' },
-  fr: { weather: 'Météo', crypto: 'Crypto', whale: 'Baleines', news: 'Actualités', travel: 'Voyages', viral: 'Viral', entertainment: 'Divertissement', social: 'Social', stocks: 'Actions', education: 'Apprendre', markets: 'Marchés', aitools: 'Outils IA', software: 'Logiciels', women: 'Femmes', shopping: 'Shopping', platforms: 'Plateformes 🇩🇪' },
-  es: { weather: 'Clima', crypto: 'Cripto', whale: 'Ballenas', news: 'Noticias', travel: 'Viajes', viral: 'Viral', entertainment: 'Entretenimiento', social: 'Social', stocks: 'Acciones', education: 'Aprender', markets: 'Mercados', aitools: 'Herramientas IA', software: 'Software', women: 'Mujeres', shopping: 'Compras', platforms: 'Plataformas 🇩🇪' },
+  az: { weather: 'Hava', crypto: 'Kripto Bazarları', whale: 'Balina Aktivliyi', news: 'Qlobal Xəbərlər', travel: 'Səyahət', viral: 'Viral Məzmun', entertainment: 'Əyləncə', social: 'Sosial Trendlər', stocks: 'Səhm Bazarları', education: 'Təhsil', markets: 'Bazarlar', aitools: 'AI Alətlər', software: 'Proqramlar', women: 'Qadınlar', shopping: 'Alış-veriş', platforms: 'Platformalar 🇩🇪', chinese: 'Çin Platformaları 🇨🇳', germany: 'Almaniyada Həyat 🇩🇪' },
+  en: { weather: 'Weather', crypto: 'Crypto Markets', whale: 'Whale Activity', news: 'Global News', travel: 'Travel', viral: 'Viral Content', entertainment: 'Entertainment', social: 'Social Trends', stocks: 'Stocks', education: 'Education', markets: 'Markets', aitools: 'AI Tools', software: 'Software', women: 'Women', shopping: 'Shopping', platforms: 'Platforms 🇩🇪', chinese: 'Chinese Platforms 🇨🇳', germany: 'Life in Germany 🇩🇪' },
+  ru: { weather: 'Погода', crypto: 'Крипто рынки', whale: 'Активность китов', news: 'Мировые новости', travel: 'Путешествия', viral: 'Вирусный контент', entertainment: 'Развлечения', social: 'Социальные тренды', stocks: 'Акции', education: 'Образование', markets: 'Рынки', aitools: 'ИИ Инструменты', software: 'Софт', women: 'Женщинам', shopping: 'Покупки', platforms: 'Платформы 🇩🇪', chinese: 'Китайские 🇨🇳', germany: 'Жизнь в Германии 🇩🇪' },
+  tr: { weather: 'Hava', crypto: 'Kripto', whale: 'Balina', news: 'Haberler', travel: 'Seyahat', viral: 'Viral', entertainment: 'Eğlence', social: 'Sosyal', stocks: 'Hisseler', education: 'Eğitim', markets: 'Piyasalar', aitools: 'YZ Araçları', software: 'Yazılım', women: 'Kadınlar', shopping: 'Alışveriş', platforms: 'Platformlar 🇩🇪', chinese: 'Çin 🇨🇳', germany: 'Almanya 🇩🇪' },
+  de: { weather: 'Wetter', crypto: 'Krypto', whale: 'Wale', news: 'Nachrichten', travel: 'Reisen', viral: 'Viral', entertainment: 'Unterhaltung', social: 'Sozial', stocks: 'Aktien', education: 'Lernen', markets: 'Märkte', aitools: 'KI-Tools', software: 'Software', women: 'Frauen', shopping: 'Einkaufen', platforms: 'Plattformen 🇩🇪', chinese: 'Chinesisch 🇨🇳', germany: 'Leben in DE 🇩🇪' },
+  fr: { weather: 'Météo', crypto: 'Crypto', whale: 'Baleines', news: 'Actualités', travel: 'Voyages', viral: 'Viral', entertainment: 'Divertissement', social: 'Social', stocks: 'Actions', education: 'Apprendre', markets: 'Marchés', aitools: 'Outils IA', software: 'Logiciels', women: 'Femmes', shopping: 'Shopping', platforms: 'Plateformes 🇩🇪', chinese: 'Chinois 🇨🇳', germany: 'Allemagne 🇩🇪' },
+  es: { weather: 'Clima', crypto: 'Cripto', whale: 'Ballenas', news: 'Noticias', travel: 'Viajes', viral: 'Viral', entertainment: 'Entretenimiento', social: 'Social', stocks: 'Acciones', education: 'Aprender', markets: 'Mercados', aitools: 'Herramientas IA', software: 'Software', women: 'Mujeres', shopping: 'Compras', platforms: 'Plataformas 🇩🇪', chinese: 'Chino 🇨🇳', germany: 'Alemania 🇩🇪' },
 }
 
 const subKeyMap: Record<string, string> = {
@@ -94,6 +96,8 @@ const submenuMap: Record<string, string[]> = {
   women: ['beauty', 'diet', 'fitness', 'parenting', 'fashion', 'wellness'],
   shopping: ['all', 'electronics', 'fashion', 'grocery', 'pharmacy', 'auto', 'home'],
   platforms: ['general', 'clothes', 'pharma', 'food', 'electronics', 'autoparts', 'furniture', 'international'],
+  chinese: ['all', 'general', 'fashion', 'electronics', 'home', 'kids', 'hobby'],
+  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools'],
 }
 
 const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'technology', social: 'social' }
@@ -134,6 +138,8 @@ function Content({ main, sub }: { main: string; sub: string }) {
     if (main === 'women') return <WomenWidget initialCategory={sub || 'all'} />
     if (main === 'shopping') return <PlatformsWidget initialCategory={sub || 'all'} />
     if (main === 'platforms') return <PlatformsWidget initialCategory={sub || 'all'} />
+    if (main === 'chinese') return <ChinesePlatformsWidget initialCategory={sub || 'all'} />
+    if (main === 'germany') return <GermanyWidget initialTab={sub || 'behoerden'} />
     if (main === 'education') {
       const eduConfig = educationMap[sub] || { mode: 'science' as const, subject: 'physics' }
       return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />

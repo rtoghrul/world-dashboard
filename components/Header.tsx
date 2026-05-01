@@ -126,6 +126,29 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'wellness', label: { en: 'Wellness & Health', az: 'Sağlamlıq', ru: 'Здоровье', tr: 'Sağlık', de: 'Wellness', fr: 'Bien-être', es: 'Bienestar', zh: '健康', ar: 'صحة', ja: 'ウェルネス', it: 'Benessere', pt: 'Bem-estar' } },
     ]
   },
+  chinese: {
+    label: { en: 'China 🇨🇳', az: 'Çin 🇨🇳', ru: 'Китай 🇨🇳', tr: 'Çin 🇨🇳', de: 'China 🇨🇳', fr: 'Chine 🇨🇳', es: 'China 🇨🇳', zh: '中国 🇨🇳', ar: 'صين 🇨🇳', ja: '中国 🇨🇳', it: 'Cina 🇨🇳', pt: 'China 🇨🇳' },
+    items: [
+      { id: 'all', label: { en: 'All', az: 'Hamısı', ru: 'Все', tr: 'Tümü', de: 'Alle', fr: 'Tous', es: 'Todos', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' } },
+      { id: 'general', label: { en: 'General', az: 'Ümumi', ru: 'Общие', tr: 'Genel', de: 'Allgemein', fr: 'Général', es: 'General', zh: '综合', ar: 'عام', ja: '総合', it: 'Generale', pt: 'Geral' } },
+      { id: 'fashion', label: { en: 'Fashion', az: 'Moda', ru: 'Мода', tr: 'Moda', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
+      { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', ru: 'Электроника', tr: 'Elektronik', de: 'Elektronik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子機器', it: 'Elettronica', pt: 'Eletrônicos' } },
+      { id: 'home', label: { en: 'Home & Garden', az: 'Ev & Bağ', ru: 'Дом и сад', tr: 'Ev & Bahçe', de: 'Haus & Garten', fr: 'Maison', es: 'Hogar', zh: '家居', ar: 'منزل', ja: '家庭', it: 'Casa', pt: 'Casa' } },
+      { id: 'kids', label: { en: 'Kids & Baby', az: 'Uşaq', ru: 'Дети', tr: 'Çocuk', de: 'Kinder', fr: 'Enfants', es: 'Niños', zh: '儿童', ar: 'أطفال', ja: '子供', it: 'Bambini', pt: 'Crianças' } },
+      { id: 'hobby', label: { en: 'Hobby & Tools', az: 'Hobbi', ru: 'Хобби', tr: 'Hobi', de: 'Hobby', fr: 'Loisirs', es: 'Hobby', zh: '爱好', ar: 'هوايات', ja: '趣味', it: 'Hobby', pt: 'Hobby' } },
+    ]
+  },
+  germany: {
+    label: { en: 'Germany 🇩🇪', az: 'Almaniya 🇩🇪', ru: 'Германия 🇩🇪', tr: 'Almanya 🇩🇪', de: 'Deutschland 🇩🇪', fr: 'Allemagne 🇩🇪', es: 'Alemania 🇩🇪', zh: '德国 🇩🇪', ar: 'ألمانيا 🇩🇪', ja: 'ドイツ 🇩🇪', it: 'Germania 🇩🇪', pt: 'Alemanha 🇩🇪' },
+    items: [
+      { id: 'behoerden', label: { en: 'Government', az: 'Dövlət', ru: 'Гос. органы', tr: 'Devlet', de: 'Behörden', fr: 'Gouvernement', es: 'Gobierno', zh: '政府', ar: 'حكومة', ja: '行政', it: 'Governo', pt: 'Governo' } },
+      { id: 'wohnung', label: { en: 'Housing', az: 'Mənzil', ru: 'Жильё', tr: 'Konut', de: 'Wohnung', fr: 'Logement', es: 'Vivienda', zh: '住房', ar: 'سكن', ja: '住居', it: 'Alloggio', pt: 'Moradia' } },
+      { id: 'bildung', label: { en: 'Education', az: 'Təhsil', ru: 'Образование', tr: 'Eğitim', de: 'Bildung', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'تعليم', ja: '教育', it: 'Istruzione', pt: 'Educação' } },
+      { id: 'arbeit', label: { en: 'Work', az: 'İş', ru: 'Работа', tr: 'İş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمل', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
+      { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
+      { id: 'tools', label: { en: 'Tools', az: 'Alətlər', ru: 'Инструменты', tr: 'Araçlar', de: 'Tools', fr: 'Outils', es: 'Herramientas', zh: '工具', ar: 'أدوات', ja: 'ツール', it: 'Strumenti', pt: 'Ferramentas' } },
+    ]
+  },
   platforms: {
     label: { en: 'Platforms 🇩🇪', az: 'Platformalar 🇩🇪', ru: 'Платформы 🇩🇪', tr: 'Platformlar 🇩🇪', de: 'Plattformen 🇩🇪', fr: 'Plateformes 🇩🇪', es: 'Plataformas 🇩🇪', zh: '平台 🇩🇪', ar: 'منصات 🇩🇪', ja: 'プラットフォーム 🇩🇪', it: 'Piattaforme 🇩🇪', pt: 'Plataformas 🇩🇪' },
     items: [
