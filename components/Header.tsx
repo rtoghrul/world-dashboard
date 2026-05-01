@@ -14,102 +14,105 @@ import WhatsNew from '@/components/WhatsNew'
 import { createClient } from '@/lib/supabase'
 
 const menuStructure: Record<string, { label: Record<string,string>; items: { id: string; label: Record<string,string> }[] }> = {
-  weather: {
-    label: { en: 'Weather', az: 'Hava', ru: 'Погода' },
-    items: [
-      { id: 'current', label: { en: 'Current', az: 'İndi', ru: 'Сейчас' } },
-      { id: 'hourly', label: { en: 'Hourly', az: 'Saatlıq', ru: 'По часам' } },
-      { id: 'weekly', label: { en: 'Weekly', az: 'Həftəlik', ru: 'Неделя' } },
-    ]
-  },
-  crypto: {
-    label: { en: 'Crypto', az: 'Kripto', ru: 'Крипто' },
-    items: [
-      { id: 'top', label: { en: 'Top Coins', az: 'Top Coinlər', ru: 'Топ монеты' } },
-      { id: 'bitcoin', label: { en: 'Bitcoin', az: 'Bitcoin', ru: 'Bitcoin' } },
-      { id: 'ethereum', label: { en: 'Ethereum', az: 'Ethereum', ru: 'Ethereum' } },
-      { id: 'fear-greed', label: { en: 'Fear & Greed', az: 'Fear & Greed', ru: 'Страх и жадность' } },
-    ]
-  },
-  whale: {
-    label: { en: 'Whale', az: 'Balina', ru: 'Киты' },
-    items: [
-      { id: 'large-transfers', label: { en: 'Large Transfers', az: 'Böyük Transferlər', ru: 'Крупные переводы' } },
-      { id: 'wallets', label: { en: 'Wallets', az: 'Cüzdanlar', ru: 'Кошельки' } },
-      { id: 'exchanges', label: { en: 'Exchanges', az: 'Birjalar', ru: 'Биржи' } },
-    ]
-  },
   news: {
-    label: { en: 'News', az: 'Xəbərlər', ru: 'Новости' },
+    label: { en: 'News', az: 'Xəbərlər', ru: 'Новости', tr: 'Haberler', de: 'Nachrichten', fr: 'Actualités', es: 'Noticias', zh: '新闻', ar: 'أخبار', ja: 'ニュース', it: 'Notizie', pt: 'Notícias' },
     items: [
-      { id: 'top', label: { en: 'Top', az: 'Top', ru: 'Топ' } },
-      { id: 'war', label: { en: 'War', az: 'Müharibə', ru: 'Война' } },
-      { id: 'politics', label: { en: 'Politics', az: 'Siyasət', ru: 'Политика' } },
-      { id: 'economy', label: { en: 'Economy', az: 'İqtisadiyyat', ru: 'Экономика' } },
-      { id: 'ai', label: { en: 'AI', az: 'AI', ru: 'AI' } },
-      { id: 'industry', label: { en: 'Industry', az: 'Sənaye', ru: 'Индустрия' } },
-      { id: 'social', label: { en: 'Social', az: 'Sosial', ru: 'Соцсети' } },
+      { id: 'top', label: { en: 'Top', az: 'Əsas', ru: 'Главное', tr: 'Öne Çıkan', de: 'Top', fr: 'À la une', es: 'Destacado', zh: '头条', ar: 'رئيسية', ja: 'トップ', it: 'Top', pt: 'Destaque' } },
+      { id: 'war', label: { en: 'War & Conflicts', az: 'Müharibə', ru: 'Война', tr: 'Savaş', de: 'Krieg', fr: 'Guerre', es: 'Guerra', zh: '战争', ar: 'حرب', ja: '戦争', it: 'Guerra', pt: 'Guerra' } },
+      { id: 'politics', label: { en: 'Politics', az: 'Siyasət', ru: 'Политика', tr: 'Politika', de: 'Politik', fr: 'Politique', es: 'Política', zh: '政治', ar: 'سياسة', ja: '政治', it: 'Politica', pt: 'Política' } },
+      { id: 'economy', label: { en: 'Economy', az: 'İqtisadiyyat', ru: 'Экономика', tr: 'Ekonomi', de: 'Wirtschaft', fr: 'Économie', es: 'Economía', zh: '经济', ar: 'اقتصاد', ja: '経済', it: 'Economia', pt: 'Economia' } },
+      { id: 'tech', label: { en: 'Technology', az: 'Texnologiya', ru: 'Технологии', tr: 'Teknoloji', de: 'Technik', fr: 'Tech', es: 'Tecnología', zh: '科技', ar: 'تقنية', ja: 'テクノロジー', it: 'Tecnologia', pt: 'Tecnologia' } },
+      { id: 'ai', label: { en: 'AI & Tech', az: 'AI & Texno', ru: 'ИИ', tr: 'YZ', de: 'KI', fr: 'IA', es: 'IA', zh: 'AI', ar: 'ذ.ا.', ja: 'AI', it: 'IA', pt: 'IA' } },
+      { id: 'science', label: { en: 'Science', az: 'Elm', ru: 'Наука', tr: 'Bilim', de: 'Wissenschaft', fr: 'Science', es: 'Ciencia', zh: '科学', ar: 'علوم', ja: '科学', it: 'Scienza', pt: 'Ciência' } },
+      { id: 'sports', label: { en: 'Sports', az: 'İdman', ru: 'Спорт', tr: 'Spor', de: 'Sport', fr: 'Sport', es: 'Deportes', zh: '体育', ar: 'رياضة', ja: 'スポーツ', it: 'Sport', pt: 'Esportes' } },
+      { id: 'health', label: { en: 'Health', az: 'Səhiyyə', ru: 'Здоровье', tr: 'Sağlık', de: 'Gesundheit', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'صحة', ja: '健康', it: 'Salute', pt: 'Saúde' } },
+      { id: 'industry', label: { en: 'Industry', az: 'Sənaye', ru: 'Индустрия', tr: 'Endüstri', de: 'Industrie', fr: 'Industrie', es: 'Industria', zh: '产业', ar: 'صناعة', ja: '産業', it: 'Industria', pt: 'Indústria' } },
     ]
   },
-  travel: {
-    label: { en: 'Travel', az: 'Səyahət', ru: 'Путешествия' },
+  markets: {
+    label: { en: 'Markets', az: 'Bazarlar', ru: 'Рынки', tr: 'Piyasalar', de: 'Märkte', fr: 'Marchés', es: 'Mercados', zh: '市场', ar: 'أسواق', ja: '市場', it: 'Mercati', pt: 'Mercados' },
     items: [
-      { id: 'flight-hotel', label: { en: 'Flight + Hotel', az: 'Uçuş + Otel', ru: 'Рейс + Отель' } },
-      { id: 'flight', label: { en: 'Flights', az: 'Uçuşlar', ru: 'Рейсы' } },
-      { id: 'hotel', label: { en: 'Hotels', az: 'Otellər', ru: 'Отели' } },
-      { id: 'last-minute', label: { en: 'Last Minute', az: 'Son Dəqiqə', ru: 'Горящие туры' } },
-    ]
-  },
-  viral: {
-    label: { en: 'Viral', az: 'Viral', ru: 'Вирусное' },
-    items: [
-      { id: 'youtube', label: { en: 'YouTube', az: 'YouTube', ru: 'YouTube' } },
-      { id: 'music', label: { en: 'Music', az: 'Musiqi', ru: 'Музыка' } },
-      { id: 'shorts', label: { en: 'Shorts', az: 'Shorts', ru: 'Shorts' } },
-      { id: 'trending', label: { en: 'Trending', az: 'Trend', ru: 'Тренды' } },
+      { id: 'crypto-top', label: { en: 'Crypto Top', az: 'Kripto Top', ru: 'Крипто Топ', tr: 'Kripto Top', de: 'Krypto Top', fr: 'Crypto Top', es: 'Cripto Top', zh: '加密Top', ar: 'كريبتو', ja: '仮想通貨Top', it: 'Crypto Top', pt: 'Cripto Top' } },
+      { id: 'bitcoin', label: { en: 'Bitcoin', az: 'Bitcoin', ru: 'Bitcoin', tr: 'Bitcoin', de: 'Bitcoin', fr: 'Bitcoin', es: 'Bitcoin', zh: 'Bitcoin', ar: 'بيتكوين', ja: 'Bitcoin', it: 'Bitcoin', pt: 'Bitcoin' } },
+      { id: 'ethereum', label: { en: 'Ethereum', az: 'Ethereum', ru: 'Ethereum', tr: 'Ethereum', de: 'Ethereum', fr: 'Ethereum', es: 'Ethereum', zh: 'Ethereum', ar: 'إيثيريوم', ja: 'Ethereum', it: 'Ethereum', pt: 'Ethereum' } },
+      { id: 'fear-greed', label: { en: 'Fear & Greed', az: 'Qorxu & Tamah', ru: 'Страх & Жадность', tr: 'Korku & Açgöz', de: 'Angst & Gier', fr: 'Peur & Avidité', es: 'Miedo & Codicia', zh: '恐惧与贪婪', ar: 'خوف وطمع', ja: '恐怖と貪欲', it: 'Paura & Avidità', pt: 'Medo & Ganância' } },
+      { id: 'whale', label: { en: 'Whale Activity', az: 'Balina', ru: 'Киты', tr: 'Balina', de: 'Wale', fr: 'Baleines', es: 'Ballenas', zh: '鲸鱼', ar: 'حيتان', ja: 'クジラ', it: 'Balene', pt: 'Baleias' } },
+      { id: 'stocks-top', label: { en: 'Stocks', az: 'Səhmlər', ru: 'Акции', tr: 'Hisseler', de: 'Aktien', fr: 'Actions', es: 'Acciones', zh: '股票', ar: 'أسهم', ja: '株式', it: 'Azioni', pt: 'Ações' } },
+      { id: 'gainers', label: { en: 'Top Gainers', az: 'Qalxanlar', ru: 'Рост', tr: 'Kazananlar', de: 'Gewinner', fr: 'Gagnants', es: 'Ganadores', zh: '涨幅榜', ar: 'رابحون', ja: '上昇', it: 'In rialzo', pt: 'Em alta' } },
+      { id: 'losers', label: { en: 'Top Losers', az: 'Düşənlər', ru: 'Падение', tr: 'Kaybedenler', de: 'Verlierer', fr: 'Perdants', es: 'Perdedores', zh: '跌幅榜', ar: 'خاسرون', ja: '下落', it: 'In ribasso', pt: 'Em baixa' } },
     ]
   },
   entertainment: {
-    label: { en: 'Movies', az: 'Kino', ru: 'Кино' },
+    label: { en: 'Entertainment', az: 'Əyləncə', ru: 'Развлечения', tr: 'Eğlence', de: 'Unterhaltung', fr: 'Divertissement', es: 'Entretenimiento', zh: '娱乐', ar: 'ترفيه', ja: 'エンタメ', it: 'Intrattenimento', pt: 'Entretenimento' },
     items: [
-      { id: 'movies', label: { en: 'Movies', az: 'Filmlər', ru: 'Фильмы' } },
-      { id: 'series', label: { en: 'Series', az: 'Seriallar', ru: 'Сериалы' } },
-      { id: 'cartoons', label: { en: 'Cartoons', az: 'Multfilmlər', ru: 'Мультфильмы' } },
-      { id: 'upcoming', label: { en: 'Upcoming', az: 'Gözlənilən', ru: 'Ожидаемые' } },
+      { id: 'movies', label: { en: 'Movies', az: 'Filmlər', ru: 'Фильмы', tr: 'Filmler', de: 'Filme', fr: 'Films', es: 'Películas', zh: '电影', ar: 'أفلام', ja: '映画', it: 'Film', pt: 'Filmes' } },
+      { id: 'series', label: { en: 'TV Series', az: 'Seriallar', ru: 'Сериалы', tr: 'Diziler', de: 'Serien', fr: 'Séries', es: 'Series', zh: '剧集', ar: 'مسلسلات', ja: 'ドラマ', it: 'Serie', pt: 'Séries' } },
+      { id: 'anime', label: { en: 'Anime', az: 'Anime', ru: 'Аниме', tr: 'Anime', de: 'Anime', fr: 'Anime', es: 'Anime', zh: '动漫', ar: 'أنمي', ja: 'アニメ', it: 'Anime', pt: 'Anime' } },
+      { id: 'gaming', label: { en: 'Gaming', az: 'Oyunlar', ru: 'Игры', tr: 'Oyunlar', de: 'Spiele', fr: 'Jeux', es: 'Juegos', zh: '游戏', ar: 'ألعاب', ja: 'ゲーム', it: 'Giochi', pt: 'Jogos' } },
+      { id: 'upcoming', label: { en: 'Upcoming', az: 'Gözlənilən', ru: 'Скоро', tr: 'Yakında', de: 'Demnächst', fr: 'À venir', es: 'Próximamente', zh: '即将上映', ar: 'قادم', ja: '近日公開', it: 'In arrivo', pt: 'Em breve' } },
+      { id: 'cartoons', label: { en: 'Cartoons', az: 'Cizgi filmlər', ru: 'Мультфильмы', tr: 'Çizgi Film', de: 'Zeichentrick', fr: 'Dessins animés', es: 'Dibujos', zh: '动画', ar: 'رسوم', ja: 'アニメ', it: 'Cartoni', pt: 'Desenhos' } },
     ]
   },
-  social: {
-    label: { en: 'Social', az: 'Sosial', ru: 'Соцсети' },
+  viral: {
+    label: { en: 'Viral', az: 'Viral', ru: 'Вирусное', tr: 'Viral', de: 'Viral', fr: 'Viral', es: 'Viral', zh: '热门', ar: 'فيروسي', ja: 'バイラル', it: 'Virale', pt: 'Viral' },
     items: [
-      { id: 'instagram', label: { en: 'Instagram', az: 'Instagram', ru: 'Instagram' } },
-      { id: 'tiktok', label: { en: 'TikTok', az: 'TikTok', ru: 'TikTok' } },
-      { id: 'x', label: { en: 'X (Twitter)', az: 'X (Twitter)', ru: 'X (Twitter)' } },
-      { id: 'facebook', label: { en: 'Facebook', az: 'Facebook', ru: 'Facebook' } },
+      { id: 'youtube', label: { en: 'YouTube', az: 'YouTube', ru: 'YouTube', tr: 'YouTube', de: 'YouTube', fr: 'YouTube', es: 'YouTube', zh: 'YouTube', ar: 'يوتيوب', ja: 'YouTube', it: 'YouTube', pt: 'YouTube' } },
+      { id: 'tiktok', label: { en: 'TikTok', az: 'TikTok', ru: 'TikTok', tr: 'TikTok', de: 'TikTok', fr: 'TikTok', es: 'TikTok', zh: 'TikTok', ar: 'تيك توك', ja: 'TikTok', it: 'TikTok', pt: 'TikTok' } },
+      { id: 'instagram', label: { en: 'Instagram', az: 'Instagram', ru: 'Instagram', tr: 'Instagram', de: 'Instagram', fr: 'Instagram', es: 'Instagram', zh: 'Instagram', ar: 'إنستغرام', ja: 'Instagram', it: 'Instagram', pt: 'Instagram' } },
+      { id: 'music', label: { en: 'Music', az: 'Musiqi', ru: 'Музыка', tr: 'Müzik', de: 'Musik', fr: 'Musique', es: 'Música', zh: '音乐', ar: 'موسيقى', ja: '音楽', it: 'Musica', pt: 'Música' } },
+      { id: 'shorts', label: { en: 'Shorts', az: 'Shorts', ru: 'Shorts', tr: 'Shorts', de: 'Shorts', fr: 'Shorts', es: 'Shorts', zh: '短视频', ar: 'Shorts', ja: 'ショート', it: 'Shorts', pt: 'Shorts' } },
+      { id: 'trending', label: { en: 'Trending', az: 'Trend', ru: 'Тренды', tr: 'Trend', de: 'Trending', fr: 'Tendances', es: 'Tendencias', zh: '热门', ar: 'رائج', ja: 'トレンド', it: 'Tendenze', pt: 'Tendências' } },
     ]
   },
-  stocks: {
-    label: { en: 'Stocks', az: 'Səhmlər', ru: 'Акции' },
+  aitools: {
+    label: { en: 'AI Tools', az: 'AI Alətlər', ru: 'ИИ Инструменты', tr: 'YZ Araçları', de: 'KI-Tools', fr: 'Outils IA', es: 'Herramientas IA', zh: 'AI工具', ar: 'أدوات ذ.ا.', ja: 'AIツール', it: 'Strumenti IA', pt: 'Ferramentas IA' },
     items: [
-      { id: 'top', label: { en: 'Top', az: 'Top', ru: 'Топ' } },
-      { id: 'gainers', label: { en: 'Gainers', az: 'Qalxanlar', ru: 'Рост' } },
-      { id: 'losers', label: { en: 'Losers', az: 'Düşənlər', ru: 'Падение' } },
-      { id: 'tech', label: { en: 'Tech', az: 'Texnologiya', ru: 'Технологии' } },
+      { id: 'chatbots', label: { en: 'AI Chatbots', az: 'AI Chatbotlar', ru: 'ИИ Чатботы', tr: 'YZ Sohbet', de: 'KI-Chatbots', fr: 'Chatbots IA', es: 'Chatbots IA', zh: 'AI聊天', ar: 'محادثة ذ.ا.', ja: 'AIチャット', it: 'Chatbot IA', pt: 'Chatbots IA' } },
+      { id: 'image-gen', label: { en: 'Image Generation', az: 'Şəkil Yaratma', ru: 'Генерация изображений', tr: 'Görsel Üretme', de: 'Bildgenerierung', fr: 'Génération images', es: 'Generación imágenes', zh: 'AI绘画', ar: 'توليد صور', ja: '画像生成', it: 'Generazione immagini', pt: 'Geração de imagens' } },
+      { id: 'video-gen', label: { en: 'Video AI', az: 'Video AI', ru: 'Видео ИИ', tr: 'Video YZ', de: 'Video-KI', fr: 'Vidéo IA', es: 'Video IA', zh: 'AI视频', ar: 'فيديو ذ.ا.', ja: '動画AI', it: 'Video IA', pt: 'Vídeo IA' } },
+      { id: 'writing', label: { en: 'Writing AI', az: 'Yazı AI', ru: 'Написание ИИ', tr: 'Yazı YZ', de: 'Schreib-KI', fr: 'Écriture IA', es: 'Escritura IA', zh: 'AI写作', ar: 'كتابة ذ.ا.', ja: '文章AI', it: 'Scrittura IA', pt: 'Escrita IA' } },
+      { id: 'coding', label: { en: 'Coding AI', az: 'Proqramlaşdırma AI', ru: 'Код ИИ', tr: 'Kodlama YZ', de: 'Coding-KI', fr: 'Code IA', es: 'Código IA', zh: 'AI编程', ar: 'برمجة ذ.ا.', ja: 'コードAI', it: 'Codifica IA', pt: 'Código IA' } },
+      { id: 'free-tools', label: { en: 'Free AI Tools', az: 'Pulsuz AI', ru: 'Бесплатные ИИ', tr: 'Ücretsiz YZ', de: 'Kostenlose KI', fr: 'IA Gratuits', es: 'IA Gratis', zh: '免费AI', ar: 'ذ.ا. مجاني', ja: '無料AI', it: 'IA Gratuiti', pt: 'IA Grátis' } },
+    ]
+  },
+  software: {
+    label: { en: 'Software', az: 'Proqramlar', ru: 'Софт', tr: 'Yazılım', de: 'Software', fr: 'Logiciels', es: 'Software', zh: '软件', ar: 'برامج', ja: 'ソフト', it: 'Software', pt: 'Software' },
+    items: [
+      { id: 'android', label: { en: 'Android Apps', az: 'Android', ru: 'Android', tr: 'Android', de: 'Android', fr: 'Android', es: 'Android', zh: 'Android', ar: 'أندرويد', ja: 'Android', it: 'Android', pt: 'Android' } },
+      { id: 'ios', label: { en: 'iOS Apps', az: 'iOS', ru: 'iOS', tr: 'iOS', de: 'iOS', fr: 'iOS', es: 'iOS', zh: 'iOS', ar: 'iOS', ja: 'iOS', it: 'iOS', pt: 'iOS' } },
+      { id: 'windows', label: { en: 'Windows Software', az: 'Windows', ru: 'Windows', tr: 'Windows', de: 'Windows', fr: 'Windows', es: 'Windows', zh: 'Windows', ar: 'ويندوز', ja: 'Windows', it: 'Windows', pt: 'Windows' } },
+      { id: 'mac', label: { en: 'Mac Apps', az: 'Mac', ru: 'Mac', tr: 'Mac', de: 'Mac', fr: 'Mac', es: 'Mac', zh: 'Mac', ar: 'ماك', ja: 'Mac', it: 'Mac', pt: 'Mac' } },
+      { id: 'browser-ext', label: { en: 'Extensions', az: 'Əlavələr', ru: 'Расширения', tr: 'Eklentiler', de: 'Erweiterungen', fr: 'Extensions', es: 'Extensiones', zh: '扩展', ar: 'إضافات', ja: '拡張機能', it: 'Estensioni', pt: 'Extensões' } },
     ]
   },
   education: {
-    label: { en: 'Learn', az: 'Təhsil', ru: 'Учёба' },
+    label: { en: 'Learn', az: 'Təhsil', ru: 'Учёба', tr: 'Eğitim', de: 'Lernen', fr: 'Apprendre', es: 'Aprender', zh: '学习', ar: 'تعلم', ja: '学習', it: 'Impara', pt: 'Aprender' },
     items: [
-      { id: 'science', label: { en: 'Science', az: 'Elm', ru: 'Наука' } },
-      { id: 'math', label: { en: 'Mathematics', az: 'Riyaziyyat', ru: 'Математика' } },
-      { id: 'physics', label: { en: 'Physics', az: 'Fizika', ru: 'Физика' } },
-      { id: 'chemistry', label: { en: 'Chemistry', az: 'Kimya', ru: 'Химия' } },
-      { id: 'biology', label: { en: 'Biology', az: 'Biologiya', ru: 'Биология' } },
-      { id: 'astronomy', label: { en: 'Astronomy', az: 'Astronomiya', ru: 'Астрономия' } },
-      { id: 'languages', label: { en: 'Languages', az: 'Dillər', ru: 'Языки' } },
-      { id: 'engineering', label: { en: 'Engineering', az: 'Mühəndislik', ru: 'Инженерия' } },
-      { id: 'automation', label: { en: 'Automation', az: 'Avtomatlaşdırma', ru: 'Автоматизация' } },
-      { id: 'electrical', label: { en: 'Electrical', az: 'Elektrik', ru: 'Электрика' } },
-      { id: 'mechanical', label: { en: 'Mechanical', az: 'Mexanika', ru: 'Механика' } },
+      { id: 'science', label: { en: 'Science', az: 'Elm', ru: 'Наука', tr: 'Bilim', de: 'Wissenschaft', fr: 'Science', es: 'Ciencia', zh: '科学', ar: 'علوم', ja: '科学', it: 'Scienza', pt: 'Ciência' } },
+      { id: 'math', label: { en: 'Mathematics', az: 'Riyaziyyat', ru: 'Математика', tr: 'Matematik', de: 'Mathematik', fr: 'Mathématiques', es: 'Matemáticas', zh: '数学', ar: 'رياضيات', ja: '数学', it: 'Matematica', pt: 'Matemática' } },
+      { id: 'physics', label: { en: 'Physics', az: 'Fizika', ru: 'Физика', tr: 'Fizik', de: 'Physik', fr: 'Physique', es: 'Física', zh: '物理', ar: 'فيزياء', ja: '物理', it: 'Fisica', pt: 'Física' } },
+      { id: 'engineering', label: { en: 'Engineering', az: 'Mühəndislik', ru: 'Инженерия', tr: 'Mühendislik', de: 'Ingenieurwesen', fr: 'Ingénierie', es: 'Ingeniería', zh: '工程', ar: 'هندسة', ja: '工学', it: 'Ingegneria', pt: 'Engenharia' } },
+      { id: 'automation', label: { en: 'Automation', az: 'Avtomatika', ru: 'Автоматизация', tr: 'Otomasyon', de: 'Automatisierung', fr: 'Automatisation', es: 'Automatización', zh: '自动化', ar: 'أتمتة', ja: 'オートメーション', it: 'Automazione', pt: 'Automação' } },
+      { id: 'electrical', label: { en: 'Electrical', az: 'Elektrik', ru: 'Электрика', tr: 'Elektrik', de: 'Elektrotechnik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子工学', it: 'Elettronica', pt: 'Eletrônica' } },
+      { id: 'languages', label: { en: 'Languages', az: 'Dillər', ru: 'Языки', tr: 'Diller', de: 'Sprachen', fr: 'Langues', es: 'Idiomas', zh: '语言', ar: 'لغات', ja: '言語', it: 'Lingue', pt: 'Idiomas' } },
+      { id: 'courses', label: { en: 'Free Courses', az: 'Pulsuz Kurslar', ru: 'Бесплатные курсы', tr: 'Ücretsiz Kurslar', de: 'Kostenlose Kurse', fr: 'Cours gratuits', es: 'Cursos gratis', zh: '免费课程', ar: 'دورات مجانية', ja: '無料コース', it: 'Corsi gratuiti', pt: 'Cursos grátis' } },
+    ]
+  },
+  travel: {
+    label: { en: 'Travel', az: 'Səyahət', ru: 'Путешествия', tr: 'Seyahat', de: 'Reisen', fr: 'Voyages', es: 'Viajes', zh: '旅行', ar: 'سفر', ja: '旅行', it: 'Viaggi', pt: 'Viagens' },
+    items: [
+      { id: 'flight-hotel', label: { en: 'Flight + Hotel', az: 'Uçuş + Otel', ru: 'Рейс + Отель', tr: 'Uçuş + Otel', de: 'Flug + Hotel', fr: 'Vol + Hôtel', es: 'Vuelo + Hotel', zh: '机票+酒店', ar: 'طيران+فندق', ja: '航空券+ホテル', it: 'Volo + Hotel', pt: 'Voo + Hotel' } },
+      { id: 'flight', label: { en: 'Flights', az: 'Uçuşlar', ru: 'Рейсы', tr: 'Uçuşlar', de: 'Flüge', fr: 'Vols', es: 'Vuelos', zh: '机票', ar: 'طيران', ja: '航空券', it: 'Voli', pt: 'Voos' } },
+      { id: 'hotel', label: { en: 'Hotels', az: 'Otellər', ru: 'Отели', tr: 'Oteller', de: 'Hotels', fr: 'Hôtels', es: 'Hoteles', zh: '酒店', ar: 'فنادق', ja: 'ホテル', it: 'Hotel', pt: 'Hotéis' } },
+      { id: 'last-minute', label: { en: 'Last Minute', az: 'Son Dəqiqə', ru: 'Горящие', tr: 'Son dakika', de: 'Last Minute', fr: 'Dernière minute', es: 'Última hora', zh: '特价', ar: 'عروض أخيرة', ja: '直前割', it: 'Last minute', pt: 'Última hora' } },
+    ]
+  },
+  weather: {
+    label: { en: 'Weather', az: 'Hava', ru: 'Погода', tr: 'Hava', de: 'Wetter', fr: 'Météo', es: 'Clima', zh: '天气', ar: 'طقس', ja: '天気', it: 'Meteo', pt: 'Clima' },
+    items: [
+      { id: 'current', label: { en: 'Current', az: 'İndi', ru: 'Сейчас', tr: 'Şimdi', de: 'Aktuell', fr: 'Actuel', es: 'Actual', zh: '当前', ar: 'الحالي', ja: '現在', it: 'Attuale', pt: 'Atual' } },
+      { id: 'hourly', label: { en: 'Hourly', az: 'Saatlıq', ru: 'По часам', tr: 'Saatlik', de: 'Stündlich', fr: 'Horaire', es: 'Por hora', zh: '逐时', ar: 'بالساعة', ja: '毎時', it: 'Orario', pt: 'Por hora' } },
+      { id: 'weekly', label: { en: 'Weekly', az: 'Həftəlik', ru: 'Неделя', tr: 'Haftalık', de: 'Wöchentlich', fr: 'Hebdo', es: 'Semanal', zh: '每周', ar: 'أسبوعي', ja: '週間', it: 'Settimanale', pt: 'Semanal' } },
     ]
   },
 }
@@ -131,9 +134,8 @@ function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: Dropd
   useEffect(() => {
     const top = buttonRect.bottom + 4
     let left = buttonRect.left
-    // If dropdown would overflow right edge, align to right
-    if (left + 180 > window.innerWidth) {
-      left = buttonRect.right - 180
+    if (left + 200 > window.innerWidth) {
+      left = buttonRect.right - 200
     }
     setPosition({ top, left: Math.max(8, left) })
   }, [buttonRect])
@@ -157,7 +159,7 @@ function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: Dropd
     <div
       ref={dropdownRef}
       style={{ position: 'fixed', top: position.top, left: position.left, zIndex: 99999 }}
-      className="min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.08] shadow-2xl shadow-black/60"
+      className="min-w-[200px] max-h-[70vh] overflow-y-auto py-1.5 rounded-xl bg-[#111118] border border-white/[0.08] shadow-2xl shadow-black/60"
     >
       {section.items.map(item => (
         <Link
@@ -222,7 +224,6 @@ export default function Header() {
       <header className="sticky top-0 z-50 bg-[#07070b]/90 backdrop-blur-xl border-b border-white/[0.04]">
         <div className="max-w-screen-2xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
-            {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group shrink-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-shadow">
                 <Globe className="w-4 h-4 text-white" />
@@ -230,8 +231,7 @@ export default function Header() {
               <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center mx-2 flex-1 flex-wrap">
+            <nav className="hidden md:flex items-center mx-2 flex-1 overflow-x-auto scrollbar-hide">
               {menuKeys.map((id) => {
                 const section = menuStructure[id]
                 return (
@@ -247,15 +247,12 @@ export default function Header() {
               })}
             </nav>
 
-            {/* Right side */}
             <div className="flex items-center gap-2 shrink-0">
-              {/* Search trigger for Cmd+K */}
               <button
                 onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
                 className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[11px] text-[#6b6b80] hover:text-white hover:border-white/[0.1] transition"
               >
                 <Search className="w-3.5 h-3.5" />
-                <span className="hidden lg:inline">Search</span>
                 <kbd className="ml-1 px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
               </button>
               <LanguagePicker />
@@ -272,7 +269,6 @@ export default function Header() {
               <button onClick={handleLogout} className="p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition" title="Logout">
                 <LogOut className="w-4 h-4" />
               </button>
-              {/* Mobile menu button */}
               <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
@@ -281,7 +277,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Portal-based dropdown - renders outside header DOM */}
       {mounted && openMenu && buttonRect && (
         <DropdownPortal
           sectionId={openMenu}
@@ -292,7 +287,6 @@ export default function Header() {
         />
       )}
 
-      {/* Mobile sidebar */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[99998] md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
