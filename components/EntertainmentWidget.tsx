@@ -2,6 +2,8 @@
 import useSWR from 'swr'
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { ChevronDown, Film, Tv, Play, Search, ExternalLink } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
 import SectionNews from './SectionNews'
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 type Mode = 'movie' | 'series' | 'cartoon'
