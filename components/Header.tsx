@@ -115,6 +115,42 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'weekly', label: { en: 'Weekly', az: 'Həftəlik', ru: 'Неделя', tr: 'Haftalık', de: 'Wöchentlich', fr: 'Hebdo', es: 'Semanal', zh: '每周', ar: 'أسبوعي', ja: '週間', it: 'Settimanale', pt: 'Semanal' } },
     ]
   },
+  women: {
+    label: { en: 'Women', az: 'Qadınlar', ru: 'Женщинам', tr: 'Kadınlar', de: 'Frauen', fr: 'Femmes', es: 'Mujeres', zh: '女性', ar: 'نساء', ja: '女性', it: 'Donne', pt: 'Mulheres' },
+    items: [
+      { id: 'beauty', label: { en: 'Beauty & Cosmetics', az: 'Gözəllik', ru: 'Красота', tr: 'Güzellik', de: 'Schönheit', fr: 'Beauté', es: 'Belleza', zh: '美容', ar: 'جمال', ja: '美容', it: 'Bellezza', pt: 'Beleza' } },
+      { id: 'diet', label: { en: 'Diet & Nutrition', az: 'Dieta', ru: 'Диета', tr: 'Diyet', de: 'Ernährung', fr: 'Nutrition', es: 'Nutrición', zh: '饮食', ar: 'حمية', ja: 'ダイエット', it: 'Dieta', pt: 'Dieta' } },
+      { id: 'fitness', label: { en: 'Fitness', az: 'Fitness', ru: 'Фитнес', tr: 'Fitness', de: 'Fitness', fr: 'Fitness', es: 'Fitness', zh: '健身', ar: 'لياقة', ja: 'フィットネス', it: 'Fitness', pt: 'Fitness' } },
+      { id: 'parenting', label: { en: 'Parenting', az: 'Uşaq Baxımı', ru: 'Материнство', tr: 'Ebeveynlik', de: 'Elternschaft', fr: 'Parentalité', es: 'Maternidad', zh: '育儿', ar: 'أمومة', ja: '育児', it: 'Genitorialità', pt: 'Maternidade' } },
+      { id: 'fashion', label: { en: 'Fashion', az: 'Moda', ru: 'Мода', tr: 'Moda', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
+      { id: 'wellness', label: { en: 'Wellness & Health', az: 'Sağlamlıq', ru: 'Здоровье', tr: 'Sağlık', de: 'Wellness', fr: 'Bien-être', es: 'Bienestar', zh: '健康', ar: 'صحة', ja: 'ウェルネス', it: 'Benessere', pt: 'Bem-estar' } },
+    ]
+  },
+  shopping: {
+    label: { en: 'Shopping', az: 'Alış-veriş', ru: 'Покупки', tr: 'Alışveriş', de: 'Einkaufen', fr: 'Shopping', es: 'Compras', zh: '购物', ar: 'تسوق', ja: 'ショッピング', it: 'Shopping', pt: 'Compras' },
+    items: [
+      { id: 'all', label: { en: 'All Stores', az: 'Bütün Mağazalar', ru: 'Все магазины', tr: 'Tüm Mağazalar', de: 'Alle Shops', fr: 'Tous les magasins', es: 'Todas las tiendas', zh: '所有商店', ar: 'كل المتاجر', ja: '全店舗', it: 'Tutti i negozi', pt: 'Todas as lojas' } },
+      { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', ru: 'Электроника', tr: 'Elektronik', de: 'Elektronik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子機器', it: 'Elettronica', pt: 'Eletrônicos' } },
+      { id: 'fashion', label: { en: 'Fashion', az: 'Geyim', ru: 'Одежда', tr: 'Giyim', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '服装', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
+      { id: 'grocery', label: { en: 'Grocery', az: 'Ərzaq', ru: 'Продукты', tr: 'Market', de: 'Lebensmittel', fr: 'Alimentation', es: 'Alimentos', zh: '食品', ar: 'بقالة', ja: '食料品', it: 'Alimentari', pt: 'Alimentos' } },
+      { id: 'pharmacy', label: { en: 'Pharmacy', az: 'Aptek', ru: 'Аптека', tr: 'Eczane', de: 'Apotheke', fr: 'Pharmacie', es: 'Farmacia', zh: '药品', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' } },
+      { id: 'auto', label: { en: 'Auto Parts', az: 'Avtomobil', ru: 'Автозапчасти', tr: 'Oto Yedek', de: 'Autoteile', fr: 'Auto', es: 'Autopartes', zh: '汽车', ar: 'سيارات', ja: '自動車', it: 'Ricambi auto', pt: 'Autopeças' } },
+      { id: 'home', label: { en: 'Home & Furniture', az: 'Ev & Mebel', ru: 'Дом и мебель', tr: 'Ev & Mobilya', de: 'Möbel', fr: 'Maison', es: 'Hogar', zh: '家居', ar: 'أثاث', ja: '家具', it: 'Casa', pt: 'Casa' } },
+    ]
+  },
+  platforms: {
+    label: { en: 'Platforms 🇩🇪', az: 'Platformalar 🇩🇪', ru: 'Платформы 🇩🇪', tr: 'Platformlar 🇩🇪', de: 'Plattformen 🇩🇪', fr: 'Plateformes 🇩🇪', es: 'Plataformas 🇩🇪', zh: '平台 🇩🇪', ar: 'منصات 🇩🇪', ja: 'プラットフォーム 🇩🇪', it: 'Piattaforme 🇩🇪', pt: 'Plataformas 🇩🇪' },
+    items: [
+      { id: 'general', label: { en: 'General', az: 'Ümumi', ru: 'Общие', tr: 'Genel', de: 'Allgemein', fr: 'Général', es: 'General', zh: '综合', ar: 'عام', ja: '総合', it: 'Generale', pt: 'Geral' } },
+      { id: 'clothes', label: { en: 'Clothing', az: 'Geyim', ru: 'Одежда', tr: 'Giyim', de: 'Kleidung', fr: 'Vêtements', es: 'Ropa', zh: '服装', ar: 'ملابس', ja: '衣料品', it: 'Abbigliamento', pt: 'Roupas' } },
+      { id: 'pharma', label: { en: 'Pharmacy', az: 'Aptek', ru: 'Аптека', tr: 'Eczane', de: 'Apotheke', fr: 'Pharmacie', es: 'Farmacia', zh: '药店', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' } },
+      { id: 'food', label: { en: 'Food Delivery', az: 'Yemək Çatdırılma', ru: 'Доставка еды', tr: 'Yemek', de: 'Essen', fr: 'Livraison', es: 'Comida', zh: '外卖', ar: 'توصيل طعام', ja: 'フードデリバリー', it: 'Cibo', pt: 'Comida' } },
+      { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', ru: 'Электроника', tr: 'Elektronik', de: 'Elektronik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子機器', it: 'Elettronica', pt: 'Eletrônicos' } },
+      { id: 'autoparts', label: { en: 'Auto Parts', az: 'Maşın hissələri', ru: 'Автозапчасти', tr: 'Oto Parça', de: 'Autoteile', fr: 'Auto', es: 'Repuestos', zh: '汽配', ar: 'قطع غيار', ja: '自動車部品', it: 'Ricambi', pt: 'Peças' } },
+      { id: 'furniture', label: { en: 'Furniture', az: 'Mebel', ru: 'Мебель', tr: 'Mobilya', de: 'Möbel', fr: 'Meubles', es: 'Muebles', zh: '家具', ar: 'أثاث', ja: '家具', it: 'Mobili', pt: 'Móveis' } },
+      { id: 'international', label: { en: 'International', az: 'Beynəlxalq', ru: 'Международные', tr: 'Uluslararası', de: 'International', fr: 'International', es: 'Internacional', zh: '国际', ar: 'دولي', ja: '海外', it: 'Internazionale', pt: 'Internacional' } },
+    ]
+  },
 }
 
 const menuKeys = Object.keys(menuStructure)
