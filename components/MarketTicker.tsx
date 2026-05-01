@@ -2,6 +2,11 @@
 import useSWR from 'swr'
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react'
 import { Coin, formatNum } from './CryptoWidget'
+import { useLang } from '@/lib/LanguageContext'
+
+const LABELS: Record<string, Record<string, string>> = {
+  markets: { en: 'Markets', az: 'Bazarlar', ru: 'Рынки', tr: 'Piyasalar', de: 'Märkte', fr: 'Marchés', es: 'Mercados', zh: '市场', ar: 'أسواق', ja: '市場', it: 'Mercati', pt: 'Mercados' },
+}
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -39,6 +44,7 @@ function StatItem({ label, value, sub, up }: { label: string; value: string; sub
 }
 
 export default function MarketTicker() {
+  const { lang } = useLang()
   const { data: market } = useSWR<MarketData>('/api/market', fetcher, { refreshInterval: 300000 })
   const { data: coins } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
 
@@ -71,7 +77,7 @@ export default function MarketTicker() {
         <div className="flex items-center gap-0 py-2 overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-1.5 mr-3 flex-shrink-0">
             <div className="live-dot" />
-            <span className="text-[#4a4a5e] text-[10px] font-semibold uppercase tracking-wider">Markets</span>
+            <span className="text-[#4a4a5e] text-[10px] font-semibold uppercase tracking-wider">{LABELS.markets[lang] || 'Markets'}</span>
           </div>
 
           {market?.total_market_cap && (

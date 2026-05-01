@@ -19,6 +19,7 @@ import DailyStreak from '@/components/DailyStreak'
 import DailyQuiz from '@/components/DailyQuiz'
 import PortfolioSimulator from '@/components/PortfolioSimulator'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
+import { Sparkles, Download } from 'lucide-react'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -59,9 +60,18 @@ export default function HomePage() {
   const gold = Array.isArray(stocks) ? stocks.find((s: any) => s.symbol === 'GC=F' || s.symbol === 'GLD') : null
 
   const labels = {
-    en: { breaking: 'Breaking News', markets: 'Markets', viewAll: 'View all', topCoins: 'Top Coins', quickStats: 'Quick Stats' },
-    az: { breaking: 'Son Xəbərlər', markets: 'Bazarlar', viewAll: 'Hamısına bax', topCoins: 'Top Coinlər', quickStats: 'Statistika' },
-    ru: { breaking: 'Главные новости', markets: 'Рынки', viewAll: 'Смотреть все', topCoins: 'Топ монеты', quickStats: 'Статистика' },
+    en: { breaking: 'Breaking News', markets: 'Markets', viewAll: 'View all', topCoins: 'Top Coins', quickStats: 'Quick Stats', aiTools: 'AI Tools', software: 'Software & Apps', btcDom: 'BTC Dominance', volume: '24h Volume', activeCoins: 'Active Coins', fearGreed: 'Fear & Greed' },
+    az: { breaking: 'Son Xəbərlər', markets: 'Bazarlar', viewAll: 'Hamısına bax', topCoins: 'Top Coinlər', quickStats: 'Statistika', aiTools: 'AI Alətlər', software: 'Proqramlar', btcDom: 'BTC Dominantlığı', volume: '24s Həcm', activeCoins: 'Aktiv Coinlər', fearGreed: 'Qorxu & Tamah' },
+    ru: { breaking: 'Главные новости', markets: 'Рынки', viewAll: 'Смотреть все', topCoins: 'Топ монеты', quickStats: 'Статистика', aiTools: 'ИИ Инструменты', software: 'Софт и приложения', btcDom: 'Доминация BTC', volume: 'Объём 24ч', activeCoins: 'Активные монеты', fearGreed: 'Страх и Жадность' },
+    tr: { breaking: 'Son Dakika', markets: 'Piyasalar', viewAll: 'Tümünü gör', topCoins: 'Top Coinler', quickStats: 'İstatistikler', aiTools: 'YZ Araçları', software: 'Yazılım', btcDom: 'BTC Dominansı', volume: '24s Hacim', activeCoins: 'Aktif Coinler', fearGreed: 'Korku & Açgözlülük' },
+    de: { breaking: 'Eilmeldung', markets: 'Märkte', viewAll: 'Alle anzeigen', topCoins: 'Top Coins', quickStats: 'Statistiken', aiTools: 'KI-Tools', software: 'Software', btcDom: 'BTC Dominanz', volume: '24h Volumen', activeCoins: 'Aktive Coins', fearGreed: 'Angst & Gier' },
+    fr: { breaking: 'Dernières nouvelles', markets: 'Marchés', viewAll: 'Voir tout', topCoins: 'Top Cryptos', quickStats: 'Statistiques', aiTools: 'Outils IA', software: 'Logiciels', btcDom: 'Dominance BTC', volume: 'Volume 24h', activeCoins: 'Coins actifs', fearGreed: 'Peur & Avidité' },
+    es: { breaking: 'Últimas Noticias', markets: 'Mercados', viewAll: 'Ver todo', topCoins: 'Top Monedas', quickStats: 'Estadísticas', aiTools: 'Herramientas IA', software: 'Software', btcDom: 'Dominio BTC', volume: 'Volumen 24h', activeCoins: 'Monedas activas', fearGreed: 'Miedo & Codicia' },
+    zh: { breaking: '突发新闻', markets: '市场', viewAll: '查看全部', topCoins: '热门币种', quickStats: '快速统计', aiTools: 'AI工具', software: '软件', btcDom: 'BTC主导', volume: '24h成交量', activeCoins: '活跃币种', fearGreed: '恐惧与贪婪' },
+    ar: { breaking: 'أخبار عاجلة', markets: 'أسواق', viewAll: 'عرض الكل', topCoins: 'أفضل العملات', quickStats: 'إحصائيات', aiTools: 'أدوات ذ.ا.', software: 'برامج', btcDom: 'هيمنة BTC', volume: 'حجم 24س', activeCoins: 'عملات نشطة', fearGreed: 'خوف وطمع' },
+    ja: { breaking: '速報ニュース', markets: '市場', viewAll: 'すべて見る', topCoins: 'トップコイン', quickStats: '統計', aiTools: 'AIツール', software: 'ソフト', btcDom: 'BTC占有率', volume: '24h出来高', activeCoins: 'アクティブコイン', fearGreed: '恐怖と貪欲' },
+    it: { breaking: 'Ultime Notizie', markets: 'Mercati', viewAll: 'Vedi tutto', topCoins: 'Top Coin', quickStats: 'Statistiche', aiTools: 'Strumenti IA', software: 'Software', btcDom: 'Dominanza BTC', volume: 'Volume 24h', activeCoins: 'Coin attivi', fearGreed: 'Paura & Avidità' },
+    pt: { breaking: 'Últimas Notícias', markets: 'Mercados', viewAll: 'Ver tudo', topCoins: 'Top Moedas', quickStats: 'Estatísticas', aiTools: 'Ferramentas IA', software: 'Software', btcDom: 'Dominância BTC', volume: 'Volume 24h', activeCoins: 'Moedas ativas', fearGreed: 'Medo & Ganância' },
   }
   const t = labels[lang as keyof typeof labels] || labels.en
 
@@ -193,19 +203,19 @@ export default function HomePage() {
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">BTC Dominance</span>
+                  <span className="text-[#8b8b9e] text-xs">{t.btcDom}</span>
                   <span className="text-white text-xs font-mono">
                     {market?.btc_dominance ? `${market.btc_dominance.toFixed(1)}%` : '—'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">24h Volume</span>
+                  <span className="text-[#8b8b9e] text-xs">{t.volume}</span>
                   <span className="text-white text-xs font-mono">
                     {market?.total_volume ? formatNum(market.total_volume) : '—'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">Active Coins</span>
+                  <span className="text-[#8b8b9e] text-xs">{t.activeCoins}</span>
                   <span className="text-white text-xs font-mono">
                     {market?.active_coins ? market.active_coins.toLocaleString() : '—'}
                   </span>
@@ -227,7 +237,7 @@ export default function HomePage() {
                   ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">Fear &amp; Greed</span>
+                  <span className="text-[#8b8b9e] text-xs">{t.fearGreed}</span>
                   {market?.fear_greed ? (
                     <span className={`text-xs font-mono font-bold ${
                       market.fear_greed <= 25 ? 'text-red-400' :
@@ -240,6 +250,51 @@ export default function HomePage() {
                   ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* AI Tools & Software Preview Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+          {/* AI Tools Preview */}
+          <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-purple-400" />
+                <h3 className="text-white font-semibold text-sm">{t.aiTools}</h3>
+              </div>
+              <Link href="/section/aitools/chatbots" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
+                {t.viewAll} <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {['ChatGPT', 'Claude', 'Gemini', 'Midjourney'].map(name => (
+                <div key={name} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-purple-500/30 transition">
+                  <p className="text-xs text-white font-medium">{name}</p>
+                  <p className="text-[10px] text-emerald-400">🆓 Free</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Software Preview */}
+          <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Download className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-white font-semibold text-sm">{t.software}</h3>
+              </div>
+              <Link href="/section/software/android" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
+                {t.viewAll} <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {['ReVanced', 'TrollStore', 'uBlock Origin', 'MAS'].map(name => (
+                <div key={name} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-cyan-500/30 transition">
+                  <p className="text-xs text-white font-medium">{name}</p>
+                  <p className="text-[10px] text-emerald-400">🆓 Free</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

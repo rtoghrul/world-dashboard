@@ -1,6 +1,20 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Sparkles, Clock, TrendingUp, TrendingDown, Newspaper, Cloud, Zap } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
+
+const COPY: Record<string, Record<string, string>> = {
+  morning: { en: 'Good morning', az: 'Sabahınız xeyir', ru: 'Доброе утро', tr: 'Günaydın', de: 'Guten Morgen', fr: 'Bonjour', es: 'Buenos días', zh: '早上好', ar: 'صباح الخير', ja: 'おはようございます', it: 'Buongiorno', pt: 'Bom dia' },
+  afternoon: { en: 'Good afternoon', az: 'Günortanız xeyir', ru: 'Добрый день', tr: 'İyi günler', de: 'Guten Tag', fr: 'Bon après-midi', es: 'Buenas tardes', zh: '下午好', ar: 'مساء الخير', ja: 'こんにちは', it: 'Buon pomeriggio', pt: 'Boa tarde' },
+  evening: { en: 'Good evening', az: 'Axşamınız xeyir', ru: 'Добрый вечер', tr: 'İyi akşamlar', de: 'Guten Abend', fr: 'Bonsoir', es: 'Buenas noches', zh: '晚上好', ar: 'مساء الخير', ja: 'こんばんは', it: 'Buonasera', pt: 'Boa noite' },
+  brief: { en: 'Your daily brief', az: 'Günlük icmal', ru: 'Ваш дайджест', tr: 'Günlük özet', de: 'Ihr Tagesbriefing', fr: 'Votre résumé', es: 'Tu resumen diario', zh: '每日简报', ar: 'ملخصك اليومي', ja: 'デイリーブリーフ', it: 'Il tuo riassunto', pt: 'Seu resumo diário' },
+  minRead: { en: '~1 min read', az: '~1 dəq oxu', ru: '~1 мин чтения', tr: '~1 dk okuma', de: '~1 Min Lesen', fr: '~1 min lecture', es: '~1 min lectura', zh: '约1分钟', ar: '~1 دقيقة', ja: '約1分', it: '~1 min lettura', pt: '~1 min leitura' },
+  topStories: { en: 'Top Stories', az: 'Əsas Xəbərlər', ru: 'Главные', tr: 'Öne Çıkanlar', de: 'Top-Meldungen', fr: 'À la une', es: 'Destacadas', zh: '头条', ar: 'أهم الأخبار', ja: 'トップニュース', it: 'Notizie Top', pt: 'Destaques' },
+  cryptoMovers: { en: 'Crypto Movers', az: 'Kripto Hərəkəti', ru: 'Крипто движения', tr: 'Kripto Hareketleri', de: 'Krypto Bewegungen', fr: 'Crypto Mouvements', es: 'Movimientos Cripto', zh: '加密动态', ar: 'تحركات العملات', ja: '仮想通貨動向', it: 'Movimenti Crypto', pt: 'Movimentos Cripto' },
+  trending: { en: 'Trending', az: 'Trend', ru: 'Тренды', tr: 'Trend', de: 'Trending', fr: 'Tendances', es: 'Tendencias', zh: '热门', ar: 'رائج', ja: 'トレンド', it: 'Tendenze', pt: 'Tendências' },
+  tip: { en: 'Tip: Press', az: 'Məsləhət:', ru: 'Совет:', tr: 'İpucu:', de: 'Tipp:', fr: 'Conseil:', es: 'Consejo:', zh: '提示:', ar: 'نصيحة:', ja: 'ヒント:', it: 'Suggerimento:', pt: 'Dica:' },
+  quickSearch: { en: 'for quick search', az: 'sürətli axtarış', ru: 'быстрый поиск', tr: 'hızlı arama', de: 'Schnellsuche', fr: 'recherche rapide', es: 'búsqueda rápida', zh: '快速搜索', ar: 'بحث سريع', ja: 'クイック検索', it: 'ricerca rapida', pt: 'busca rápida' },
+}
 
 interface BriefData {
   greeting: string
@@ -12,6 +26,7 @@ interface BriefData {
 }
 
 export default function DailyBrief() {
+  const { lang } = useLang()
   const [data, setData] = useState<BriefData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -81,9 +96,9 @@ export default function DailyBrief() {
 
         // Greeting
         const hour = new Date().getHours()
-        let greeting = 'Good morning'
-        if (hour >= 12 && hour < 17) greeting = 'Good afternoon'
-        else if (hour >= 17) greeting = 'Good evening'
+        let greeting = COPY.morning[lang] || COPY.morning.en
+        if (hour >= 12 && hour < 17) greeting = COPY.afternoon[lang] || COPY.afternoon.en
+        else if (hour >= 17) greeting = COPY.evening[lang] || COPY.evening.en
 
         setData({
           greeting,
@@ -95,7 +110,7 @@ export default function DailyBrief() {
         })
       } catch (e) {
         setData({
-          greeting: 'Good morning',
+          greeting: COPY.morning[lang] || COPY.morning.en,
           time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
           topNews: [
             { title: 'Markets open higher on tech earnings', source: 'Bloomberg' },
@@ -135,6 +150,8 @@ export default function DailyBrief() {
 
   if (!data) return null
 
+  const c = (key: string) => COPY[key]?.[lang] || COPY[key]?.en || key
+
   return (
     <div className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-white/[0.06] p-6 mb-6">
       {/* Header */}
@@ -146,7 +163,7 @@ export default function DailyBrief() {
           </h2>
           <p className="text-sm text-[#6b6b80] mt-0.5 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
-            {data.time} • Your daily brief • ~1 min read
+            {data.time} • {c('brief')} • {c('minRead')}
           </p>
         </div>
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
@@ -160,7 +177,7 @@ export default function DailyBrief() {
         {/* Top News */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
           <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <Newspaper className="w-3.5 h-3.5" /> Top Stories
+            <Newspaper className="w-3.5 h-3.5" /> {c('topStories')}
           </h3>
           <div className="space-y-3">
             {data.topNews.map((news, i) => (
@@ -175,7 +192,7 @@ export default function DailyBrief() {
         {/* Crypto Movers */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
           <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5" /> Crypto Movers
+            <Zap className="w-3.5 h-3.5" /> {c('cryptoMovers')}
           </h3>
           <div className="space-y-2.5">
             {data.cryptoMovers.map((coin, i) => (
@@ -196,7 +213,7 @@ export default function DailyBrief() {
         {/* Trending */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
           <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <TrendingUp className="w-3.5 h-3.5" /> Trending
+            <TrendingUp className="w-3.5 h-3.5" /> {c('trending')}
           </h3>
           <div className="flex flex-wrap gap-2">
             {data.trending.map((topic, i) => (
@@ -206,7 +223,7 @@ export default function DailyBrief() {
             ))}
           </div>
           <div className="mt-4 pt-3 border-t border-white/[0.04]">
-            <p className="text-[11px] text-[#5b5b70]">💡 Tip: Press <kbd className="px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd> for quick search</p>
+            <p className="text-[11px] text-[#5b5b70]">💡 {c('tip')} <kbd className="px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd> {c('quickSearch')}</p>
           </div>
         </div>
       </div>
