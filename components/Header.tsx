@@ -1,8 +1,9 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Globe, ChevronDown, LogOut, X } from 'lucide-react'
+import { Globe, ChevronDown, LogOut, X, Search } from 'lucide-react'
 import LanguagePicker from '@/components/LanguagePicker'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
@@ -103,14 +104,75 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
 
 const menuKeys = Object.keys(menuStructure)
 
+interface DropdownPortalProps {
+  sectionId: string
+  section: typeof menuStructure[string]
+  lang: string
+  buttonRect: DOMRect
+  onClose: () => void
+}
+
+function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: DropdownPortalProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [position, setPosition] = useState({ top: 0, left: 0 })
+
+  useEffect(() => {
+    const top = buttonRect.bottom + 4
+    let left = buttonRect.left
+    // If dropdown would overflow right edge, align to right
+    if (left + 180 > window.innerWidth) {
+      left = buttonRect.right - 180
+    }
+    setPosition({ top, left: Math.max(8, left) })
+  }, [buttonRect])
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        onClose()
+      }
+    }
+    function handleScroll() { onClose() }
+    document.addEventListener('mousedown', handleClick)
+    window.addEventListener('scroll', handleScroll, true)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      window.removeEventListener('scroll', handleScroll, true)
+    }
+  }, [onClose])
+
+  return createPortal(
+    <div
+      ref={dropdownRef}
+      style={{ position: 'fixed', top: position.top, left: position.left, zIndex: 99999 }}
+      className="min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.08] shadow-2xl shadow-black/60"
+    >
+      {section.items.map(item => (
+        <Link
+          key={item.id}
+          href={`/section/${sectionId}/${item.id}`}
+          onClick={onClose}
+          className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition-colors"
+        >
+          {item.label[lang] || item.label.en}
+        </Link>
+      ))}
+    </div>,
+    document.body
+  )
+}
+
 export default function Header() {
   const { lang } = useLang()
   const router = useRouter()
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [buttonRect, setButtonRect] = useState<DOMRect | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
-  const navRef = useRef<HTMLElement>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     const init = async () => {
@@ -123,20 +185,20 @@ export default function Header() {
     init()
   }, [])
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setOpenMenu(null)
-      }
+  const toggleMenu = useCallback((id: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    if (openMenu === id) {
+      setOpenMenu(null)
+      setButtonRect(null)
+    } else {
+      setOpenMenu(id)
+      setButtonRect(e.currentTarget.getBoundingClientRect())
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [openMenu])
 
-  const toggleMenu = (id: string) => {
-    setOpenMenu(prev => prev === id ? null : id)
-  }
+  const closeMenu = useCallback(() => {
+    setOpenMenu(null)
+    setButtonRect(null)
+  }, [])
 
   const handleLogout = async () => {
     try { const supabase = createClient(); await supabase.auth.signOut() } catch {}
@@ -156,35 +218,19 @@ export default function Header() {
               <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
-            {/* Desktop Navigation - click to open */}
-            <nav ref={navRef} className="hidden md:flex items-center mx-4 flex-1 flex-wrap">
-              {menuKeys.map((id, index) => {
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center mx-2 flex-1 flex-wrap">
+              {menuKeys.map((id) => {
                 const section = menuStructure[id]
-                const isRightHalf = index >= menuKeys.length - 3
                 return (
-                  <div key={id} className="relative shrink-0">
-                    <button
-                      onClick={() => toggleMenu(id)}
-                      className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-white bg-white/[0.06]' : 'text-[#8b8b9e] hover:text-white'}`}
-                    >
-                      {section.label[lang] || section.label.en}
-                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${openMenu === id ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openMenu === id && (
-                      <div className={`absolute top-full mt-1 min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.06] shadow-2xl shadow-black/50 z-[100] ${isRightHalf ? 'right-0' : 'left-0'}`}>
-                        {section.items.map(item => (
-                          <Link
-                            key={item.id}
-                            href={`/section/${id}/${item.id}`}
-                            onClick={() => setOpenMenu(null)}
-                            className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition-colors"
-                          >
-                            {item.label[lang] || item.label.en}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <button
+                    key={id}
+                    onClick={(e) => toggleMenu(id, e)}
+                    className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-white bg-white/[0.06]' : 'text-[#8b8b9e] hover:text-white'}`}
+                  >
+                    {section.label[lang] || section.label.en}
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${openMenu === id ? 'rotate-180' : ''}`} />
+                  </button>
                 )
               })}
             </nav>
@@ -209,9 +255,20 @@ export default function Header() {
         </div>
       </header>
 
+      {/* Portal-based dropdown - renders outside header DOM */}
+      {mounted && openMenu && buttonRect && (
+        <DropdownPortal
+          sectionId={openMenu}
+          section={menuStructure[openMenu]}
+          lang={lang}
+          buttonRect={buttonRect}
+          onClose={closeMenu}
+        />
+      )}
+
       {/* Mobile sidebar */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-[80] md:hidden">
+        <div className="fixed inset-0 z-[99998] md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
           <div className="absolute right-0 top-0 bottom-0 w-[80vw] max-w-xs bg-[#0a0a10] border-l border-white/[0.04] overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b border-white/[0.04]">
