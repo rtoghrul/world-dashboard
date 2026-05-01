@@ -45,6 +45,7 @@ const WomenWidget = dynamic(() => import('@/components/WomenWidget'), { ssr: fal
 const PlatformsWidget = dynamic(() => import('@/components/PlatformsWidget'), { ssr: false, loading: WidgetLoader })
 const ChinesePlatformsWidget = dynamic(() => import('@/components/ChinesePlatformsWidget'), { ssr: false, loading: WidgetLoader })
 const GermanyWidget = dynamic(() => import('@/components/GermanyWidget'), { ssr: false, loading: WidgetLoader })
+const BenefitsWidget = dynamic(() => import('@/components/BenefitsWidget'), { ssr: false, loading: WidgetLoader })
 
 const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store, chinese: ShoppingBag, germany: Newspaper }
 
@@ -84,23 +85,23 @@ const subKeyMap: Record<string, string> = {
 
 const submenuMap: Record<string, string[]> = {
   weather: ['current', 'hourly', 'weekly'],
-  crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed'],
+  crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed', 'benefits'],
   whale: ['large-transfers', 'wallets', 'exchanges'],
-  news: ['top', 'war', 'politics', 'economy', 'tech', 'ai', 'science', 'sports', 'health', 'industry'],
-  markets: ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed', 'whale', 'stocks-top', 'gainers', 'losers'],
-  travel: ['flight-hotel', 'flight', 'hotel', 'last-minute'],
-  viral: ['youtube', 'tiktok', 'instagram', 'music', 'shorts', 'trending'],
-  entertainment: ['movies', 'series', 'anime', 'gaming', 'upcoming', 'cartoons'],
+  news: ['top', 'war', 'politics', 'economy', 'tech', 'ai', 'science', 'sports', 'health', 'industry', 'benefits'],
+  markets: ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed', 'whale', 'stocks-top', 'gainers', 'losers', 'benefits'],
+  travel: ['flight-hotel', 'flight', 'hotel', 'last-minute', 'benefits'],
+  viral: ['youtube', 'tiktok', 'instagram', 'music', 'shorts', 'trending', 'benefits'],
+  entertainment: ['movies', 'series', 'anime', 'gaming', 'upcoming', 'cartoons', 'benefits'],
   social: ['instagram', 'tiktok', 'x', 'facebook', 'trending'],
   stocks: ['top', 'gainers', 'losers', 'tech'],
-  education: ['science', 'math', 'physics', 'chemistry', 'biology', 'astronomy', 'languages', 'engineering', 'automation', 'electrical', 'mechanical', 'courses'],
-  aitools: ['chatbots', 'image-gen', 'video-gen', 'writing', 'coding', 'free-tools'],
-  software: ['android', 'ios', 'windows', 'mac', 'browser-ext'],
+  education: ['science', 'math', 'physics', 'chemistry', 'biology', 'astronomy', 'languages', 'engineering', 'automation', 'electrical', 'mechanical', 'courses', 'benefits'],
+  aitools: ['chatbots', 'image-gen', 'video-gen', 'writing', 'coding', 'free-tools', 'benefits'],
+  software: ['android', 'ios', 'windows', 'mac', 'browser-ext', 'benefits'],
   women: ['beauty', 'diet', 'fitness', 'parenting', 'fashion', 'wellness'],
   shopping: ['all', 'electronics', 'fashion', 'grocery', 'pharmacy', 'auto', 'home'],
   platforms: ['general', 'clothes', 'pharma', 'food', 'electronics', 'autoparts', 'furniture', 'international'],
   chinese: ['all', 'general', 'fashion', 'electronics', 'home', 'kids', 'hobby'],
-  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch'],
+  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch', 'benefits'],
 }
 
 const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'technology', social: 'social' }
@@ -124,6 +125,12 @@ const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: 
 
 function Content({ main, sub }: { main: string; sub: string }) {
   try {
+    // Benefits tab for any section
+    if (sub === 'benefits') {
+      const sectionKey = main === 'crypto' ? 'markets' : main
+      return <BenefitsWidget section={sectionKey} />
+    }
+
     if (main === 'weather') return <WeatherWidget />
     if (main === 'crypto') return <CryptoWidget defaultExpanded />
     if (main === 'markets' && ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed'].includes(sub)) return <CryptoWidget defaultExpanded />
