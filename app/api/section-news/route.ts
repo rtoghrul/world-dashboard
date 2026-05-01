@@ -64,7 +64,7 @@ const KEYWORDS: Record<string, Record<string, string>> = {
     all: 'movies series Netflix Disney streaming',
   },
   weather: {
-    all: 'extreme weather forecast warning',
+    _dynamic: true,
   },
   travel: {
     _dynamic: true,
@@ -110,11 +110,9 @@ function parseRSSItems(xml: string): NewsItem[] {
     const link = itemXml.match(/<link>([\s\S]*?)<\/link>/)?.[1] || ''
     const source = itemXml.match(/<source[^>]*>([\s\S]*?)<\/source>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
     const pubDate = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/)?.[1] || ''
-    // Try to get image from media:content or enclosure
     const mediaUrl = itemXml.match(/<media:content[^>]*url="([^"]+)"/)?.[1] || ''
     const enclosure = itemXml.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] || ''
     const thumbnail = mediaUrl || enclosure || ''
-    // Try to get description
     const descRaw = itemXml.match(/<description>([\s\S]*?)<\/description>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
     const description = descRaw.replace(/<[^>]+>/g, '').trim().slice(0, 300)
     if (title && link) {
@@ -124,13 +122,55 @@ function parseRSSItems(xml: string): NewsItem[] {
   return items
 }
 
+async function fetchOGMetadata(url: string): Promise<{ image: string; description: string }> {
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 4000)
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' },
+      redirect: 'follow',
+    })
+    clearTimeout(timeout)
+    if (!res.ok) return { image: '', description: '' }
+    const html = await res.text()
+    const head = html.slice(0, 15000)
+    const ogImage = head.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)?.[1]
+      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i)?.[1]
+      || ''
+    const ogDesc = head.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i)?.[1]
+      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:description["']/i)?.[1]
+      || head.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)?.[1]
+      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i)?.[1]
+      || ''
+    return { image: ogImage, description: ogDesc.slice(0, 300) }
+  } catch {
+    return { image: '', description: '' }
+  }
+}
+
+async function enrichWithOG(items: NewsItem[]): Promise<NewsItem[]> {
+  const results = await Promise.allSettled(
+    items.map(async (item) => {
+      if (item.thumbnail && item.description) return item
+      const og = await fetchOGMetadata(item.link)
+      return {
+        ...item,
+        thumbnail: item.thumbnail || og.image,
+        description: item.description || og.description,
+      }
+    })
+  )
+  return results.map((r, i) => r.status === 'fulfilled' ? r.value : items[i])
+}
+
 export async function GET(req: NextRequest) {
   const section = req.nextUrl.searchParams.get('section') || ''
   const tab = req.nextUrl.searchParams.get('tab') || 'all'
   const lang = req.nextUrl.searchParams.get('lang') || 'de'
   const destination = req.nextUrl.searchParams.get('destination') || ''
+  const country = req.nextUrl.searchParams.get('country') || ''
 
-  // Travel section uses dynamic keywords based on destination
   let keywords = ''
   if (section === 'travel') {
     const dest = destination || tab
@@ -138,6 +178,13 @@ export async function GET(req: NextRequest) {
       keywords = 'travel tourism flights hotels deals'
     } else {
       keywords = `${dest} travel tourism visa safety tips`
+    }
+  } else if (section === 'weather') {
+    const weatherCountry = country || destination || ''
+    if (weatherCountry) {
+      keywords = `${weatherCountry} weather storm flood warning forecast`
+    } else {
+      keywords = 'extreme weather forecast warning storm'
     }
   } else {
     const sectionKeywords = KEYWORDS[section]
@@ -162,32 +209,28 @@ export async function GET(req: NextRequest) {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
     })
 
-    if (!res.ok) {
-      // Fallback: try without "when:1d" for more results
-      const fallbackUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
-      const fallbackRes = await fetch(fallbackUrl, { next: { revalidate: 1800 } })
-      if (!fallbackRes.ok) {
-        return NextResponse.json({ items: [], error: 'News fetch failed' }, { status: 502 })
-      }
-      const xml = await fallbackRes.text()
-      const newsItems = parseRSSItems(xml).slice(0, 10)
-      return NextResponse.json({ items: newsItems })
+    let newsItems: NewsItem[] = []
+
+    if (res.ok) {
+      const xml = await res.text()
+      newsItems = parseRSSItems(xml).slice(0, 10)
     }
 
-    const xml = await res.text()
-    let newsItems = parseRSSItems(xml).slice(0, 10)
-
-    // If less than 3 items found for today, try without date filter
     if (newsItems.length < 3) {
       const fallbackUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
-      const fallbackRes = await fetch(fallbackUrl, { next: { revalidate: 1800 } })
+      const fallbackRes = await fetch(fallbackUrl, { next: { revalidate: 1800 }, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' } })
       if (fallbackRes.ok) {
         const xml2 = await fallbackRes.text()
         newsItems = parseRSSItems(xml2).slice(0, 10)
       }
     }
 
-    return NextResponse.json({ items: newsItems })
+    if (newsItems.length === 0) {
+      return NextResponse.json({ items: [] })
+    }
+
+    const enriched = await enrichWithOG(newsItems)
+    return NextResponse.json({ items: enriched })
   } catch (err: any) {
     return NextResponse.json({ items: [], error: err.message }, { status: 500 })
   }

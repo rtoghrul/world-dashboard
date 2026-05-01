@@ -25,9 +25,10 @@ interface Props {
   accentColor?: string
   destination?: string
   darkMode?: boolean
+  country?: string
 }
 
-export default function SectionNews({ section, tab, accentColor = 'blue', destination, darkMode = false }: Props) {
+export default function SectionNews({ section, tab, accentColor = 'blue', destination, darkMode = false, country }: Props) {
   const { lang } = useLang()
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -35,18 +36,20 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
   const [modal, setModal] = useState<NewsItem | null>(null)
   const t = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
 
+
   const fetchNews = () => {
     setLoading(true)
     setError(false)
     const params = new URLSearchParams({ section, tab, lang })
     if (destination) params.set('destination', destination)
+    if (country) params.set('country', country)
     fetch(`/api/section-news?${params.toString()}`)
       .then(r => r.json())
       .then(data => { setNews(data.items || []); setLoading(false) })
       .catch(() => { setError(true); setLoading(false) })
   }
 
-  useEffect(() => { fetchNews() }, [section, tab, lang, destination])
+  useEffect(() => { fetchNews() }, [section, tab, lang, destination, country])
 
   useEffect(() => {
     if (!modal) return
