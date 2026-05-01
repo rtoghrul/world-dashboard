@@ -96,7 +96,8 @@ interface NewsItem {
   link: string
   source: string
   pubDate: string
-  image: string
+  thumbnail: string
+  description: string
 }
 
 function parseRSSItems(xml: string): NewsItem[] {
@@ -112,9 +113,12 @@ function parseRSSItems(xml: string): NewsItem[] {
     // Try to get image from media:content or enclosure
     const mediaUrl = itemXml.match(/<media:content[^>]*url="([^"]+)"/)?.[1] || ''
     const enclosure = itemXml.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] || ''
-    const image = mediaUrl || enclosure || ''
+    const thumbnail = mediaUrl || enclosure || ''
+    // Try to get description
+    const descRaw = itemXml.match(/<description>([\s\S]*?)<\/description>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
+    const description = descRaw.replace(/<[^>]+>/g, '').trim().slice(0, 300)
     if (title && link) {
-      items.push({ title: title.trim(), link: link.trim(), source: source.trim(), pubDate: pubDate.trim(), image })
+      items.push({ title: title.trim(), link: link.trim(), source: source.trim(), pubDate: pubDate.trim(), thumbnail, description })
     }
   }
   return items
