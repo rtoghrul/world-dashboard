@@ -15,7 +15,7 @@ type MarketData = {
 }
 
 function fngColor(value: number | null) {
-  if (value === null) return 'text-gray-400'
+  if (value === null) return 'text-[#6b6b80]'
   if (value <= 25) return 'text-red-400'
   if (value <= 45) return 'text-orange-400'
   if (value <= 55) return 'text-yellow-400'
@@ -25,11 +25,11 @@ function fngColor(value: number | null) {
 
 function StatItem({ label, value, sub, up }: { label: string; value: string; sub?: string; up?: boolean }) {
   return (
-    <div className="flex items-center gap-2 flex-shrink-0 px-4 border-r border-gray-800/60 last:border-0">
-      <span className="text-gray-500 text-xs">{label}</span>
+    <div className="flex items-center gap-2 flex-shrink-0 px-4 border-r border-white/[0.04] last:border-0">
+      <span className="text-[#4a4a5e] text-[11px] uppercase tracking-wider">{label}</span>
       <span className="text-white text-xs font-medium font-mono">{value}</span>
       {sub !== undefined && up !== undefined && (
-        <span className={`text-xs flex items-center gap-0.5 ${up ? 'text-emerald-400' : 'text-red-400'}`}>
+        <span className={`text-[11px] flex items-center gap-0.5 font-medium ${up ? 'text-emerald-400' : 'text-red-400'}`}>
           {up ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
           {sub}
         </span>
@@ -51,12 +51,12 @@ export default function MarketTicker() {
   const capUp = (market?.market_cap_change_24h ?? 0) >= 0
 
   return (
-    <div className="bg-gray-950 border-b border-gray-800/50">
-      <div className="max-w-screen-2xl mx-auto px-4">
-        <div className="flex items-center gap-0 py-1.5 overflow-x-auto scrollbar-hide">
-          <div className="flex items-center gap-1 mr-4 flex-shrink-0">
-            <Activity className="w-3 h-3 text-indigo-400" />
-            <span className="text-gray-500 text-xs font-medium uppercase tracking-wider">Markets</span>
+    <div className="border-b border-white/[0.03] bg-[#050507]/80">
+      <div className="max-w-screen-2xl mx-auto px-5">
+        <div className="flex items-center gap-0 py-2 overflow-x-auto">
+          <div className="flex items-center gap-1.5 mr-4 flex-shrink-0">
+            <div className="live-dot" />
+            <span className="text-[#4a4a5e] text-[10px] font-semibold uppercase tracking-wider">Markets</span>
           </div>
 
           {market?.total_market_cap && (
@@ -87,15 +87,16 @@ export default function MarketTicker() {
           )}
 
           {market?.btc_dominance !== null && market?.btc_dominance !== undefined && (
-            <StatItem label="BTC Dom." value={`${market.btc_dominance.toFixed(1)}%`} />
+            <StatItem label="BTC.D" value={`${market.btc_dominance.toFixed(1)}%`} />
           )}
 
           {market?.fear_greed !== null && market?.fear_greed !== undefined && (
             <div className="flex items-center gap-2 flex-shrink-0 px-4">
-              <span className="text-gray-500 text-xs">Fear & Greed</span>
+              <span className="text-[#4a4a5e] text-[10px] uppercase tracking-wider">F&amp;G</span>
               <span className={`text-xs font-bold ${fngColor(market.fear_greed)}`}>
-                {market.fear_greed} — {market.fear_greed_label}
+                {market.fear_greed}
               </span>
+              <span className="text-[#6b6b80] text-[10px]">{market.fear_greed_label}</span>
             </div>
           )}
         </div>

@@ -16,13 +16,87 @@ import StocksWidget from '@/components/StocksWidget'
 import EducationWidget from '@/components/EducationWidget'
 import { useLang } from '@/lib/LanguageContext'
 
-const fetcher = (url:string)=>fetch(url).then(r=>r.json())
-const icons:any={weather:CloudSun,crypto:Bitcoin,whale:WalletCards,news:Newspaper,travel:Plane,viral:Play,entertainment:Film,social:Share2,stocks:BarChart2,education:BookOpen}
-const names:any={az:{weather:'Hava',crypto:'Kripto Bazarları',whale:'Balina Aktivliyi',news:'Qlobal Xəbərlər',travel:'Səyahət',viral:'Viral Məzmun',entertainment:'Kino və Seriallar',social:'Sosial Trendlər',stocks:'Səhm Bazarları',education:'Təhsil'},en:{weather:'Weather',crypto:'Crypto Markets',whale:'Whale Activity',news:'Global News',travel:'Travel',viral:'Viral Content',entertainment:'Movies & Series',social:'Social Trends',stocks:'Stocks',education:'Education'},ru:{weather:'Погода',crypto:'Крипто рынки',whale:'Активность китов',news:'Мировые новости',travel:'Путешествия',viral:'Вирусный контент',entertainment:'Кино и сериалы',social:'Социальные тренды',stocks:'Акции',education:'Образование'}}
-const subText:any={top:'Top',war:'War',politics:'Politics',economy:'Economy',ai:'AI',industry:'Industry',social:'Social','flight-hotel':'Flight + Hotel',flight:'Flight',hotel:'Hotel','last-minute':'Last minute',movies:'Movies',series:'Series',cartoons:'Cartoons',upcoming:'Upcoming',youtube:'YouTube',music:'Music',shorts:'Shorts',trending:'Trending',bitcoin:'Bitcoin',ethereum:'Ethereum','fear-greed':'Fear & Greed','large-transfers':'Large transfers',wallets:'Wallets',exchanges:'Exchanges',current:'Current',hourly:'Hourly',weekly:'Weekly',gainers:'Gainers',losers:'Losers',tech:'Tech',courses:'Courses',engineering:'Engineering','ai-tools':'AI tools',cybersecurity:'Cybersecurity',instagram:'Instagram',tiktok:'TikTok',x:'X',facebook:'Facebook'}
-const newsCat:any={top:'top',war:'war',politics:'politics',economy:'business',ai:'ai',industry:'technology',social:'social'}
-const entertainmentType:any={movies:'movie',series:'series',cartoons:'cartoon',top:'movie',upcoming:'movie'}
-function MetaBar(){const {data}=useSWR<any>('/api/weather',fetcher,{refreshInterval:300000}); const now=new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',weekday:'short',day:'2-digit',month:'short'}).format(new Date()); return <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5"><div className="rounded-lg border border-gray-800 bg-gray-900 p-4 flex items-center gap-3"><Clock className="w-5 h-5 text-blue-300"/><div><p className="text-xs text-gray-500">Local time</p><p className="text-white font-semibold">{now}</p></div></div><div className="rounded-lg border border-gray-800 bg-gray-900 p-4 flex items-center gap-3"><CloudSun className="w-5 h-5 text-yellow-300"/><div><p className="text-xs text-gray-500">Weather</p><p className="text-white font-semibold">{data?.temperature ? `${Math.round(data.temperature)}°C · ${data.city||'Frankfurt'}` : 'Frankfurt weather'}</p></div></div></div>}
-function FilterBanner({main,sub}:{main:string;sub:string}){return <div className="mb-4 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-3 text-sm text-blue-200">Active filter: <b>{main}</b> / <b>{subText[sub]||sub}</b></div>}
-function Content({main,sub}:{main:string;sub:string}){if(main==='weather')return <WeatherWidget/>; if(main==='crypto')return <><FilterBanner main={main} sub={sub}/><CryptoWidget/></>; if(main==='whale')return <><FilterBanner main={main} sub={sub}/><WhaleWidget/></>; if(main==='news')return <><FilterBanner main={main} sub={newsCat[sub]||sub}/><NewsWidget/></>; if(main==='travel')return <><FilterBanner main={main} sub={sub}/><TravelComparisonWidget/></>; if(main==='viral')return <><FilterBanner main={main} sub={sub}/><ViralWidget/></>; if(main==='entertainment')return <><FilterBanner main={main} sub={entertainmentType[sub]||sub}/><EntertainmentWidget/></>; if(main==='social')return <><FilterBanner main={main} sub={sub}/><SocialWidget/></>; if(main==='stocks')return <><FilterBanner main={main} sub={sub}/><StocksWidget/></>; if(main==='education')return <><FilterBanner main={main} sub={sub}/><EducationWidget/></>; return <NewsWidget/>}
-export default function SectionPage(){const params=useParams(); const main=String(params.main||'news'); const sub=String(params.sub||'top'); const {lang}=useLang(); const Icon=icons[main]||Newspaper; const title=(names[lang]||names.en)[main]||main; return <div className="min-h-screen bg-gray-950"><Header/><main className="max-w-screen-2xl mx-auto px-4 py-6"><Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-4"><ArrowLeft className="w-4 h-4"/>Back to dashboard</Link><section className="rounded-2xl border border-gray-800 bg-gray-900/60 overflow-hidden"><div className="border-b border-gray-800 p-5"><div className="flex items-center gap-3"><div className="w-11 h-11 rounded-lg bg-purple-500/15 border border-purple-500/25 flex items-center justify-center"><Icon className="w-5 h-5 text-purple-300"/></div><div><h1 className="text-2xl font-bold text-white">{title}</h1><p className="text-gray-400 text-sm">{subText[sub]||sub} · local time and weather included</p></div></div></div><div className="p-5"><MetaBar/><Content main={main} sub={sub}/></div></section></main></div>}
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+const icons: any = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen }
+
+const names: any = {
+  az: { weather: 'Hava', crypto: 'Kripto Bazarları', whale: 'Balina Aktivliyi', news: 'Qlobal Xəbərlər', travel: 'Səyahət', viral: 'Viral Məzmun', entertainment: 'Kino və Seriallar', social: 'Sosial Trendlər', stocks: 'Səhm Bazarları', education: 'Təhsil' },
+  en: { weather: 'Weather', crypto: 'Crypto Markets', whale: 'Whale Activity', news: 'Global News', travel: 'Travel', viral: 'Viral Content', entertainment: 'Movies & Series', social: 'Social Trends', stocks: 'Stocks', education: 'Education' },
+  ru: { weather: 'Погода', crypto: 'Крипто рынки', whale: 'Активность китов', news: 'Мировые новости', travel: 'Путешествия', viral: 'Вирусный контент', entertainment: 'Кино и сериалы', social: 'Социальные тренды', stocks: 'Акции', education: 'Образование' }
+}
+
+const subText: any = { top: 'Top', war: 'War', politics: 'Politics', economy: 'Economy', ai: 'AI', industry: 'Industry', social: 'Social', 'flight-hotel': 'Flight + Hotel', flight: 'Flight', hotel: 'Hotel', 'last-minute': 'Last minute', movies: 'Movies', series: 'Series', cartoons: 'Cartoons', upcoming: 'Upcoming', youtube: 'YouTube', music: 'Music', shorts: 'Shorts', trending: 'Trending', bitcoin: 'Bitcoin', ethereum: 'Ethereum', 'fear-greed': 'Fear & Greed', 'large-transfers': 'Large transfers', wallets: 'Wallets', exchanges: 'Exchanges', current: 'Current', hourly: 'Hourly', weekly: 'Weekly', gainers: 'Gainers', losers: 'Losers', tech: 'Tech', courses: 'Courses', engineering: 'Engineering', 'ai-tools': 'AI tools', cybersecurity: 'Cybersecurity', instagram: 'Instagram', tiktok: 'TikTok', x: 'X', facebook: 'Facebook' }
+
+const submenuMap: Record<string, string[]> = { weather: ['current', 'hourly', 'weekly'], crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed'], whale: ['large-transfers', 'wallets', 'exchanges'], news: ['top', 'war', 'politics', 'economy', 'ai', 'industry', 'social'], travel: ['flight-hotel', 'flight', 'hotel', 'last-minute'], viral: ['youtube', 'music', 'shorts', 'trending'], entertainment: ['movies', 'series', 'cartoons', 'upcoming'], social: ['instagram', 'tiktok', 'x', 'facebook'], stocks: ['top', 'gainers', 'losers', 'tech'], education: ['courses', 'engineering', 'ai-tools', 'cybersecurity'] }
+
+const newsCat: any = { top: 'top', war: 'war', politics: 'politics', economy: 'business', ai: 'ai', industry: 'technology', social: 'social' }
+const entertainmentType: any = { movies: 'movie', series: 'series', cartoons: 'cartoon', top: 'movie', upcoming: 'movie' }
+
+function Content({ main, sub }: { main: string; sub: string }) {
+  if (main === 'weather') return <WeatherWidget />
+  if (main === 'crypto') return <CryptoWidget />
+  if (main === 'whale') return <WhaleWidget />
+  if (main === 'news') return <NewsWidget />
+  if (main === 'travel') return <TravelComparisonWidget />
+  if (main === 'viral') return <ViralWidget />
+  if (main === 'entertainment') return <EntertainmentWidget />
+  if (main === 'social') return <SocialWidget />
+  if (main === 'stocks') return <StocksWidget />
+  if (main === 'education') return <EducationWidget />
+  return <NewsWidget />
+}
+
+export default function SectionPage() {
+  const params = useParams()
+  const main = String(params.main || 'news')
+  const sub = String(params.sub || 'top')
+  const { lang } = useLang()
+  const Icon = icons[main] || Newspaper
+  const title = (names[lang] || names.en)[main] || main
+  const subs = submenuMap[main] || []
+
+  return (
+    <div className="min-h-screen">
+      <Header />
+
+      {/* Sub-navigation tabs */}
+      <div className="border-b border-white/[0.04] bg-[#07070b]/80 backdrop-blur-sm sticky top-14 z-30">
+        <div className="max-w-screen-2xl mx-auto px-5">
+          <div className="flex items-center gap-1 py-2 overflow-x-auto">
+            {subs.map(s => (
+              <Link
+                key={s}
+                href={`/section/${main}/${s}`}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                  s === sub
+                    ? 'bg-white/[0.08] text-white'
+                    : 'text-[#6b6b80] hover:text-white hover:bg-white/[0.03]'
+                }`}
+              >
+                {subText[s] || s}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Full page content */}
+      <main className="max-w-screen-2xl mx-auto px-5 py-6">
+        {/* Page header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+            <Icon className="w-5 h-5 text-white/80" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white">{title}</h1>
+            <p className="text-xs text-[#6b6b80]">{subText[sub] || sub}</p>
+          </div>
+        </div>
+
+        {/* Widget content - full width */}
+        <Content main={main} sub={sub} />
+      </main>
+    </div>
+  )
+}
