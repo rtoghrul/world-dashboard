@@ -51,27 +51,17 @@ const KEYWORDS: Record<string, Record<string, string>> = {
     fashion: 'Mode Trends Frauen Fashion',
     wellness: 'Wellness Gesundheit Mental Health',
   },
-  crypto: {
-    all: 'cryptocurrency Bitcoin Ethereum market',
-  },
-  stocks: {
-    all: 'stock market DAX S&P500 investing',
-  },
+  crypto: { all: 'cryptocurrency Bitcoin Ethereum market' },
+  stocks: { all: 'stock market DAX S&P500 investing' },
   entertainment: {
     movie: 'new movies cinema release 2025',
     series: 'new TV series streaming Netflix',
     cartoon: 'animated movie cartoon kids new',
     all: 'movies series Netflix Disney streaming',
   },
-  weather: {
-    _dynamic: true,
-  },
-  travel: {
-    _dynamic: true,
-  },
-  viral: {
-    all: 'viral trending social media TikTok',
-  },
+  weather: { _dynamic: true },
+  travel: { _dynamic: true },
+  viral: { all: 'viral trending social media TikTok' },
   aitools: {
     all: 'AI artificial intelligence new tools ChatGPT',
     writing: 'AI writing tools GPT copywriting',
@@ -100,6 +90,14 @@ interface NewsItem {
   description: string
 }
 
+function extractRealUrl(descHtml: string, googleLink: string): string {
+  const hrefMatch = descHtml.match(/<a[^>]+href=["']([^"']+)["']/i)
+  if (hrefMatch && hrefMatch[1] && !hrefMatch[1].includes('news.google.com')) {
+    return hrefMatch[1]
+  }
+  return googleLink
+}
+
 function parseRSSItems(xml: string): NewsItem[] {
   const items: NewsItem[] = []
   const itemRegex = /<item>([\s\S]*?)<\/item>/g
@@ -107,57 +105,73 @@ function parseRSSItems(xml: string): NewsItem[] {
   while ((match = itemRegex.exec(xml)) !== null) {
     const itemXml = match[1]
     const title = itemXml.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
-    const link = itemXml.match(/<link>([\s\S]*?)<\/link>/)?.[1] || ''
+    const googleLink = itemXml.match(/<link>([\s\S]*?)<\/link>/)?.[1]?.trim() || ''
     const source = itemXml.match(/<source[^>]*>([\s\S]*?)<\/source>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
+    const sourceUrl = itemXml.match(/<source[^>]*url=["']([^"']+)["']/)?.[1] || ''
     const pubDate = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/)?.[1] || ''
-    const mediaUrl = itemXml.match(/<media:content[^>]*url="([^"]+)"/)?.[1] || ''
-    const enclosure = itemXml.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] || ''
+    const mediaUrl = itemXml.match(/<media:content[^>]*url=["']([^"']+)["']/)?.[1] || ''
+    const enclosure = itemXml.match(/<enclosure[^>]*url=["']([^"']+)["']/)?.[1] || ''
     const thumbnail = mediaUrl || enclosure || ''
     const descRaw = itemXml.match(/<description>([\s\S]*?)<\/description>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
+
+    const realLink = extractRealUrl(descRaw, googleLink)
     const description = descRaw.replace(/<[^>]+>/g, '').trim().slice(0, 300)
-    if (title && link) {
-      items.push({ title: title.trim(), link: link.trim(), source: source.trim(), pubDate: pubDate.trim(), thumbnail, description })
+
+    if (title) {
+      items.push({
+        title: title.trim(),
+        link: realLink || googleLink,
+        source: source.trim(),
+        pubDate: pubDate.trim(),
+        thumbnail,
+        description,
+      })
     }
   }
   return items
 }
 
-async function fetchOGMetadata(url: string): Promise<{ image: string; description: string }> {
+async function fetchOG(url: string): Promise<{ image: string; description: string }> {
   try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 4000)
+    if (url.includes('news.google.com')) return { image: '', description: '' }
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 3500)
     const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' },
+      signal: ctrl.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html',
+      },
       redirect: 'follow',
     })
-    clearTimeout(timeout)
+    clearTimeout(timer)
     if (!res.ok) return { image: '', description: '' }
-    const html = await res.text()
-    const head = html.slice(0, 15000)
-    const ogImage = head.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)?.[1]
+    const text = await res.text()
+    const head = text.slice(0, 20000)
+    const image = head.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)?.[1]
       || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i)?.[1]
+      || head.match(/<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i)?.[1]
       || ''
-    const ogDesc = head.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i)?.[1]
+    const desc = head.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i)?.[1]
       || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:description["']/i)?.[1]
       || head.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)?.[1]
       || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i)?.[1]
       || ''
-    return { image: ogImage, description: ogDesc.slice(0, 300) }
+    return { image, description: desc.slice(0, 300) }
   } catch {
     return { image: '', description: '' }
   }
 }
 
-async function enrichWithOG(items: NewsItem[]): Promise<NewsItem[]> {
+async function enrichItems(items: NewsItem[]): Promise<NewsItem[]> {
   const results = await Promise.allSettled(
     items.map(async (item) => {
-      if (item.thumbnail && item.description) return item
-      const og = await fetchOGMetadata(item.link)
+      if (item.thumbnail && item.description && item.description.length > 20) return item
+      const og = await fetchOG(item.link)
       return {
         ...item,
         thumbnail: item.thumbnail || og.image,
-        description: item.description || og.description,
+        description: (item.description && item.description.length > 20) ? item.description : (og.description || item.description),
       }
     })
   )
@@ -174,62 +188,38 @@ export async function GET(req: NextRequest) {
   let keywords = ''
   if (section === 'travel') {
     const dest = destination || tab
-    if (!dest || dest === 'all') {
-      keywords = 'travel tourism flights hotels deals'
-    } else {
-      keywords = `${dest} travel tourism visa safety tips`
-    }
+    keywords = (!dest || dest === 'all') ? 'travel tourism flights hotels deals' : `${dest} travel tourism visa safety tips`
   } else if (section === 'weather') {
-    const weatherCountry = country || destination || ''
-    if (weatherCountry) {
-      keywords = `${weatherCountry} weather storm flood warning forecast`
-    } else {
-      keywords = 'extreme weather forecast warning storm'
-    }
+    const wc = country || destination || ''
+    keywords = wc ? `${wc} weather storm flood warning forecast` : 'extreme weather forecast warning storm'
   } else {
-    const sectionKeywords = KEYWORDS[section]
-    if (!sectionKeywords) {
-      return NextResponse.json({ items: [], error: 'Unknown section' }, { status: 400 })
-    }
-    keywords = sectionKeywords[tab] || sectionKeywords['all'] || Object.values(sectionKeywords)[0]
+    const sk = KEYWORDS[section]
+    if (!sk) return NextResponse.json({ items: [], error: 'Unknown section' }, { status: 400 })
+    keywords = sk[tab] || sk['all'] || Object.values(sk)[0]
   }
 
-  if (!keywords) {
-    return NextResponse.json({ items: [], error: 'No keywords for section/tab' }, { status: 400 })
-  }
+  if (!keywords) return NextResponse.json({ items: [], error: 'No keywords' }, { status: 400 })
 
   const locale = LANG_MAP[lang] || LANG_MAP.en
 
   try {
     const encoded = encodeURIComponent(keywords + ' when:1d')
     const url = `https://news.google.com/rss/search?q=${encoded}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
-
-    const res = await fetch(url, {
-      next: { revalidate: 1800 },
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
-    })
+    const res = await fetch(url, { next: { revalidate: 1800 }, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' } })
 
     let newsItems: NewsItem[] = []
-
     if (res.ok) {
-      const xml = await res.text()
-      newsItems = parseRSSItems(xml).slice(0, 10)
+      newsItems = parseRSSItems(await res.text()).slice(0, 10)
     }
 
     if (newsItems.length < 3) {
-      const fallbackUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
-      const fallbackRes = await fetch(fallbackUrl, { next: { revalidate: 1800 }, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' } })
-      if (fallbackRes.ok) {
-        const xml2 = await fallbackRes.text()
-        newsItems = parseRSSItems(xml2).slice(0, 10)
-      }
+      const fb = await fetch(`https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`, { next: { revalidate: 1800 }, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' } })
+      if (fb.ok) newsItems = parseRSSItems(await fb.text()).slice(0, 10)
     }
 
-    if (newsItems.length === 0) {
-      return NextResponse.json({ items: [] })
-    }
+    if (newsItems.length === 0) return NextResponse.json({ items: [] })
 
-    const enriched = await enrichWithOG(newsItems)
+    const enriched = await enrichItems(newsItems)
     return NextResponse.json({ items: enriched })
   } catch (err: any) {
     return NextResponse.json({ items: [], error: err.message }, { status: 500 })
