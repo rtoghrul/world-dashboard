@@ -8,6 +8,7 @@ import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
+import PortfolioTracker from '@/components/PortfolioTracker'
 import { NewsItem, NewsCard } from '@/components/NewsWidget'
 import { Coin, formatNum } from '@/components/CryptoWidget'
 
@@ -123,6 +124,11 @@ export default function HomePage() {
                   </Link>
                 )
               })}
+            </div>
+
+            {/* Portfolio */}
+            <div className="mt-5">
+              <PortfolioTracker />
             </div>
           </div>
         </div>
