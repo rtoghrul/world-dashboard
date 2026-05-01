@@ -81,6 +81,7 @@ const subKeyMap: Record<string, string> = {
   beauty:'subBeauty',diet:'subDiet',fitness:'subFitness',parenting:'subParenting',fashion:'subFashion',wellness:'subWellness',
   all:'subAll',electronics:'subElectronics',grocery:'subGrocery',pharmacy:'subPharmacy',auto:'subAuto',home:'subHome',
   general:'subGeneral',clothes:'subClothes',pharma:'subPharma',food:'subFood',autoparts:'subAutoparts',furniture:'subFurniture',international:'subInternational',
+  benefits:'subBenefits',
 }
 
 const submenuMap: Record<string, string[]> = {
@@ -97,10 +98,10 @@ const submenuMap: Record<string, string[]> = {
   education: ['science', 'math', 'physics', 'chemistry', 'biology', 'astronomy', 'languages', 'engineering', 'automation', 'electrical', 'mechanical', 'courses', 'benefits'],
   aitools: ['chatbots', 'image-gen', 'video-gen', 'writing', 'coding', 'free-tools', 'benefits'],
   software: ['android', 'ios', 'windows', 'mac', 'browser-ext', 'benefits'],
-  women: ['beauty', 'diet', 'fitness', 'parenting', 'fashion', 'wellness'],
-  shopping: ['all', 'electronics', 'fashion', 'grocery', 'pharmacy', 'auto', 'home'],
-  platforms: ['general', 'clothes', 'pharma', 'food', 'electronics', 'autoparts', 'furniture', 'international'],
-  chinese: ['all', 'general', 'fashion', 'electronics', 'home', 'kids', 'hobby'],
+  women: ['beauty', 'diet', 'fitness', 'parenting', 'fashion', 'wellness', 'benefits'],
+  shopping: ['all', 'electronics', 'fashion', 'grocery', 'pharmacy', 'auto', 'home', 'benefits'],
+  platforms: ['general', 'clothes', 'pharma', 'food', 'electronics', 'autoparts', 'furniture', 'international', 'benefits'],
+  chinese: ['all', 'general', 'fashion', 'electronics', 'home', 'kids', 'hobby', 'benefits'],
   germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch', 'benefits'],
 }
 

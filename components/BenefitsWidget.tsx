@@ -40,6 +40,8 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
         { name: 'KfW-Förderung (Kredit 300)', url: 'https://www.kfw.de/inlandsfoerderung/Privatpersonen/Neubau/F%C3%B6rderprodukte/Klimafreundlicher-Neubau-(297-298)/', desc: { en: 'Up to €150,000 low-interest loan for energy-efficient homes', az: 'Enerji-effektiv evlər üçün €150,000-a qədər aşağı faizli kredit', de: 'Bis 150.000€ zinsgünstiges Darlehen für Effizienzhaus', ru: 'До €150,000 льготный кредит на энергоэффективный дом' }, saving: '€150K loan', type: 'subsidy', important: true },
         { name: 'Wohnungsbauprämie', url: 'https://www.bundesfinanzministerium.de', desc: { en: '€70-140/year state bonus for Bausparvertrag savings', az: 'Bausparvertrag yığımı üçün illik €70-140 dövlət bonusu', de: '70-140€/Jahr Staatsprämie für Bausparvertrag', ru: '€70-140/год гос. премия за стройсбережения' }, saving: '€140/yr', type: 'subsidy' },
         { name: 'Wohngeld 2025', url: 'https://www.bmwsb.bund.de/Webs/BMWSB/DE/themen/wohnen/wohnraumfoerderung/wohngeld/wohngeld-node.html', desc: { en: 'Housing allowance - up to €370/month for low income', az: 'Mənzil müavinəti - aşağı gəlir üçün aylıq €370-ə qədər', de: 'Wohngeld - bis 370€/Monat für Geringverdiener', ru: 'Жилищное пособие - до €370/мес' }, saving: '€370/mo', type: 'subsidy', important: true },
+        { name: 'Arbeitnehmersparzulage', url: 'https://www.finanztip.de/arbeitnehmersparzulage/', desc: { en: 'Employee savings bonus - up to €80/year state grant for VL', az: 'İşçi yığım bonusu - VL üçün illik €80 dövlət qrantı', de: 'Arbeitnehmer-Sparzulage - bis 80€/Jahr für VL', ru: 'Бонус за накопления - до €80/год от государства' }, saving: '€80/yr', type: 'subsidy' },
+        { name: 'Lastenzuschuss (Eigentümer)', url: 'https://www.bmwsb.bund.de/Webs/BMWSB/DE/themen/wohnen/wohnraumfoerderung/wohngeld/wohngeld-node.html', desc: { en: 'Mortgage subsidy for homeowners - reduces monthly burden', az: 'Ev sahibləri üçün ipoteka subsidiyası - aylıq yükü azaldır', de: 'Lastenzuschuss für Eigentümer - monatliche Belastung senken', ru: 'Субсидия на ипотеку для собственников' }, saving: '€300+/mo', type: 'subsidy' },
       ]
     },
     {
@@ -50,6 +52,8 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
         { name: 'E-Auto Förderung (THG-Quote)', url: 'https://www.umweltbundesamt.de/themen/verkehr-laerm/emissionshandel/thg-quote', desc: { en: 'EV owners earn €250-400/year selling CO2 quota', az: 'Elektromobil sahibləri CO2 kvotası sataraq illik €250-400 qazanır', de: 'E-Auto-Besitzer verdienen 250-400€/Jahr mit THG-Quote', ru: 'Владельцы EV зарабатывают €250-400/год на квотах CO2' }, saving: '€400/yr', type: 'earn', important: true },
         { name: 'Pendlerpauschale', url: 'https://www.finanztip.de/pendlerpauschale/', desc: { en: 'Commuter tax deduction - €0.30/km (€0.38 from 21st km)', az: 'İşə gedən vergi endirimi - km başına €0.30 (21-ci km-dən €0.38)', de: 'Entfernungspauschale - 0,30€/km (ab 21. km: 0,38€)', ru: 'Налоговый вычет за дорогу - €0.30/км' }, saving: '~€1500/yr', type: 'subsidy' },
         { name: 'Jobticket (steuerfrei)', url: 'https://www.haufe.de/personal/entgelt/jobticket-steuerbefreiung_78_472544.html', desc: { en: 'Tax-free employer transit pass - ask your HR!', az: 'Vergisiz işəgötürən nəqliyyat bileti - HR-dan soruş!', de: 'Steuerfreies Jobticket vom Arbeitgeber - HR fragen!', ru: 'Безналоговый проездной от работодателя' }, saving: 'Tax-free', type: 'tip' },
+        { name: 'Dienstwagen 0.25% Regel (E-Auto)', url: 'https://www.adac.de/rund-ums-fahrzeug/elektromobilitaet/kaufen-leasing/dienstwagen-elektro/', desc: { en: 'Company EV taxed at only 0.25% - massive tax saving vs 1%', az: 'Şirkət elektromobili yalnız 0.25% vergilənir - 1%-ə nisbətən böyük qənaət', de: 'Dienstwagen E-Auto nur 0,25% - viel weniger als 1%', ru: 'Служебный EV только 0.25% налог - огромная экономия' }, saving: '75% less tax', type: 'tip', important: true },
+        { name: 'BahnCard 25/50 Probe', url: 'https://www.bahn.de/angebot/bahncard', desc: { en: 'Trial BahnCard - 25/50% off all DB trains for 3 months', az: 'Sınaq BahnCard - 3 ay bütün DB qatarlarında 25/50% endirim', de: 'Probe BahnCard - 25/50% auf alle DB-Züge für 3 Monate', ru: 'Пробная BahnCard - 25/50% скидка 3 месяца' }, saving: '25-50% off', type: 'discount' },
       ]
     },
     {
@@ -60,6 +64,8 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
         { name: 'Elterngeld: 65-67% salary', url: 'https://familienportal.de/familienportal/familienleistungen/elterngeld', desc: { en: 'Parental leave pay - 65-67% of net salary for 12-14 months', az: 'Valideyn məzuniyyəti - xalis maaşın 65-67%-i, 12-14 ay', de: 'Elterngeld - 65-67% des Nettogehalts, 12-14 Monate', ru: 'Родительское пособие - 65-67% от зарплаты, 12-14 мес' }, saving: '~€1800/mo', type: 'subsidy', important: true },
         { name: 'Kinderzuschlag: +€292/mo', url: 'https://www.arbeitsagentur.de/familie-und-kinder/kinderzuschlag', desc: { en: 'Extra supplement for low-income families - up to €292/child/month', az: 'Aşağı gəlirli ailələr üçün əlavə - hər uşağa aylıq €292-ə qədər', de: 'Kinderzuschlag für Geringverdiener - bis 292€/Kind/Monat', ru: 'Доплата малоимущим - до €292/ребёнок/мес' }, saving: '€292/mo', type: 'subsidy', important: true },
         { name: 'Kita kostenlos (Berlin)', url: 'https://www.berlin.de/sen/jugend/familie-und-kinder/kindertagesbetreuung/', desc: { en: 'Free kindergarten in Berlin - €0 from age 1 to school', az: 'Berlində pulsuz uşaq bağçası - 1 yaşdan məktəbə qədər €0', de: 'Kita kostenlos in Berlin - 0€ ab 1 Jahr bis Schulalter', ru: 'Бесплатный детский сад в Берлине' }, saving: '€0 Kita', type: 'free', important: true },
+        { name: 'Bildung und Teilhabe (BuT)', url: 'https://www.bmas.de/DE/Arbeit/Grundsicherung-Buergergeld/Bildungspaket/bildungspaket.html', desc: { en: 'Free school supplies, lunch, trips, tutoring for low-income kids', az: 'Aşağı gəlirli uşaqlar üçün pulsuz məktəb ləvazimatı, nahar, ekskursiya', de: 'Kostenlose Schulsachen, Mittagessen, Ausflüge, Nachhilfe', ru: 'Бесплатные школьные принадлежности, обеды, экскурсии' }, saving: '€195+/yr', type: 'free' },
+        { name: 'Mutterschaftsgeld', url: 'https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/mutterschaftsleistungen', desc: { en: 'Maternity pay - full salary for 6 weeks before + 8 weeks after birth', az: 'Analıq ödənişi - doğuşdan 6 həftə əvvəl + 8 həftə sonra tam maaş', de: 'Mutterschaftsgeld - volles Gehalt 6 Wo. vor + 8 Wo. nach Geburt', ru: 'Пособие по беременности - полная зарплата 14 недель' }, saving: 'Full salary', type: 'subsidy', important: true },
       ]
     },
     {
@@ -69,6 +75,8 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
         { name: 'Homeoffice Pauschale: €1260/yr', url: 'https://www.finanztip.de/homeoffice-pauschale/', desc: { en: 'Work from home tax deduction - €6/day, max €1260/year', az: 'Evdən iş vergi endirimi - gündə €6, maks €1260/il', de: 'Homeoffice-Pauschale - 6€/Tag, max 1260€/Jahr', ru: 'Вычет за домашний офис - €6/день, макс €1260/год' }, saving: '€1260/yr', type: 'subsidy', important: true },
         { name: 'Werbungskosten: €1230 auto', url: 'https://www.finanztip.de/werbungskosten/', desc: { en: 'Automatic €1230 work expense deduction - no receipts needed', az: 'Avtomatik €1230 iş xərci endirimi - qəbz lazım deyil', de: 'Werbungskostenpauschale - 1230€ automatisch', ru: '€1230 автоматический вычет - без чеков' }, saving: '€1230', type: 'tip', important: true },
         { name: 'Steuerberater (1. Jahr kostenlos)', url: 'https://www.lohnsteuercompact.de', desc: { en: 'Online tax software - first year free, avg €1000+ refund', az: 'Onlayn vergi proqramı - ilk il pulsuz, ortalama €1000+ geri ödəmə', de: 'Online-Steuer - 1. Jahr gratis, Ø 1000€+ Erstattung', ru: 'Онлайн налоговая - 1й год бесплатно, ≈€1000+ возврат' }, saving: '€1000+', type: 'free' },
+        { name: 'Sonderausgaben (Versicherungen)', url: 'https://www.finanztip.de/vorsorgeaufwendungen/', desc: { en: 'Deduct health & pension insurance - up to €1900 (employed)', az: 'Tibbi & pensiya sığortası endirimi - €1900-a qədər (işçilər)', de: 'Kranken- & Rentenversicherung absetzen - bis 1900€', ru: 'Вычет за медстраховку и пенсию - до €1900' }, saving: '€1900', type: 'subsidy' },
+        { name: 'Handwerkerleistungen', url: 'https://www.finanztip.de/handwerkerleistungen/', desc: { en: 'Deduct 20% of craftsman bills - max €1200/year tax back', az: 'Usta xidmətlərinin 20%-ni endir - maks €1200/il vergi geri', de: '20% der Handwerkerrechnung absetzen - max 1200€/Jahr', ru: 'Вычет 20% за ремонтников - до €1200/год назад' }, saving: '€1200/yr', type: 'subsidy' },
       ]
     },
   ],
@@ -192,6 +200,116 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
         { name: 'CS50 Harvard (FREE)', url: 'https://cs50.harvard.edu', desc: { en: "Harvard's CS50 - world's best intro to CS, free certificate", az: 'Harvardın CS50 - dünyanın ən yaxşı CS girişi, pulsuz sertifikat', de: 'Harvards CS50 - weltbester CS-Einstieg, gratis Zertifikat', ru: 'CS50 Гарварда - лучшее введение в CS, бесплатный серт.' }, type: 'free', important: true },
         { name: 'Coursera Financial Aid (FREE)', url: 'https://www.coursera.org/financial-aid', desc: { en: 'Apply for financial aid → get any course FREE with certificate', az: 'Maliyyə yardımına müraciət et → istənilən kursu sertifikatla PULSUZ al', de: 'Finanzielle Hilfe beantragen → jeden Kurs GRATIS', ru: 'Подать на фин. помощь → любой курс БЕСПЛАТНО' }, type: 'free', important: true },
         { name: 'AWS/Azure/GCP Free Tier', url: 'https://aws.amazon.com/free/', desc: { en: 'Cloud platforms - 12 months free tier + always-free services', az: 'Bulud platformaları - 12 ay pulsuz + həmişə pulsuz xidmətlər', de: 'Cloud-Plattformen - 12 Monate gratis + immer-kostenlose Dienste', ru: 'Облачные платформы - 12 мес бесплатно' }, type: 'free' },
+      ]
+    },
+  ],
+
+  women: [
+    {
+      id: 'beauty-savings',
+      title: { en: '💄 Beauty & Skincare Savings', az: '💄 Gözəllik & Dəriyə Qənaət', de: '💄 Beauty & Hautpflege sparen', ru: '💄 Экономия на красоте' },
+      items: [
+        { name: 'The Ordinary (from €4)', url: 'https://theordinary.com', desc: { en: 'Lab-quality skincare from €4 - same ingredients as luxury brands', az: 'Laboratoriya keyfiyyətli dəri baxımı €4-dən - lüks brendlərlə eyni inqredientlər', de: 'Labor-Qualität ab 4€ - gleiche Wirkstoffe wie Luxusmarken', ru: 'Лабораторная косметика от €4 - те же ингредиенты что и люкс' }, saving: 'from €4', type: 'discount', important: true },
+        { name: 'Rossmann/dm 10% Coupons', url: 'https://www.rossmann.de/de/coupons', desc: { en: 'Regular 10% off coupons via app - stack with sales', az: 'Tətbiq vasitəsilə müntəzəm 10% endirim kuponları', de: 'Regelmäßig 10% Rabatt-Coupons via App - mit Sales kombinierbar', ru: 'Регулярные купоны -10% через приложение' }, saving: '10% off', type: 'discount', important: true },
+        { name: 'Parfumdreams (70% off)', url: 'https://www.parfumdreams.de', desc: { en: 'Discounted original perfumes - up to 70% off retail', az: 'Endirimli orijinal ətirlər - pərakəndə qiymətdən 70%-ə qədər ucuz', de: 'Original-Parfüms bis 70% günstiger als im Laden', ru: 'Оригинальные духи - до 70% дешевле розницы' }, saving: '70% off', type: 'discount' },
+        { name: 'iHerb (natural, cheap shipping)', url: 'https://www.iherb.com', desc: { en: 'Natural supplements & skincare - free shipping over €40', az: 'Təbii əlavələr & dəri baxımı - €40-dan yuxarı pulsuz çatdırılma', de: 'Natürliche Supplements & Pflege - Gratisversand ab 40€', ru: 'Натуральные добавки & уход - бесплатная доставка от €40' }, saving: 'Free ship 40€+', type: 'discount' },
+        { name: 'Treatwell (Beauty-Deals)', url: 'https://www.treatwell.de', desc: { en: 'Book beauty treatments at 30-50% discount', az: 'Gözəllik prosedurlarını 30-50% endirimlə sifariş et', de: 'Beauty-Behandlungen mit 30-50% Rabatt buchen', ru: 'Бьюти-процедуры со скидкой 30-50%' }, saving: '30-50% off', type: 'discount' },
+      ]
+    },
+    {
+      id: 'health-wellness',
+      title: { en: '🧘 Health & Wellness Free', az: '🧘 Sağlamlıq & Wellness Pulsuz', de: '🧘 Gesundheit & Wellness gratis', ru: '🧘 Здоровье бесплатно' },
+      items: [
+        { name: 'Nike Training Club (FREE)', url: 'https://www.nike.com/ntc-app', desc: { en: 'Hundreds of free workout videos - yoga, HIIT, strength', az: 'Yüzlərlə pulsuz məşq videosu - yoga, HIIT, güc', de: 'Hunderte kostenlose Workouts - Yoga, HIIT, Kraft', ru: 'Сотни бесплатных тренировок - йога, HIIT, сила' }, type: 'free', important: true },
+        { name: 'Yazio Free (Calorie Counter)', url: 'https://www.yazio.com', desc: { en: 'Free calorie counter - German app, great food database', az: 'Pulsuz kalori sayğacı - Alman tətbiqi, geniş qida bazası', de: 'Kostenloser Kalorienzähler - große Lebensmittel-DB', ru: 'Бесплатный счётчик калорий - немецкое приложение' }, type: 'free' },
+        { name: 'Krankenkasse Bonus (€150+/yr)', url: 'https://www.tk.de/techniker/leistungen-und-mitgliedschaft/praemien-und-bonusprogramme', desc: { en: 'Health insurance bonus programs - earn €150+/year for healthy habits', az: 'Tibbi sığorta bonus proqramları - sağlam vərdişlərə illik €150+ qazan', de: 'Bonusprogramm der Krankenkasse - 150€+/Jahr für gesundes Verhalten', ru: 'Бонус от страховки - €150+/год за здоровый образ жизни' }, saving: '€150+/yr', type: 'earn', important: true },
+        { name: 'Präventionskurse (bis €150 erstattet)', url: 'https://www.zentrale-pruefstelle-praevention.de', desc: { en: 'Prevention courses refunded by insurance - yoga, Pilates, stress mgmt', az: 'Sığorta tərəfindən ödənilən profilaktika kursları - yoga, Pilates', de: 'Präventionskurse von Kasse erstattet - Yoga, Pilates, Stress', ru: 'Курсы профилактики - возмещает страховка' }, saving: '€150 back', type: 'subsidy', important: true },
+      ]
+    },
+    {
+      id: 'mom-benefits',
+      title: { en: '🤰 Mom & Pregnancy Benefits', az: '🤰 Ana & Hamiləlik Müavinətləri', de: '🤰 Mutter- & Schwangerschafts-Vorteile', ru: '🤰 Пособия для мам' },
+      items: [
+        { name: 'Baby Welcome Boxes (FREE)', url: 'https://www.pampers.de/registrierung', desc: { en: 'Free baby boxes from Pampers, dm, Rossmann, Amazon - register now!', az: 'Pampers, dm, Rossmann, Amazon-dan pulsuz körpə qutuları - indi qeydiyyatdan keç!', de: 'Gratis Baby-Boxen von Pampers, dm, Rossmann, Amazon', ru: 'Бесплатные baby-боксы от Pampers, dm, Rossmann, Amazon' }, type: 'free', important: true },
+        { name: 'Bundesstiftung Mutter & Kind', url: 'https://www.bundesstiftung-mutter-und-kind.de', desc: { en: 'Financial help for pregnant women in need - up to €1500', az: 'Ehtiyacı olan hamilə qadınlara maliyyə yardımı - €1500-ə qədər', de: 'Finanzielle Hilfe für Schwangere in Notlage - bis 1500€', ru: 'Финансовая помощь беременным в нужде - до €1500' }, saving: '€1500', type: 'subsidy', important: true },
+        { name: 'Hebamme (kostenlos über Kasse)', url: 'https://www.gkv-spitzenverband.de', desc: { en: 'Midwife visits fully covered by insurance - pre & post birth', az: 'Mamaça ziyarətləri sığorta tərəfindən tam ödənilir', de: 'Hebammenbetreuung komplett von Kasse bezahlt', ru: 'Акушерка полностью оплачивается страховкой' }, saving: '€0 (covered)', type: 'free' },
+      ]
+    },
+  ],
+
+  chinese: [
+    {
+      id: 'cheap-chinese',
+      title: { en: '🇨🇳 Best Deals from China', az: '🇨🇳 Çindən Ən Yaxşı Təkliflər', de: '🇨🇳 Beste China-Deals', ru: '🇨🇳 Лучшие предложения из Китая' },
+      items: [
+        { name: 'AliExpress Choice (free shipping)', url: 'https://www.aliexpress.com/p/choice/index.html', desc: { en: 'Curated products with FREE fast shipping (5-10 days to EU)', az: 'PULSUZ sürətli çatdırılma ilə seçilmiş məhsullar (AB-yə 5-10 gün)', de: 'Kuratierte Produkte mit GRATIS Schnellversand (5-10 Tage EU)', ru: 'Товары с БЕСПЛАТНОЙ быстрой доставкой (5-10 дней)' }, type: 'free', important: true },
+        { name: 'Temu (90% off retail)', url: 'https://www.temu.com', desc: { en: 'Ultra-cheap everything - 90% cheaper than retail, free ship', az: 'Ultra ucuz hər şey - pərakəndədən 90% ucuz, pulsuz çatdırılma', de: 'Ultra-günstig alles - 90% unter Einzelhandel, Gratisversand', ru: 'Ультра-дёшево всё - на 90% дешевле, бесплатная доставка' }, saving: '90% off', type: 'discount', important: true },
+        { name: 'New User Coupons (€15-30 off)', url: 'https://www.aliexpress.com', desc: { en: 'New account? Get €15-30 welcome coupon bundle on first purchase', az: 'Yeni hesab? İlk alışda €15-30 xoş gəldin kuponu paketi al', de: 'Neues Konto? 15-30€ Willkommens-Gutschein', ru: 'Новый аккаунт? Купоны €15-30 на первую покупку' }, saving: '€15-30', type: 'discount', important: true },
+        { name: 'Banggood Flash Deals', url: 'https://www.banggood.com/marketing-Flash-Deals/tid-1218.html', desc: { en: 'Daily flash deals - electronics & gadgets 50-80% off', az: 'Gündəlik flash təkliflər - elektronika 50-80% endirim', de: 'Tägliche Flash-Deals - Elektronik 50-80% Rabatt', ru: 'Ежедневные акции - электроника 50-80% скидка' }, saving: '50-80% off', type: 'discount' },
+        { name: '11.11 / Black Friday Sales', url: 'https://sale.aliexpress.com', desc: { en: 'Biggest sales: 11.11 (Nov), Black Friday - save 50-95%!', az: 'Ən böyük satışlar: 11.11 (Noyabr), Black Friday - 50-95% qənaət!', de: 'Größte Sales: 11.11 (Nov), Black Friday - 50-95% sparen!', ru: 'Главные распродажи: 11.11, Black Friday - 50-95%!' }, saving: '50-95% off', type: 'tip', important: true },
+        { name: 'CSSBuy/Sugargoo (rep savings)', url: 'https://www.cssbuy.com', desc: { en: 'Shipping agents - combine parcels, save 40-60% on shipping', az: 'Göndərmə agentləri - bağlamaları birləşdir, göndərmədə 40-60% qənaət', de: 'Versandagenten - Pakete bündeln, 40-60% Versand sparen', ru: 'Агенты доставки - объединить посылки, -40-60% за доставку' }, saving: '40-60% ship', type: 'tip' },
+      ]
+    },
+    {
+      id: 'china-tech',
+      title: { en: '📱 Cheap Tech from China', az: '📱 Çindən Ucuz Texnologiya', de: '📱 Günstige Technik aus China', ru: '📱 Дешёвая техника из Китая' },
+      items: [
+        { name: 'Xiaomi Official (EU warranty)', url: 'https://www.mi.com/de', desc: { en: 'Flagship quality at half price - EU warranty & support', az: 'Yarı qiymətə flaqman keyfiyyət - AB zəmanəti & dəstəyi', de: 'Flagship-Qualität zum halben Preis - EU-Garantie', ru: 'Флагманское качество за полцены - гарантия ЕС' }, saving: '50% vs Samsung', type: 'discount', important: true },
+        { name: 'AliExpress Tech Week', url: 'https://www.aliexpress.com/category/44/consumer-electronics.html', desc: { en: 'Weekly tech deals - phones, tablets, earbuds from $15', az: 'Həftəlik texno təkliflər - telefonlar, planşetlər, qulaqlıqlar $15-dən', de: 'Wöchentliche Tech-Deals - Phones, Tablets, Earbuds ab $15', ru: 'Еженедельные техно-скидки - от $15' }, saving: 'from $15', type: 'discount' },
+        { name: 'Nothing Phone (€299)', url: 'https://nothing.tech', desc: { en: 'Premium design phone from €299 - Glyph lights, stock Android', az: 'Premium dizayn telefon €299-dan - Glyph işıqlar, stock Android', de: 'Premium-Design-Phone ab 299€ - Glyph-Lights, Stock-Android', ru: 'Премиум дизайн телефон от €299 - Glyph, чистый Android' }, saving: '€299', type: 'discount' },
+      ]
+    },
+  ],
+
+  platforms: [
+    {
+      id: 'platform-deals',
+      title: { en: '🛒 German Platform Deals', az: '🛒 Alman Platform Endirimləri', de: '🛒 Deutsche Plattform-Deals', ru: '🛒 Скидки немецких платформ' },
+      items: [
+        { name: 'Amazon Warehouse (30% off)', url: 'https://www.amazon.de/Amazon-Warehouse/b?node=18726498031', desc: { en: 'Open-box/returned items 20-40% cheaper - Amazon quality checked', az: 'Açılmış/qaytarılmış məhsullar 20-40% ucuz - Amazon keyfiyyət yoxlanılmış', de: 'Geöffnete/retournierte Ware 20-40% günstiger - Amazon geprüft', ru: 'Вскрытые/возвращённые товары -20-40% - проверено Amazon' }, saving: '20-40% off', type: 'discount', important: true },
+        { name: 'mydealz.de (Community Deals)', url: 'https://www.mydealz.de', desc: { en: 'Community-curated best deals in Germany - live updated', az: 'Almaniyada icma tərəfindən seçilmiş ən yaxşı təkliflər', de: 'Community-kuratierte Deals in Deutschland - live aktualisiert', ru: 'Лучшие акции Германии от сообщества - live' }, type: 'free', important: true },
+        { name: 'idealo Preisalarm', url: 'https://www.idealo.de', desc: { en: 'Price comparison + alerts when price drops - never overpay', az: 'Qiymət müqayisəsi + qiymət düşəndə xəbərdarlıq - əlavə ödəmə', de: 'Preisvergleich + Alarm bei Preisfall - nie zu viel zahlen', ru: 'Сравнение цен + уведомление при снижении' }, type: 'free', important: true },
+        { name: 'Payback Points (free money)', url: 'https://www.payback.de', desc: { en: 'Collect points at dm, Rewe, Aral, real → redeem for cash/vouchers', az: 'dm, Rewe, Aral-da xal topla → nağd/kupon ilə dəyiş', de: 'Punkte bei dm, Rewe, Aral sammeln → einlösen', ru: 'Копить баллы в dm, Rewe, Aral → обменять на деньги' }, saving: '€50-100/yr', type: 'earn', important: true },
+        { name: 'Deutschland Card', url: 'https://www.deutschlandcard.de', desc: { en: 'Loyalty points at Edeka, Netto, Esso → cashback', az: 'Edeka, Netto, Esso-da loyallıq xalları → cashback', de: 'Treuepunkte bei Edeka, Netto, Esso → Cashback', ru: 'Баллы лояльности в Edeka, Netto, Esso → кэшбэк' }, saving: '€30-80/yr', type: 'earn' },
+        { name: 'Kleinanzeigen (Free stuff)', url: 'https://www.kleinanzeigen.de/s-zu-verschenken/k0', desc: { en: '"Zu verschenken" section - free furniture, electronics, clothes', az: '"Zu verschenken" bölməsi - pulsuz mebel, elektronika, paltar', de: '"Zu verschenken" - kostenlose Möbel, Elektronik, Kleidung', ru: 'Раздел "Отдам даром" - мебель, электроника, одежда' }, saving: '€0', type: 'free' },
+      ]
+    },
+    {
+      id: 'cashback',
+      title: { en: '💸 Cashback & Vouchers', az: '💸 Cashback & Kuponlar', de: '💸 Cashback & Gutscheine', ru: '💸 Кэшбэк и купоны' },
+      items: [
+        { name: 'TopCashback DE', url: 'https://www.topcashback.de', desc: { en: 'Highest cashback rates in Germany - up to 15% back', az: 'Almaniyada ən yüksək cashback dərəcələri - 15%-ə qədər geri', de: 'Höchste Cashback-Raten in DE - bis 15% zurück', ru: 'Максимальный кэшбэк в Германии - до 15% назад' }, saving: 'up to 15%', type: 'earn', important: true },
+        { name: 'Shoop.de', url: 'https://www.shoop.de', desc: { en: 'German cashback portal - 2-10% back on 2000+ shops', az: 'Alman cashback portalı - 2000+ mağazada 2-10% geri', de: 'Deutsches Cashback-Portal - 2-10% bei 2000+ Shops', ru: 'Немецкий кэшбэк - 2-10% в 2000+ магазинах' }, saving: '2-10% back', type: 'earn', important: true },
+        { name: 'Gutscheinsammler', url: 'https://www.gutscheinsammler.de', desc: { en: 'All valid German voucher codes in one place', az: 'Bütün etibarlı Alman kupon kodları bir yerdə', de: 'Alle gültigen Gutscheincodes auf einem Blick', ru: 'Все действующие немецкие промокоды' }, type: 'free' },
+        { name: 'Honey Browser Extension', url: 'https://www.joinhoney.com', desc: { en: 'Auto-applies best coupon at checkout - works on 30K+ sites', az: 'Ödəmədə avtomatik ən yaxşı kuponu tətbiq edir - 30K+ saytda işləyir', de: 'Wendet automatisch besten Gutschein an - 30K+ Shops', ru: 'Авто-применяет лучший купон - работает на 30K+ сайтах' }, type: 'free', important: true },
+      ]
+    },
+  ],
+
+  shopping: [
+    {
+      id: 'shopping-hacks',
+      title: { en: '🛍️ Shopping Hacks', az: '🛍️ Alış-veriş Hiylələri', de: '🛍️ Shopping-Tricks', ru: '🛍️ Лайфхаки для покупок' },
+      items: [
+        { name: 'CamelCamelCamel (Amazon)', url: 'https://camelcamelcamel.com', desc: { en: 'Amazon price history - see if deal is real or fake', az: 'Amazon qiymət tarixi - təklifin real və ya saxta olduğunu gör', de: 'Amazon-Preisverlauf - echte oder falsche Deals erkennen', ru: 'История цен Amazon - настоящая ли скидка?' }, type: 'free', important: true },
+        { name: 'Keepa (Price Tracker)', url: 'https://keepa.com', desc: { en: 'Amazon price drop alerts - never miss a deal', az: 'Amazon qiymət düşüşü xəbərdarlıqları - heç bir təklifi qaçırma', de: 'Amazon-Preisfall-Alerts - kein Deal verpassen', ru: 'Уведомления о снижении цен Amazon' }, type: 'free', important: true },
+        { name: 'Amazon Renewed (refurbished)', url: 'https://www.amazon.de/Amazon-Renewed/b?node=17299808031', desc: { en: 'Certified refurbished electronics 20-50% off + warranty', az: 'Sertifikatlı yenilənmiş elektronika 20-50% ucuz + zəmanət', de: 'Zertifiziert erneuerte Elektronik 20-50% günstiger + Garantie', ru: 'Восстановленная электроника -20-50% + гарантия' }, saving: '20-50% off', type: 'discount' },
+        { name: 'Prisjakt / Geizhals', url: 'https://geizhals.de', desc: { en: 'Tech price comparison - find lowest price across all shops', az: 'Texno qiymət müqayisəsi - bütün mağazalarda ən aşağı qiyməti tap', de: 'Technik-Preisvergleich - günstigsten Preis finden', ru: 'Сравнение цен техники - самая низкая цена' }, type: 'free' },
+        { name: 'Vinted (Second-hand fashion)', url: 'https://www.vinted.de', desc: { en: 'Buy/sell second-hand clothes - 50-90% off retail, no seller fees', az: 'İkinci əl paltar al/sat - pərakəndədən 50-90% ucuz, satıcı rüsumu yox', de: 'Second-Hand Mode kaufen/verkaufen - 50-90% günstiger', ru: 'Купить/продать б/у одежду - на 50-90% дешевле' }, saving: '50-90% off', type: 'discount', important: true },
+      ]
+    },
+  ],
+
+  viral: [
+    {
+      id: 'earn-content',
+      title: { en: '💰 Earn from Viral Content', az: '💰 Viral Məzmundan Pul Qazan', de: '💰 Mit viralen Inhalten verdienen', ru: '💰 Заработай на вирусном контенте' },
+      items: [
+        { name: 'YouTube Shorts Fund', url: 'https://support.google.com/youtube/answer/10923658', desc: { en: 'Earn $100-10,000/month from YouTube Shorts views', az: 'YouTube Shorts baxışlarından aylıq $100-10,000 qazan', de: 'Mit YouTube Shorts Views $100-10.000/Monat verdienen', ru: 'Заработай $100-10,000/мес с YouTube Shorts' }, saving: '$100-10K/mo', type: 'earn', important: true },
+        { name: 'TikTok Creator Fund', url: 'https://www.tiktok.com/creators/creator-portal/', desc: { en: 'Monetize TikTok - 10K+ followers = $0.02-0.04 per 1K views', az: 'TikTok-u monetizasiya et - 10K+ izləyici = 1K baxışa $0.02-0.04', de: 'TikTok monetarisieren - 10K+ Follower = $0.02-0.04 pro 1K Views', ru: 'Монетизация TikTok - 10K+ подписчиков' }, saving: '$0.02-0.04/1K', type: 'earn', important: true },
+        { name: 'Instagram Reels Bonus', url: 'https://help.instagram.com/386810562498740', desc: { en: 'Earn from Reels plays - invite-only but growing', az: 'Reels oynatmalarından qazan - yalnız dəvətlə amma böyüyür', de: 'Mit Reels-Plays verdienen - auf Einladung, aber wachsend', ru: 'Заработок с Reels - по приглашению, растёт' }, type: 'earn' },
+        { name: 'Canva Free (Design tool)', url: 'https://www.canva.com', desc: { en: 'Create viral thumbnails & posts for free - no design skills needed', az: 'Pulsuz viral thumbnail & postlar yarat - dizayn bacarığı lazım deyil', de: 'Virale Thumbnails & Posts gratis erstellen - ohne Designkenntnisse', ru: 'Создавай вирусные обложки бесплатно - без навыков' }, type: 'free', important: true },
+        { name: 'CapCut (FREE Video Editor)', url: 'https://www.capcut.com', desc: { en: 'Professional video editing free - TikTok/Reels/Shorts optimized', az: 'Peşəkar video montaj pulsuz - TikTok/Reels/Shorts üçün optimize', de: 'Profi-Videoschnitt gratis - für TikTok/Reels/Shorts optimiert', ru: 'Проф. монтаж бесплатно - для TikTok/Reels/Shorts' }, type: 'free', important: true },
       ]
     },
   ],
