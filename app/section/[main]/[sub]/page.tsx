@@ -14,6 +14,7 @@ import SocialWidget from '@/components/SocialWidget'
 import StocksWidget from '@/components/StocksWidget'
 import EducationWidget from '@/components/EducationWidget'
 import { useLang } from '@/lib/LanguageContext'
+import t from '@/lib/translations'
 
 const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen }
 
@@ -23,32 +24,21 @@ const names: Record<string, Record<string, string>> = {
   ru: { weather: 'Погода', crypto: 'Крипто рынки', whale: 'Активность китов', news: 'Мировые новости', travel: 'Путешествия', viral: 'Вирусный контент', entertainment: 'Кино и сериалы', social: 'Социальные тренды', stocks: 'Акции', education: 'Образование' }
 }
 
-const subText: Record<string, string> = {
-  // News
-  top: 'Top', war: 'War', politics: 'Politics', economy: 'Economy', ai: 'AI', industry: 'Industry', social: 'Social',
-  // Travel
-  'flight-hotel': 'Flight + Hotel', flight: 'Flight', hotel: 'Hotel', 'last-minute': 'Last minute',
-  // Entertainment
-  movies: 'Movies', series: 'Series', cartoons: 'Cartoons', upcoming: 'Upcoming',
-  // Viral
-  youtube: 'YouTube', music: 'Music', shorts: 'Shorts', trending: 'Trending',
-  // Crypto
-  bitcoin: 'Bitcoin', ethereum: 'Ethereum', 'fear-greed': 'Fear & Greed',
-  // Whale
-  'large-transfers': 'Large transfers', wallets: 'Wallets', exchanges: 'Exchanges',
-  // Weather
-  current: 'Current', hourly: 'Hourly', weekly: 'Weekly',
-  // Stocks
-  gainers: 'Gainers', losers: 'Losers', tech: 'Tech',
-  // Education - Science
-  science: 'Science', math: 'Mathematics', geometry: 'Geometry', physics: 'Physics',
-  chemistry: 'Chemistry', biology: 'Biology', anatomy: 'Anatomy', astronomy: 'Astronomy', languages: 'Languages',
-  // Education - Engineering
-  engineering: 'Engineering', automation: 'Automation', electrical: 'Electrical', mechanical: 'Mechanical',
-  // Education - Other
-  courses: 'Free Courses', 'ai-tools': 'AI Tools', cybersecurity: 'Cybersecurity',
-  // Social
-  instagram: 'Instagram', tiktok: 'TikTok', x: 'X', facebook: 'Facebook',
+// Map sub-tab slugs to translation keys (sub + PascalCase)
+const subKeyMap: Record<string, string> = {
+  top:'subTop',war:'subWar',politics:'subPolitics',economy:'subEconomy',ai:'subAI',industry:'subIndustry',social:'subSocial',
+  'flight-hotel':'subFlightHotel',flight:'subFlight',hotel:'subHotel','last-minute':'subLastMinute',
+  movies:'subMovies',series:'subSeries',cartoons:'subCartoons',upcoming:'subUpcoming',
+  youtube:'subYouTube',music:'subMusic',shorts:'subShorts',trending:'subTrending',
+  bitcoin:'subBitcoin',ethereum:'subEthereum','fear-greed':'subFearGreed',
+  'large-transfers':'subLargeTransfers',wallets:'subWallets',exchanges:'subExchanges',
+  current:'subCurrent',hourly:'subHourly',weekly:'subWeekly',
+  gainers:'subGainers',losers:'subLosers',tech:'subTech',
+  science:'subScience',math:'subMath',geometry:'subMath',physics:'subPhysics',
+  chemistry:'subChemistry',biology:'subBiology',anatomy:'subBiology',astronomy:'subAstronomy',languages:'subLanguages',
+  engineering:'subEngineering',automation:'subAutomation',electrical:'subElectrical',mechanical:'subMechanical',
+  courses:'subCourses',
+  instagram:'subInstagram',tiktok:'subTiktok',x:'subX',facebook:'subFacebook',
 }
 
 const submenuMap: Record<string, string[]> = {
@@ -105,10 +95,13 @@ export default function SectionPage() {
   const params = useParams()
   const main = String(params.main || 'news')
   const sub = String(params.sub || 'top')
-  const { lang } = useLang()
+  const { lang, tr } = useLang()
   const Icon = icons[main] || Newspaper
   const title = (names[lang] || names.en)[main] || main
   const subs = submenuMap[main] || []
+
+  // Helper to get translated sub-tab label
+  const getSubLabel = (s: string) => tr[subKeyMap[s] || ''] || s
 
   return (
     <div className="min-h-screen">
@@ -128,7 +121,7 @@ export default function SectionPage() {
                     : 'text-[#6b6b80] hover:text-white hover:bg-white/[0.03]'
                 }`}
               >
-                {subText[s] || s}
+              {getSubLabel(s)}
               </Link>
             ))}
           </div>
@@ -147,7 +140,7 @@ export default function SectionPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">{title}</h1>
-            <p className="text-xs text-[#6b6b80]">{subText[sub] || sub}</p>
+            <p className="text-xs text-[#6b6b80]">{getSubLabel(sub)}</p>
           </div>
         </div>
 
