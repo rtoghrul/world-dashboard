@@ -15,7 +15,10 @@
     "swr": "^2.2.5",
     "lucide-react": "^0.344.0",
     "@supabase/supabase-js": "^2.43.0",
-    "@supabase/ssr": "^0.4.0"
+    "@supabase/ssr": "^0.4.0",
+    "framer-motion": "^11.0.0",
+    "@radix-ui/react-tooltip": "^1.0.0",
+    "clsx": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
