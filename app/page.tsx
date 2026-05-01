@@ -76,7 +76,7 @@ export default function HomePage() {
   const t = labels[lang as keyof typeof labels] || labels.en
 
   return (
-    <div className="min-h-screen relative z-[1]">
+    <div className="min-h-screen relative z-[1] w-full">
       <ServiceWorkerRegistrar />
       <Header />
       <MarketTicker />
@@ -84,7 +84,7 @@ export default function HomePage() {
       {/* Live Price Ticker */}
       <LivePriceTicker />
 
-      <main className="max-w-screen-2xl mx-auto px-5 py-6">
+      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         {/* Daily Streak */}
         <div className="mb-4">
           <DailyStreak />

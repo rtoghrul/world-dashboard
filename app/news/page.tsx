@@ -2,250 +2,182 @@
 import { useState } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
-import {
-  ArrowLeft, Search, Newspaper, Cpu, Globe2, Landmark, BadgeDollarSign,
-  Factory, Share2, Clapperboard, Palette, Trophy, Microscope, HeartPulse,
-  RefreshCw, X, ExternalLink, TrendingUp,
-  type LucideIcon,
-} from 'lucide-react'
+import { ArrowLeft, Search, X, ExternalLink, RefreshCw } from 'lucide-react'
 import Header from '@/components/Header'
 import { type NewsItem } from '@/components/NewsWidget'
 import { useLang } from '@/lib/LanguageContext'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
-type NewsCategory = 'top' | 'war' | 'politics' | 'economy' | 'technology' | 'ai' | 'industry' | 'social' | 'cinema' | 'art' | 'sports' | 'science' | 'health'
+type Cat = 'top' | 'war' | 'politics' | 'economy' | 'technology' | 'ai' | 'industry' | 'social' | 'cinema' | 'art' | 'sports' | 'science' | 'health'
 
-const CATS: { id: NewsCategory; label: string; icon: LucideIcon; color: string }[] = [
-  { id: 'top', label: '\u018fsas', icon: Globe2, color: 'bg-blue-500' },
-  { id: 'war', label: 'M\u00fcharib\u0259', icon: Newspaper, color: 'bg-red-600' },
-  { id: 'politics', label: 'Siyas\u0259t', icon: Landmark, color: 'bg-sky-500' },
-  { id: 'economy', label: '\u0130qtisadiyyat', icon: BadgeDollarSign, color: 'bg-emerald-500' },
-  { id: 'technology', label: 'Texnologiya', icon: Cpu, color: 'bg-cyan-500' },
-  { id: 'ai', label: 'AI', icon: Cpu, color: 'bg-purple-500' },
-  { id: 'industry', label: 'S\u0259naye', icon: Factory, color: 'bg-orange-500' },
-  { id: 'social', label: 'Sosial', icon: Share2, color: 'bg-pink-500' },
-  { id: 'cinema', label: 'Kino', icon: Clapperboard, color: 'bg-amber-500' },
-  { id: 'art', label: '\u0130nc\u0259s\u0259n\u0259t', icon: Palette, color: 'bg-fuchsia-500' },
-  { id: 'sports', label: '\u0130dman', icon: Trophy, color: 'bg-lime-500' },
-  { id: 'science', label: 'Elm', icon: Microscope, color: 'bg-indigo-500' },
-  { id: 'health', label: 'Sa\u011flaml\u0131q', icon: HeartPulse, color: 'bg-rose-500' },
+const CATS: { id: Cat; az: string; en: string }[] = [
+  { id: 'top', az: '\u018fsas', en: 'Top' },
+  { id: 'war', az: 'M\u00fcharib\u0259', en: 'War' },
+  { id: 'politics', az: 'Siyas\u0259t', en: 'Politics' },
+  { id: 'economy', az: '\u0130qtisadiyyat', en: 'Economy' },
+  { id: 'technology', az: 'Texnologiya', en: 'Tech' },
+  { id: 'ai', az: 'AI', en: 'AI' },
+  { id: 'industry', az: 'S\u0259naye', en: 'Industry' },
+  { id: 'social', az: 'Sosial', en: 'Social' },
+  { id: 'cinema', az: 'Kino', en: 'Cinema' },
+  { id: 'art', az: '\u0130nc\u0259s\u0259n\u0259t', en: 'Art' },
+  { id: 'sports', az: '\u0130dman', en: 'Sports' },
+  { id: 'science', az: 'Elm', en: 'Science' },
+  { id: 'health', az: 'Sa\u011flaml\u0131q', en: 'Health' },
 ]
 
-function timeAgo(dateStr: string) {
-  if (!dateStr) return ''
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 60) return `${mins} d\u0259q \u0259vv\u0259l`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours} saat \u0259vv\u0259l`
-  const days = Math.floor(hours / 24)
-  return `${days} g\u00fcn \u0259vv\u0259l`
+function ago(d: string) {
+  if (!d) return ''
+  const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000)
+  if (m < 60) return `${m} d\u0259q`
+  const h = Math.floor(m / 60)
+  if (h < 24) return `${h} saat`
+  return `${Math.floor(h / 24)} g\u00fcn`
 }
 
-function CardImage({ src, fallbackLetter }: { src?: string | null; fallbackLetter: string }) {
-  const [failed, setFailed] = useState(false)
-  if (src && !failed) {
-    return <img src={src} alt="" className="w-full h-full object-cover" onError={() => setFailed(true)} />
-  }
-  return (
-    <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-      <span className="text-4xl font-bold text-gray-700">{fallbackLetter}</span>
-    </div>
-  )
+function Img({ src, letter, className }: { src?: string | null; letter: string; className?: string }) {
+  const [err, setErr] = useState(false)
+  if (src && !err) return <img src={src} alt="" className={className} onError={() => setErr(true)} />
+  return <div className={`${className} bg-gray-100 flex items-center justify-center`}><span className="text-2xl font-bold text-gray-300">{letter}</span></div>
 }
 
 export default function NewsPage() {
   const { tr, lang } = useLang()
-  const [tab, setTab] = useState<NewsCategory>('top')
-  const [query, setQuery] = useState('')
+  const [tab, setTab] = useState<Cat>('top')
+  const [q, setQ] = useState('')
   const [modal, setModal] = useState<NewsItem | null>(null)
 
-  const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(
-    `/api/news?category=${tab}&lang=${lang}`,
-    fetcher,
-    { refreshInterval: 300000 }
-  )
+  const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(`/api/news?category=${tab}&lang=${lang}`, fetcher, { refreshInterval: 300000 })
 
-  const filtered = query
-    ? data?.filter(item => item.title.toLowerCase().includes(query.toLowerCase()) || item.description?.toLowerCase().includes(query.toLowerCase()))
-    : data
-
-  const items = filtered || []
+  const items = (q ? data?.filter(x => x.title.toLowerCase().includes(q.toLowerCase())) : data) || []
   const hero = items[0]
-  const gridItems = items.slice(1, 9)
-  const sideItems = items.slice(0, 10)
-  const catObj = CATS.find(c => c.id === tab) || CATS[0]
+  const side = items.slice(1, 5)
+  const grid = items.slice(5)
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-white">
       <Header />
-      <main className="max-w-screen-xl mx-auto px-4 py-5">
-        {/* Top bar */}
-        <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <h1 className="text-white font-bold text-lg">{'\ud83d\udcf0'} {tr.news || 'News'}</h1>
+
+      {/* Red top bar */}
+      <div className="bg-red-600">
+        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Link href="/" className="text-white/80 hover:text-white transition"><ArrowLeft className="w-4 h-4" /></Link>
+            <h1 className="text-white font-bold text-sm">{'\ud83d\udcf0'} {tr.news || 'X\u0259b\u0259rl\u0259r'}</h1>
           </div>
-          <div className="flex items-center gap-2 sm:ml-auto">
-            <div className="flex items-center gap-1.5 bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 flex-1 sm:flex-none">
-              <Search className="w-3.5 h-3.5 text-gray-500" />
-              <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder={tr.search + '...'} className="bg-transparent text-white text-sm outline-none w-full sm:w-40 placeholder-gray-600" />
-              {query && <button onClick={() => setQuery('')}><X className="w-3 h-3 text-gray-500 hover:text-white" /></button>}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center bg-white/20 rounded px-2 py-1">
+              <Search className="w-3 h-3 text-white/70" />
+              <input value={q} onChange={e => setQ(e.target.value)} placeholder="Axtar..." className="bg-transparent text-white text-xs outline-none ml-1.5 w-24 sm:w-32 placeholder-white/50" />
+              {q && <button onClick={() => setQ('')}><X className="w-3 h-3 text-white/70" /></button>}
             </div>
-            <button onClick={() => mutate()} className="p-2 rounded-lg bg-gray-900 border border-gray-800 hover:bg-gray-800 transition">
-              <RefreshCw className="w-3.5 h-3.5 text-gray-400" />
-            </button>
+            <button onClick={() => mutate()} className="p-1 rounded hover:bg-white/10"><RefreshCw className="w-3.5 h-3.5 text-white/80" /></button>
           </div>
         </div>
+      </div>
 
-        {/* Categories - horizontal scroll */}
-        <div className="-mx-4 px-4 mb-5 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-1.5 min-w-max pb-1">
-            {CATS.map(cat => {
-              const active = tab === cat.id
-              return (
-                <button key={cat.id} onClick={() => { setTab(cat.id); setQuery('') }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${active ? `${cat.color} text-white shadow-lg` : 'bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700'}`}>
-                  <cat.icon className="w-3 h-3" />{cat.label}
-                </button>
-              )
-            })}
+      {/* Category tabs */}
+      <div className="border-b border-gray-200 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-0 min-w-max">
+            {CATS.map(c => (
+              <button key={c.id} onClick={() => { setTab(c.id); setQ('') }}
+                className={`px-4 py-2.5 text-xs font-medium border-b-2 transition whitespace-nowrap ${tab === c.id ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-800'}`}>
+                {lang === 'az' ? c.az : c.en}
+              </button>
+            ))}
           </div>
         </div>
+      </div>
 
+      <main className="max-w-6xl mx-auto px-4 py-5">
         {isLoading && (
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5">
-            <div className="space-y-4">
-              <div className="aspect-[16/9] rounded-2xl bg-gray-900 animate-pulse" />
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {[...Array(6)].map((_, i) => <div key={i} className="aspect-[16/10] rounded-xl bg-gray-900 animate-pulse" />)}
-              </div>
-            </div>
-            <div className="hidden lg:block rounded-2xl bg-gray-900 h-96 animate-pulse" />
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4">
+            <div className="aspect-[16/9] bg-gray-100 rounded animate-pulse" />
+            <div className="space-y-2">{[1,2,3,4].map(i => <div key={i} className="h-20 bg-gray-100 rounded animate-pulse" />)}</div>
           </div>
         )}
 
-        {error && <div className="p-12 text-center text-red-400 bg-gray-900 rounded-2xl border border-gray-800">{tr.error || 'Error'}</div>}
+        {error && <div className="p-12 text-center text-red-500">X\u0259ta ba\u015f verdi</div>}
 
         {!isLoading && !error && items.length === 0 && (
-          <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-2xl border border-gray-800">{tr.noData || 'No results'}</div>
+          <div className="p-12 text-center text-gray-400">N\u0259tic\u0259 tap\u0131lmad\u0131</div>
         )}
 
         {!isLoading && !error && items.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5">
-            {/* Main content */}
-            <div className="space-y-4">
-              {/* Hero card */}
+          <>
+            {/* Hero row: big left + small right */}
+            <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-4 mb-6">
+              {/* Hero */}
               {hero && (
-                <button onClick={() => setModal(hero)} className="relative w-full aspect-[16/8] sm:aspect-[16/7] rounded-2xl overflow-hidden group">
-                  <CardImage src={hero.thumbnail} fallbackLetter={hero.source?.charAt(0) || 'N'} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                  <span className={`absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-bold text-white ${catObj.color}`}>{catObj.label}</span>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                    <h2 className="text-white font-bold text-base sm:text-xl leading-snug line-clamp-2 group-hover:text-indigo-300 transition">{hero.title}</h2>
-                    {hero.description && <p className="text-gray-300 text-xs mt-2 line-clamp-2 hidden sm:block">{hero.description}</p>}
-                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
-                      <span>{hero.source}</span>
-                      <span>{'\u00b7'}</span>
-                      <span>{timeAgo(hero.pubDate)}</span>
-                    </div>
+                <button onClick={() => setModal(hero)} className="relative group rounded overflow-hidden aspect-[16/9]">
+                  <Img src={hero.thumbnail} letter={hero.source?.charAt(0) || 'N'} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <span className="inline-block px-2 py-0.5 bg-red-600 text-white text-[10px] font-bold rounded mb-2">{(CATS.find(c => c.id === tab) || CATS[0])[lang === 'az' ? 'az' : 'en']}</span>
+                    <h2 className="text-white font-bold text-lg leading-snug line-clamp-3 group-hover:underline">{hero.title}</h2>
+                    <p className="text-white/70 text-xs mt-1.5">{hero.source} \u2022 {ago(hero.pubDate)}</p>
                   </div>
                 </button>
               )}
 
-              {/* Grid cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {gridItems.map((item, i) => (
-                  <button key={i} onClick={() => setModal(item)} className="text-left group rounded-xl overflow-hidden bg-gray-900 border border-gray-800 hover:border-gray-700 transition">
-                    <div className="relative aspect-[16/10] overflow-hidden">
-                      <CardImage src={item.thumbnail} fallbackLetter={item.source?.charAt(0) || 'N'} />
-                      <span className={`absolute top-2 left-2 px-1.5 py-0.5 rounded text-[9px] font-bold text-white ${catObj.color}`}>{catObj.label}</span>
-                    </div>
-                    <div className="p-2.5">
-                      <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition leading-snug">{item.title}</h3>
-                      <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-gray-500">
-                        <span>{item.source}</span>
-                        <span>{'\u00b7'}</span>
-                        <span>{timeAgo(item.pubDate)}</span>
-                      </div>
+              {/* Side cards */}
+              <div className="flex flex-col gap-2">
+                {side.map((item, i) => (
+                  <button key={i} onClick={() => setModal(item)} className="flex gap-3 p-2 rounded hover:bg-gray-50 transition text-left group border border-gray-100">
+                    <Img src={item.thumbnail} letter={item.source?.charAt(0) || 'N'} className="w-24 h-16 rounded object-cover flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-gray-900 text-sm font-medium line-clamp-2 group-hover:text-red-600 transition leading-snug">{item.title}</h3>
+                      <p className="text-gray-400 text-[11px] mt-1">{item.source} \u2022 {ago(item.pubDate)}</p>
                     </div>
                   </button>
                 ))}
               </div>
-
-              {/* Remaining items as list */}
-              {items.length > 9 && (
-                <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden divide-y divide-gray-800/50">
-                  {items.slice(9).map((item, i) => (
-                    <button key={i} onClick={() => setModal(item)} className="w-full text-left flex gap-3 px-4 py-3 hover:bg-gray-800/40 transition group">
-                      {item.thumbnail ? (
-                        <img src={item.thumbnail} alt="" className="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-gray-800" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                      ) : (
-                        <div className="w-16 h-16 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center flex-shrink-0">
-                          <span className="text-indigo-400 text-xl font-bold">{item.source?.charAt(0) || 'N'}</span>
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
-                        {item.description && <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>}
-                        <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-600">
-                          <span>{item.source}</span><span>{'\u00b7'}</span><span>{timeAgo(item.pubDate)}</span>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {/* Sidebar - Most Read */}
-            <aside className="hidden lg:block">
-              <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden sticky top-4">
-                <div className="px-4 py-3 border-b border-gray-800 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-red-400" />
-                  <h3 className="text-white text-sm font-bold">{'\u018fn \u00e7ox oxunan'}</h3>
+            {/* Grid */}
+            {grid.length > 0 && (
+              <>
+                <div className="border-t border-gray-200 pt-4 mb-4">
+                  <h3 className="text-gray-900 font-bold text-sm">Son x\u0259b\u0259rl\u0259r</h3>
                 </div>
-                <div className="divide-y divide-gray-800/50">
-                  {sideItems.map((item, i) => (
-                    <button key={i} onClick={() => setModal(item)} className="w-full text-left flex gap-3 px-4 py-2.5 hover:bg-gray-800/40 transition group">
-                      <span className={`text-lg font-bold w-6 flex-shrink-0 ${i < 3 ? 'text-red-400' : 'text-gray-600'}`}>{i + 1}</span>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-white text-xs line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h4>
-                        <span className="text-[10px] text-gray-600 mt-0.5 block">{item.source} {'\u00b7'} {timeAgo(item.pubDate)}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {grid.map((item, i) => (
+                    <button key={i} onClick={() => setModal(item)} className="text-left group rounded overflow-hidden border border-gray-100 hover:shadow-md transition">
+                      <div className="aspect-[16/10] overflow-hidden bg-gray-100">
+                        <Img src={item.thumbnail} letter={item.source?.charAt(0) || 'N'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
-                      {item.thumbnail && <img src={item.thumbnail} alt="" className="w-10 h-10 rounded object-cover flex-shrink-0 bg-gray-800" />}
+                      <div className="p-3">
+                        <h3 className="text-gray-900 text-sm font-medium line-clamp-2 group-hover:text-red-600 transition">{item.title}</h3>
+                        <p className="text-gray-400 text-[11px] mt-1.5">{item.source} \u2022 {ago(item.pubDate)}</p>
+                      </div>
                     </button>
                   ))}
                 </div>
-              </div>
-            </aside>
-          </div>
+              </>
+            )}
+          </>
         )}
       </main>
 
       {/* Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setModal(null)}>
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-            {modal.thumbnail && (
-              <img src={modal.thumbnail} alt="" className="w-full h-48 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
-            )}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setModal(null)}>
+          <div className="bg-white rounded-lg w-full max-w-lg overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            {modal.thumbnail && <img src={modal.thumbnail} alt="" className="w-full h-48 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />}
             <div className="p-5">
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h2 className="text-white font-semibold text-sm leading-snug">{modal.title}</h2>
-                <button onClick={() => setModal(null)} className="text-gray-500 hover:text-white transition flex-shrink-0"><X className="w-4 h-4" /></button>
+              <h2 className="text-gray-900 font-bold text-base leading-snug mb-2">{modal.title}</h2>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">{modal.description || '\u2014'}</p>
+              <div className="flex items-center gap-2 text-gray-400 text-xs mb-4">
+                <span>{modal.source}</span><span>\u2022</span><span>{ago(modal.pubDate)}</span>
               </div>
-              <p className="text-gray-400 text-xs leading-relaxed mb-4">{modal.description || '\u2014'}</p>
-              <div className="flex items-center gap-2 text-gray-600 text-xs mb-4">
-                <span>{modal.source}</span><span>{'\u00b7'}</span><span>{timeAgo(modal.pubDate)}</span>
+              <div className="flex gap-2">
+                <a href={modal.link} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-red-600 hover:bg-red-700 transition rounded text-white text-sm font-medium">
+                  <ExternalLink className="w-3.5 h-3.5" />Tam oxu
+                </a>
+                <button onClick={() => setModal(null)} className="px-4 py-2.5 border border-gray-200 rounded text-gray-600 text-sm hover:bg-gray-50 transition">Ba\u011fla</button>
               </div>
-              <a href={modal.link} target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 transition rounded-xl text-white text-xs font-medium">
-                <ExternalLink className="w-3.5 h-3.5" />Tam oxu (m\u0259nb\u0259d\u0259)
-              </a>
             </div>
           </div>
         </div>
