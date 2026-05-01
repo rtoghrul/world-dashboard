@@ -126,18 +126,6 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'wellness', label: { en: 'Wellness & Health', az: 'Sağlamlıq', ru: 'Здоровье', tr: 'Sağlık', de: 'Wellness', fr: 'Bien-être', es: 'Bienestar', zh: '健康', ar: 'صحة', ja: 'ウェルネス', it: 'Benessere', pt: 'Bem-estar' } },
     ]
   },
-  shopping: {
-    label: { en: 'Shopping', az: 'Alış-veriş', ru: 'Покупки', tr: 'Alışveriş', de: 'Einkaufen', fr: 'Shopping', es: 'Compras', zh: '购物', ar: 'تسوق', ja: 'ショッピング', it: 'Shopping', pt: 'Compras' },
-    items: [
-      { id: 'all', label: { en: 'All Stores', az: 'Bütün Mağazalar', ru: 'Все магазины', tr: 'Tüm Mağazalar', de: 'Alle Shops', fr: 'Tous les magasins', es: 'Todas las tiendas', zh: '所有商店', ar: 'كل المتاجر', ja: '全店舗', it: 'Tutti i negozi', pt: 'Todas as lojas' } },
-      { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', ru: 'Электроника', tr: 'Elektronik', de: 'Elektronik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子機器', it: 'Elettronica', pt: 'Eletrônicos' } },
-      { id: 'fashion', label: { en: 'Fashion', az: 'Geyim', ru: 'Одежда', tr: 'Giyim', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '服装', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
-      { id: 'grocery', label: { en: 'Grocery', az: 'Ərzaq', ru: 'Продукты', tr: 'Market', de: 'Lebensmittel', fr: 'Alimentation', es: 'Alimentos', zh: '食品', ar: 'بقالة', ja: '食料品', it: 'Alimentari', pt: 'Alimentos' } },
-      { id: 'pharmacy', label: { en: 'Pharmacy', az: 'Aptek', ru: 'Аптека', tr: 'Eczane', de: 'Apotheke', fr: 'Pharmacie', es: 'Farmacia', zh: '药品', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' } },
-      { id: 'auto', label: { en: 'Auto Parts', az: 'Avtomobil', ru: 'Автозапчасти', tr: 'Oto Yedek', de: 'Autoteile', fr: 'Auto', es: 'Autopartes', zh: '汽车', ar: 'سيارات', ja: '自動車', it: 'Ricambi auto', pt: 'Autopeças' } },
-      { id: 'home', label: { en: 'Home & Furniture', az: 'Ev & Mebel', ru: 'Дом и мебель', tr: 'Ev & Mobilya', de: 'Möbel', fr: 'Maison', es: 'Hogar', zh: '家居', ar: 'أثاث', ja: '家具', it: 'Casa', pt: 'Casa' } },
-    ]
-  },
   platforms: {
     label: { en: 'Platforms 🇩🇪', az: 'Platformalar 🇩🇪', ru: 'Платформы 🇩🇪', tr: 'Platformlar 🇩🇪', de: 'Plattformen 🇩🇪', fr: 'Plateformes 🇩🇪', es: 'Plataformas 🇩🇪', zh: '平台 🇩🇪', ar: 'منصات 🇩🇪', ja: 'プラットフォーム 🇩🇪', it: 'Piattaforme 🇩🇪', pt: 'Plataformas 🇩🇪' },
     items: [

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
-import { Heart, Sparkles, Baby, Dumbbell, Palette, Smartphone, ExternalLink, Star } from 'lucide-react'
+import { Heart, Sparkles, Baby, Dumbbell, Palette, Apple, ExternalLink, Star } from 'lucide-react'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Women’s Corner', az: 'Qadınlar Bölməsi', ru: 'Женский раздел', de: 'Frauenbereich', tr: 'Kadınlar Köşesi' },
