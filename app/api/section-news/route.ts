@@ -1,252 +1,261 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { translateTexts } from '@/lib/translate'
 
-const LANG_MAP: Record<string, { hl: string; gl: string; ceid: string }> = {
-  en: { hl: 'en', gl: 'US', ceid: 'US:en' },
-  de: { hl: 'de', gl: 'DE', ceid: 'DE:de' },
-  ru: { hl: 'ru', gl: 'RU', ceid: 'RU:ru' },
-  tr: { hl: 'tr', gl: 'TR', ceid: 'TR:tr' },
-  az: { hl: 'tr', gl: 'TR', ceid: 'TR:tr' },
-  fr: { hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
-  es: { hl: 'es', gl: 'ES', ceid: 'ES:es' },
-  it: { hl: 'it', gl: 'IT', ceid: 'IT:it' },
-  pt: { hl: 'pt-BR', gl: 'BR', ceid: 'BR:pt-419' },
-  zh: { hl: 'zh-CN', gl: 'CN', ceid: 'CN:zh-CN' },
-  ar: { hl: 'ar', gl: 'SA', ceid: 'SA:ar' },
-  ja: { hl: 'ja', gl: 'JP', ceid: 'JP:ja' },
-}
+export const revalidate = 600
 
-const KEYWORDS: Record<string, Record<string, string>> = {
-  germany: {
-    behoerden: 'Deutschland Behörden Verwaltung Gesetz Politik',
-    wohnung: 'Deutschland Mietpreise Immobilien Wohnung Miete',
-    bildung: 'Deutschland Bildung Schule Universität',
-    arbeit: 'Deutschland Arbeitsmarkt Jobs Gehalt Fachkräfte',
-    aenderungen: 'Deutschland Gesetzesänderung 2025 neue Regeln',
-    tools: 'Deutschland Digitalisierung Apps Online-Dienste',
+const SECTION_FEEDS: Record<string, Record<string, string[]>> = {
+  crypto: {
+    all: [
+      'https://cointelegraph.com/rss',
+      'https://www.coindesk.com/arc/outboundfeeds/rss/',
+    ],
   },
-  chinese: {
-    all: 'Temu SHEIN AliExpress Europe shopping',
-    general: 'Temu AliExpress Europe marketplace',
-    fashion: 'SHEIN fast fashion Europe',
-    electronics: 'Xiaomi Banggood electronics Europe',
-    home: 'smart home China Europe products',
-    kids: 'PatPat kids clothing Europe',
-    hobby: '3D printer drone China Europe',
+  stocks: {
+    all: [
+      'https://feeds.bbci.co.uk/news/business/rss.xml',
+      'https://www.cnbc.com/id/100003114/device/rss/rss.html',
+      'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
+    ],
   },
-  platforms: {
-    general: 'Amazon REWE Lieferando Deutschland Online-Shopping',
-    clothes: 'Zalando AboutYou Mode Deutschland Online',
-    pharma: 'Online Apotheke Deutschland DocMorris',
-    food: 'Lieferando Wolt Flink Gorillas Lieferung',
-    electronics: 'MediaMarkt Saturn Elektronik Deutschland',
-    autoparts: 'Autodoc Kfzteile24 Autoteile Online',
-    furniture: 'IKEA Wayfair Möbel Deutschland Online',
-    international: 'Amazon eBay international shopping',
-  },
-  women: {
-    beauty: 'Beauty Skincare Trends Kosmetik',
-    diet: 'Ernährung Diät gesund abnehmen',
-    fitness: 'Fitness Workout Frauen Training',
-    parenting: 'Eltern Baby Kinder Erziehung',
-    fashion: 'Mode Trends Frauen Fashion',
-    wellness: 'Wellness Gesundheit Mental Health',
-  },
-  crypto: { all: 'cryptocurrency Bitcoin Ethereum market' },
-  stocks: { all: 'stock market DAX S&P500 investing' },
   entertainment: {
-    movie: 'yeni filmler sinema 2025',
-    series: 'yeni diziler Netflix 2025',
-    cartoon: 'animasyon çizgi film yeni',
-    all: 'filmler diziler Netflix Disney streaming',
+    movie: [
+      'https://variety.com/feed/',
+      'https://www.hollywoodreporter.com/feed/',
+    ],
+    series: [
+      'https://variety.com/feed/',
+      'https://www.hollywoodreporter.com/feed/',
+    ],
+    cartoon: [
+      'https://variety.com/feed/',
+    ],
+    all: [
+      'https://variety.com/feed/',
+      'https://www.hollywoodreporter.com/feed/',
+    ],
   },
-  weather: { _dynamic: true },
-  travel: { _dynamic: true },
-  viral: { all: 'viral trending sosyal medya TikTok' },
+  travel: {
+    all: [
+      'https://feeds.bbci.co.uk/news/world/rss.xml',
+      'https://www.theguardian.com/travel/rss',
+    ],
+  },
+  weather: {
+    all: [
+      'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',
+    ],
+  },
+  viral: {
+    all: [
+      'https://www.reddit.com/r/popular/.rss',
+      'https://www.theverge.com/rss/index.xml',
+    ],
+  },
   aitools: {
-    all: 'yapay zeka AI yeni araçlar ChatGPT',
-    writing: 'AI yazma araçları GPT',
-    image: 'AI görsel üretimi Midjourney',
-    code: 'AI kodlama asistanı Copilot',
-    audio: 'AI ses müzik üretimi',
-    video: 'AI video üretimi Sora',
-    research: 'AI araştırma buluş',
+    all: [
+      'https://techcrunch.com/category/artificial-intelligence/feed/',
+      'https://feeds.feedburner.com/venturebeat/SZYF',
+    ],
+    writing: ['https://techcrunch.com/category/artificial-intelligence/feed/'],
+    image: ['https://techcrunch.com/category/artificial-intelligence/feed/'],
+    code: ['https://techcrunch.com/category/artificial-intelligence/feed/'],
+    audio: ['https://techcrunch.com/category/artificial-intelligence/feed/'],
+    video: ['https://techcrunch.com/category/artificial-intelligence/feed/'],
+    research: ['https://feeds.feedburner.com/venturebeat/SZYF'],
   },
   software: {
-    all: 'yazılım uygulama yeni güncelleme',
-    windows: 'Windows yazılım uygulama yeni',
-    mac: 'macOS Mac uygulama yeni',
-    ios: 'iOS iPhone uygulama yeni',
-    android: 'Android uygulama Google Play yeni',
-    extensions: 'tarayıcı eklentileri Chrome yeni',
+    all: [
+      'https://techcrunch.com/feed/',
+      'https://www.theverge.com/rss/index.xml',
+    ],
+    windows: ['https://www.theverge.com/rss/index.xml'],
+    mac: ['https://www.theverge.com/rss/index.xml'],
+    ios: ['https://techcrunch.com/feed/'],
+    android: ['https://techcrunch.com/feed/'],
+    extensions: ['https://www.theverge.com/rss/index.xml'],
+  },
+  germany: {
+    behoerden: ['https://www.tagesschau.de/xml/rss2/'],
+    wohnung: ['https://www.tagesschau.de/xml/rss2/'],
+    bildung: ['https://www.tagesschau.de/xml/rss2/'],
+    arbeit: ['https://www.tagesschau.de/xml/rss2/'],
+    aenderungen: ['https://www.tagesschau.de/xml/rss2/'],
+    tools: ['https://www.tagesschau.de/xml/rss2/'],
+    all: ['https://www.tagesschau.de/xml/rss2/'],
+  },
+  chinese: {
+    all: ['https://techcrunch.com/feed/'],
+    general: ['https://techcrunch.com/feed/'],
+    fashion: ['https://www.theverge.com/rss/index.xml'],
+    electronics: ['https://techcrunch.com/feed/'],
+    home: ['https://www.theverge.com/rss/index.xml'],
+    kids: ['https://www.theverge.com/rss/index.xml'],
+    hobby: ['https://techcrunch.com/feed/'],
+  },
+  platforms: {
+    all: ['https://techcrunch.com/feed/'],
+    general: ['https://techcrunch.com/feed/'],
+    clothes: ['https://www.theverge.com/rss/index.xml'],
+    pharma: ['https://feeds.bbci.co.uk/news/health/rss.xml'],
+    food: ['https://techcrunch.com/feed/'],
+    electronics: ['https://techcrunch.com/feed/'],
+    autoparts: ['https://techcrunch.com/feed/'],
+    furniture: ['https://www.theverge.com/rss/index.xml'],
+    international: ['https://techcrunch.com/feed/'],
+  },
+  women: {
+    beauty: ['https://www.allure.com/feed/rss'],
+    diet: ['https://feeds.bbci.co.uk/news/health/rss.xml'],
+    fitness: ['https://feeds.bbci.co.uk/news/health/rss.xml'],
+    parenting: ['https://feeds.bbci.co.uk/news/health/rss.xml'],
+    fashion: ['https://www.theverge.com/rss/index.xml'],
+    wellness: ['https://feeds.bbci.co.uk/news/health/rss.xml'],
+    all: ['https://feeds.bbci.co.uk/news/health/rss.xml'],
   },
 }
 
-interface NewsItem {
-  title: string
-  link: string
-  source: string
-  pubDate: string
-  thumbnail: string
-  description: string
-}
-
-function decodeGoogleNewsUrl(googleUrl: string): string {
-  try {
-    if (!googleUrl.includes('news.google.com/rss/articles/')) return googleUrl
-    const articleId = googleUrl.split('/articles/')[1]?.split('?')[0]
-    if (!articleId) return googleUrl
-    const decoded = Buffer.from(articleId, 'base64').toString('latin1')
-    const urlMatch = decoded.match(/https?:\/\/[^\s\x00-\x1f"'<>\\]{10,}/)
-    if (urlMatch) {
-      const clean = urlMatch[0].replace(/[\x00-\x1f\x7f-\x9f]+.*$/, '')
-      if (clean.includes('.') && !clean.includes('news.google.com')) return clean
-    }
-    const utf8Decoded = Buffer.from(articleId, 'base64').toString('utf-8')
-    const utf8Match = utf8Decoded.match(/https?:\/\/[^\s\x00-\x1f"'<>\\]{10,}/)
-    if (utf8Match) {
-      const clean = utf8Match[0].replace(/[\x00-\x1f\x7f-\x9f]+.*$/, '')
-      if (clean.includes('.') && !clean.includes('news.google.com')) return clean
-    }
-  } catch {}
-  return googleUrl
-}
-
-function extractRealUrl(descHtml: string, googleLink: string): string {
-  const decoded = decodeGoogleNewsUrl(googleLink)
-  if (decoded !== googleLink && !decoded.includes('news.google.com')) return decoded
-  const hrefMatch = descHtml.match(/<a[^>]+href=["']([^"']+)["']/i)
-  if (hrefMatch && hrefMatch[1] && !hrefMatch[1].includes('news.google.com')) {
-    return hrefMatch[1]
+function extractThumbnail(block: string): string {
+  const patterns = [
+    /media:thumbnail[^>]+url="([^"]+)"/i,
+    /media:content[^>]+url="([^"]+(?:\.jpg|\.jpeg|\.png|\.webp|\.gif)[^"]*)"/i,
+    /media:content[^>]+url="([^"]+)"[^>]*(?:medium="image"|type="image)/i,
+    /media:content[^>]+url="([^"]+)"/i,
+    /<enclosure[^>]+url="([^"]+)"[^>]+type="image/i,
+    /<enclosure[^>]+url="([^"]+)"/i,
+    /<img[^>]+src="([^"]+)"/i,
+  ]
+  for (const p of patterns) {
+    const m = block.match(p)
+    if (m && m[1] && m[1].startsWith('http')) return m[1]
   }
-  return googleLink
+  const cdataDesc = block.match(/<description[^>]*><!\[CDATA\[([\s\S]*?)\]\]><\/description>/i)
+  if (cdataDesc) {
+    const imgMatch = cdataDesc[1].match(/<img[^>]+src="([^"]+)"/i)
+    if (imgMatch && imgMatch[1]?.startsWith('http')) return imgMatch[1]
+  }
+  return ''
 }
 
-function parseRSSItems(xml: string): NewsItem[] {
-  const items: NewsItem[] = []
+function parseRSS(xml: string, sourceLabel: string): { title: string; link: string; pubDate: string; description: string; thumbnail: string; source: string }[] {
+  const items: { title: string; link: string; pubDate: string; description: string; thumbnail: string; source: string }[] = []
   const itemRegex = /<item>([\s\S]*?)<\/item>/g
   let match
   while ((match = itemRegex.exec(xml)) !== null) {
-    const itemXml = match[1]
-    const title = itemXml.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
-    const googleLink = itemXml.match(/<link>([\s\S]*?)<\/link>/)?.[1]?.trim() || ''
-    const source = itemXml.match(/<source[^>]*>([\s\S]*?)<\/source>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
-    const pubDate = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/)?.[1] || ''
-    const mediaUrl = itemXml.match(/<media:content[^>]*url=["']([^"']+)["']/)?.[1] || ''
-    const enclosure = itemXml.match(/<enclosure[^>]*url=["']([^"']+)["']/)?.[1] || ''
-    const thumbnail = mediaUrl || enclosure || ''
-    const descRaw = itemXml.match(/<description>([\s\S]*?)<\/description>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
-
-    const realLink = extractRealUrl(descRaw, googleLink)
-    const description = descRaw.replace(/<[^>]+>/g, '').trim().slice(0, 300)
-
-    if (title) {
-      items.push({
-        title: title.trim(),
-        link: realLink,
-        source: source.trim(),
-        pubDate: pubDate.trim(),
-        thumbnail,
-        description,
-      })
+    const block = match[1]
+    const getTag = (tag: string) => {
+      const m = block.match(new RegExp(`<${tag}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'))
+      return m ? m[1].trim() : ''
     }
+    const linkMatch = block.match(/<link>([^<]+)<\/link>/) || block.match(/<link[^>]+href="([^"]+)"/)
+    const title = getTag('title')
+    if (!title) continue
+
+    const rawDesc = getTag('description')
+    const description = rawDesc.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'").trim().slice(0, 200)
+    const thumbnail = extractThumbnail(block)
+
+    items.push({
+      title,
+      link: linkMatch ? linkMatch[1].trim() : '',
+      pubDate: getTag('pubDate') || getTag('dc:date') || getTag('published'),
+      description: description || '',
+      thumbnail,
+      source: sourceLabel,
+    })
+    if (items.length >= 6) break
   }
   return items
 }
 
-async function fetchOG(url: string): Promise<{ image: string; description: string }> {
-  try {
-    if (!url || url.includes('news.google.com')) return { image: '', description: '' }
-    const ctrl = new AbortController()
-    const timer = setTimeout(() => ctrl.abort(), 4000)
-    const res = await fetch(url, {
-      signal: ctrl.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml',
-        'Accept-Language': 'en-US,en;q=0.9',
-      },
-      redirect: 'follow',
-    })
-    clearTimeout(timer)
-    if (!res.ok) return { image: '', description: '' }
-    const html = await res.text()
-    const head = html.slice(0, 25000)
-    const image = head.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)?.[1]
-      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i)?.[1]
-      || head.match(/<meta[^>]*name=["']twitter:image(?::src)?["'][^>]*content=["']([^"']+)["']/i)?.[1]
-      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image(?::src)?["']/i)?.[1]
-      || ''
-    const desc = head.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i)?.[1]
-      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:description["']/i)?.[1]
-      || head.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)?.[1]
-      || head.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i)?.[1]
-      || ''
-    return { image: image.startsWith('http') ? image : '', description: desc.slice(0, 300) }
-  } catch {
-    return { image: '', description: '' }
+// Also handle Atom feeds (The Verge, etc.)
+function parseAtom(xml: string, sourceLabel: string): { title: string; link: string; pubDate: string; description: string; thumbnail: string; source: string }[] {
+  const items: { title: string; link: string; pubDate: string; description: string; thumbnail: string; source: string }[] = []
+  const entryRegex = /<entry>([\s\S]*?)<\/entry>/g
+  let match
+  while ((match = entryRegex.exec(xml)) !== null) {
+    const block = match[1]
+    const title = block.match(/<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i)?.[1]?.trim() || ''
+    if (!title) continue
+    const link = block.match(/<link[^>]*href="([^"]+)"/)?.[1] || ''
+    const published = block.match(/<published>([^<]+)/)?.[1] || block.match(/<updated>([^<]+)/)?.[1] || ''
+    const content = block.match(/<content[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/content>/i)?.[1] || ''
+    const summary = block.match(/<summary[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/summary>/i)?.[1] || ''
+    const rawDesc = summary || content
+    const description = rawDesc.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim().slice(0, 200)
+
+    let thumbnail = ''
+    const imgInContent = content.match(/<img[^>]+src="([^"]+)"/i)
+    if (imgInContent && imgInContent[1]?.startsWith('http')) thumbnail = imgInContent[1]
+    const mediaThumbnail = block.match(/<media:thumbnail[^>]+url="([^"]+)"/i)
+    if (mediaThumbnail) thumbnail = mediaThumbnail[1]
+    const mediaContent = block.match(/<media:content[^>]+url="([^"]+)"/i)
+    if (mediaContent) thumbnail = mediaContent[1]
+
+    items.push({ title, link, pubDate: published, description, thumbnail, source: sourceLabel })
+    if (items.length >= 6) break
   }
+  return items
 }
 
-async function enrichItems(items: NewsItem[]): Promise<NewsItem[]> {
-  const results = await Promise.allSettled(
-    items.map(async (item) => {
-      if (item.thumbnail && item.description && item.description.length > 30) return item
-      if (item.link.includes('news.google.com')) return item
-      const og = await fetchOG(item.link)
-      return {
-        ...item,
-        thumbnail: item.thumbnail || og.image,
-        description: (item.description && item.description.length > 30) ? item.description : (og.description || item.description),
-      }
+async function fetchFeed(url: string): Promise<{ title: string; link: string; pubDate: string; description: string; thumbnail: string; source: string }[]> {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
+      next: { revalidate: 600 },
     })
-  )
-  return results.map((r, i) => r.status === 'fulfilled' ? r.value : items[i])
+    if (!res.ok) return []
+    const xml = await res.text()
+    const titleMatch = xml.match(/<(?:channel|feed)>\s*<title[^>]*>(?:<!\[CDATA\[)?([^\]<]+)/)
+    const sourceLabel = titleMatch ? titleMatch[1].trim() : new URL(url).hostname
+
+    if (xml.includes('<entry>')) {
+      return parseAtom(xml, sourceLabel)
+    }
+    return parseRSS(xml, sourceLabel)
+  } catch {
+    return []
+  }
 }
 
 export async function GET(req: NextRequest) {
   const section = req.nextUrl.searchParams.get('section') || ''
   const tab = req.nextUrl.searchParams.get('tab') || 'all'
-  const lang = req.nextUrl.searchParams.get('lang') || 'de'
-  const destination = req.nextUrl.searchParams.get('destination') || ''
-  const country = req.nextUrl.searchParams.get('country') || ''
+  const lang = req.nextUrl.searchParams.get('lang') || 'en'
 
-  let keywords = ''
-  if (section === 'travel') {
-    const dest = destination || tab
-    keywords = (!dest || dest === 'all') ? 'seyahat turizm uçuş otel' : `${dest} seyahat turizm vize`
-  } else if (section === 'weather') {
-    const wc = country || destination || ''
-    keywords = wc ? `${wc} hava durumu fırtına uyarı` : 'hava durumu fırtına sel uyarı'
-  } else {
-    const sk = KEYWORDS[section]
-    if (!sk) return NextResponse.json({ items: [], error: 'Unknown section' }, { status: 400 })
-    keywords = sk[tab] || sk['all'] || Object.values(sk)[0]
+  const sectionFeeds = SECTION_FEEDS[section]
+  if (!sectionFeeds) {
+    return NextResponse.json({ items: [] })
   }
 
-  if (!keywords) return NextResponse.json({ items: [], error: 'No keywords' }, { status: 400 })
-
-  const locale = LANG_MAP[lang] || LANG_MAP.tr
-
-  try {
-    const encoded = encodeURIComponent(keywords + ' when:2d')
-    const url = `https://news.google.com/rss/search?q=${encoded}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
-    const res = await fetch(url, { next: { revalidate: 1800 }, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' } })
-
-    let newsItems: NewsItem[] = []
-    if (res.ok) {
-      newsItems = parseRSSItems(await res.text()).slice(0, 8)
-    }
-
-    if (newsItems.length < 3) {
-      const fb = await fetch(`https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`, { next: { revalidate: 1800 }, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' } })
-      if (fb.ok) newsItems = parseRSSItems(await fb.text()).slice(0, 8)
-    }
-
-    if (newsItems.length === 0) return NextResponse.json({ items: [] })
-
-    const enriched = await enrichItems(newsItems)
-    return NextResponse.json({ items: enriched })
-  } catch (err: any) {
-    return NextResponse.json({ items: [], error: err.message }, { status: 500 })
+  const feedUrls = sectionFeeds[tab] || sectionFeeds['all'] || Object.values(sectionFeeds)[0]
+  if (!feedUrls || feedUrls.length === 0) {
+    return NextResponse.json({ items: [] })
   }
+
+  const results = await Promise.allSettled(feedUrls.map(url => fetchFeed(url)))
+  let items = results
+    .filter(r => r.status === 'fulfilled')
+    .flatMap(r => (r as PromiseFulfilledResult<any[]>).value)
+    .slice(0, 8)
+
+  if (items.length === 0) {
+    return NextResponse.json({ items: [] })
+  }
+
+  // Translate if not English
+  if (lang !== 'en' && items.length > 0) {
+    const titles = items.map(i => i.title)
+    const descs = items.map(i => i.description)
+    const [translatedTitles, translatedDescs] = await Promise.all([
+      translateTexts(titles, lang),
+      translateTexts(descs, lang),
+    ])
+    items = items.map((item, i) => ({
+      ...item,
+      title: translatedTitles[i] || item.title,
+      description: translatedDescs[i] || item.description,
+    }))
+  }
+
+  return NextResponse.json({ items })
 }
