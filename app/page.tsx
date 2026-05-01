@@ -16,6 +16,7 @@ import TrendingWidget from '@/components/TrendingWidget'
 import CalendarWidget from '@/components/CalendarWidget'
 import DailyStreak from '@/components/DailyStreak'
 import DailyQuiz from '@/components/DailyQuiz'
+import PortfolioSimulator from '@/components/PortfolioSimulator'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -152,6 +153,9 @@ export default function HomePage() {
 
             {/* Trending */}
             <TrendingWidget />
+
+            {/* Paper Trading */}
+            <PortfolioSimulator />
           </div>
         </div>
 

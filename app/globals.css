@@ -429,3 +429,14 @@ body::after {
 .section-card:hover .section-icon {
   transform: scale(1.1);
 }
+
+/* ═══════════════════════════════════════════
+   FOCUS MODE
+   ═══════════════════════════════════════════ */
+body.focus-mode header,
+body.focus-mode .market-ticker,
+body.focus-mode footer {
+  opacity: 0.15;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
