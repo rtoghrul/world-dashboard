@@ -12,10 +12,18 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'World Dashboard',
-  description: 'Real-time global intelligence — Crypto, News, Flights, Hotels, Viral Content',
+  description: 'Real-time global intelligence — Crypto, News, Stocks, Entertainment & more',
   manifest: '/manifest.json',
-  themeColor: '#050507',
-  icons: { icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>' },
+  themeColor: '#6366f1',
+  icons: {
+    icon: '/api/icon?size=32',
+    apple: '/api/icon?size=180',
+  },
+  openGraph: {
+    title: 'World Dashboard',
+    description: 'Real-time global intelligence — Crypto, News, Stocks, Entertainment & more',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/api/icon?size=180" />
       </head>
       <body className={`${inter.className} bg-gray-950 min-h-screen`}>
         <ThemeProvider>

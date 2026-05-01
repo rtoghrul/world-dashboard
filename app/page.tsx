@@ -2,10 +2,11 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
-import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Film } from 'lucide-react'
+import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2 } from 'lucide-react'
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
+import LivePriceTicker from '@/components/LivePriceTicker'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 import PortfolioTracker from '@/components/PortfolioTracker'
@@ -21,10 +22,22 @@ import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
+type MarketData = {
+  total_market_cap: number | null
+  market_cap_change_24h: number | null
+  btc_dominance: number | null
+  active_coins: number | null
+  fear_greed: number | null
+  fear_greed_label: string | null
+  total_volume: number | null
+}
+
 export default function HomePage() {
   const { lang } = useLang()
   const { data: news } = useSWR<NewsItem[]>(`/api/news?category=top&lang=${lang}`, fetcher, { refreshInterval: 300000 })
   const { data: coins } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
+  const { data: market } = useSWR<MarketData>('/api/market', fetcher, { refreshInterval: 300000 })
+  const { data: stocks } = useSWR<any[]>('/api/stocks', fetcher, { refreshInterval: 300000 })
 
   useEffect(() => {
     const init = async () => {
@@ -40,10 +53,15 @@ export default function HomePage() {
   const newsItems = Array.isArray(news) ? news.slice(0, 6) : []
   const topCoins = Array.isArray(coins) ? coins.slice(0, 5) : []
 
+  // Extract stock data
+  const sp500 = Array.isArray(stocks) ? stocks.find((s: any) => s.symbol === '^GSPC') : null
+  const nasdaq = Array.isArray(stocks) ? stocks.find((s: any) => s.symbol === '^IXIC') : null
+  const gold = Array.isArray(stocks) ? stocks.find((s: any) => s.symbol === 'GC=F' || s.symbol === 'GLD') : null
+
   const labels = {
-    en: { breaking: 'Breaking News', markets: 'Markets', viewAll: 'View all', topCoins: 'Top Coins' },
-    az: { breaking: 'Son Xəbərlər', markets: 'Bazarlar', viewAll: 'Hamısına bax', topCoins: 'Top Coinlər' },
-    ru: { breaking: 'Главные новости', markets: 'Рынки', viewAll: 'Смотреть все', topCoins: 'Топ монеты' },
+    en: { breaking: 'Breaking News', markets: 'Markets', viewAll: 'View all', topCoins: 'Top Coins', quickStats: 'Quick Stats' },
+    az: { breaking: 'Son Xəbərlər', markets: 'Bazarlar', viewAll: 'Hamısına bax', topCoins: 'Top Coinlər', quickStats: 'Statistika' },
+    ru: { breaking: 'Главные новости', markets: 'Рынки', viewAll: 'Смотреть все', topCoins: 'Топ монеты', quickStats: 'Статистика' },
   }
   const t = labels[lang as keyof typeof labels] || labels.en
 
@@ -52,6 +70,9 @@ export default function HomePage() {
       <ServiceWorkerRegistrar />
       <Header />
       <MarketTicker />
+
+      {/* Live Price Ticker */}
+      <LivePriceTicker />
 
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
         {/* Daily Streak */}
@@ -159,7 +180,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Second row: Calendar + Quiz */}
+        {/* Second row: Calendar + Quiz + Live Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
           <CalendarWidget />
           <DailyQuiz />
@@ -167,32 +188,56 @@ export default function HomePage() {
             <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
               <div className="flex items-center gap-2 mb-3">
                 <BarChart2 className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-white font-semibold text-sm">Quick Stats</h3>
+                <h3 className="text-white font-semibold text-sm">{t.quickStats}</h3>
+                <span className="live-dot" />
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">BTC Dominance</span>
-                  <span className="text-white text-xs font-mono">54.2%</span>
+                  <span className="text-white text-xs font-mono">
+                    {market?.btc_dominance ? `${market.btc_dominance.toFixed(1)}%` : '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">24h Volume</span>
-                  <span className="text-white text-xs font-mono">$89.4B</span>
+                  <span className="text-white text-xs font-mono">
+                    {market?.total_volume ? formatNum(market.total_volume) : '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">Active Coins</span>
-                  <span className="text-white text-xs font-mono">14,283</span>
+                  <span className="text-white text-xs font-mono">
+                    {market?.active_coins ? market.active_coins.toLocaleString() : '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">S&amp;P 500</span>
-                  <span className="text-emerald-400 text-xs font-mono">+0.87%</span>
+                  {sp500 ? (
+                    <span className={`text-xs font-mono ${sp500.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {sp500.change >= 0 ? '+' : ''}{sp500.changePercent?.toFixed(2) || sp500.change?.toFixed(2)}%
+                    </span>
+                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">NASDAQ</span>
-                  <span className="text-emerald-400 text-xs font-mono">+1.12%</span>
+                  {nasdaq ? (
+                    <span className={`text-xs font-mono ${nasdaq.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {nasdaq.change >= 0 ? '+' : ''}{nasdaq.changePercent?.toFixed(2) || nasdaq.change?.toFixed(2)}%
+                    </span>
+                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">Gold</span>
-                  <span className="text-white text-xs font-mono">$2,341</span>
+                  <span className="text-[#8b8b9e] text-xs">Fear &amp; Greed</span>
+                  {market?.fear_greed ? (
+                    <span className={`text-xs font-mono font-bold ${
+                      market.fear_greed <= 25 ? 'text-red-400' :
+                      market.fear_greed <= 45 ? 'text-orange-400' :
+                      market.fear_greed <= 55 ? 'text-yellow-400' :
+                      market.fear_greed <= 75 ? 'text-lime-400' : 'text-emerald-400'
+                    }`}>
+                      {market.fear_greed} · {market.fear_greed_label}
+                    </span>
+                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
                 </div>
               </div>
             </div>

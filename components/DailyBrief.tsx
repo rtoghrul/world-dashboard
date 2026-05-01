@@ -18,20 +18,15 @@ export default function DailyBrief() {
   useEffect(() => {
     async function fetchBrief() {
       try {
-        // Fetch crypto data
-        const cryptoRes = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&sparkline=false&price_change_percentage=24h')
-        const cryptoData = await cryptoRes.json()
+        const [cryptoRes, newsRes, weatherRes, trendingRes] = await Promise.allSettled([
+          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&sparkline=false&price_change_percentage=24h'),
+          fetch('/api/news?category=top'),
+          fetch('https://api.open-meteo.com/v1/forecast?latitude=40.41&longitude=49.87&current=temperature_2m,weather_code&timezone=auto'),
+          fetch('/api/trending')
+        ])
 
-        // Fetch news
-        const newsRes = await fetch('/api/news')
-        const newsData = await newsRes.json().catch(() => ({ articles: [] }))
-
-        // Get time-based greeting
-        const hour = new Date().getHours()
-        let greeting = 'Good morning'
-        if (hour >= 12 && hour < 17) greeting = 'Good afternoon'
-        else if (hour >= 17) greeting = 'Good evening'
-
+        // Crypto
+        const cryptoData = cryptoRes.status === 'fulfilled' ? await cryptoRes.value.json() : []
         const movers = Array.isArray(cryptoData) ? cryptoData.slice(0, 4).map((c: any) => ({
           name: c.name,
           symbol: c.symbol?.toUpperCase(),
@@ -39,10 +34,13 @@ export default function DailyBrief() {
           price: `$${c.current_price?.toLocaleString() || '0'}`
         })) : []
 
-        const topNews = Array.isArray(newsData?.articles)
-          ? newsData.articles.slice(0, 3).map((a: any) => ({
-              title: a.title || 'Breaking news',
-              source: a.source?.name || 'News'
+        // News — /api/news returns array directly, not { articles: [] }
+        const newsData = newsRes.status === 'fulfilled' ? await newsRes.value.json() : []
+        const newsArray = Array.isArray(newsData) ? newsData : (newsData?.articles || [])
+        const topNews = newsArray.length > 0
+          ? newsArray.slice(0, 3).map((a: any) => ({
+              title: a.title || a.headline || 'Breaking news',
+              source: a.source?.name || a.source || 'News'
             }))
           : [
               { title: 'Markets react to global economic shifts', source: 'Reuters' },
@@ -50,13 +48,50 @@ export default function DailyBrief() {
               { title: 'Central banks signal rate decisions', source: 'FT' },
             ]
 
+        // Weather from Open-Meteo (Baku coordinates)
+        let weather = { temp: '—', condition: 'Loading...', city: 'Baku' }
+        if (weatherRes.status === 'fulfilled') {
+          const wData = await weatherRes.value.json()
+          const temp = wData?.current?.temperature_2m
+          const code = wData?.current?.weather_code
+          const conditionMap: Record<number, string> = {
+            0: 'Clear', 1: 'Mostly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
+            45: 'Foggy', 48: 'Rime Fog', 51: 'Light Drizzle', 53: 'Drizzle',
+            55: 'Heavy Drizzle', 61: 'Light Rain', 63: 'Rain', 65: 'Heavy Rain',
+            71: 'Light Snow', 73: 'Snow', 75: 'Heavy Snow', 80: 'Rain Showers',
+            95: 'Thunderstorm', 96: 'Thunderstorm + Hail'
+          }
+          weather = {
+            temp: temp != null ? `${Math.round(temp)}°C` : '—',
+            condition: conditionMap[code] || 'Unknown',
+            city: 'Baku'
+          }
+        }
+
+        // Trending
+        let trending = ['AI Agents', 'Bitcoin ETF', 'NVIDIA', 'Fed Rate Decision']
+        if (trendingRes.status === 'fulfilled') {
+          try {
+            const tData = await trendingRes.value.json()
+            if (Array.isArray(tData) && tData.length > 0) {
+              trending = tData.slice(0, 6).map((t: any) => t.title || t.name || t.query || t)
+            }
+          } catch {}
+        }
+
+        // Greeting
+        const hour = new Date().getHours()
+        let greeting = 'Good morning'
+        if (hour >= 12 && hour < 17) greeting = 'Good afternoon'
+        else if (hour >= 17) greeting = 'Good evening'
+
         setData({
           greeting,
           time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
           topNews,
           cryptoMovers: movers,
-          weather: { temp: '22°C', condition: 'Partly Cloudy', city: 'Baku' },
-          trending: ['AI Agents', 'Bitcoin ETF', 'NVIDIA', 'Fed Rate Decision'],
+          weather,
+          trending,
         })
       } catch (e) {
         setData({
@@ -116,7 +151,7 @@ export default function DailyBrief() {
         </div>
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
           <Cloud className="w-3.5 h-3.5 text-blue-400" />
-          <span className="text-xs text-[#a0a0b0]">{data.weather.city} {data.weather.temp}</span>
+          <span className="text-xs text-[#a0a0b0]">{data.weather.city} {data.weather.temp} · {data.weather.condition}</span>
         </div>
       </div>
 
@@ -166,7 +201,7 @@ export default function DailyBrief() {
           <div className="flex flex-wrap gap-2">
             {data.trending.map((topic, i) => (
               <span key={i} className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-[#a0a0b0]">
-                #{topic}
+                #{typeof topic === 'string' ? topic : 'Trending'}
               </span>
             ))}
           </div>

@@ -107,9 +107,9 @@ export function NewsCard({ item }: { item: NewsItem }) {
   )
 }
 
-export default function NewsWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
+export default function NewsWidget({ defaultExpanded = false, initialTab = 'top' }: { defaultExpanded?: boolean; initialTab?: string }) {
   const { tr, lang } = useLang()
-  const [tab, setTab] = useState<NewsCategory>('top')
+  const [tab, setTab] = useState<NewsCategory>((initialTab || 'top') as NewsCategory)
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState(!defaultExpanded)
   const { data, error, isLoading, mutate } = useSWR<NewsItem[]>(`/api/news?category=${tab}&lang=${lang}`, fetcher, { refreshInterval: 300000 })

@@ -1,5 +1,4 @@
 'use client'
-import useSWR from 'swr'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ArrowLeft, Clock, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin } from 'lucide-react'
@@ -16,28 +15,25 @@ import StocksWidget from '@/components/StocksWidget'
 import EducationWidget from '@/components/EducationWidget'
 import { useLang } from '@/lib/LanguageContext'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen }
 
-const icons: any = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen }
-
-const names: any = {
+const names: Record<string, Record<string, string>> = {
   az: { weather: 'Hava', crypto: 'Kripto Bazarları', whale: 'Balina Aktivliyi', news: 'Qlobal Xəbərlər', travel: 'Səyahət', viral: 'Viral Məzmun', entertainment: 'Kino və Seriallar', social: 'Sosial Trendlər', stocks: 'Səhm Bazarları', education: 'Təhsil' },
   en: { weather: 'Weather', crypto: 'Crypto Markets', whale: 'Whale Activity', news: 'Global News', travel: 'Travel', viral: 'Viral Content', entertainment: 'Movies & Series', social: 'Social Trends', stocks: 'Stocks', education: 'Education' },
   ru: { weather: 'Погода', crypto: 'Крипто рынки', whale: 'Активность китов', news: 'Мировые новости', travel: 'Путешествия', viral: 'Вирусный контент', entertainment: 'Кино и сериалы', social: 'Социальные тренды', stocks: 'Акции', education: 'Образование' }
 }
 
-const subText: any = { top: 'Top', war: 'War', politics: 'Politics', economy: 'Economy', ai: 'AI', industry: 'Industry', social: 'Social', 'flight-hotel': 'Flight + Hotel', flight: 'Flight', hotel: 'Hotel', 'last-minute': 'Last minute', movies: 'Movies', series: 'Series', cartoons: 'Cartoons', upcoming: 'Upcoming', youtube: 'YouTube', music: 'Music', shorts: 'Shorts', trending: 'Trending', bitcoin: 'Bitcoin', ethereum: 'Ethereum', 'fear-greed': 'Fear & Greed', 'large-transfers': 'Large transfers', wallets: 'Wallets', exchanges: 'Exchanges', current: 'Current', hourly: 'Hourly', weekly: 'Weekly', gainers: 'Gainers', losers: 'Losers', tech: 'Tech', courses: 'Courses', engineering: 'Engineering', 'ai-tools': 'AI tools', cybersecurity: 'Cybersecurity', instagram: 'Instagram', tiktok: 'TikTok', x: 'X', facebook: 'Facebook' }
+const subText: Record<string, string> = { top: 'Top', war: 'War', politics: 'Politics', economy: 'Economy', ai: 'AI', industry: 'Industry', social: 'Social', 'flight-hotel': 'Flight + Hotel', flight: 'Flight', hotel: 'Hotel', 'last-minute': 'Last minute', movies: 'Movies', series: 'Series', cartoons: 'Cartoons', upcoming: 'Upcoming', youtube: 'YouTube', music: 'Music', shorts: 'Shorts', trending: 'Trending', bitcoin: 'Bitcoin', ethereum: 'Ethereum', 'fear-greed': 'Fear & Greed', 'large-transfers': 'Large transfers', wallets: 'Wallets', exchanges: 'Exchanges', current: 'Current', hourly: 'Hourly', weekly: 'Weekly', gainers: 'Gainers', losers: 'Losers', tech: 'Tech', courses: 'Courses', engineering: 'Engineering', 'ai-tools': 'AI tools', cybersecurity: 'Cybersecurity', instagram: 'Instagram', tiktok: 'TikTok', x: 'X', facebook: 'Facebook' }
 
 const submenuMap: Record<string, string[]> = { weather: ['current', 'hourly', 'weekly'], crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed'], whale: ['large-transfers', 'wallets', 'exchanges'], news: ['top', 'war', 'politics', 'economy', 'ai', 'industry', 'social'], travel: ['flight-hotel', 'flight', 'hotel', 'last-minute'], viral: ['youtube', 'music', 'shorts', 'trending'], entertainment: ['movies', 'series', 'cartoons', 'upcoming'], social: ['instagram', 'tiktok', 'x', 'facebook'], stocks: ['top', 'gainers', 'losers', 'tech'], education: ['courses', 'engineering', 'ai-tools', 'cybersecurity'] }
 
-const newsCat: any = { top: 'top', war: 'war', politics: 'politics', economy: 'business', ai: 'ai', industry: 'technology', social: 'social' }
-const entertainmentType: any = { movies: 'movie', series: 'series', cartoons: 'cartoon', top: 'movie', upcoming: 'movie' }
+const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', ai: 'ai', industry: 'technology', social: 'social' }
 
 function Content({ main, sub }: { main: string; sub: string }) {
   if (main === 'weather') return <WeatherWidget />
   if (main === 'crypto') return <CryptoWidget defaultExpanded />
   if (main === 'whale') return <WhaleWidget defaultExpanded />
-  if (main === 'news') return <NewsWidget defaultExpanded />
+  if (main === 'news') return <NewsWidget defaultExpanded initialTab={newsCat[sub] || 'top'} />
   if (main === 'travel') return <TravelComparisonWidget defaultExpanded />
   if (main === 'viral') return <ViralWidget defaultExpanded />
   if (main === 'entertainment') return <EntertainmentWidget />
@@ -63,7 +59,7 @@ export default function SectionPage() {
       {/* Sub-navigation tabs */}
       <div className="border-b border-white/[0.04] bg-[#07070b]/80 backdrop-blur-sm sticky top-14 z-30">
         <div className="max-w-screen-2xl mx-auto px-5">
-          <div className="flex items-center gap-1 py-2 overflow-x-auto">
+          <div className="flex items-center gap-1 py-2 overflow-x-auto scrollbar-hide">
             {subs.map(s => (
               <Link
                 key={s}
@@ -85,6 +81,9 @@ export default function SectionPage() {
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
         {/* Page header */}
         <div className="flex items-center gap-3 mb-6">
+          <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] transition">
+            <ArrowLeft className="w-5 h-5 text-white/80" />
+          </Link>
           <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
             <Icon className="w-5 h-5 text-white/80" />
           </div>

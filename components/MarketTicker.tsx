@@ -25,11 +25,11 @@ function fngColor(value: number | null) {
 
 function StatItem({ label, value, sub, up }: { label: string; value: string; sub?: string; up?: boolean }) {
   return (
-    <div className="flex items-center gap-2 flex-shrink-0 px-4 border-r border-white/[0.04] last:border-0">
-      <span className="text-[#4a4a5e] text-[11px] uppercase tracking-wider">{label}</span>
+    <div className="flex items-center gap-2 flex-shrink-0 px-3 border-r border-white/[0.04] last:border-0">
+      <span className="text-[#4a4a5e] text-[10px] uppercase tracking-wider">{label}</span>
       <span className="text-white text-xs font-medium font-mono">{value}</span>
       {sub !== undefined && up !== undefined && (
-        <span className={`text-[11px] flex items-center gap-0.5 font-medium ${up ? 'text-emerald-400' : 'text-red-400'}`}>
+        <span className={`text-[10px] flex items-center gap-0.5 font-medium ${up ? 'text-emerald-400' : 'text-red-400'}`}>
           {up ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
           {sub}
         </span>
@@ -45,16 +45,31 @@ export default function MarketTicker() {
   const coinList = Array.isArray(coins) ? coins : []
   const btc = coinList.find(c => c.id === 'bitcoin')
   const eth = coinList.find(c => c.id === 'ethereum')
+  const sol = coinList.find(c => c.id === 'solana')
+  const bnb = coinList.find(c => c.id === 'binancecoin')
+  const xrp = coinList.find(c => c.id === 'ripple')
 
   if (!market && !btc) return null
 
   const capUp = (market?.market_cap_change_24h ?? 0) >= 0
 
+  const renderCoin = (coin: Coin | undefined, label: string) => {
+    if (!coin) return null
+    return (
+      <StatItem
+        label={label}
+        value={`$${coin.current_price.toLocaleString()}`}
+        sub={`${Math.abs(coin.price_change_percentage_24h).toFixed(2)}%`}
+        up={coin.price_change_percentage_24h >= 0}
+      />
+    )
+  }
+
   return (
     <div className="border-b border-white/[0.03] bg-[#050507]/80">
       <div className="max-w-screen-2xl mx-auto px-5">
-        <div className="flex items-center gap-0 py-2 overflow-x-auto">
-          <div className="flex items-center gap-1.5 mr-4 flex-shrink-0">
+        <div className="flex items-center gap-0 py-2 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-1.5 mr-3 flex-shrink-0">
             <div className="live-dot" />
             <span className="text-[#4a4a5e] text-[10px] font-semibold uppercase tracking-wider">Markets</span>
           </div>
@@ -68,30 +83,18 @@ export default function MarketTicker() {
             />
           )}
 
-          {btc && (
-            <StatItem
-              label="BTC"
-              value={`$${btc.current_price.toLocaleString()}`}
-              sub={`${Math.abs(btc.price_change_percentage_24h).toFixed(2)}%`}
-              up={btc.price_change_percentage_24h >= 0}
-            />
-          )}
-
-          {eth && (
-            <StatItem
-              label="ETH"
-              value={`$${eth.current_price.toLocaleString()}`}
-              sub={`${Math.abs(eth.price_change_percentage_24h).toFixed(2)}%`}
-              up={eth.price_change_percentage_24h >= 0}
-            />
-          )}
+          {renderCoin(btc, 'BTC')}
+          {renderCoin(eth, 'ETH')}
+          {renderCoin(sol, 'SOL')}
+          {renderCoin(bnb, 'BNB')}
+          {renderCoin(xrp, 'XRP')}
 
           {market?.btc_dominance !== null && market?.btc_dominance !== undefined && (
             <StatItem label="BTC.D" value={`${market.btc_dominance.toFixed(1)}%`} />
           )}
 
           {market?.fear_greed !== null && market?.fear_greed !== undefined && (
-            <div className="flex items-center gap-2 flex-shrink-0 px-4">
+            <div className="flex items-center gap-2 flex-shrink-0 px-3">
               <span className="text-[#4a4a5e] text-[10px] uppercase tracking-wider">F&amp;G</span>
               <span className={`text-xs font-bold ${fngColor(market.fear_greed)}`}>
                 {market.fear_greed}
