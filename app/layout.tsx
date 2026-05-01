@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     icon: '/api/icon?size=32',
     apple: '/api/icon?size=180',
   },
-  keywords: ['AI tools', 'free AI', 'crypto', 'bitcoin', 'news', 'mod apk', 'jailbreak', 'free software', 'movies', 'stocks', 'entertainment', 'world dashboard'],
+  keywords: ['AI tools', 'free AI', 'crypto', 'bitcoin', 'news', 'free software', 'open source', 'movies', 'stocks', 'entertainment', 'world dashboard', 'Germany platforms', 'online shopping'],
   authors: [{ name: 'World Dashboard' }],
   robots: { index: true, follow: true },
   openGraph: {
