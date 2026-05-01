@@ -1,14 +1,14 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
-import { ExternalLink, Store, ShoppingBag, Pill, Truck, Cpu, Car, Sofa, Globe2, Search } from 'lucide-react'
+import { ExternalLink, Store, ShoppingBag, Package, Truck, Cpu, CircleDot, Home, Globe2, Search } from 'lucide-react'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Online Platforms — Germany 🇩🇪', az: 'Onlayn Platformalar — Almaniya 🇩🇪', ru: 'Онлайн-платформы — Германия 🇩🇪', de: 'Online-Plattformen — Deutschland 🇩🇪', tr: 'Online Platformlar — Almanya 🇩🇪' },
-  subtitle: { en: 'All platforms delivering to Germany (domestic & international)', az: 'Almaniyaya çatdırma edən bütün platformalar', ru: 'Все платформы с доставкой в Германию', de: 'Alle Plattformen mit Lieferung nach Deutschland', tr: 'Almanya\'ya teslimat yapan tüm platformlar' },
+  subtitle: { en: 'All platforms delivering to Germany (domestic & international)', az: 'Almaniyaya çatdırma edən bütün platformalar', ru: 'Все платформы с доставкой в Германию', de: 'Alle Plattformen mit Lieferung nach Deutschland', tr: 'Almanya’ya teslimat yapan tüm platformlar' },
   visit: { en: 'Visit', az: 'Keç', ru: 'Перейти', de: 'Besuchen', tr: 'Git' },
   all: { en: 'All', az: 'Hamısı', ru: 'Все', de: 'Alle', tr: 'Tümü' },
-  delivery: { en: 'Delivers to DE', az: 'DE-yə çatdırır', ru: 'Доставка в DE', de: 'Lieferung nach DE', tr: 'DE\'ye teslimat' },
+  delivery: { en: 'Delivers to DE', az: 'DE-yə çatdırır', ru: 'Доставка в DE', de: 'Lieferung nach DE', tr: 'DE’ye teslimat' },
   free_shipping: { en: 'Free shipping', az: 'Pulsuz çatdırılma', ru: 'Бесплатная доставка', de: 'Kostenloser Versand', tr: 'Ücretsiz kargo' },
 }
 
@@ -16,11 +16,11 @@ const categories = [
   { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü' }, icon: Store },
   { id: 'general', label: { en: 'General', az: 'Ümumi', de: 'Allgemein', ru: 'Общие', tr: 'Genel' }, icon: ShoppingBag },
   { id: 'clothes', label: { en: 'Clothing', az: 'Geyim', de: 'Kleidung', ru: 'Одежда', tr: 'Giyim' }, icon: ShoppingBag },
-  { id: 'pharma', label: { en: 'Pharmacy', az: 'Aptek', de: 'Apotheke', ru: 'Аптека', tr: 'Eczane' }, icon: Pill },
+  { id: 'pharma', label: { en: 'Pharmacy', az: 'Aptek', de: 'Apotheke', ru: 'Аптека', tr: 'Eczane' }, icon: Package },
   { id: 'food', label: { en: 'Food & Grocery', az: 'Ərzaq', de: 'Lebensmittel', ru: 'Продукты', tr: 'Market' }, icon: Truck },
   { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', de: 'Elektronik', ru: 'Электроника', tr: 'Elektronik' }, icon: Cpu },
-  { id: 'autoparts', label: { en: 'Auto Parts', az: 'Maşın hissələri', de: 'Autoteile', ru: 'Автозапчасти', tr: 'Oto Parça' }, icon: Car },
-  { id: 'furniture', label: { en: 'Furniture', az: 'Mebel', de: 'Möbel', ru: 'Мебель', tr: 'Mobilya' }, icon: Sofa },
+  { id: 'autoparts', label: { en: 'Auto Parts', az: 'Maşın hissələri', de: 'Autoteile', ru: 'Автозапчасти', tr: 'Oto Parça' }, icon: CircleDot },
+  { id: 'furniture', label: { en: 'Furniture', az: 'Mebel', de: 'Möbel', ru: 'Мебель', tr: 'Mobilya' }, icon: Home },
   { id: 'international', label: { en: 'International', az: 'Beynəlxalq', de: 'International', ru: 'Международные', tr: 'Uluslararası' }, icon: Globe2 },
 ]
 
@@ -42,7 +42,7 @@ const platforms: Platform[] = [
   { name: 'Kaufland.de', url: 'https://kaufland.de', category: 'general', desc: { en: 'Marketplace with millions of products', az: 'Milyonlarla məhsul olan marketplace', de: 'Marktplatz mit Millionen Produkten', ru: 'Маркетплейс с миллионами товаров' }, origin: '🇩🇪 Germany' },
   { name: 'Lidl Online', url: 'https://lidl.de', category: 'general', desc: { en: 'Discounter with online shop + food delivery', az: 'Diskaunter onlayn mağaza', de: 'Discounter mit Online-Shop', ru: 'Дискаунтер с онлайн-магазином' }, origin: '🇩🇪 Germany', freeShipping: '59€+' },
   // Clothes
-  { name: 'Zalando', url: 'https://zalando.de', category: 'clothes', desc: { en: 'Europe\'s largest fashion platform, free returns', az: 'Avropanın ən böyük moda platforması, pulsuz geri qaytarma', de: 'Europas größte Modeplattform, kostenloser Rückversand', ru: 'Крупнейшая модная платформа Европы' }, origin: '🇩🇪 Germany', freeShipping: 'Always', highlight: true },
+  { name: 'Zalando', url: 'https://zalando.de', category: 'clothes', desc: { en: 'Europe’s largest fashion platform, free returns', az: 'Avropanın ən böyük moda platforması, pulsuz geri qaytarma', de: 'Europas größte Modeplattform, kostenloser Rückversand', ru: 'Крупнейшая модная платформа Европы' }, origin: '🇩🇪 Germany', freeShipping: 'Always', highlight: true },
   { name: 'About You', url: 'https://aboutyou.de', category: 'clothes', desc: { en: 'Fashion marketplace, personalized shopping', az: 'Moda marketplace, fərdi alış-veriş', de: 'Mode-Marktplatz, personalisiertes Shopping', ru: 'Модный маркетплейс, персональный шопинг' }, origin: '🇩🇪 Germany', freeShipping: 'Always' },
   { name: 'H&M', url: 'https://hm.com/de', category: 'clothes', desc: { en: 'Affordable fashion for all ages', az: 'Bütün yaşlar üçün əlçatan moda', de: 'Erschwingliche Mode für alle', ru: 'Доступная мода для всех возрастов' }, origin: '🇸🇪 Sweden', freeShipping: '25€+' },
   { name: 'ASOS', url: 'https://asos.com/de', category: 'clothes', desc: { en: '850+ brands, youth fashion, free delivery', az: '850+ brend, gənc modası', de: '850+ Marken, Jugendmode', ru: '850+ брендов, молодёжная мода' }, origin: '🇬🇧 UK', freeShipping: '29.99€+' },

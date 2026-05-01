@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
-import { Heart, Sparkles, Baby, Dumbbell, Palette, Apple, ExternalLink, Star } from 'lucide-react'
+import { Heart, Sparkles, Baby, Dumbbell, Palette, Smartphone, ExternalLink, Star } from 'lucide-react'
 
 const COPY: Record<string, Record<string, string>> = {
-  title: { en: 'Women\'s Corner', az: 'Qadınlar Bölməsi', ru: 'Женский раздел', de: 'Frauenbereich', tr: 'Kadınlar Köşesi' },
+  title: { en: 'Women’s Corner', az: 'Qadınlar Bölməsi', ru: 'Женский раздел', de: 'Frauenbereich', tr: 'Kadınlar Köşesi' },
   subtitle: { en: 'Beauty, health, parenting & lifestyle', az: 'Gözəllik, sağlamlıq, uşaq baxımı', ru: 'Красота, здоровье, материнство', de: 'Schönheit, Gesundheit, Elternschaft', tr: 'Güzellik, sağlık, ebeveynlik' },
 }
 
@@ -33,7 +33,7 @@ const items: WomenItem[] = [
   { name: 'Sephora', category: 'beauty', desc: { en: 'Premium beauty products & tutorials', az: 'Premium gözəllik məhsulları', de: 'Premium-Beauty & Tutorials', ru: 'Премиум косметика и туториалы' }, url: 'https://sephora.de', type: 'shop', rating: 4.8, popular: true },
   { name: 'Douglas', category: 'beauty', desc: { en: 'Perfume, makeup, skincare (DE #1)', az: 'Ətir, makiyaj, dəri baxımı (DE №1)', de: 'Parfum, Make-up, Hautpflege (DE #1)', ru: 'Парфюм, макияж, уход (DE №1)' }, url: 'https://douglas.de', type: 'shop', rating: 4.7, popular: true },
   { name: 'Flaconi', category: 'beauty', desc: { en: 'Online perfumery, great deals', az: 'Onlayn ətirxana, əla təkliflər', de: 'Online-Parfümerie, tolle Angebote', ru: 'Онлайн-парфюмерия, выгодно' }, url: 'https://flaconi.de', type: 'shop', rating: 4.6 },
-  { name: 'Paula\'s Choice', category: 'beauty', desc: { en: 'Science-based skincare, no nonsense', az: 'Elmi əsaslı dəri baxımı', de: 'Wissenschaftlich fundierte Hautpflege', ru: 'Научный уход за кожей' }, url: 'https://paulaschoice.de', type: 'shop', rating: 4.8 },
+  { name: 'Paula’s Choice', category: 'beauty', desc: { en: 'Science-based skincare, no nonsense', az: 'Elmi əsaslı dəri baxımı', de: 'Wissenschaftlich fundierte Hautpflege', ru: 'Научный уход за кожей' }, url: 'https://paulaschoice.de', type: 'shop', rating: 4.8 },
   { name: 'The Ordinary', category: 'beauty', desc: { en: 'Affordable clinical skincare', az: 'Əlçatan klinik dəri baxımı', de: 'Erschwingliche klinische Pflege', ru: 'Доступный клинический уход' }, url: 'https://theordinary.com', type: 'shop', rating: 4.7, popular: true },
   { name: 'Think Dirty', category: 'beauty', desc: { en: 'Scan cosmetics for toxic ingredients', az: 'Kosmetikada zərərli maddələri yoxla', de: 'Kosmetik auf Giftstoffe prüfen', ru: 'Проверка косметики на токсичность' }, url: 'https://thinkdirtyapp.com', type: 'app', rating: 4.5, free: true },
   { name: 'INCI Beauty', category: 'beauty', desc: { en: 'Ingredient analyzer for skincare', az: 'Dəri baxımı tərkib analizatoru', de: 'Inhaltsstoff-Analyzer', ru: 'Анализ состава косметики' }, url: 'https://incibeauty.com', type: 'app', rating: 4.4, free: true },
@@ -45,7 +45,7 @@ const items: WomenItem[] = [
   { name: 'Foodspring', category: 'diet', desc: { en: 'Premium nutrition & protein (German brand)', az: 'Premium qida və protein (Alman brendi)', de: 'Premium-Nutrition & Protein (deutsch)', ru: 'Премиум-питание (немецкий бренд)' }, url: 'https://foodspring.de', type: 'shop', rating: 4.6 },
   // Fitness
   { name: 'Nike Training Club', category: 'fitness', desc: { en: '200+ free workouts, yoga, HIIT, strength', az: '200+ pulsuz məşq, yoga, HIIT', de: '200+ kostenlose Workouts, Yoga, HIIT', ru: '200+ бесплатных тренировок, йога, HIIT' }, url: 'https://nike.com/ntc-app', type: 'app', rating: 4.8, popular: true, free: true },
-  { name: 'Sweat (Kayla Itsines)', category: 'fitness', desc: { en: 'Women\'s fitness app, BBG & PWR programs', az: 'Qadın fitness app, BBG & PWR proqramları', de: 'Frauen-Fitness-App, BBG & PWR', ru: 'Женское фитнес-приложение, BBG & PWR' }, url: 'https://sweat.com', type: 'app', rating: 4.7, popular: true },
+  { name: 'Sweat (Kayla Itsines)', category: 'fitness', desc: { en: 'Women’s fitness app, BBG & PWR programs', az: 'Qadın fitness app, BBG & PWR proqramları', de: 'Frauen-Fitness-App, BBG & PWR', ru: 'Женское фитнес-приложение, BBG & PWR' }, url: 'https://sweat.com', type: 'app', rating: 4.7, popular: true },
   { name: 'Freeletics', category: 'fitness', desc: { en: 'AI personal trainer, no equipment needed', az: 'AI şəxsi məşqçi, avadanlıq lazım deyil', de: 'KI-Personal-Trainer, kein Equipment', ru: 'ИИ-тренер, без оборудования' }, url: 'https://freeletics.com', type: 'app', rating: 4.5, free: true },
   { name: 'Down Dog Yoga', category: 'fitness', desc: { en: 'Personalized yoga sessions, never same twice', az: 'Fərdi yoga sessiyaları, heç vaxt eyni deyil', de: 'Personalisierte Yoga-Sessions', ru: 'Персонализированная йога' }, url: 'https://downdogapp.com', type: 'app', rating: 4.9, free: true },
   { name: 'FitOn', category: 'fitness', desc: { en: 'Free celebrity trainer workouts', az: 'Pulsuz məşhur trener məşqləri', de: 'Kostenlose Promi-Trainer-Workouts', ru: 'Бесплатные тренировки от звёзд' }, url: 'https://fitonapp.com', type: 'app', rating: 4.7, free: true },
@@ -56,7 +56,7 @@ const items: WomenItem[] = [
   { name: 'Windeln.de', category: 'parenting', desc: { en: 'Baby products, diapers, toys (DE shop)', az: 'Uşaq məhsulları, bezi, oyuncaqlar', de: 'Babyprodukte, Windeln, Spielzeug', ru: 'Товары для малышей, подгузники' }, url: 'https://windeln.de', type: 'shop', rating: 4.4 },
   { name: 'Pampers Club', category: 'parenting', desc: { en: 'Earn rewards, baby development tracker', az: 'Mükafat qazan, körpə inkişaf izləyicisi', de: 'Prämien sammeln, Baby-Entwicklungs-Tracker', ru: 'Бонусы, трекер развития малыша' }, url: 'https://pampers.de', type: 'app', rating: 4.5, free: true },
   // Fashion
-  { name: 'Zalando', category: 'fashion', desc: { en: 'Europe\'s #1 fashion, free returns', az: 'Avropanın №1 moda, pulsuz geri qaytarma', de: 'Europas Nr.1 Mode, kostenlose Retoure', ru: 'Мода №1 в Европе, бесплатный возврат' }, url: 'https://zalando.de', type: 'shop', rating: 4.8, popular: true },
+  { name: 'Zalando', category: 'fashion', desc: { en: 'Europe’s #1 fashion, free returns', az: 'Avropanın №1 moda, pulsuz geri qaytarma', de: 'Europas Nr.1 Mode, kostenlose Retoure', ru: 'Мода №1 в Европе, бесплатный возврат' }, url: 'https://zalando.de', type: 'shop', rating: 4.8, popular: true },
   { name: 'About You', category: 'fashion', desc: { en: 'Personalized fashion discovery', az: 'Fərdi moda kəşfi', de: 'Personalisierte Mode-Entdeckung', ru: 'Персонализированный подбор моды' }, url: 'https://aboutyou.de', type: 'shop', rating: 4.7, popular: true },
   { name: 'Pinterest', category: 'fashion', desc: { en: 'Style inspiration & outfit ideas', az: 'Stil ilhamı və geyim ideyaları', de: 'Stil-Inspiration & Outfit-Ideen', ru: 'Стильные идеи и вдохновение' }, url: 'https://pinterest.com', type: 'app', rating: 4.7, free: true },
   { name: 'Vinted', category: 'fashion', desc: { en: 'Buy & sell second-hand fashion', az: 'İkinci əl moda al və sat', de: 'Second-Hand-Mode kaufen & verkaufen', ru: 'Покупка и продажа б/у моды' }, url: 'https://vinted.de', type: 'app', rating: 4.5, popular: true, free: true },
