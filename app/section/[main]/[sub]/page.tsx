@@ -100,7 +100,7 @@ const submenuMap: Record<string, string[]> = {
   shopping: ['all', 'electronics', 'fashion', 'grocery', 'pharmacy', 'auto', 'home'],
   platforms: ['general', 'clothes', 'pharma', 'food', 'electronics', 'autoparts', 'furniture', 'international'],
   chinese: ['all', 'general', 'fashion', 'electronics', 'home', 'kids', 'hobby'],
-  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools'],
+  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch'],
 }
 
 const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'technology', social: 'social' }

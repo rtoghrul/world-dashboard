@@ -7,11 +7,11 @@ function mapLang(lang: string) {
   return LANG_MAP[lang] || lang
 }
 
-async function translateOne(text: string, target: string): Promise<string> {
+async function translateOne(text: string, target: string, source: string = 'en'): Promise<string> {
   if (!text?.trim()) return text
   try {
     const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 500))}&langpair=en|${target}`,
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 500))}&langpair=${source}|${target}`,
       { next: { revalidate: 86400 } }
     )
     if (!res.ok) return text
@@ -23,9 +23,10 @@ async function translateOne(text: string, target: string): Promise<string> {
   }
 }
 
-export async function translateTexts(texts: string[], lang: string): Promise<string[]> {
-  if (!lang || lang === 'en') return texts
+export async function translateTexts(texts: string[], lang: string, sourceLang: string = 'en'): Promise<string[]> {
+  if (!lang || lang === sourceLang) return texts
   const target = mapLang(lang)
-  const results = await Promise.allSettled(texts.map(t => translateOne(t, target)))
+  const source = mapLang(sourceLang)
+  const results = await Promise.allSettled(texts.map(t => translateOne(t, target, source)))
   return results.map((r, i) => (r.status === 'fulfilled' ? r.value : texts[i]))
 }

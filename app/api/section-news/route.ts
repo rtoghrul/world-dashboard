@@ -81,6 +81,13 @@ const SECTION_FEEDS: Record<string, Record<string, string[]>> = {
     arbeit: ['https://www.tagesschau.de/xml/rss2/'],
     aenderungen: ['https://www.tagesschau.de/xml/rss2/'],
     tools: ['https://www.tagesschau.de/xml/rss2/'],
+    auto: ['https://www.adac.de/rss/tipps-und-infos/', 'https://www.tagesschau.de/xml/rss2/'],
+    familie: ['https://www.tagesschau.de/xml/rss2/', 'https://feeds.bbci.co.uk/news/education/rss.xml'],
+    miete: ['https://www.tagesschau.de/xml/rss2/'],
+    gesundheit: ['https://www.tagesschau.de/xml/rss2/'],
+    versicherung: ['https://www.tagesschau.de/xml/rss2/'],
+    rechte: ['https://www.tagesschau.de/xml/rss2/'],
+    deutsch: ['https://www.tagesschau.de/xml/rss2/'],
     all: ['https://www.tagesschau.de/xml/rss2/'],
   },
   chinese: {
@@ -217,6 +224,11 @@ async function fetchFeed(url: string): Promise<{ title: string; link: string; pu
   }
 }
 
+// Sections whose RSS feeds are NOT in English
+const SOURCE_LANG_MAP: Record<string, string> = {
+  germany: 'de',
+}
+
 export async function GET(req: NextRequest) {
   const section = req.nextUrl.searchParams.get('section') || ''
   const tab = req.nextUrl.searchParams.get('tab') || 'all'
@@ -242,13 +254,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ items: [] })
   }
 
-  // Translate if not English
-  if (lang !== 'en' && items.length > 0) {
+  // Translate if target lang differs from source lang
+  const sourceLang = SOURCE_LANG_MAP[section] || 'en'
+  if (lang !== sourceLang && items.length > 0) {
     const titles = items.map(i => i.title)
     const descs = items.map(i => i.description)
     const [translatedTitles, translatedDescs] = await Promise.all([
-      translateTexts(titles, lang),
-      translateTexts(descs, lang),
+      translateTexts(titles, lang, sourceLang),
+      translateTexts(descs, lang, sourceLang),
     ])
     items = items.map((item, i) => ({
       ...item,

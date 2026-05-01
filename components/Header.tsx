@@ -147,6 +147,13 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'arbeit', label: { en: 'Work', az: 'İş', ru: 'Работа', tr: 'İş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمل', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
       { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
       { id: 'tools', label: { en: 'Tools', az: 'Alətlər', ru: 'Инструменты', tr: 'Araçlar', de: 'Tools', fr: 'Outils', es: 'Herramientas', zh: '工具', ar: 'أدوات', ja: 'ツール', it: 'Strumenti', pt: 'Ferramentas' } },
+      { id: 'auto', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', ru: 'Авто и ПДД', tr: 'Oto & Trafik', de: 'Auto & Verkehr', fr: 'Auto', es: 'Auto', zh: '汽车', ar: 'سيارات', ja: '車', it: 'Auto', pt: 'Auto' } },
+      { id: 'familie', label: { en: 'Family', az: 'Ailə', ru: 'Семья', tr: 'Aile', de: 'Familie', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'عائلة', ja: '家族', it: 'Famiglia', pt: 'Família' } },
+      { id: 'miete', label: { en: 'Tenant & Landlord', az: 'Kirayəçi & Ev sahibi', ru: 'Аренда', tr: 'Kiracı', de: 'Mieter & Vermieter', fr: 'Locataire', es: 'Alquiler', zh: '租房', ar: 'إيجار', ja: '賃貸', it: 'Affitto', pt: 'Aluguel' } },
+      { id: 'gesundheit', label: { en: 'Healthcare', az: 'Səhiyyə', ru: 'Здоровье', tr: 'Sağlık', de: 'Gesundheit', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'صحة', ja: '医療', it: 'Salute', pt: 'Saúde' } },
+      { id: 'versicherung', label: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', tr: 'Sigorta', de: 'Versicherung', fr: 'Assurance', es: 'Seguro', zh: '保险', ar: 'تأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguro' } },
+      { id: 'rechte', label: { en: 'Your Rights', az: 'Hüquqlarınız', ru: 'Ваши права', tr: 'Haklarınız', de: 'Ihre Rechte', fr: 'Vos droits', es: 'Sus derechos', zh: '权利', ar: 'حقوقك', ja: '権利', it: 'I tuoi diritti', pt: 'Seus direitos' } },
+      { id: 'deutsch', label: { en: 'German Language', az: 'Alman dili', ru: 'Немецкий язык', tr: 'Almanca', de: 'Deutsch lernen', fr: 'Allemand', es: 'Alemán', zh: '德语', ar: 'ألمانية', ja: 'ドイツ語', it: 'Tedesco', pt: 'Alemão' } },
     ]
   },
   platforms: {
