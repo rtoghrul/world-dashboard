@@ -237,6 +237,15 @@ export default function Header() {
 
             {/* Right side */}
             <div className="flex items-center gap-2 shrink-0">
+              {/* Search trigger for Cmd+K */}
+              <button
+                onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[11px] text-[#6b6b80] hover:text-white hover:border-white/[0.1] transition"
+              >
+                <Search className="w-3.5 h-3.5" />
+                <span className="hidden lg:inline">Search</span>
+                <kbd className="ml-1 px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
+              </button>
               <LanguagePicker />
               {isAdmin && (
                 <Link href="/admin" className="px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition">
