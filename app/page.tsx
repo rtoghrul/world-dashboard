@@ -9,6 +9,7 @@ import DailyBrief from '@/components/DailyBrief'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 import PortfolioTracker from '@/components/PortfolioTracker'
+import PriceChart from '@/components/PriceChart'
 import { NewsItem, NewsCard } from '@/components/NewsWidget'
 import { Coin, formatNum } from '@/components/CryptoWidget'
 
@@ -48,6 +49,12 @@ export default function HomePage() {
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
         {/* AI Daily Brief */}
         <DailyBrief />
+
+        {/* Price Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <PriceChart coinId="bitcoin" coinName="Bitcoin" />
+          <PriceChart coinId="ethereum" coinName="Ethereum" />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* News - takes 2 columns */}
