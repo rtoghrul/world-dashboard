@@ -1,25 +1,45 @@
 'use client'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ArrowLeft, Clock, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin, Heart, ShoppingBag, Store } from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { ArrowLeft, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin, Heart, ShoppingBag, Store } from 'lucide-react'
 import Header from '@/components/Header'
 import ErrorBoundary from '@/components/ErrorBoundary'
-import WeatherWidget from '@/components/WeatherWidget'
-import NewsWidget from '@/components/NewsWidget'
-import CryptoWidget from '@/components/CryptoWidget'
-import WhaleWidget from '@/components/WhaleWidget'
-import TravelComparisonWidget from '@/components/TravelComparisonWidget'
-import ViralWidget from '@/components/ViralWidget'
-import EntertainmentWidget from '@/components/EntertainmentWidget'
-import SocialWidget from '@/components/SocialWidget'
-import StocksWidget from '@/components/StocksWidget'
-import EducationWidget from '@/components/EducationWidget'
-import AIToolsWidget from '@/components/AIToolsWidget'
-import SoftwareWidget  from '@/components/SoftwareWidget'
-import WomenWidget from '@/components/WomenWidget'
-import PlatformsWidget from '@/components/PlatformsWidget'
 import { useLang } from '@/lib/LanguageContext'
-import t from '@/lib/translations'
+
+function WidgetLoader() {
+  return (
+    <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-6">
+      <div className="flex items-center gap-3 animate-pulse">
+        <div className="w-10 h-10 rounded-lg bg-white/[0.04]" />
+        <div className="flex-1 space-y-2">
+          <div className="h-3 bg-white/[0.04] rounded w-1/3" />
+          <div className="h-2 bg-white/[0.04] rounded w-1/2" />
+        </div>
+      </div>
+      <div className="mt-4 space-y-3">
+        <div className="h-8 bg-white/[0.04] rounded" />
+        <div className="h-8 bg-white/[0.04] rounded" />
+        <div className="h-8 bg-white/[0.04] rounded" />
+      </div>
+    </div>
+  )
+}
+
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false, loading: WidgetLoader })
+const NewsWidget = dynamic(() => import('@/components/NewsWidget'), { ssr: false, loading: WidgetLoader })
+const CryptoWidget = dynamic(() => import('@/components/CryptoWidget'), { ssr: false, loading: WidgetLoader })
+const WhaleWidget = dynamic(() => import('@/components/WhaleWidget'), { ssr: false, loading: WidgetLoader })
+const TravelComparisonWidget = dynamic(() => import('@/components/TravelComparisonWidget'), { ssr: false, loading: WidgetLoader })
+const ViralWidget = dynamic(() => import('@/components/ViralWidget'), { ssr: false, loading: WidgetLoader })
+const EntertainmentWidget = dynamic(() => import('@/components/EntertainmentWidget'), { ssr: false, loading: WidgetLoader })
+const SocialWidget = dynamic(() => import('@/components/SocialWidget'), { ssr: false, loading: WidgetLoader })
+const StocksWidget = dynamic(() => import('@/components/StocksWidget'), { ssr: false, loading: WidgetLoader })
+const EducationWidget = dynamic(() => import('@/components/EducationWidget'), { ssr: false, loading: WidgetLoader })
+const AIToolsWidget = dynamic(() => import('@/components/AIToolsWidget'), { ssr: false, loading: WidgetLoader })
+const SoftwareWidget = dynamic(() => import('@/components/SoftwareWidget'), { ssr: false, loading: WidgetLoader })
+const WomenWidget = dynamic(() => import('@/components/WomenWidget'), { ssr: false, loading: WidgetLoader })
+const PlatformsWidget = dynamic(() => import('@/components/PlatformsWidget'), { ssr: false, loading: WidgetLoader })
 
 const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store }
 
@@ -44,8 +64,8 @@ const subKeyMap: Record<string, string> = {
   bitcoin:'subBitcoin',ethereum:'subEthereum','fear-greed':'subFearGreed',
   'large-transfers':'subLargeTransfers',wallets:'subWallets',exchanges:'subExchanges',
   current:'subCurrent',hourly:'subHourly',weekly:'subWeekly',
-  gainers:'subGainers',losers:'subLosers',tech:'subTech',
-  science:'subScience',math:'subMath',physics:'subPhysics',
+  gainers:'subGainers',losers:'subLosers',
+  math:'subMath',physics:'subPhysics',
   chemistry:'subChemistry',biology:'subBiology',anatomy:'subBiology',astronomy:'subAstronomy',languages:'subLanguages',
   engineering:'subEngineering',automation:'subAutomation',electrical:'subElectrical',mechanical:'subMechanical',
   courses:'subCourses',
@@ -96,28 +116,37 @@ const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: 
 }
 
 function Content({ main, sub }: { main: string; sub: string }) {
-  if (main === 'weather') return <WeatherWidget />
-  if (main === 'crypto') return <CryptoWidget defaultExpanded />
-  if (main === 'markets' && ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed'].includes(sub)) return <CryptoWidget defaultExpanded />
-  if (main === 'markets' && sub === 'whale') return <WhaleWidget defaultExpanded />
-  if (main === 'markets' && ['stocks-top', 'gainers', 'losers'].includes(sub)) return <StocksWidget defaultExpanded />
-  if (main === 'whale') return <WhaleWidget defaultExpanded />
-  if (main === 'news') return <NewsWidget defaultExpanded initialTab={newsCat[sub] || 'top'} />
-  if (main === 'travel') return <TravelComparisonWidget defaultExpanded />
-  if (main === 'viral') return <ViralWidget defaultExpanded />
-  if (main === 'entertainment') return <EntertainmentWidget />
-  if (main === 'social') return <SocialWidget defaultExpanded />
-  if (main === 'stocks') return <StocksWidget defaultExpanded />
-  if (main === 'aitools') return <AIToolsWidget defaultExpanded initialCategory={sub === 'chatbots' ? 'chatbots' : sub === 'image-gen' ? 'image' : sub === 'video-gen' ? 'video' : sub === 'writing' ? 'writing' : sub === 'coding' ? 'coding' : 'all'} />
-  if (main === 'software') return <SoftwareWidget defaultExpanded initialPlatform={sub === 'android' ? 'android' : sub === 'ios' ? 'ios' : sub === 'windows' ? 'windows' : sub === 'mac' ? 'mac' : sub === 'browser-ext' ? 'extensions' : 'all'} />
-  if (main === 'women') return <WomenWidget initialCategory={sub || 'all'} />
-  if (main === 'shopping') return <PlatformsWidget initialCategory={sub || 'all'} />
-  if (main === 'platforms') return <PlatformsWidget initialCategory={sub || 'all'} />
-  if (main === 'education') {
-    const eduConfig = educationMap[sub] || { mode: 'science', subject: 'physics' }
-    return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />
+  try {
+    if (main === 'weather') return <WeatherWidget />
+    if (main === 'crypto') return <CryptoWidget defaultExpanded />
+    if (main === 'markets' && ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed'].includes(sub)) return <CryptoWidget defaultExpanded />
+    if (main === 'markets' && sub === 'whale') return <WhaleWidget defaultExpanded />
+    if (main === 'markets' && ['stocks-top', 'gainers', 'losers'].includes(sub)) return <StocksWidget defaultExpanded />
+    if (main === 'whale') return <WhaleWidget defaultExpanded />
+    if (main === 'news') return <NewsWidget defaultExpanded initialTab={newsCat[sub] || 'top'} />
+    if (main === 'travel') return <TravelComparisonWidget defaultExpanded />
+    if (main === 'viral') return <ViralWidget defaultExpanded />
+    if (main === 'entertainment') return <EntertainmentWidget />
+    if (main === 'social') return <SocialWidget defaultExpanded />
+    if (main === 'stocks') return <StocksWidget defaultExpanded />
+    if (main === 'aitools') return <AIToolsWidget defaultExpanded initialCategory={sub === 'chatbots' ? 'chatbots' : sub === 'image-gen' ? 'image' : sub === 'video-gen' ? 'video' : sub === 'writing' ? 'writing' : sub === 'coding' ? 'coding' : 'all'} />
+    if (main === 'software') return <SoftwareWidget defaultExpanded initialPlatform={sub === 'android' ? 'android' : sub === 'ios' ? 'ios' : sub === 'windows' ? 'windows' : sub === 'mac' ? 'mac' : sub === 'browser-ext' ? 'extensions' : 'all'} />
+    if (main === 'women') return <WomenWidget initialCategory={sub || 'all'} />
+    if (main === 'shopping') return <PlatformsWidget initialCategory={sub || 'all'} />
+    if (main === 'platforms') return <PlatformsWidget initialCategory={sub || 'all'} />
+    if (main === 'education') {
+      const eduConfig = educationMap[sub] || { mode: 'science' as const, subject: 'physics' }
+      return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />
+    }
+    return <NewsWidget defaultExpanded />
+  } catch (err) {
+    return (
+      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center">
+        <p className="text-red-400 text-sm">Widget render error</p>
+        <button onClick={() => window.location.reload()} className="mt-3 px-4 py-2 rounded-lg bg-white/[0.06] text-white text-sm">Reload</button>
+      </div>
+    )
   }
-  return <NewsWidget defaultExpanded />
 }
 
 export default function SectionPage() {
@@ -129,10 +158,14 @@ export default function SectionPage() {
   const title = (names[lang] || names.en)[main] || main
   const subs = submenuMap[main] || []
 
-  const getSubLabel = (s: string) => tr[subKeyMap[s] || ''] || s
+  const getSubLabel = (s: string) => {
+    const key = subKeyMap[s]
+    if (key && tr && tr[key]) return tr[key]
+    return s
+  }
 
   return (
-    <div className="min-h-screen relative z-[1]">
+    <div className="min-h-screen relative z-[1] bg-gray-950">
       <Header />
 
       <div className="border-b border-white/[0.04] bg-[#07070b]/80 backdrop-blur-sm sticky top-14 z-30">
