@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/lib/ThemeContext'
 import AIAssistant from '@/components/AIAssistant'
 import CommandPalette from '@/components/CommandPalette'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
+import ScrollProgress from '@/components/ScrollProgress'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AIAssistant />
             <CommandPalette />
             <KeyboardShortcuts />
+            <ScrollProgress />
           </LanguageProvider>
         </ThemeProvider>
       </body>
