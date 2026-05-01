@@ -99,10 +99,17 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
   education: {
     label: { en: 'Learn', az: 'Təhsil', ru: 'Учёба' },
     items: [
-      { id: 'courses', label: { en: 'Courses', az: 'Kurslar', ru: 'Курсы' } },
+      { id: 'science', label: { en: 'Science', az: 'Elm', ru: 'Наука' } },
+      { id: 'math', label: { en: 'Mathematics', az: 'Riyaziyyat', ru: 'Математика' } },
+      { id: 'physics', label: { en: 'Physics', az: 'Fizika', ru: 'Физика' } },
+      { id: 'chemistry', label: { en: 'Chemistry', az: 'Kimya', ru: 'Химия' } },
+      { id: 'biology', label: { en: 'Biology', az: 'Biologiya', ru: 'Биология' } },
+      { id: 'astronomy', label: { en: 'Astronomy', az: 'Astronomiya', ru: 'Астрономия' } },
+      { id: 'languages', label: { en: 'Languages', az: 'Dillər', ru: 'Языки' } },
       { id: 'engineering', label: { en: 'Engineering', az: 'Mühəndislik', ru: 'Инженерия' } },
-      { id: 'ai-tools', label: { en: 'AI Tools', az: 'AI Alətləri', ru: 'AI инструменты' } },
-      { id: 'cybersecurity', label: { en: 'Cybersecurity', az: 'Kibertəhlükəsizlik', ru: 'Кибербезопасность' } },
+      { id: 'automation', label: { en: 'Automation', az: 'Avtomatlaşdırma', ru: 'Автоматизация' } },
+      { id: 'electrical', label: { en: 'Electrical', az: 'Elektrik', ru: 'Электрика' } },
+      { id: 'mechanical', label: { en: 'Mechanical', az: 'Mexanika', ru: 'Механика' } },
     ]
   },
 }

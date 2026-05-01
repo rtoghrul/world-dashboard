@@ -23,11 +23,66 @@ const names: Record<string, Record<string, string>> = {
   ru: { weather: 'Погода', crypto: 'Крипто рынки', whale: 'Активность китов', news: 'Мировые новости', travel: 'Путешествия', viral: 'Вирусный контент', entertainment: 'Кино и сериалы', social: 'Социальные тренды', stocks: 'Акции', education: 'Образование' }
 }
 
-const subText: Record<string, string> = { top: 'Top', war: 'War', politics: 'Politics', economy: 'Economy', ai: 'AI', industry: 'Industry', social: 'Social', 'flight-hotel': 'Flight + Hotel', flight: 'Flight', hotel: 'Hotel', 'last-minute': 'Last minute', movies: 'Movies', series: 'Series', cartoons: 'Cartoons', upcoming: 'Upcoming', youtube: 'YouTube', music: 'Music', shorts: 'Shorts', trending: 'Trending', bitcoin: 'Bitcoin', ethereum: 'Ethereum', 'fear-greed': 'Fear & Greed', 'large-transfers': 'Large transfers', wallets: 'Wallets', exchanges: 'Exchanges', current: 'Current', hourly: 'Hourly', weekly: 'Weekly', gainers: 'Gainers', losers: 'Losers', tech: 'Tech', courses: 'Courses', engineering: 'Engineering', 'ai-tools': 'AI tools', cybersecurity: 'Cybersecurity', instagram: 'Instagram', tiktok: 'TikTok', x: 'X', facebook: 'Facebook' }
+const subText: Record<string, string> = {
+  // News
+  top: 'Top', war: 'War', politics: 'Politics', economy: 'Economy', ai: 'AI', industry: 'Industry', social: 'Social',
+  // Travel
+  'flight-hotel': 'Flight + Hotel', flight: 'Flight', hotel: 'Hotel', 'last-minute': 'Last minute',
+  // Entertainment
+  movies: 'Movies', series: 'Series', cartoons: 'Cartoons', upcoming: 'Upcoming',
+  // Viral
+  youtube: 'YouTube', music: 'Music', shorts: 'Shorts', trending: 'Trending',
+  // Crypto
+  bitcoin: 'Bitcoin', ethereum: 'Ethereum', 'fear-greed': 'Fear & Greed',
+  // Whale
+  'large-transfers': 'Large transfers', wallets: 'Wallets', exchanges: 'Exchanges',
+  // Weather
+  current: 'Current', hourly: 'Hourly', weekly: 'Weekly',
+  // Stocks
+  gainers: 'Gainers', losers: 'Losers', tech: 'Tech',
+  // Education - Science
+  science: 'Science', math: 'Mathematics', geometry: 'Geometry', physics: 'Physics',
+  chemistry: 'Chemistry', biology: 'Biology', anatomy: 'Anatomy', astronomy: 'Astronomy', languages: 'Languages',
+  // Education - Engineering
+  engineering: 'Engineering', automation: 'Automation', electrical: 'Electrical', mechanical: 'Mechanical',
+  // Education - Other
+  courses: 'Free Courses', 'ai-tools': 'AI Tools', cybersecurity: 'Cybersecurity',
+  // Social
+  instagram: 'Instagram', tiktok: 'TikTok', x: 'X', facebook: 'Facebook',
+}
 
-const submenuMap: Record<string, string[]> = { weather: ['current', 'hourly', 'weekly'], crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed'], whale: ['large-transfers', 'wallets', 'exchanges'], news: ['top', 'war', 'politics', 'economy', 'ai', 'industry', 'social'], travel: ['flight-hotel', 'flight', 'hotel', 'last-minute'], viral: ['youtube', 'music', 'shorts', 'trending'], entertainment: ['movies', 'series', 'cartoons', 'upcoming'], social: ['instagram', 'tiktok', 'x', 'facebook'], stocks: ['top', 'gainers', 'losers', 'tech'], education: ['courses', 'engineering', 'ai-tools', 'cybersecurity'] }
+const submenuMap: Record<string, string[]> = {
+  weather: ['current', 'hourly', 'weekly'],
+  crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed'],
+  whale: ['large-transfers', 'wallets', 'exchanges'],
+  news: ['top', 'war', 'politics', 'economy', 'ai', 'industry', 'social'],
+  travel: ['flight-hotel', 'flight', 'hotel', 'last-minute'],
+  viral: ['youtube', 'music', 'shorts', 'trending'],
+  entertainment: ['movies', 'series', 'cartoons', 'upcoming'],
+  social: ['instagram', 'tiktok', 'x', 'facebook'],
+  stocks: ['top', 'gainers', 'losers', 'tech'],
+  education: ['science', 'math', 'physics', 'chemistry', 'biology', 'astronomy', 'languages', 'engineering', 'automation', 'electrical', 'mechanical', 'courses'],
+}
 
 const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', ai: 'ai', industry: 'technology', social: 'social' }
+
+// Education sub → mode + subject mapping
+const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: string }> = {
+  science: { mode: 'science', subject: 'physics' },
+  math: { mode: 'science', subject: 'math' },
+  geometry: { mode: 'science', subject: 'geometry' },
+  physics: { mode: 'science', subject: 'physics' },
+  chemistry: { mode: 'science', subject: 'chemistry' },
+  biology: { mode: 'science', subject: 'biology' },
+  anatomy: { mode: 'science', subject: 'anatomy' },
+  astronomy: { mode: 'science', subject: 'astronomy' },
+  languages: { mode: 'science', subject: 'languages' },
+  engineering: { mode: 'engineering' },
+  automation: { mode: 'engineering', subject: 'automation' },
+  electrical: { mode: 'engineering', subject: 'electrical' },
+  mechanical: { mode: 'engineering', subject: 'mechanical' },
+  courses: { mode: 'science', subject: 'physics' },
+}
 
 function Content({ main, sub }: { main: string; sub: string }) {
   if (main === 'weather') return <WeatherWidget />
@@ -39,7 +94,10 @@ function Content({ main, sub }: { main: string; sub: string }) {
   if (main === 'entertainment') return <EntertainmentWidget />
   if (main === 'social') return <SocialWidget defaultExpanded />
   if (main === 'stocks') return <StocksWidget defaultExpanded />
-  if (main === 'education') return <EducationWidget defaultExpanded />
+  if (main === 'education') {
+    const eduConfig = educationMap[sub] || { mode: 'science', subject: 'physics' }
+    return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />
+  }
   return <NewsWidget defaultExpanded />
 }
 

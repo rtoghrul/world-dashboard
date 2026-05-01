@@ -162,12 +162,12 @@ function ScienceArticleCard({ article }: { article: ModalItem }) {
   )
 }
 
-export default function EducationWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
+export default function EducationWidget({ defaultExpanded = false, initialMode = 'science', initialSubject }: { defaultExpanded?: boolean; initialMode?: 'science' | 'engineering'; initialSubject?: string }) {
   const { tr, lang } = useLang()
   const [collapsed, setCollapsed] = useState(!defaultExpanded)
-  const [mode, setMode] = useState<Mode>('science')
-  const [subject, setSubject] = useState('physics')
-  const [activeEngTopic, setActiveEngTopic] = useState<'automation' | 'electrical' | 'mechanical' | null>(null)
+  const [mode, setMode] = useState<Mode>(initialMode || 'science')
+  const [subject, setSubject] = useState(initialMode === 'science' ? (initialSubject || 'physics') : 'physics')
+  const [activeEngTopic, setActiveEngTopic] = useState<'automation' | 'electrical' | 'mechanical' | null>(initialMode === 'engineering' && initialSubject ? initialSubject as any : null)
   const { data: rawData, isLoading, error } = useSWR<ModalItem[]>(
     mode === 'science' ? `/api/education?subject=${subject}&lang=${lang}` : null,
     fetcher,
@@ -226,7 +226,7 @@ export default function EducationWidget({ defaultExpanded = false }: { defaultEx
               {s.emoji} {s.label}
             </span>
           ))}
-          <span className="text-gray-600 text-xs">· Engineering & more</span>
+          <span className="text-gray-600 text-xs">· Engineering &amp; more</span>
         </div>
       )}
 
