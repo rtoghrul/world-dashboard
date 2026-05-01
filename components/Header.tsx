@@ -267,7 +267,7 @@ export default function Header() {
               <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
-            <nav className="hidden md:flex items-center mx-2 flex-1 overflow-x-auto scrollbar-hide">
+            <nav className="hidden md:flex items-center mx-2 flex-1 overflow-x-auto scrollbar-thin">
               {menuKeys.map((id) => {
                 const section = menuStructure[id]
                 return (

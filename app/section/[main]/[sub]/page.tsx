@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ArrowLeft, Clock, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin, Heart, ShoppingBag, Store } from 'lucide-react'
 import Header from '@/components/Header'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import WeatherWidget from '@/components/WeatherWidget'
 import NewsWidget from '@/components/NewsWidget'
 import CryptoWidget from '@/components/CryptoWidget'
@@ -32,7 +33,6 @@ const names: Record<string, Record<string, string>> = {
   es: { weather: 'Clima', crypto: 'Cripto', whale: 'Ballenas', news: 'Noticias', travel: 'Viajes', viral: 'Viral', entertainment: 'Entretenimiento', social: 'Social', stocks: 'Acciones', education: 'Aprender', markets: 'Mercados', aitools: 'Herramientas IA', software: 'Software', women: 'Mujeres', shopping: 'Compras', platforms: 'Plataformas 🇩🇪' },
 }
 
-// Map sub-tab slugs to translation keys (sub + PascalCase)
 const subKeyMap: Record<string, string> = {
   top:'subTop',war:'subWar',politics:'subPolitics',economy:'subEconomy',ai:'subAI',industry:'subIndustry',social:'subSocial',
   tech:'subTech',science:'subScience',sports:'subSports',health:'subHealth',
@@ -78,7 +78,6 @@ const submenuMap: Record<string, string[]> = {
 
 const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'technology', social: 'social' }
 
-// Education sub → mode + subject mapping
 const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: string }> = {
   science: { mode: 'science', subject: 'physics' },
   math: { mode: 'science', subject: 'math' },
@@ -130,17 +129,15 @@ export default function SectionPage() {
   const title = (names[lang] || names.en)[main] || main
   const subs = submenuMap[main] || []
 
-  // Helper to get translated sub-tab label
   const getSubLabel = (s: string) => tr[subKeyMap[s] || ''] || s
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative z-[1]">
       <Header />
 
-      {/* Sub-navigation tabs */}
       <div className="border-b border-white/[0.04] bg-[#07070b]/80 backdrop-blur-sm sticky top-14 z-30">
         <div className="max-w-screen-2xl mx-auto px-5">
-          <div className="flex items-center gap-1 py-2 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-1 py-2 overflow-x-auto scrollbar-thin">
             {subs.map(s => (
               <Link
                 key={s}
@@ -158,9 +155,7 @@ export default function SectionPage() {
         </div>
       </div>
 
-      {/* Full page content */}
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
-        {/* Page header */}
         <div className="flex items-center gap-3 mb-6">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] transition">
             <ArrowLeft className="w-5 h-5 text-white/80" />
@@ -174,8 +169,9 @@ export default function SectionPage() {
           </div>
         </div>
 
-        {/* Widget content - full width */}
-        <Content main={main} sub={sub} />
+        <ErrorBoundary fallbackMessage="This widget failed to load. Please try refreshing the page.">
+          <Content main={main} sub={sub} />
+        </ErrorBoundary>
       </main>
     </div>
   )

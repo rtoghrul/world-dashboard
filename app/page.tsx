@@ -76,7 +76,7 @@ export default function HomePage() {
   const t = labels[lang as keyof typeof labels] || labels.en
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative z-[1]">
       <ServiceWorkerRegistrar />
       <Header />
       <MarketTicker />

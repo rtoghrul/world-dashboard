@@ -44,12 +44,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/api/icon?size=180" />
       </head>
-      <script dangerouslySetInnerHTML={{ __html: `
-        window.addEventListener('error', function(e) {
-          if (e.message && (e.message.includes('Loading chunk') || e.message.includes('Failed to fetch'))) { window.location.reload(); }
-        });
-      `}} />
       <body className={`${inter.className} bg-gray-950 min-h-screen`}>
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.addEventListener('error', function(e) {
+            if (e.message && (e.message.includes('Loading chunk') || e.message.includes('Failed to fetch'))) { window.location.reload(); }
+          });
+        `}} />
         <ThemeProvider>
           <LanguageProvider>
             {children}
