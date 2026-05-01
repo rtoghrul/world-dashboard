@@ -5,6 +5,9 @@ import dynamic from 'next/dynamic'
 import { ArrowLeft, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin, Heart, ShoppingBag, Store } from 'lucide-react'
 import Header from '@/components/Header'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import CommandPalette from '@/components/CommandPalette'
+import MobileBottomNav from '@/components/MobileBottomNav'
+import Footer from '@/components/Footer'
 import { useLang } from '@/lib/LanguageContext'
 
 function WidgetLoader() {
@@ -172,6 +175,7 @@ export default function SectionPage() {
 
   return (
     <div className="min-h-screen relative z-[1] bg-gray-950">
+      <CommandPalette />
       <Header />
 
       <div className="border-b border-white/[0.04] bg-[#07070b]/90 backdrop-blur-xl sticky top-14 z-30">
@@ -212,6 +216,9 @@ export default function SectionPage() {
           <Content main={main} sub={sub} />
         </ErrorBoundary>
       </main>
+
+      <Footer />
+      <MobileBottomNav />
     </div>
   )
 }

@@ -6,6 +6,10 @@ import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Gl
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
+import CommandPalette from '@/components/CommandPalette'
+import MobileBottomNav from '@/components/MobileBottomNav'
+import Footer from '@/components/Footer'
+import QuickActions from '@/components/QuickActions'
 import LivePriceTicker from '@/components/LivePriceTicker'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
@@ -78,6 +82,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative z-[1] w-full">
       <ServiceWorkerRegistrar />
+      <CommandPalette />
       <Header />
 
       {/* ═══ HERO SECTION ═══ */}
@@ -123,6 +128,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <QuickActions />
 
       <MarketTicker />
       <LivePriceTicker />
@@ -342,6 +349,9 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+
+      <Footer />
+      <MobileBottomNav />
     </div>
   )
 }
