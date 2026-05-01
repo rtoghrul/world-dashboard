@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Globe, ChevronDown, LogOut, Search, X } from 'lucide-react'
+import { Globe, ChevronDown, LogOut, X } from 'lucide-react'
 import LanguagePicker from '@/components/LanguagePicker'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
@@ -26,7 +26,7 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     ]
   },
   whale: {
-    label: { en: 'Whale Activity', az: 'Balina', ru: 'Киты' },
+    label: { en: 'Whale', az: 'Balina', ru: 'Киты' },
     items: [
       { id: 'large-transfers', label: { en: 'Large Transfers', az: 'Böyük Transferlər', ru: 'Крупные переводы' } },
       { id: 'wallets', label: { en: 'Wallets', az: 'Cüzdanlar', ru: 'Кошельки' } },
@@ -64,7 +64,7 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     ]
   },
   entertainment: {
-    label: { en: 'Entertainment', az: 'Əyləncə', ru: 'Развлечения' },
+    label: { en: 'Movies', az: 'Kino', ru: 'Кино' },
     items: [
       { id: 'movies', label: { en: 'Movies', az: 'Filmlər', ru: 'Фильмы' } },
       { id: 'series', label: { en: 'Series', az: 'Seriallar', ru: 'Сериалы' } },
@@ -91,7 +91,7 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     ]
   },
   education: {
-    label: { en: 'Education', az: 'Təhsil', ru: 'Образование' },
+    label: { en: 'Learn', az: 'Təhsil', ru: 'Учёба' },
     items: [
       { id: 'courses', label: { en: 'Courses', az: 'Kurslar', ru: 'Курсы' } },
       { id: 'engineering', label: { en: 'Engineering', az: 'Mühəndislik', ru: 'Инженерия' } },
@@ -101,9 +101,11 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
   },
 }
 
-function DropdownMenu({ sectionId, section, lang, onClose }: { sectionId: string; section: typeof menuStructure[string]; lang: string; onClose: () => void }) {
+const menuKeys = Object.keys(menuStructure)
+
+function DropdownMenu({ sectionId, section, lang, alignRight, onClose }: { sectionId: string; section: typeof menuStructure[string]; lang: string; alignRight?: boolean; onClose: () => void }) {
   return (
-    <div className="absolute top-full left-0 mt-1 min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.06] shadow-2xl shadow-black/50 z-50 animate-fade-in">
+    <div className={`absolute top-full mt-1 min-w-[180px] py-1.5 rounded-xl bg-[#111118] border border-white/[0.06] shadow-2xl shadow-black/50 z-50 animate-fade-in ${alignRight ? 'right-0' : 'left-0'}`}>
       {section.items.map(item => (
         <Link
           key={item.id}
@@ -154,39 +156,42 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-[#07070b]/90 backdrop-blur-xl border-b border-white/[0.04]">
-        <div className="max-w-screen-2xl mx-auto px-5">
-          {/* Top bar */}
+        <div className="max-w-screen-2xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
+            <Link href="/" className="flex items-center gap-2 group shrink-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-shadow">
                 <Globe className="w-4 h-4 text-white" />
               </div>
-              <span className="text-white font-semibold text-[15px] tracking-tight hidden sm:block">World Dashboard</span>
+              <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
-            {/* Desktop Navigation with Dropdowns */}
-            <nav className="hidden lg:flex items-center gap-0.5">
-              {Object.entries(menuStructure).map(([id, section]) => (
-                <div
-                  key={id}
-                  className="relative"
-                  onMouseEnter={() => handleMouseEnter(id)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <button className={`flex items-center gap-1 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${openMenu === id ? 'text-white bg-white/[0.04]' : 'text-[#8b8b9e] hover:text-white'}`}>
-                    {section.label[lang] || section.label.en}
-                    <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === id ? 'rotate-180' : ''}`} />
-                  </button>
-                  {openMenu === id && (
-                    <DropdownMenu sectionId={id} section={section} lang={lang} onClose={() => setOpenMenu(null)} />
-                  )}
-                </div>
-              ))}
+            {/* Desktop Navigation - scrollable */}
+            <nav className="hidden md:flex items-center overflow-x-auto mx-4 flex-1 scrollbar-hide">
+              {menuKeys.map((id, index) => {
+                const section = menuStructure[id]
+                const isRightHalf = index >= menuKeys.length - 3
+                return (
+                  <div
+                    key={id}
+                    className="relative shrink-0"
+                    onMouseEnter={() => handleMouseEnter(id)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <button className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-white bg-white/[0.04]' : 'text-[#8b8b9e] hover:text-white'}`}>
+                      {section.label[lang] || section.label.en}
+                      <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === id ? 'rotate-180' : ''}`} />
+                    </button>
+                    {openMenu === id && (
+                      <DropdownMenu sectionId={id} section={section} lang={lang} alignRight={isRightHalf} onClose={() => setOpenMenu(null)} />
+                    )}
+                  </div>
+                )
+              })}
             </nav>
 
             {/* Right side */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <LanguagePicker />
               {isAdmin && (
                 <Link href="/admin" className="px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition">
@@ -197,7 +202,7 @@ export default function Header() {
                 <LogOut className="w-4 h-4" />
               </button>
               {/* Mobile menu button */}
-              <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition">
+              <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
             </div>
@@ -207,7 +212,7 @@ export default function Header() {
 
       {/* Mobile sidebar */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-[80] lg:hidden">
+        <div className="fixed inset-0 z-[80] md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
           <div className="absolute right-0 top-0 bottom-0 w-[80vw] max-w-xs bg-[#0a0a10] border-l border-white/[0.04] overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b border-white/[0.04]">
@@ -233,7 +238,7 @@ export default function Header() {
                           key={item.id}
                           href={`/section/${id}/${item.id}`}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-2 text-xs text-[#6b6b80] hover:text-white transition"
+                          className="block px-4 py-2.5 text-xs text-[#6b6b80] hover:text-white transition"
                         >
                           {item.label[lang] || item.label.en}
                         </Link>
