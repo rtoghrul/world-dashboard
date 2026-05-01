@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Globe, ChevronDown, LogOut, X, Search } from 'lucide-react'
 import LanguagePicker from '@/components/LanguagePicker'
 import { useLang } from '@/lib/LanguageContext'
+import NotificationCenter from '@/components/NotificationCenter'
 import { createClient } from '@/lib/supabase'
 
 const menuStructure: Record<string, { label: Record<string,string>; items: { id: string; label: Record<string,string> }[] }> = {
@@ -252,6 +253,7 @@ export default function Header() {
                   Admin
                 </Link>
               )}
+              <NotificationCenter />
               <button onClick={handleLogout} className="p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition" title="Logout">
                 <LogOut className="w-4 h-4" />
               </button>
