@@ -11,18 +11,28 @@ import ScrollProgress from '@/components/ScrollProgress'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'World Dashboard',
-  description: 'Real-time global intelligence — Crypto, News, Stocks, Entertainment & more',
+  title: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment',
+  description: 'Your all-in-one hub: AI tools directory, crypto markets, global news, free software downloads, movies, viral content, education and more. Updated in real-time.',
   manifest: '/manifest.json',
   themeColor: '#6366f1',
   icons: {
     icon: '/api/icon?size=32',
     apple: '/api/icon?size=180',
   },
+  keywords: ['AI tools', 'free AI', 'crypto', 'bitcoin', 'news', 'mod apk', 'jailbreak', 'free software', 'movies', 'stocks', 'entertainment', 'world dashboard'],
+  authors: [{ name: 'World Dashboard' }],
+  robots: { index: true, follow: true },
   openGraph: {
-    title: 'World Dashboard',
-    description: 'Real-time global intelligence — Crypto, News, Stocks, Entertainment & more',
+    title: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment',
+    description: 'Your all-in-one hub: AI tools, crypto markets, global news, free software, movies, viral content and more.',
     type: 'website',
+    url: 'https://world-dashboard-delta-umber.vercel.app',
+    siteName: 'World Dashboard',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'World Dashboard — Everything in One Place',
+    description: 'AI Tools, Crypto, News, Free Software, Movies, Stocks — all updated real-time.',
   },
 }
 
