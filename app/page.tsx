@@ -79,9 +79,52 @@ export default function HomePage() {
     <div className="min-h-screen relative z-[1] w-full">
       <ServiceWorkerRegistrar />
       <Header />
-      <MarketTicker />
 
-      {/* Live Price Ticker */}
+      {/* ═══ HERO SECTION ═══ */}
+      <section className="relative overflow-hidden border-b border-white/[0.03]">
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.03] via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="gradient-text text-2xl sm:text-3xl font-bold tracking-tight">World Dashboard</h1>
+              <p className="text-[#6b6b80] text-xs sm:text-sm mt-1">Real-time intelligence · 15+ sections · 12 languages</p>
+            </div>
+            <div className="flex items-center gap-3 sm:gap-4">
+              {/* KPI Pills */}
+              {market?.total_market_cap && (
+                <div className="glass px-3 py-1.5 rounded-full flex items-center gap-2">
+                  <span className="text-[10px] text-[#8b8b9e]">Crypto MCap</span>
+                  <span className="text-xs text-white font-mono font-medium">{formatNum(market.total_market_cap)}</span>
+                  {market.market_cap_change_24h !== null && (
+                    <span className={`text-[10px] font-medium ${market.market_cap_change_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {market.market_cap_change_24h >= 0 ? '+' : ''}{market.market_cap_change_24h.toFixed(1)}%
+                    </span>
+                  )}
+                </div>
+              )}
+              {sp500 && (
+                <div className="hidden sm:flex glass px-3 py-1.5 rounded-full items-center gap-2">
+                  <span className="text-[10px] text-[#8b8b9e]">S&amp;P 500</span>
+                  <span className={`text-xs font-mono font-medium ${sp500.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {sp500.change >= 0 ? '+' : ''}{sp500.changePercent?.toFixed(2)}%
+                  </span>
+                </div>
+              )}
+              {market?.fear_greed && (
+                <div className="hidden md:flex glass px-3 py-1.5 rounded-full items-center gap-2">
+                  <span className="text-[10px] text-[#8b8b9e]">{t.fearGreed}</span>
+                  <span className={`text-xs font-mono font-bold ${
+                    market.fear_greed <= 25 ? 'text-red-400' : market.fear_greed <= 45 ? 'text-orange-400' :
+                    market.fear_greed <= 55 ? 'text-yellow-400' : market.fear_greed <= 75 ? 'text-lime-400' : 'text-emerald-400'
+                  }`}>{market.fear_greed}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <MarketTicker />
       <LivePriceTicker />
 
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">

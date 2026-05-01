@@ -11,7 +11,7 @@ import ScrollProgress from '@/components/ScrollProgress'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment',
+  title: { default: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment', template: '%s | World Dashboard' },
   description: 'Your all-in-one hub: AI tools directory, crypto markets, global news, free software downloads, movies, viral content, education and more. Updated in real-time.',
   manifest: '/manifest.json',
   themeColor: '#6366f1',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment',
     description: 'Your all-in-one hub: AI tools, crypto markets, global news, free software, movies, viral content and more.',
-    type: 'website',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
     url: 'https://world-dashboard-delta-umber.vercel.app',
     siteName: 'World Dashboard',
   },
