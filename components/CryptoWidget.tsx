@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { TrendingUp, TrendingDown, Search, ArrowRight, ChevronDown } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import SectionNews from './SectionNews'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -175,6 +176,7 @@ export default function CryptoWidget({ defaultExpanded = false }: { defaultExpan
           </div>
         </>
       )}
+      {!collapsed && <SectionNews section="crypto" tab="all" accentColor="indigo" darkMode />}
     </div>
   )
 }

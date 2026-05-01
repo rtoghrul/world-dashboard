@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { ChevronDown, Clapperboard, ExternalLink, Eye, Flame, Play, RefreshCw, Search, ThumbsUp, TrendingUp } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import SectionNews from './SectionNews'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -301,6 +302,7 @@ export default function ViralWidget({ defaultExpanded = false }: { defaultExpand
             </div>
           )}
           <div className="mt-4 border-t border-gray-800 pt-4"><p className="mb-2 text-xs text-gray-500">{tr.otherPlatforms}</p><div className="flex flex-wrap gap-2">{SOCIAL.map(s => <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${s.bg} ${s.color}`}><span>{s.icon}</span>{s.name}</a>)}</div></div>
+          <SectionNews section="viral" tab="all" accentColor="red" darkMode />
         </div>
       )}
     </div>

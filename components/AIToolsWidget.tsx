@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { Bot, Image, Video, PenTool, Code, Sparkles, ExternalLink, Star, Zap } from 'lucide-react'
+import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'AI Tools Directory', az: 'AI Alətlər Kataloqu', ru: 'Каталог ИИ инструментов', tr: 'YZ Araçları', de: 'KI-Tools Verzeichnis', fr: 'Répertoire Outils IA', es: 'Directorio Herramientas IA', zh: 'AI工具目录', ar: 'دليل أدوات الذكاء', ja: 'AIツールディレクトリ', it: 'Directory Strumenti IA', pt: 'Diretório Ferramentas IA' },
@@ -145,6 +146,8 @@ export default function AIToolsWidget({ defaultExpanded, initialCategory }: { de
           </a>
         ))}
       </div>
+
+    <SectionNews section="aitools" tab={activeCategory} accentColor="purple" darkMode />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { Smartphone, Monitor, Apple, Globe, ExternalLink, Star, Sparkles, ArrowRight } from 'lucide-react'
+import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Software & Apps', az: 'Proqramlar', ru: 'Программы', tr: 'Yazılım', de: 'Software', fr: 'Logiciels', es: 'Software', zh: '软件', ar: 'برامج', ja: 'ソフト', it: 'Software', pt: 'Software' },
@@ -192,6 +193,8 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
           )}
         </>
       )}
+
+      <SectionNews section="software" tab={platform} accentColor="emerald" darkMode />
     </div>
   )
 }

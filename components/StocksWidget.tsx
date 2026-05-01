@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { TrendingUp, TrendingDown, ChevronDown, BarChart2, ArrowUpRight } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import SectionNews from './SectionNews'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -138,6 +139,7 @@ export default function StocksWidget({ defaultExpanded = false }: { defaultExpan
           )}
         </div>
       )}
+      {!collapsed && <SectionNews section="stocks" tab="all" accentColor="emerald" darkMode />}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 import { useMemo, useState } from 'react'
 import { BadgePercent, ChevronDown, ExternalLink, Hotel, Minus, Plane, Plus, Search, Sparkles } from 'lucide-react'
+import SectionNews from './SectionNews'
 import { useLang } from '@/lib/LanguageContext'
 
 type Mode = 'package' | 'flight' | 'hotel'
@@ -101,6 +102,7 @@ export default function TravelComparisonWidget({ defaultExpanded = false }: { de
       <div className="grid grid-cols-2 gap-2"><Counter label={t.adults} value={adults} minus={() => setAdults(v => Math.max(1, v - 1))} plus={() => setAdults(v => Math.min(9, v + 1))} /><Counter label={t.children} value={children} minus={() => setChildren(v => Math.max(0, v - 1))} plus={() => setChildren(v => Math.min(9, v + 1))} /></div>
       <button onClick={() => setShow(true)} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg text-sm flex items-center justify-center gap-2"><Search className="w-4 h-4" />{t.show}</button>
       {show && <div><div className="mb-2"><p className="text-white text-sm font-semibold">{t.cheapest}</p><p className="text-gray-500 text-xs">{t.compare}</p></div><div className="grid grid-cols-1 sm:grid-cols-2 gap-2">{providers.map((p: any) => { const Icon = p.icon; return <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-800/50 hover:bg-gray-800 border border-gray-700/50 hover:border-gray-600 group"><span className="flex items-center gap-2 text-white text-xs font-medium group-hover:text-cyan-300"><Icon className="w-3.5 h-3.5" /><span><span className="block">{p.name}</span><span className="block text-gray-500 font-normal mt-0.5">{p.desc}</span></span></span><ExternalLink className="w-3.5 h-3.5 text-gray-600" /></a> })}</div><p className="mt-2 text-[11px] text-gray-600">{t.note}</p></div>}
+      {show && to && <SectionNews section="travel" tab="all" destination={to} accentColor="cyan" darkMode />}
     </div>}
   </div>
 }

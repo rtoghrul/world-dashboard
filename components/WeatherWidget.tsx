@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Wind, Droplets, X, ChevronUp } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import SectionNews from './SectionNews'
 
 const LOCALE_MAP: Record<string, string> = {
   en: 'en-US', az: 'az-AZ', ru: 'ru-RU', de: 'de-DE', tr: 'tr-TR',
@@ -177,6 +178,8 @@ export default function WeatherWidget() {
           </div>
         </div>
       )}
+
+    {weather && <SectionNews section="weather" tab="all" accentColor="blue" darkMode />}
     </div>
   )
 }

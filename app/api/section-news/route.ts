@@ -1,65 +1,93 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Keyword mapping for each section/tab
+const LANG_MAP: Record<string, { hl: string; gl: string; ceid: string }> = {
+  en: { hl: 'en', gl: 'US', ceid: 'US:en' },
+  de: { hl: 'de', gl: 'DE', ceid: 'DE:de' },
+  ru: { hl: 'ru', gl: 'RU', ceid: 'RU:ru' },
+  tr: { hl: 'tr', gl: 'TR', ceid: 'TR:tr' },
+  az: { hl: 'ru', gl: 'RU', ceid: 'RU:ru' },
+  fr: { hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  es: { hl: 'es', gl: 'ES', ceid: 'ES:es' },
+  it: { hl: 'it', gl: 'IT', ceid: 'IT:it' },
+  pt: { hl: 'pt-BR', gl: 'BR', ceid: 'BR:pt-419' },
+  zh: { hl: 'zh-CN', gl: 'CN', ceid: 'CN:zh-CN' },
+  ar: { hl: 'ar', gl: 'SA', ceid: 'SA:ar' },
+  ja: { hl: 'ja', gl: 'JP', ceid: 'JP:ja' },
+}
+
 const KEYWORDS: Record<string, Record<string, string>> = {
   germany: {
-    behoerden: 'Behörden Deutschland Verwaltung Gesetz',
-    wohnung: 'Mietpreise Deutschland Immobilien Wohnung Miete',
-    bildung: 'Bildung Schule Universität Kita Deutschland',
-    arbeit: 'Arbeitsmarkt Jobs Gehalt Fachkräfte Deutschland',
-    aenderungen: 'Gesetzesänderung 2025 Deutschland neue Regeln',
-    tools: 'Digitalisierung Apps Deutschland Online-Dienste',
+    behoerden: 'Deutschland Behörden Verwaltung Gesetz Politik',
+    wohnung: 'Deutschland Mietpreise Immobilien Wohnung Miete',
+    bildung: 'Deutschland Bildung Schule Universität',
+    arbeit: 'Deutschland Arbeitsmarkt Jobs Gehalt Fachkräfte',
+    aenderungen: 'Deutschland Gesetzesänderung 2025 neue Regeln',
+    tools: 'Deutschland Digitalisierung Apps Online-Dienste',
   },
   chinese: {
     all: 'Temu SHEIN AliExpress Europe shopping',
     general: 'Temu AliExpress Europe marketplace',
-    fashion: 'SHEIN fast fashion Europe Zaful',
-    electronics: 'Xiaomi Banggood electronics Europe gadgets',
-    home: 'robot vacuum smart home China Europe',
-    kids: 'PatPat kids clothing Europe affordable',
-    hobby: '3D printer drone RC China Europe',
+    fashion: 'SHEIN fast fashion Europe',
+    electronics: 'Xiaomi Banggood electronics Europe',
+    home: 'smart home China Europe products',
+    kids: 'PatPat kids clothing Europe',
+    hobby: '3D printer drone China Europe',
   },
   platforms: {
     general: 'Amazon REWE Lieferando Deutschland Online-Shopping',
     clothes: 'Zalando AboutYou Mode Deutschland Online',
     pharma: 'Online Apotheke Deutschland DocMorris',
-    food: 'Lieferando Wolt Flink Gorillas Lieferung Deutschland',
+    food: 'Lieferando Wolt Flink Gorillas Lieferung',
     electronics: 'MediaMarkt Saturn Elektronik Deutschland',
-    autoparts: 'Autodoc Kfzteile24 Autoteile Online Deutschland',
+    autoparts: 'Autodoc Kfzteile24 Autoteile Online',
     furniture: 'IKEA Wayfair Möbel Deutschland Online',
-    international: 'Amazon eBay international shopping Germany',
+    international: 'Amazon eBay international shopping',
   },
   women: {
     beauty: 'Beauty Skincare Trends Kosmetik',
-    diet: 'Ernährung Diät gesund abnehmen Tipps',
-    fitness: 'Fitness Workout Frauen Training Tipps',
-    parenting: 'Eltern Baby Kinder Erziehung Tipps',
-    fashion: 'Mode Trends Frauen Fashion Outfit',
-    wellness: 'Wellness Gesundheit Frauen Mental Health',
+    diet: 'Ernährung Diät gesund abnehmen',
+    fitness: 'Fitness Workout Frauen Training',
+    parenting: 'Eltern Baby Kinder Erziehung',
+    fashion: 'Mode Trends Frauen Fashion',
+    wellness: 'Wellness Gesundheit Mental Health',
   },
   crypto: {
-    all: 'cryptocurrency Bitcoin Ethereum market news',
+    all: 'cryptocurrency Bitcoin Ethereum market',
   },
   stocks: {
-    all: 'stock market DAX S&P500 investing news',
+    all: 'stock market DAX S&P500 investing',
   },
   entertainment: {
-    all: 'movies series Netflix Disney streaming new releases',
+    movie: 'new movies cinema release 2025',
+    series: 'new TV series streaming Netflix',
+    cartoon: 'animated movie cartoon kids new',
+    all: 'movies series Netflix Disney streaming',
   },
   weather: {
-    all: 'Wetter Deutschland Unwetter Vorhersage',
+    all: 'extreme weather forecast warning',
   },
   travel: {
-    all: 'Reisen Flüge günstig Urlaub Tipps Europa',
+    _dynamic: true,
   },
   viral: {
-    all: 'viral trending social media TikTok YouTube',
+    all: 'viral trending social media TikTok',
   },
   aitools: {
-    all: 'AI artificial intelligence tools ChatGPT new',
+    all: 'AI artificial intelligence new tools ChatGPT',
+    writing: 'AI writing tools GPT copywriting',
+    image: 'AI image generation Midjourney DALL-E',
+    code: 'AI coding assistant Copilot Cursor',
+    audio: 'AI audio music generation voice',
+    video: 'AI video generation Sora RunwayML',
+    research: 'AI research papers breakthrough',
   },
   software: {
-    all: 'software apps new release update developer tools',
+    all: 'software apps new release update',
+    windows: 'Windows software apps new release',
+    mac: 'macOS Mac apps software new',
+    ios: 'iOS iPhone apps new release',
+    android: 'Android apps Google Play new',
+    extensions: 'browser extensions Chrome Firefox new',
   },
 }
 
@@ -68,6 +96,7 @@ interface NewsItem {
   link: string
   source: string
   pubDate: string
+  image: string
 }
 
 function parseRSSItems(xml: string): NewsItem[] {
@@ -80,8 +109,12 @@ function parseRSSItems(xml: string): NewsItem[] {
     const link = itemXml.match(/<link>([\s\S]*?)<\/link>/)?.[1] || ''
     const source = itemXml.match(/<source[^>]*>([\s\S]*?)<\/source>/)?.[1]?.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') || ''
     const pubDate = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/)?.[1] || ''
+    // Try to get image from media:content or enclosure
+    const mediaUrl = itemXml.match(/<media:content[^>]*url="([^"]+)"/)?.[1] || ''
+    const enclosure = itemXml.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] || ''
+    const image = mediaUrl || enclosure || ''
     if (title && link) {
-      items.push({ title: title.trim(), link: link.trim(), source: source.trim(), pubDate: pubDate.trim() })
+      items.push({ title: title.trim(), link: link.trim(), source: source.trim(), pubDate: pubDate.trim(), image })
     }
   }
   return items
@@ -90,40 +123,66 @@ function parseRSSItems(xml: string): NewsItem[] {
 export async function GET(req: NextRequest) {
   const section = req.nextUrl.searchParams.get('section') || ''
   const tab = req.nextUrl.searchParams.get('tab') || 'all'
+  const lang = req.nextUrl.searchParams.get('lang') || 'de'
+  const destination = req.nextUrl.searchParams.get('destination') || ''
 
-  const sectionKeywords = KEYWORDS[section]
-  if (!sectionKeywords) {
-    return NextResponse.json({ items: [], error: 'Unknown section' }, { status: 400 })
+  // Travel section uses dynamic keywords based on destination
+  let keywords = ''
+  if (section === 'travel') {
+    const dest = destination || tab
+    if (!dest || dest === 'all') {
+      keywords = 'travel tourism flights hotels deals'
+    } else {
+      keywords = `${dest} travel tourism visa safety tips`
+    }
+  } else {
+    const sectionKeywords = KEYWORDS[section]
+    if (!sectionKeywords) {
+      return NextResponse.json({ items: [], error: 'Unknown section' }, { status: 400 })
+    }
+    keywords = sectionKeywords[tab] || sectionKeywords['all'] || Object.values(sectionKeywords)[0]
   }
 
-  const keywords = sectionKeywords[tab] || sectionKeywords['all'] || Object.values(sectionKeywords)[0]
   if (!keywords) {
-    return NextResponse.json({ items: [], error: 'Unknown tab' }, { status: 400 })
+    return NextResponse.json({ items: [], error: 'No keywords for section/tab' }, { status: 400 })
   }
+
+  const locale = LANG_MAP[lang] || LANG_MAP.en
 
   try {
     const encoded = encodeURIComponent(keywords + ' when:1d')
-    const url = `https://news.google.com/rss/search?q=${encoded}&hl=de&gl=DE&ceid=DE:de`
+    const url = `https://news.google.com/rss/search?q=${encoded}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
 
     const res = await fetch(url, {
-      next: { revalidate: 1800 }, // cache 30 min
+      next: { revalidate: 1800 },
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
     })
 
     if (!res.ok) {
-      // Fallback to English if German fails
-      const urlEn = `https://news.google.com/rss/search?q=${encodeURIComponent(keywords + ' when:1d')}&hl=en&gl=US&ceid=US:en`
-      const resEn = await fetch(urlEn, { next: { revalidate: 1800 } })
-      if (!resEn.ok) {
+      // Fallback: try without "when:1d" for more results
+      const fallbackUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
+      const fallbackRes = await fetch(fallbackUrl, { next: { revalidate: 1800 } })
+      if (!fallbackRes.ok) {
         return NextResponse.json({ items: [], error: 'News fetch failed' }, { status: 502 })
       }
-      const xmlEn = await resEn.text()
-      const newsItems = parseRSSItems(xmlEn).slice(0, 10)
+      const xml = await fallbackRes.text()
+      const newsItems = parseRSSItems(xml).slice(0, 10)
       return NextResponse.json({ items: newsItems })
     }
 
     const xml = await res.text()
-    const newsItems = parseRSSItems(xml).slice(0, 10)
+    let newsItems = parseRSSItems(xml).slice(0, 10)
+
+    // If less than 3 items found for today, try without date filter
+    if (newsItems.length < 3) {
+      const fallbackUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keywords)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${locale.ceid}`
+      const fallbackRes = await fetch(fallbackUrl, { next: { revalidate: 1800 } })
+      if (fallbackRes.ok) {
+        const xml2 = await fallbackRes.text()
+        newsItems = parseRSSItems(xml2).slice(0, 10)
+      }
+    }
+
     return NextResponse.json({ items: newsItems })
   } catch (err: any) {
     return NextResponse.json({ items: [], error: err.message }, { status: 500 })
