@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Film } from 'lucide-react'
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
+import DailyBrief from '@/components/DailyBrief'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 import { NewsItem, NewsCard } from '@/components/NewsWidget'
@@ -44,6 +45,9 @@ export default function HomePage() {
       <MarketTicker />
 
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
+        {/* AI Daily Brief */}
+        <DailyBrief />
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* News - takes 2 columns */}
           <div className="lg:col-span-2">
