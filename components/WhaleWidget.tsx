@@ -41,10 +41,10 @@ function money(value: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: value >= 1000000 ? 'compact' : 'standard', maximumFractionDigits: 1 }).format(value)
 }
 
-export default function WhaleWidget() {
+export default function WhaleWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { tr, lang } = useLang()
   const t = copy[lang] || copy.en
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
 
   const { data: cryptoData } = useSWR<Coin[]>('/api/crypto?per_page=50&page=1', fetcher, { refreshInterval: 60000 })
   const { data: polyData } = useSWR<Market[]>('/api/polymarket?limit=20', fetcher, { refreshInterval: 120000 })

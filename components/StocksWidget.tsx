@@ -22,9 +22,9 @@ const INDEX_LABELS: Record<string, string> = {
   '^DJI': 'Dow Jones',
 }
 
-export default function StocksWidget() {
+export default function StocksWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { tr } = useLang()
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
   const { data, error, isLoading } = useSWR<Quote[]>('/api/stocks', fetcher, { refreshInterval: 60000 })
 
   const quotes = Array.isArray(data) ? data : []

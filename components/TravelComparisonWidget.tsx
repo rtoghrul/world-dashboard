@@ -18,10 +18,10 @@ function enc(v: string) { return encodeURIComponent(v.trim()) }
 function yymmdd(date: string) { if (!date) return ''; const [y, m, d] = date.split('-'); return `${y.slice(2)}${m}${d}` }
 function code(value: string) { const m = value.match(/\(([A-Za-z]{3})\)/); if (m) return m[1].toUpperCase(); const clean = value.trim().toUpperCase(); return /^[A-Z]{3}$/.test(clean) ? clean : clean.slice(0, 3) }
 
-export default function TravelComparisonWidget() {
+export default function TravelComparisonWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { lang } = useLang()
   const t = copy[lang] || copy.en
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
   const [mode, setMode] = useState<Mode>('package')
   const [tripType, setTripType] = useState<TripType>('round')
   const [from, setFrom] = useState('Frankfurt (FRA)')

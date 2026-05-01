@@ -162,9 +162,9 @@ function ScienceArticleCard({ article }: { article: ModalItem }) {
   )
 }
 
-export default function EducationWidget() {
+export default function EducationWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { tr, lang } = useLang()
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
   const [mode, setMode] = useState<Mode>('science')
   const [subject, setSubject] = useState('physics')
   const [activeEngTopic, setActiveEngTopic] = useState<'automation' | 'electrical' | 'mechanical' | null>(null)

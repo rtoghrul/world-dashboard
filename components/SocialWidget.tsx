@@ -58,10 +58,10 @@ const PLATFORMS = [
   },
 ]
 
-export default function SocialWidget() {
+export default function SocialWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { tr } = useLang()
   const [platform, setPlatform] = useState('tiktok')
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
 
   const current = PLATFORMS.find(p => p.id === platform)!
 

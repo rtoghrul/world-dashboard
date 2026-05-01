@@ -99,10 +99,10 @@ export function CryptoTable({ coins }: { coins: Coin[] }) {
   )
 }
 
-export default function CryptoWidget() {
+export default function CryptoWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { tr } = useLang()
   const [query, setQuery] = useState('')
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
   const { data, error, isLoading, mutate } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
 
   const coins = Array.isArray(data) ? data : []

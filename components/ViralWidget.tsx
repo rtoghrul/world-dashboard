@@ -166,7 +166,7 @@ const SOCIAL = [
   { name: 'X/Twitter', icon: 'X', color: 'text-sky-400', bg: 'bg-sky-500/10 border-sky-500/20', url: 'https://x.com/explore/tabs/trending' },
 ]
 
-export default function ViralWidget() {
+export default function ViralWidget({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { lang, tr } = useLang()
   const viralLang = (['az', 'ru', 'de', 'tr'].includes(lang) ? lang : 'en') as ViralLang
   const text = COPY[viralLang]
@@ -174,7 +174,7 @@ export default function ViralWidget() {
   const [category, setCategory] = useState('')
   const [query, setQuery] = useState('')
   const [showEmbed, setShowEmbed] = useState<string | null>(null)
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(!defaultExpanded)
   const [manualRegion, setManualRegion] = useState(false)
   const [reloadToken, setReloadToken] = useState(0)
 

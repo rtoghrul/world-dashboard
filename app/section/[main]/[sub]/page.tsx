@@ -35,16 +35,16 @@ const entertainmentType: any = { movies: 'movie', series: 'series', cartoons: 'c
 
 function Content({ main, sub }: { main: string; sub: string }) {
   if (main === 'weather') return <WeatherWidget />
-  if (main === 'crypto') return <CryptoWidget />
-  if (main === 'whale') return <WhaleWidget />
-  if (main === 'news') return <NewsWidget />
-  if (main === 'travel') return <TravelComparisonWidget />
-  if (main === 'viral') return <ViralWidget />
+  if (main === 'crypto') return <CryptoWidget defaultExpanded />
+  if (main === 'whale') return <WhaleWidget defaultExpanded />
+  if (main === 'news') return <NewsWidget defaultExpanded />
+  if (main === 'travel') return <TravelComparisonWidget defaultExpanded />
+  if (main === 'viral') return <ViralWidget defaultExpanded />
   if (main === 'entertainment') return <EntertainmentWidget />
-  if (main === 'social') return <SocialWidget />
-  if (main === 'stocks') return <StocksWidget />
-  if (main === 'education') return <EducationWidget />
-  return <NewsWidget />
+  if (main === 'social') return <SocialWidget defaultExpanded />
+  if (main === 'stocks') return <StocksWidget defaultExpanded />
+  if (main === 'education') return <EducationWidget defaultExpanded />
+  return <NewsWidget defaultExpanded />
 }
 
 export default function SectionPage() {
