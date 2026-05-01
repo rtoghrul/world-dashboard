@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { ExternalLink, Landmark, Home, GraduationCap, Briefcase, CalendarClock, Globe2, Wrench, FileText, Baby, Scale, Heart, Car, Banknote } from 'lucide-react'
+import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Life in Germany 🇩🇪', az: 'Almaniyada Həyat 🇩🇪', ru: 'Жизнь в Германии 🇩🇪', de: 'Leben in Deutschland 🇩🇪', tr: 'Almanya\u2019da Ya\u015fam 🇩🇪' },
@@ -153,6 +154,8 @@ export default function GermanyWidget({ initialTab }: { initialTab?: string }) {
           {expanded ? '\u25b2 Show less' : `\u25bc Show all (${filtered.length})`}
         </button>
       )}
+
+      <SectionNews section="germany" tab={activeTab} accentColor="yellow" />
     </div>
   )
 }

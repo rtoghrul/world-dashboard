@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { ExternalLink, Star, Truck, ShieldCheck, Clock, Package, Shirt, Cpu, Home, Baby, Gamepad2, Wrench } from 'lucide-react'
+import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Chinese Platforms 🇨🇳→🇩🇪', az: 'Çin Platformaları 🇨🇳→🇩🇪', ru: 'Китайские платформы 🇨🇳→🇩🇪', de: 'Chinesische Plattformen 🇨🇳→🇩🇪', tr: 'Çin Platformları 🇨🇳→🇩🇪' },
@@ -148,6 +149,8 @@ export default function ChinesePlatformsWidget({ initialCategory }: { initialCat
           {expanded ? '\u25b2 Show less' : `\u25bc Show all (${filtered.length})`}
         </button>
       )}
+
+      <SectionNews section="chinese" tab={tab} accentColor="red" />
     </div>
   )
 }

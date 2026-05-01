@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { ExternalLink, Store, ShoppingBag, Package, Truck, Cpu, CircleDot, Home, Globe2, Search } from 'lucide-react'
+import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Online Platforms — Germany 🇩🇪', az: 'Onlayn Platformalar — Almaniya 🇩🇪', ru: 'Онлайн-платформы — Германия 🇩🇪', de: 'Online-Plattformen — Deutschland 🇩🇪', tr: 'Online Platformlar — Almanya 🇩🇪' },
@@ -166,6 +167,8 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
           {expanded ? '▲ Show less' : `▼ Show all (${filtered.length})`}
         </button>
       )}
+
+      <SectionNews section="platforms" tab={category} accentColor="blue" />
     </div>
   )
 }

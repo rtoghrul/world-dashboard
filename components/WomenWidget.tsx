@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { Heart, Sparkles, Baby, Dumbbell, Palette, Apple, ExternalLink, Star } from 'lucide-react'
+import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Women’s Corner', az: 'Qadınlar Bölməsi', ru: 'Женский раздел', de: 'Frauenbereich', tr: 'Kadınlar Köşesi' },
@@ -136,6 +137,8 @@ export default function WomenWidget({ initialCategory }: { initialCategory?: str
           {expanded ? '▲ Show less' : `▼ Show all (${filtered.length})`}
         </button>
       )}
+
+      <SectionNews section="women" tab={tab} accentColor="pink" />
     </div>
   )
 }
