@@ -10,6 +10,7 @@ import NotificationCenter from '@/components/NotificationCenter'
 import ThemeToggle from '@/components/ThemeToggle'
 import BookmarksPanel from '@/components/BookmarksPanel'
 import FocusMode from '@/components/FocusMode'
+import WhatsNew from '@/components/WhatsNew'
 import { createClient } from '@/lib/supabase'
 
 const menuStructure: Record<string, { label: Record<string,string>; items: { id: string; label: Record<string,string> }[] }> = {
@@ -254,6 +255,7 @@ export default function Header() {
               <ThemeToggle />
               <BookmarksPanel />
               <FocusMode />
+              <WhatsNew />
               {isAdmin && (
                 <Link href="/admin" className="px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition">
                   Admin
