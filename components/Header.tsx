@@ -166,8 +166,8 @@ export default function Header() {
               <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
-            {/* Desktop Navigation - scrollable */}
-            <nav className="hidden md:flex items-center overflow-x-auto mx-4 flex-1 scrollbar-hide">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center mx-4 flex-1 flex-wrap">
               {menuKeys.map((id, index) => {
                 const section = menuStructure[id]
                 const isRightHalf = index >= menuKeys.length - 3
