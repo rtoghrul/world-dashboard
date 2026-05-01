@@ -187,6 +187,11 @@ body::after {
   to { --angle: 360deg; }
 }
 
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-shimmer { animation: shimmer 2s linear infinite; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
@@ -194,6 +199,7 @@ body::after {
 .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
 .animate-ticker { animation: ticker-scroll 40s linear infinite; }
 .animate-gradient { animation: gradient-shift 8s ease infinite; background-size: 200% 200%; }
+.animate-slide-in-right { animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
 /* Staggered animations */
 .stagger-1 { animation-delay: 0.05s; }

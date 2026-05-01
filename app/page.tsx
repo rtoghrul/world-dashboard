@@ -12,6 +12,11 @@ import PortfolioTracker from '@/components/PortfolioTracker'
 import PriceChart from '@/components/PriceChart'
 import { NewsItem, NewsCard } from '@/components/NewsWidget'
 import { Coin, formatNum } from '@/components/CryptoWidget'
+import TrendingWidget from '@/components/TrendingWidget'
+import CalendarWidget from '@/components/CalendarWidget'
+import DailyStreak from '@/components/DailyStreak'
+import DailyQuiz from '@/components/DailyQuiz'
+import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -43,10 +48,16 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen relative">
+      <ServiceWorkerRegistrar />
       <Header />
       <MarketTicker />
 
       <main className="max-w-screen-2xl mx-auto px-5 py-6">
+        {/* Daily Streak */}
+        <div className="mb-4">
+          <DailyStreak />
+        </div>
+
         {/* AI Daily Brief */}
         <DailyBrief />
 
@@ -89,53 +100,97 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right sidebar - Crypto quick view */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Bitcoin className="w-4 h-4 text-amber-400" />
-                <h2 className="text-white font-semibold text-sm">{t.topCoins}</h2>
-              </div>
-              <Link href="/section/crypto/top" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
-                {t.viewAll} <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 overflow-hidden">
-              {topCoins.length === 0 && (
-                <div className="p-6 space-y-4">
-                  {[1,2,3,4,5].map(i => (
-                    <div key={i} className="flex items-center gap-3 animate-pulse">
-                      <div className="w-8 h-8 bg-white/[0.03] rounded-full" />
-                      <div className="flex-1 h-3 bg-white/[0.03] rounded" />
-                      <div className="w-16 h-3 bg-white/[0.03] rounded" />
-                    </div>
-                  ))}
+          {/* Right sidebar */}
+          <div className="space-y-5">
+            {/* Top Coins */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Bitcoin className="w-4 h-4 text-amber-400" />
+                  <h2 className="text-white font-semibold text-sm">{t.topCoins}</h2>
                 </div>
-              )}
-              {topCoins.map(coin => {
-                const up = coin.price_change_percentage_24h >= 0
-                return (
-                  <Link key={coin.id} href="/section/crypto/top" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition border-b border-white/[0.03] last:border-0">
-                    <img src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white text-xs font-medium">{coin.name}</p>
-                      <p className="text-[#4a4a5e] text-[10px] uppercase">{coin.symbol}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-white text-xs font-mono">${coin.current_price.toLocaleString()}</p>
-                      <p className={`text-[10px] font-medium flex items-center justify-end gap-0.5 ${up ? 'text-emerald-400' : 'text-red-400'}`}>
-                        {up ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
-                        {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
-                      </p>
-                    </div>
-                  </Link>
-                )
-              })}
+                <Link href="/section/crypto/top" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
+                  {t.viewAll} <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+              <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 overflow-hidden">
+                {topCoins.length === 0 && (
+                  <div className="p-6 space-y-4">
+                    {[1,2,3,4,5].map(i => (
+                      <div key={i} className="flex items-center gap-3 animate-pulse">
+                        <div className="w-8 h-8 bg-white/[0.03] rounded-full" />
+                        <div className="flex-1 h-3 bg-white/[0.03] rounded" />
+                        <div className="w-16 h-3 bg-white/[0.03] rounded" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {topCoins.map(coin => {
+                  const up = coin.price_change_percentage_24h >= 0
+                  return (
+                    <Link key={coin.id} href="/section/crypto/top" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition border-b border-white/[0.03] last:border-0">
+                      <img src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white text-xs font-medium">{coin.name}</p>
+                        <p className="text-[#4a4a5e] text-[10px] uppercase">{coin.symbol}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-white text-xs font-mono">${coin.current_price.toLocaleString()}</p>
+                        <p className={`text-[10px] font-medium flex items-center justify-end gap-0.5 ${up ? 'text-emerald-400' : 'text-red-400'}`}>
+                          {up ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
+                          {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
+                        </p>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
 
             {/* Portfolio */}
-            <div className="mt-5">
-              <PortfolioTracker />
+            <PortfolioTracker />
+
+            {/* Trending */}
+            <TrendingWidget />
+          </div>
+        </div>
+
+        {/* Second row: Calendar + Quiz */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+          <CalendarWidget />
+          <DailyQuiz />
+          <div className="hidden lg:block">
+            <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <BarChart2 className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-white font-semibold text-sm">Quick Stats</h3>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[#8b8b9e] text-xs">BTC Dominance</span>
+                  <span className="text-white text-xs font-mono">54.2%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#8b8b9e] text-xs">24h Volume</span>
+                  <span className="text-white text-xs font-mono">$89.4B</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#8b8b9e] text-xs">Active Coins</span>
+                  <span className="text-white text-xs font-mono">14,283</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#8b8b9e] text-xs">S&amp;P 500</span>
+                  <span className="text-emerald-400 text-xs font-mono">+0.87%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#8b8b9e] text-xs">NASDAQ</span>
+                  <span className="text-emerald-400 text-xs font-mono">+1.12%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#8b8b9e] text-xs">Gold</span>
+                  <span className="text-white text-xs font-mono">$2,341</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

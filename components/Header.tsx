@@ -7,6 +7,8 @@ import { Globe, ChevronDown, LogOut, X, Search } from 'lucide-react'
 import LanguagePicker from '@/components/LanguagePicker'
 import { useLang } from '@/lib/LanguageContext'
 import NotificationCenter from '@/components/NotificationCenter'
+import ThemeToggle from '@/components/ThemeToggle'
+import BookmarksPanel from '@/components/BookmarksPanel'
 import { createClient } from '@/lib/supabase'
 
 const menuStructure: Record<string, { label: Record<string,string>; items: { id: string; label: Record<string,string> }[] }> = {
@@ -248,6 +250,8 @@ export default function Header() {
                 <kbd className="ml-1 px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
               </button>
               <LanguagePicker />
+              <ThemeToggle />
+              <BookmarksPanel />
               {isAdmin && (
                 <Link href="/admin" className="px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition">
                   Admin
