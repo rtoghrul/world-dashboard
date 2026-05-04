@@ -1,9 +1,10 @@
 'use client'
 import Link from 'next/link'
-import { Newspaper, Bitcoin, Film, Zap, Download, GraduationCap, Plane, Cloud, ShoppingBag, Globe2, Sparkles, TrendingUp } from 'lucide-react'
+import { Newspaper, Bitcoin, Film, Zap, Download, GraduationCap, Plane, Cloud, ShoppingBag, Globe2, Sparkles, TrendingUp, MapPin } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const quickActions = [
+  { icon: MapPin, label: { en: 'Nearby', az: 'Yaxınlıqda', ru: 'Рядом' }, href: '/nearby', color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/20' },
   { icon: TrendingUp, label: { en: 'Trending', az: 'Trend' }, href: '/section/viral/trending', color: 'from-rose-500/20 to-pink-500/20 border-rose-500/20' },
   { icon: Sparkles, label: { en: 'AI Tools', az: 'AI Alətlər' }, href: '/section/aitools/chatbots', color: 'from-purple-500/20 to-violet-500/20 border-purple-500/20' },
   { icon: Bitcoin, label: { en: 'Crypto', az: 'Kripto' }, href: '/section/markets/crypto-top', color: 'from-amber-500/20 to-orange-500/20 border-amber-500/20' },
