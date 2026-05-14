@@ -4,11 +4,29 @@ export default function GlobalFactsNav() {
   return (
     <Link
       href="/facts"
-      className="hidden xl:flex fixed top-[126px] left-[250px] z-[2147483000] items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-[#a5a5b8] hover:text-white hover:bg-white/[0.04] transition-colors bg-[#07070b]/80 backdrop-blur-sm"
       aria-label="Open Facts"
+      style={{
+        position: 'fixed',
+        top: '113px',
+        left: '218px',
+        zIndex: 2147483000,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '7px 10px',
+        borderRadius: '8px',
+        color: '#a5a5b8',
+        background: 'rgba(7, 7, 11, 0.88)',
+        backdropFilter: 'blur(8px)',
+        fontSize: '14px',
+        fontWeight: 500,
+        lineHeight: 1,
+        textDecoration: 'none',
+        pointerEvents: 'auto',
+      }}
     >
       <span>Facts</span>
-      <span className="text-[10px] text-[#6b6b80]">▾</span>
+      <span style={{ color: '#6b6b80', fontSize: '10px' }}>▾</span>
     </Link>
   )
 }
