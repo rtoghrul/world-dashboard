@@ -7,7 +7,7 @@ import AIAssistant from '@/components/AIAssistant'
 import CommandPalette from '@/components/CommandPalette'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import ScrollProgress from '@/components/ScrollProgress'
-import GlobalFactsNav from '@/components/GlobalFactsNav'
+import MainMenuDropdown from '@/components/MainMenuDropdown'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} bg-gray-950 min-h-screen`} style={{ background: '#030305', minHeight: '100vh' }}>
         <ThemeProvider>
           <LanguageProvider>
-            <GlobalFactsNav />
+            <MainMenuDropdown />
             {children}
             <AIAssistant />
             <CommandPalette />
