@@ -7,6 +7,7 @@ import AIAssistant from '@/components/AIAssistant'
 import CommandPalette from '@/components/CommandPalette'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import ScrollProgress from '@/components/ScrollProgress'
+import FactsMenuInjector from '@/components/FactsMenuInjector'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('error',function(e){if(e.message&&(e.message.includes('Loading chunk')||e.message.includes('Failed to fetch'))){window.location.reload();}});`}} />
         <ThemeProvider>
           <LanguageProvider>
+            <FactsMenuInjector />
             {children}
             <AIAssistant />
             <CommandPalette />
