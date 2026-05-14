@@ -1,5 +1,4 @@
 import FactsCategoryClientV2 from '@/components/FactsCategoryClientV2'
-import FactsTranslationFixer from '@/components/FactsTranslationFixer'
 import { factCategories, getFactCategory } from '@/lib/facts'
 
 export function generateStaticParams() {
@@ -21,10 +20,5 @@ export default function DirectFactsCategoryPage({
   params: { id: string }
   searchParams?: { page?: string }
 }) {
-  return (
-    <>
-      <FactsCategoryClientV2 id={params.id} page={searchParams?.page} />
-      <FactsTranslationFixer />
-    </>
-  )
+  return <FactsCategoryClientV2 id={params.id} page={searchParams?.page} />
 }
