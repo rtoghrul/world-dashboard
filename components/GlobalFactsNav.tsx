@@ -7,22 +7,22 @@ export default function GlobalFactsNav() {
       aria-label="Open Facts"
       style={{
         position: 'fixed',
-        top: '113px',
-        left: '218px',
+        top: '18px',
+        left: '214px',
         zIndex: 2147483000,
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        padding: '7px 10px',
+        padding: '8px 10px',
         borderRadius: '8px',
         color: '#a5a5b8',
-        background: 'rgba(7, 7, 11, 0.88)',
-        backdropFilter: 'blur(8px)',
+        background: '#07070b',
         fontSize: '14px',
         fontWeight: 500,
         lineHeight: 1,
         textDecoration: 'none',
         pointerEvents: 'auto',
+        boxShadow: '0 0 0 1px rgba(255,255,255,0.02)',
       }}
     >
       <span>Facts</span>
