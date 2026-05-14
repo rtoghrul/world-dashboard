@@ -175,11 +175,11 @@ export default function MainMenuDropdown() {
   }, [])
 
   return (
-    <div ref={wrapperRef} className="fixed top-[76px] left-4 z-[9998] hidden md:block">
+    <div ref={wrapperRef} className="fixed top-[96px] left-8 z-[100000] hidden md:block">
       <button
         type="button"
         onClick={() => setOpen(value => !value)}
-        className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#090911]/95 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-black/20 hover:border-indigo-400/30 hover:bg-[#101020] transition"
+        className="flex items-center gap-2 rounded-xl border border-indigo-400/30 bg-indigo-600/90 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-950/30 hover:bg-indigo-500 transition"
       >
         {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         Menu
