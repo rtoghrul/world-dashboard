@@ -2,8 +2,6 @@
 
 import { useEffect } from 'react'
 
-const knownFirstMenuItems = ['Xəbərlər', 'News', 'Новости', 'Haberler', 'Nachrichten']
-
 function getFactsLabel() {
   const text = document.body.innerText || ''
   if (text.includes('Xəbərlər')) return 'Faktlar'
@@ -12,55 +10,69 @@ function getFactsLabel() {
   return 'Facts'
 }
 
-function findFirstMenuItem() {
-  const elements = Array.from(document.querySelectorAll('button, a, div')) as HTMLElement[]
-  return elements.find(element => {
-    const text = element.innerText?.trim()
-    if (!text || text.length > 40) return false
-    return knownFirstMenuItems.some(label => text === label || text.startsWith(label))
-  })
+function isMenuOpen() {
+  const text = document.body.innerText || ''
+  return text.includes('Menu') && (text.includes('Xəbərlər') || text.includes('News') || text.includes('Bazarlar') || text.includes('Markets'))
 }
 
-function injectFactsMenuItem() {
-  if (document.querySelector('[data-facts-menu-item="true"]')) return
+function upsertFactsMenuItem() {
+  const existing = document.querySelector('[data-facts-menu-item="true"]') as HTMLAnchorElement | null
 
-  const firstItem = findFirstMenuItem()
-  const parent = firstItem?.parentElement
-  if (!firstItem || !parent) return
+  if (!isMenuOpen()) {
+    existing?.remove()
+    return
+  }
+
+  if (existing) {
+    existing.textContent = `${getFactsLabel()}  ›`
+    return
+  }
 
   const item = document.createElement('a')
   item.href = '/section/facts'
   item.setAttribute('data-facts-menu-item', 'true')
-  item.className = firstItem.className
+  item.textContent = `${getFactsLabel()}  ›`
+  item.style.position = 'fixed'
+  item.style.zIndex = '2147483647'
+  item.style.left = '160px'
+  item.style.right = '0'
+  item.style.top = '276px'
+  item.style.height = '58px'
   item.style.display = 'flex'
   item.style.alignItems = 'center'
   item.style.justifyContent = 'space-between'
-  item.style.width = '100%'
+  item.style.padding = '0 46px 0 36px'
+  item.style.boxSizing = 'border-box'
   item.style.textDecoration = 'none'
-  item.style.color = 'rgb(139, 139, 158)'
-  item.style.fontSize = window.innerWidth < 768 ? '20px' : '14px'
-  item.style.fontWeight = '500'
-  item.style.padding = '14px 36px'
+  item.style.color = 'rgb(226, 232, 240)'
+  item.style.background = 'rgb(10, 10, 16)'
+  item.style.borderTop = '1px solid rgba(255,255,255,0.04)'
+  item.style.borderBottom = '1px solid rgba(255,255,255,0.04)'
+  item.style.fontSize = '20px'
+  item.style.fontWeight = '600'
+  item.style.letterSpacing = '0.01em'
 
-  const label = document.createElement('span')
-  label.textContent = getFactsLabel()
-
-  const arrow = document.createElement('span')
-  arrow.textContent = '›'
-  arrow.style.fontSize = '22px'
-  arrow.style.opacity = '0.75'
-
-  item.appendChild(label)
-  item.appendChild(arrow)
-  parent.insertBefore(item, firstItem)
+  document.body.appendChild(item)
 }
 
 export default function FactsMenuInjector() {
   useEffect(() => {
-    injectFactsMenuItem()
-    const observer = new MutationObserver(injectFactsMenuItem)
-    observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+    upsertFactsMenuItem()
+
+    const observer = new MutationObserver(upsertFactsMenuItem)
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true })
+
+    window.addEventListener('click', upsertFactsMenuItem, true)
+    window.addEventListener('keydown', upsertFactsMenuItem, true)
+
+    const interval = window.setInterval(upsertFactsMenuItem, 300)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('click', upsertFactsMenuItem, true)
+      window.removeEventListener('keydown', upsertFactsMenuItem, true)
+      window.clearInterval(interval)
+    }
   }, [])
 
   return null
