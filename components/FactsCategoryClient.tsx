@@ -5,7 +5,7 @@ import { ArrowLeft, Sparkles } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import MobileBottomNav from '@/components/MobileBottomNav'
-import { factCategories, getFactCategory, getFactsForCategory } from '@/lib/facts'
+import { getFactCategory, getFactsForCategory } from '@/lib/facts'
 import { useLang } from '@/lib/LanguageContext'
 
 const FACTS_PER_PAGE = 5
@@ -13,42 +13,18 @@ const FACTS_PER_PAGE = 5
 type LangText = Record<string, string>
 
 const ui: Record<string, Record<string, string>> = {
-  en: {
-    back: 'Back to facts', didYouKnow: 'Did you know?', subtitle: 'Only mind-blowing facts', page: 'page', of: 'of', showing: 'Showing', topicsFrom: 'topics from', total: 'total', previous: 'Previous', next: 'Next', topic: 'Topic', originalTopic: 'Original topic', explanation: 'This is a mind-blowing fact because it reveals a surprising scale, hidden mechanism, or unexpected connection.',
-  },
-  az: {
-    back: 'Faktlara qayıt', didYouKnow: 'Bilirdiniz?', subtitle: 'Yalnız heyrətləndirici faktlar', page: 'səhifə', of: '/', showing: 'Göstərilir', topicsFrom: 'mövzu, ümumi', total: 'mövzu', previous: 'Əvvəlki', next: 'Növbəti', topic: 'Mövzu', originalTopic: 'Orijinal mövzu', explanation: 'Bu heyrətləndirici faktdır, çünki gizli mexanizmi, böyük miqyası və ya gözlənilməz əlaqəni göstərir.',
-  },
-  ru: {
-    back: 'Назад к фактам', didYouKnow: 'Знаете ли вы?', subtitle: 'Только удивительные факты', page: 'страница', of: 'из', showing: 'Показано', topicsFrom: 'тем из', total: 'всего', previous: 'Назад', next: 'Далее', topic: 'Тема', originalTopic: 'Оригинальная тема', explanation: 'Это удивительный факт, потому что он показывает скрытый механизм, огромный масштаб или неожиданную связь.',
-  },
-  tr: {
-    back: 'Faktlara dön', didYouKnow: 'Biliyor muydun?', subtitle: 'Sadece akıl almaz faktlar', page: 'sayfa', of: '/', showing: 'Gösteriliyor', topicsFrom: 'konu, toplam', total: 'konu', previous: 'Önceki', next: 'Sonraki', topic: 'Konu', originalTopic: 'Orijinal konu', explanation: 'Bu akıl almaz bir fakt çünkü gizli mekanizmayı, büyük ölçeği veya beklenmedik bağlantıyı gösterir.',
-  },
-  de: {
-    back: 'Zurück zu Fakten', didYouKnow: 'Wusstest du?', subtitle: 'Nur verblüffende Fakten', page: 'Seite', of: 'von', showing: 'Zeige', topicsFrom: 'Themen von', total: 'gesamt', previous: 'Zurück', next: 'Weiter', topic: 'Thema', originalTopic: 'Originalthema', explanation: 'Das ist ein verblüffender Fakt, weil er einen versteckten Mechanismus, eine enorme Größenordnung oder eine unerwartete Verbindung zeigt.',
-  },
-  fr: {
-    back: 'Retour aux faits', didYouKnow: 'Le saviez-vous ?', subtitle: 'Uniquement des faits étonnants', page: 'page', of: 'sur', showing: 'Affichage', topicsFrom: 'sujets sur', total: 'au total', previous: 'Précédent', next: 'Suivant', topic: 'Sujet', originalTopic: 'Sujet original', explanation: 'C’est un fait étonnant, car il révèle un mécanisme caché, une grande échelle ou un lien inattendu.',
-  },
-  es: {
-    back: 'Volver a hechos', didYouKnow: '¿Sabías que?', subtitle: 'Solo hechos sorprendentes', page: 'página', of: 'de', showing: 'Mostrando', topicsFrom: 'temas de', total: 'total', previous: 'Anterior', next: 'Siguiente', topic: 'Tema', originalTopic: 'Tema original', explanation: 'Es un hecho sorprendente porque revela un mecanismo oculto, una gran escala o una conexión inesperada.',
-  },
-  it: {
-    back: 'Torna ai fatti', didYouKnow: 'Lo sapevi?', subtitle: 'Solo fatti sorprendenti', page: 'pagina', of: 'di', showing: 'Mostrando', topicsFrom: 'argomenti su', total: 'totali', previous: 'Precedente', next: 'Successivo', topic: 'Argomento', originalTopic: 'Argomento originale', explanation: 'È un fatto sorprendente perché mostra un meccanismo nascosto, una scala enorme o una connessione inattesa.',
-  },
-  pt: {
-    back: 'Voltar aos fatos', didYouKnow: 'Você sabia?', subtitle: 'Apenas fatos surpreendentes', page: 'página', of: 'de', showing: 'Mostrando', topicsFrom: 'tópicos de', total: 'total', previous: 'Anterior', next: 'Próximo', topic: 'Tópico', originalTopic: 'Tópico original', explanation: 'É um fato surpreendente porque revela um mecanismo oculto, uma grande escala ou uma conexão inesperada.',
-  },
-  zh: {
-    back: '返回事实', didYouKnow: '你知道吗？', subtitle: '只看令人震惊的事实', page: '第', of: '页 / 共', showing: '显示', topicsFrom: '个主题，共', total: '个', previous: '上一页', next: '下一页', topic: '主题', originalTopic: '原始主题', explanation: '这是一个令人震惊的事实，因为它揭示了隐藏机制、巨大尺度或意想不到的联系。',
-  },
-  ja: {
-    back: '事実一覧へ戻る', didYouKnow: '知っていましたか？', subtitle: '驚くような事実だけ', page: 'ページ', of: '/', showing: '表示中', topicsFrom: '件 / 全', total: '件', previous: '前へ', next: '次へ', topic: 'トピック', originalTopic: '元のトピック', explanation: 'これは隠れた仕組み、大きなスケール、または意外なつながりを示す驚くべき事実です。',
-  },
-  ar: {
-    back: 'العودة إلى الحقائق', didYouKnow: 'هل تعلم؟', subtitle: 'حقائق مذهلة فقط', page: 'صفحة', of: 'من', showing: 'عرض', topicsFrom: 'مواضيع من', total: 'الإجمالي', previous: 'السابق', next: 'التالي', topic: 'موضوع', originalTopic: 'الموضوع الأصلي', explanation: 'هذه حقيقة مذهلة لأنها تكشف آلية خفية أو حجماً هائلاً أو ارتباطاً غير متوقع.',
-  },
+  en: { back: 'Back to facts', didYouKnow: 'Did you know?', subtitle: 'Only mind-blowing facts', page: 'page', of: 'of', showing: 'Showing', topicsFrom: 'topics from', total: 'total', previous: 'Previous', next: 'Next', topic: 'Topic', explanation: 'This is a mind-blowing fact because it reveals a surprising scale, hidden mechanism, or unexpected connection.' },
+  az: { back: 'Faktlara qayıt', didYouKnow: 'Bilirdiniz?', subtitle: 'Yalnız heyrətləndirici faktlar', page: 'səhifə', of: '/', showing: 'Göstərilir', topicsFrom: 'mövzu, ümumi', total: 'mövzu', previous: 'Əvvəlki', next: 'Növbəti', topic: 'Mövzu', explanation: 'Bu heyrətləndirici faktdır, çünki gizli mexanizmi, böyük miqyası və ya gözlənilməz əlaqəni göstərir.' },
+  ru: { back: 'Назад к фактам', didYouKnow: 'Знаете ли вы?', subtitle: 'Только удивительные факты', page: 'страница', of: 'из', showing: 'Показано', topicsFrom: 'тем из', total: 'всего', previous: 'Назад', next: 'Далее', topic: 'Тема', explanation: 'Это удивительный факт, потому что он показывает скрытый механизм, огромный масштаб или неожиданную связь.' },
+  tr: { back: 'Faktlara dön', didYouKnow: 'Biliyor muydun?', subtitle: 'Sadece akıl almaz faktlar', page: 'sayfa', of: '/', showing: 'Gösteriliyor', topicsFrom: 'konu, toplam', total: 'konu', previous: 'Önceki', next: 'Sonraki', topic: 'Konu', explanation: 'Bu akıl almaz bir fakt çünkü gizli mekanizmayı, büyük ölçeği veya beklenmedik bağlantıyı gösterir.' },
+  de: { back: 'Zurück zu Fakten', didYouKnow: 'Wusstest du?', subtitle: 'Nur verblüffende Fakten', page: 'Seite', of: 'von', showing: 'Zeige', topicsFrom: 'Themen von', total: 'gesamt', previous: 'Zurück', next: 'Weiter', topic: 'Thema', explanation: 'Das ist ein verblüffender Fakt, weil er einen versteckten Mechanismus, eine enorme Größenordnung oder eine unerwartete Verbindung zeigt.' },
+  fr: { back: 'Retour aux faits', didYouKnow: 'Le saviez-vous ?', subtitle: 'Uniquement des faits étonnants', page: 'page', of: 'sur', showing: 'Affichage', topicsFrom: 'sujets sur', total: 'au total', previous: 'Précédent', next: 'Suivant', topic: 'Sujet', explanation: 'C’est un fait étonnant, car il révèle un mécanisme caché, une grande échelle ou un lien inattendu.' },
+  es: { back: 'Volver a hechos', didYouKnow: '¿Sabías que?', subtitle: 'Solo hechos sorprendentes', page: 'página', of: 'de', showing: 'Mostrando', topicsFrom: 'temas de', total: 'total', previous: 'Anterior', next: 'Siguiente', topic: 'Tema', explanation: 'Es un hecho sorprendente porque revela un mecanismo oculto, una gran escala o una conexión inesperada.' },
+  it: { back: 'Torna ai fatti', didYouKnow: 'Lo sapevi?', subtitle: 'Solo fatti sorprendenti', page: 'pagina', of: 'di', showing: 'Mostrando', topicsFrom: 'argomenti su', total: 'totali', previous: 'Precedente', next: 'Successivo', topic: 'Argomento', explanation: 'È un fatto sorprendente perché mostra un meccanismo nascosto, una scala enorme o una connessione inattesa.' },
+  pt: { back: 'Voltar aos fatos', didYouKnow: 'Você sabia?', subtitle: 'Apenas fatos surpreendentes', page: 'página', of: 'de', showing: 'Mostrando', topicsFrom: 'tópicos de', total: 'total', previous: 'Anterior', next: 'Próximo', topic: 'Tópico', explanation: 'É um fato surpreendente porque revela um mecanismo oculto, uma grande escala ou uma conexão inesperada.' },
+  zh: { back: '返回事实', didYouKnow: '你知道吗？', subtitle: '只看令人震惊的事实', page: '第', of: '页 / 共', showing: '显示', topicsFrom: '个主题，共', total: '个', previous: '上一页', next: '下一页', topic: '主题', explanation: '这是一个令人震惊的事实，因为它揭示了隐藏机制、巨大尺度或意想不到的联系。' },
+  ja: { back: '事実一覧へ戻る', didYouKnow: '知っていましたか？', subtitle: '驚くような事実だけ', page: 'ページ', of: '/', showing: '表示中', topicsFrom: '件 / 全', total: '件', previous: '前へ', next: '次へ', topic: 'トピック', explanation: 'これは隠れた仕組み、大きなスケール、または意外なつながりを示す驚くべき事実です。' },
+  ar: { back: 'العودة إلى الحقائق', didYouKnow: 'هل تعلم؟', subtitle: 'حقائق مذهلة فقط', page: 'صفحة', of: 'من', showing: 'عرض', topicsFrom: 'مواضيع من', total: 'الإجمالي', previous: 'السابق', next: 'التالي', topic: 'موضوع', explanation: 'هذه حقيقة مذهلة لأنها تكشف آلية خفية أو حجماً هائلاً أو ارتباطاً غير متوقع.' },
 }
 
 const categoryNames: Record<string, LangText> = {
@@ -80,11 +56,11 @@ function getText(dictionary: Record<string, string>, lang: string) {
   return dictionary[lang] || dictionary.en
 }
 
-function localizeFactTitle(title: string, lang: string) {
+function getLocalizedTitle(title: string, lang: string, categoryName: string, number: number, topicLabel: string) {
   if (lang === 'en') return title
-  const [topic, angle] = title.split(' — ')
-  const translatedAngle = angleTranslations[angle] ? getText(angleTranslations[angle], lang) : angle
-  return `${translatedAngle}: ${topic}`
+  const angle = title.split(' — ')[1]
+  const translatedAngle = angleTranslations[angle] ? getText(angleTranslations[angle], lang) : getText(angleTranslations['Did you know?'], lang)
+  return `${translatedAngle}: ${categoryName} ${topicLabel} #${number}`
 }
 
 function getVisiblePageNumbers(currentPage: number, totalPages: number) {
@@ -139,70 +115,40 @@ export default function FactsCategoryClient({ id, page }: { id: string; page?: s
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {paginatedFacts.map((fact, index) => (
-            <article
-              key={`${fact.title}-${startIndex + index}`}
-              className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-5 hover:border-indigo-400/25 hover:bg-white/[0.025] transition"
-            >
-              <div className="inline-flex items-center gap-1.5 text-[11px] text-indigo-200 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-2.5 py-1 mb-4">
-                {category.emoji} {localizedCategoryName} · #{startIndex + index + 1}
-              </div>
-              <h2 className="text-white text-lg font-semibold leading-snug">{localizeFactTitle(fact.title, lang)}</h2>
-              {lang !== 'en' && (
-                <p className="text-[#6f6f82] text-xs leading-5 mt-2">
-                  {t.originalTopic}: {fact.title.split(' — ')[0]}
+          {paginatedFacts.map((fact, index) => {
+            const factNumber = startIndex + index + 1
+            return (
+              <article
+                key={`${fact.title}-${factNumber}`}
+                className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-5 hover:border-indigo-400/25 hover:bg-white/[0.025] transition"
+              >
+                <div className="inline-flex items-center gap-1.5 text-[11px] text-indigo-200 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-2.5 py-1 mb-4">
+                  {category.emoji} {localizedCategoryName} · #{factNumber}
+                </div>
+                <h2 className="text-white text-lg font-semibold leading-snug">
+                  {getLocalizedTitle(fact.title, lang, localizedCategoryName, factNumber, t.topic)}
+                </h2>
+                <p className="text-[#9a9aae] text-sm leading-6 mt-3">
+                  {lang === 'en' ? fact.text : t.explanation}
                 </p>
-              )}
-              <p className="text-[#9a9aae] text-sm leading-6 mt-3">
-                {lang === 'en' ? fact.text : t.explanation}
-              </p>
-            </article>
-          ))}
+              </article>
+            )
+          })}
         </section>
 
         <nav className="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Facts pagination">
-          <Link
-            href={`/facts/${id}?page=${Math.max(1, currentPage - 1)}`}
-            className={`rounded-lg border px-3 py-2 text-sm transition ${
-              currentPage === 1
-                ? 'pointer-events-none border-white/[0.04] text-[#4a4a5e]'
-                : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'
-            }`}
-          >
-            {t.previous}
-          </Link>
-
+          <Link href={`/facts/${id}?page=${Math.max(1, currentPage - 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === 1 ? 'pointer-events-none border-white/[0.04] text-[#4a4a5e]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.previous}</Link>
           {visiblePages.map((pageNumber, index) => {
             const previousPage = visiblePages[index - 1]
             const showDots = previousPage && pageNumber - previousPage > 1
-
             return (
               <span key={pageNumber} className="flex items-center gap-2">
                 {showDots && <span className="text-[#6b6b80]">...</span>}
-                <Link
-                  href={`/facts/${id}?page=${pageNumber}`}
-                  className={`rounded-lg border px-3 py-2 text-sm transition ${
-                    currentPage === pageNumber
-                      ? 'border-indigo-400/40 bg-indigo-500/15 text-indigo-100'
-                      : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'
-                  }`}
-                >
-                  {pageNumber}
-                </Link>
+                <Link href={`/facts/${id}?page=${pageNumber}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === pageNumber ? 'border-indigo-400/40 bg-indigo-500/15 text-indigo-100' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{pageNumber}</Link>
               </span>
             )
           })}
-
-          <Link
-            href={`/facts/${id}?page=${Math.min(totalPages, currentPage + 1)}`}
-            className={`rounded-lg border px-3 py-2 text-sm transition ${
-              currentPage === totalPages
-                ? 'pointer-events-none border-white/[0.04] text-[#4a4a5e]'
-                : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'
-            }`}
-          >
-            {t.next}
-          </Link>
+          <Link href={`/facts/${id}?page=${Math.min(totalPages, currentPage + 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === totalPages ? 'pointer-events-none border-white/[0.04] text-[#4a4a5e]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.next}</Link>
         </nav>
       </main>
 
