@@ -5,7 +5,7 @@ import useSWR from 'swr'
 
 interface HorizonItem {
   rank: number; title: string; url: string; score: number
-  summary: string; source: string; tags: string[]
+  summary: string; source: string; tags: string[]; image?: string | null
 }
 interface HorizonBriefing {
   date: string; totalFetched: number; totalSelected: number; items: HorizonItem[]
@@ -93,7 +93,13 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
             className="w-full text-left p-4 flex items-start gap-3"
             onClick={() => setExpanded(expanded === item.rank ? null : item.rank)}
           >
-            <span className="text-gray-600 text-sm w-6 shrink-0 mt-0.5">{item.rank}.</span>
+            {item.image ? (
+              <img src={item.image} alt="" className="w-16 h-16 rounded-lg object-cover shrink-0 bg-gray-800" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            ) : (
+              <div className="w-16 h-16 rounded-lg bg-gray-800 shrink-0 flex items-center justify-center text-2xl">
+                {item.source.includes('reddit') ? '🤖' : item.source.includes('telegram') ? '✈️' : item.source.includes('hackernews') ? '🔥' : '📰'}
+              </div>
+            )}
             <div className="flex-1 min-w-0">
               <div className="flex items-start gap-2">
                 <p className="text-white text-sm font-medium leading-snug flex-1">{item.title}</p>
@@ -103,7 +109,7 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-xs text-indigo-400">{item.source}</span>
-                {item.tags.slice(0, 3).map(tag => (
+                {item.tags.slice(0, 2).map(tag => (
                   <span key={tag} className="text-gray-600 text-xs">#{tag}</span>
                 ))}
               </div>
