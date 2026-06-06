@@ -11,28 +11,27 @@ export interface HorizonBriefing {
 }
 
 function parseMarkdown(content: string): HorizonBriefing {
-  const lines = content.split(String.fromCharCode(10))
+  const NL = String.fromCharCode(10)
+  const lines = content.split(NL)
   const titleMatch = lines[0]?.match(/(\d{4}-\d{2}-\d{2})/)
   const date = titleMatch?.[1] ?? new Date().toISOString().split('T')[0]
   const countMatch = content.match(/From (\d+) items, (\d+) important/)
   const totalFetched = parseInt(countMatch?.[1] ?? '0')
   const totalSelected = parseInt(countMatch?.[2] ?? '0')
   const items: HorizonItem[] = []
-  const sep = String.fromCharCode(10) + '---' + String.fromCharCode(10)
+  const sep = NL + '---' + NL
   const sections = content.split(sep)
   for (const section of sections) {
     const hm = section.match(/^## \[(.+?)\]\((.+?)\) .+ ([\d.]+)\/10/m)
     if (!hm) continue
     const title = hm[1], url = hm[2], score = parseFloat(hm[3])
-    const rm = section.match(/item-(\d+)/), rank = rm ? parseInt(rm[1]) : items.length + 1
-    const sm = section.match(new RegExp(String.fromCharCode(10) + '([a-z]+(?:\/[^\s]+)?) '))
-    const source = sm?.[1] ?? 'unknown'
-    const afterH = section.replace(/^## .+
-/, '').trim()
-    const summary = (afterH.split(/
-
-|\*\*Background\*\*/)[0] ?? '').replace(/
-/g, ' ').trim()
+    const rm = section.match(/item-(\d+)/)
+    const rank = rm ? parseInt(rm[1]) : items.length + 1
+    const srcLines = section.split(NL).filter(l => /^[a-z]/.test(l) && l.includes(' '))
+    const source = srcLines[0]?.split(' ')[0] ?? 'unknown'
+    const parts = section.split(NL + NL)
+    const firstPara = parts.find(p => p && !p.startsWith('#') && !p.startsWith('<'))
+    const summary = (firstPara ?? '').replace(new RegExp(NL, 'g'), ' ').trim().slice(0, 300)
     const tags: string[] = []
     const tm = section.match(/\*\*Tags\*\*: (.+)/)
     if (tm) { const re = /`#([^`]+)`/g; let m; while ((m = re.exec(tm[1])) !== null) tags.push(m[1]) }
