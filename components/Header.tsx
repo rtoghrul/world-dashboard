@@ -108,7 +108,7 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     ]
   },
   chinese: {
-    label: { en: 'Local', az: 'Çin 🇨🇳', ru: 'Китай 🇨🇳', tr: 'Çin 🇨🇳', de: 'China 🇨🇳', fr: 'Chine 🇨🇳', es: 'China 🇨🇳', zh: '中国 🇨🇳', ar: 'صين 🇨🇳', ja: '中国 🇨🇳', it: 'Cina 🇨🇳', pt: 'China 🇨🇳' },
+    label: { en: 'China 🇨🇳', az: 'Çin 🇨🇳', ru: 'Китай 🇨🇳', tr: 'Çin 🇨🇳', de: 'China 🇨🇳', fr: 'Chine 🇨🇳', es: 'China 🇨🇳', zh: '中国 🇨🇳', ar: 'صين 🇨🇳', ja: '中国 🇨🇳', it: 'Cina 🇨🇳', pt: 'China 🇨🇳' },
     items: [
       { id: 'all', label: { en: 'All', az: 'Hamısı', ru: 'Все', tr: 'Tümü', de: 'Alle', fr: 'Tous', es: 'Todos', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' } },
       { id: 'general', label: { en: 'General', az: 'Ümumi', ru: 'Общие', tr: 'Genel', de: 'Allgemein', fr: 'Général', es: 'General', zh: '综合', ar: 'عام', ja: '総合', it: 'Generale', pt: 'Geral' } },
