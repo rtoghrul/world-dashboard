@@ -30,7 +30,7 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     ]
   },
   markets: {
-    label: { en: 'Markets', az: 'Bazarlar', ru: 'Рынки', tr: 'Piyasalar', de: 'Märkte', fr: 'Marchés', es: 'Mercados', zh: '市场', ar: 'أسواق', ja: '市場', it: 'Mercati', pt: 'Mercados' },
+    label: { en: 'Finance', az: 'Bazarlar', ru: 'Рынки', tr: 'Piyasalar', de: 'Märkte', fr: 'Marchés', es: 'Mercados', zh: '市场', ar: 'أسواق', ja: '市場', it: 'Mercati', pt: 'Mercados' },
     items: [
       { id: 'crypto-top', label: { en: 'Crypto Top', az: 'Kripto Top', ru: 'Крипто Топ', tr: 'Kripto Top', de: 'Krypto Top', fr: 'Crypto Top', es: 'Cripto Top', zh: '加密Top', ar: 'كريبتو', ja: '仮想通貨Top', it: 'Crypto Top', pt: 'Cripto Top' } },
       { id: 'bitcoin', label: { en: 'Bitcoin', az: 'Bitcoin', ru: 'Bitcoin', tr: 'Bitcoin', de: 'Bitcoin', fr: 'Bitcoin', es: 'Bitcoin', zh: 'Bitcoin', ar: 'بيتكوين', ja: 'Bitcoin', it: 'Bitcoin', pt: 'Bitcoin' } },
@@ -51,21 +51,18 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'gaming', label: { en: 'Gaming', az: 'Oyunlar', ru: 'Игры', tr: 'Oyunlar', de: 'Spiele', fr: 'Jeux', es: 'Juegos', zh: '游戏', ar: 'ألعاب', ja: 'ゲーム', it: 'Giochi', pt: 'Jogos' } },
       { id: 'upcoming', label: { en: 'Upcoming', az: 'Gözlənilən', ru: 'Скоро', tr: 'Yakında', de: 'Demnächst', fr: 'À venir', es: 'Próximamente', zh: '即将上映', ar: 'قادم', ja: '近日公開', it: 'In arrivo', pt: 'Em breve' } },
       { id: 'cartoons', label: { en: 'Cartoons', az: 'Cizgi filmlər', ru: 'Мультфильмы', tr: 'Çizgi Film', de: 'Zeichentrick', fr: 'Dessins animés', es: 'Dibujos', zh: '动画', ar: 'رسوم', ja: 'アニメ', it: 'Cartoni', pt: 'Desenhos' } },
-    ]
-  },
-  viral: {
-    label: { en: 'Viral', az: 'Viral', ru: 'Вирусное', tr: 'Viral', de: 'Viral', fr: 'Viral', es: 'Viral', zh: '热门', ar: 'فيروسي', ja: 'バイラル', it: 'Virale', pt: 'Viral' },
-    items: [
-      { id: 'youtube', label: { en: 'YouTube', az: 'YouTube', ru: 'YouTube', tr: 'YouTube', de: 'YouTube', fr: 'YouTube', es: 'YouTube', zh: 'YouTube', ar: 'يوتيوب', ja: 'YouTube', it: 'YouTube', pt: 'YouTube' } },
-      { id: 'tiktok', label: { en: 'TikTok', az: 'TikTok', ru: 'TikTok', tr: 'TikTok', de: 'TikTok', fr: 'TikTok', es: 'TikTok', zh: 'TikTok', ar: 'تيك توك', ja: 'TikTok', it: 'TikTok', pt: 'TikTok' } },
-      { id: 'instagram', label: { en: 'Instagram', az: 'Instagram', ru: 'Instagram', tr: 'Instagram', de: 'Instagram', fr: 'Instagram', es: 'Instagram', zh: 'Instagram', ar: 'إنستغرام', ja: 'Instagram', it: 'Instagram', pt: 'Instagram' } },
-      { id: 'music', label: { en: 'Music', az: 'Musiqi', ru: 'Музыка', tr: 'Müzik', de: 'Musik', fr: 'Musique', es: 'Música', zh: '音乐', ar: 'موسيقى', ja: '音楽', it: 'Musica', pt: 'Música' } },
-      { id: 'shorts', label: { en: 'Shorts', az: 'Shorts', ru: 'Shorts', tr: 'Shorts', de: 'Shorts', fr: 'Shorts', es: 'Shorts', zh: '短视频', ar: 'Shorts', ja: 'ショート', it: 'Shorts', pt: 'Shorts' } },
-      { id: 'trending', label: { en: 'Trending', az: 'Trend', ru: 'Тренды', tr: 'Trend', de: 'Trending', fr: 'Tendances', es: 'Tendencias', zh: '热门', ar: 'رائج', ja: 'トレンド', it: 'Tendenze', pt: 'Tendências' } },
+    
+      { id: 'youtube', section: 'viral', label: { en: 'YouTube', az: 'YouTube', ru: 'YouTube', tr: 'YouTube', de: 'YouTube', fr: 'YouTube', es: 'YouTube', zh: 'YouTube', ar: 'يوتيوب', ja: 'YouTube', it: 'YouTube', pt: 'YouTube' } },
+      { id: 'tiktok', section: 'viral', label: { en: 'TikTok', az: 'TikTok', ru: 'TikTok', tr: 'TikTok', de: 'TikTok', fr: 'TikTok', es: 'TikTok', zh: 'TikTok', ar: 'تيك توك', ja: 'TikTok', it: 'TikTok', pt: 'TikTok' } },
+      { id: 'instagram', section: 'viral', label: { en: 'Instagram', az: 'Instagram', ru: 'Instagram', tr: 'Instagram', de: 'Instagram', fr: 'Instagram', es: 'Instagram', zh: 'Instagram', ar: 'إنستغرام', ja: 'Instagram', it: 'Instagram', pt: 'Instagram' } },
+      { id: 'music', section: 'viral', label: { en: 'Music', az: 'Musiqi', ru: 'Музыка', tr: 'Müzik', de: 'Musik', fr: 'Musique', es: 'Música', zh: '音乐', ar: 'موسيقى', ja: '音楽', it: 'Musica', pt: 'Música' } },
+      { id: 'shorts', section: 'viral', label: { en: 'Shorts', az: 'Shorts', ru: 'Shorts', tr: 'Shorts', de: 'Shorts', fr: 'Shorts', es: 'Shorts', zh: '短视频', ar: 'Shorts', ja: 'ショート', it: 'Shorts', pt: 'Shorts' } },
+      { id: 'trending', section: 'viral', label: { en: 'Trending', az: 'Trend', ru: 'Тренды', tr: 'Trend', de: 'Trending', fr: 'Tendances', es: 'Tendencias', zh: '热门', ar: 'رائج', ja: 'トレンド', it: 'Tendenze', pt: 'Tendências' } },
+    
     ]
   },
   aitools: {
-    label: { en: 'AI Tools', az: 'AI Alətlər', ru: 'ИИ Инструменты', tr: 'YZ Araçları', de: 'KI-Tools', fr: 'Outils IA', es: 'Herramientas IA', zh: 'AI工具', ar: 'أدوات ذ.ا.', ja: 'AIツール', it: 'Strumenti IA', pt: 'Ferramentas IA' },
+    label: { en: 'Tech & AI', az: 'AI Alətlər', ru: 'ИИ Инструменты', tr: 'YZ Araçları', de: 'KI-Tools', fr: 'Outils IA', es: 'Herramientas IA', zh: 'AI工具', ar: 'أدوات ذ.ا.', ja: 'AIツール', it: 'Strumenti IA', pt: 'Ferramentas IA' },
     items: [
       { id: 'chatbots', label: { en: 'AI Chatbots', az: 'AI Chatbotlar', ru: 'ИИ Чатботы', tr: 'YZ Sohbet', de: 'KI-Chatbots', fr: 'Chatbots IA', es: 'Chatbots IA', zh: 'AI聊天', ar: 'محادثة ذ.ا.', ja: 'AIチャット', it: 'Chatbot IA', pt: 'Chatbots IA' } },
       { id: 'image-gen', label: { en: 'Image Generation', az: 'Şəkil Yaratma', ru: 'Генерация изображений', tr: 'Görsel Üretme', de: 'Bildgenerierung', fr: 'Génération images', es: 'Generación imágenes', zh: 'AI绘画', ar: 'توليد صور', ja: '画像生成', it: 'Generazione immagini', pt: 'Geração de imagens' } },
@@ -73,20 +70,17 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'writing', label: { en: 'Writing AI', az: 'Yazı AI', ru: 'Написание ИИ', tr: 'Yazı YZ', de: 'Schreib-KI', fr: 'Écriture IA', es: 'Escritura IA', zh: 'AI写作', ar: 'كتابة ذ.ا.', ja: '文章AI', it: 'Scrittura IA', pt: 'Escrita IA' } },
       { id: 'coding', label: { en: 'Coding AI', az: 'Proqramlaşdırma AI', ru: 'Код ИИ', tr: 'Kodlama YZ', de: 'Coding-KI', fr: 'Code IA', es: 'Código IA', zh: 'AI编程', ar: 'برمجة ذ.ا.', ja: 'コードAI', it: 'Codifica IA', pt: 'Código IA' } },
       { id: 'free-tools', label: { en: 'Free AI Tools', az: 'Pulsuz AI', ru: 'Бесплатные ИИ', tr: 'Ücretsiz YZ', de: 'Kostenlose KI', fr: 'IA Gratuits', es: 'IA Gratis', zh: '免费AI', ar: 'ذ.ا. مجاني', ja: '無料AI', it: 'IA Gratuiti', pt: 'IA Grátis' } },
-    ]
-  },
-  software: {
-    label: { en: 'Software', az: 'Proqramlar', ru: 'Софт', tr: 'Yazılım', de: 'Software', fr: 'Logiciels', es: 'Software', zh: '软件', ar: 'برامج', ja: 'ソフト', it: 'Software', pt: 'Software' },
-    items: [
-      { id: 'android', label: { en: 'Android Apps', az: 'Android', ru: 'Android', tr: 'Android', de: 'Android', fr: 'Android', es: 'Android', zh: 'Android', ar: 'أندرويد', ja: 'Android', it: 'Android', pt: 'Android' } },
-      { id: 'ios', label: { en: 'iOS Apps', az: 'iOS', ru: 'iOS', tr: 'iOS', de: 'iOS', fr: 'iOS', es: 'iOS', zh: 'iOS', ar: 'iOS', ja: 'iOS', it: 'iOS', pt: 'iOS' } },
-      { id: 'windows', label: { en: 'Windows Software', az: 'Windows', ru: 'Windows', tr: 'Windows', de: 'Windows', fr: 'Windows', es: 'Windows', zh: 'Windows', ar: 'ويندوز', ja: 'Windows', it: 'Windows', pt: 'Windows' } },
-      { id: 'mac', label: { en: 'Mac Apps', az: 'Mac', ru: 'Mac', tr: 'Mac', de: 'Mac', fr: 'Mac', es: 'Mac', zh: 'Mac', ar: 'ماك', ja: 'Mac', it: 'Mac', pt: 'Mac' } },
-      { id: 'browser-ext', label: { en: 'Extensions', az: 'Əlavələr', ru: 'Расширения', tr: 'Eklentiler', de: 'Erweiterungen', fr: 'Extensions', es: 'Extensiones', zh: '扩展', ar: 'إضافات', ja: '拡張機能', it: 'Estensioni', pt: 'Extensões' } },
+    
+      { id: 'android', section: 'software', label: { en: 'Android Apps', az: 'Android', ru: 'Android', tr: 'Android', de: 'Android', fr: 'Android', es: 'Android', zh: 'Android', ar: 'أندرويد', ja: 'Android', it: 'Android', pt: 'Android' } },
+      { id: 'ios', section: 'software', label: { en: 'iOS Apps', az: 'iOS', ru: 'iOS', tr: 'iOS', de: 'iOS', fr: 'iOS', es: 'iOS', zh: 'iOS', ar: 'iOS', ja: 'iOS', it: 'iOS', pt: 'iOS' } },
+      { id: 'windows', section: 'software', label: { en: 'Windows Software', az: 'Windows', ru: 'Windows', tr: 'Windows', de: 'Windows', fr: 'Windows', es: 'Windows', zh: 'Windows', ar: 'ويندوز', ja: 'Windows', it: 'Windows', pt: 'Windows' } },
+      { id: 'mac', section: 'software', label: { en: 'Mac Apps', az: 'Mac', ru: 'Mac', tr: 'Mac', de: 'Mac', fr: 'Mac', es: 'Mac', zh: 'Mac', ar: 'ماك', ja: 'Mac', it: 'Mac', pt: 'Mac' } },
+      { id: 'browser-ext', section: 'software', label: { en: 'Extensions', az: 'Əlavələr', ru: 'Расширения', tr: 'Eklentiler', de: 'Erweiterungen', fr: 'Extensions', es: 'Extensiones', zh: '扩展', ar: 'إضافات', ja: '拡張機能', it: 'Estensioni', pt: 'Extensões' } },
+    
     ]
   },
   education: {
-    label: { en: 'Learn', az: 'Təhsil', ru: 'Учёба', tr: 'Eğitim', de: 'Lernen', fr: 'Apprendre', es: 'Aprender', zh: '学习', ar: 'تعلم', ja: '学習', it: 'Impara', pt: 'Aprender' },
+    label: { en: 'Lifestyle', az: 'Təhsil', ru: 'Учёба', tr: 'Eğitim', de: 'Lernen', fr: 'Apprendre', es: 'Aprender', zh: '学习', ar: 'تعلم', ja: '学習', it: 'Impara', pt: 'Aprender' },
     items: [
       { id: 'science', label: { en: 'Science', az: 'Elm', ru: 'Наука', tr: 'Bilim', de: 'Wissenschaft', fr: 'Science', es: 'Ciencia', zh: '科学', ar: 'علوم', ja: '科学', it: 'Scienza', pt: 'Ciência' } },
       { id: 'math', label: { en: 'Mathematics', az: 'Riyaziyyat', ru: 'Математика', tr: 'Matematik', de: 'Mathematik', fr: 'Mathématiques', es: 'Matemáticas', zh: '数学', ar: 'رياضيات', ja: '数学', it: 'Matematica', pt: 'Matemática' } },
@@ -96,6 +90,19 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'electrical', label: { en: 'Electrical', az: 'Elektrik', ru: 'Электрика', tr: 'Elektrik', de: 'Elektrotechnik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子工学', it: 'Elettronica', pt: 'Eletrônica' } },
       { id: 'languages', label: { en: 'Languages', az: 'Dillər', ru: 'Языки', tr: 'Diller', de: 'Sprachen', fr: 'Langues', es: 'Idiomas', zh: '语言', ar: 'لغات', ja: '言語', it: 'Lingue', pt: 'Idiomas' } },
       { id: 'courses', label: { en: 'Free Courses', az: 'Pulsuz Kurslar', ru: 'Бесплатные курсы', tr: 'Ücretsiz Kurslar', de: 'Kostenlose Kurse', fr: 'Cours gratuits', es: 'Cursos gratis', zh: '免费课程', ar: 'دورات مجانية', ja: '無料コース', it: 'Corsi gratuiti', pt: 'Cursos grátis' } },
+    
+      { id: 'beauty', section: 'women', label: { en: 'Beauty & Cosmetics', az: 'Gözəllik', ru: 'Красота', tr: 'Güzellik', de: 'Schönheit', fr: 'Beauté', es: 'Belleza', zh: '美容', ar: 'جمال', ja: '美容', it: 'Bellezza', pt: 'Beleza' } },
+      { id: 'diet', section: 'women', label: { en: 'Diet & Nutrition', az: 'Dieta', ru: 'Диета', tr: 'Diyet', de: 'Ernährung', fr: 'Nutrition', es: 'Nutrición', zh: '饮食', ar: 'حمية', ja: 'ダイエット', it: 'Dieta', pt: 'Dieta' } },
+      { id: 'fitness', section: 'women', label: { en: 'Fitness', az: 'Fitness', ru: 'Фитнес', tr: 'Fitness', de: 'Fitness', fr: 'Fitness', es: 'Fitness', zh: '健身', ar: 'لياقة', ja: 'フィットネス', it: 'Fitness', pt: 'Fitness' } },
+      { id: 'parenting', section: 'women', label: { en: 'Parenting', az: 'Uşaq Baxımı', ru: 'Материнство', tr: 'Ebeveynlik', de: 'Elternschaft', fr: 'Parentalité', es: 'Maternidad', zh: '育儿', ar: 'أمومة', ja: '育児', it: 'Genitorialità', pt: 'Maternidade' } },
+      { id: 'fashion', section: 'women', label: { en: 'Fashion', az: 'Moda', ru: 'Мода', tr: 'Moda', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
+      { id: 'wellness', section: 'women', label: { en: 'Wellness & Health', az: 'Sağlamlıq', ru: 'Здоровье', tr: 'Sağlık', de: 'Wellness', fr: 'Bien-être', es: 'Bienestar', zh: '健康', ar: 'صحة', ja: 'ウェルネス', it: 'Benessere', pt: 'Bem-estar' } },
+    
+    
+      { id: 'current', section: 'weather', label: { en: 'Current', az: 'İndi', ru: 'Сейчас', tr: 'Şimdi', de: 'Aktuell', fr: 'Actuel', es: 'Actual', zh: '当前', ar: 'الحالي', ja: '現在', it: 'Attuale', pt: 'Atual' } },
+      { id: 'hourly', section: 'weather', label: { en: 'Hourly', az: 'Saatlıq', ru: 'По часам', tr: 'Saatlik', de: 'Stündlich', fr: 'Horaire', es: 'Por hora', zh: '逐时', ar: 'بالساعة', ja: '毎時', it: 'Orario', pt: 'Por hora' } },
+      { id: 'weekly', section: 'weather', label: { en: 'Weekly', az: 'Həftəlik', ru: 'Неделя', tr: 'Haftalık', de: 'Wöchentlich', fr: 'Hebdo', es: 'Semanal', zh: '每周', ar: 'أسبوعي', ja: '週間', it: 'Settimanale', pt: 'Semanal' } },
+    
     ]
   },
   travel: {
@@ -107,27 +114,8 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'last-minute', label: { en: 'Last Minute', az: 'Son Dəqiqə', ru: 'Горящие', tr: 'Son dakika', de: 'Last Minute', fr: 'Dernière minute', es: 'Última hora', zh: '特价', ar: 'عروض أخيرة', ja: '直前割', it: 'Last minute', pt: 'Última hora' } },
     ]
   },
-  weather: {
-    label: { en: 'Weather', az: 'Hava', ru: 'Погода', tr: 'Hava', de: 'Wetter', fr: 'Météo', es: 'Clima', zh: '天气', ar: 'طقس', ja: '天気', it: 'Meteo', pt: 'Clima' },
-    items: [
-      { id: 'current', label: { en: 'Current', az: 'İndi', ru: 'Сейчас', tr: 'Şimdi', de: 'Aktuell', fr: 'Actuel', es: 'Actual', zh: '当前', ar: 'الحالي', ja: '現在', it: 'Attuale', pt: 'Atual' } },
-      { id: 'hourly', label: { en: 'Hourly', az: 'Saatlıq', ru: 'По часам', tr: 'Saatlik', de: 'Stündlich', fr: 'Horaire', es: 'Por hora', zh: '逐时', ar: 'بالساعة', ja: '毎時', it: 'Orario', pt: 'Por hora' } },
-      { id: 'weekly', label: { en: 'Weekly', az: 'Həftəlik', ru: 'Неделя', tr: 'Haftalık', de: 'Wöchentlich', fr: 'Hebdo', es: 'Semanal', zh: '每周', ar: 'أسبوعي', ja: '週間', it: 'Settimanale', pt: 'Semanal' } },
-    ]
-  },
-  women: {
-    label: { en: 'Women', az: 'Qadınlar', ru: 'Женщинам', tr: 'Kadınlar', de: 'Frauen', fr: 'Femmes', es: 'Mujeres', zh: '女性', ar: 'نساء', ja: '女性', it: 'Donne', pt: 'Mulheres' },
-    items: [
-      { id: 'beauty', label: { en: 'Beauty & Cosmetics', az: 'Gözəllik', ru: 'Красота', tr: 'Güzellik', de: 'Schönheit', fr: 'Beauté', es: 'Belleza', zh: '美容', ar: 'جمال', ja: '美容', it: 'Bellezza', pt: 'Beleza' } },
-      { id: 'diet', label: { en: 'Diet & Nutrition', az: 'Dieta', ru: 'Диета', tr: 'Diyet', de: 'Ernährung', fr: 'Nutrition', es: 'Nutrición', zh: '饮食', ar: 'حمية', ja: 'ダイエット', it: 'Dieta', pt: 'Dieta' } },
-      { id: 'fitness', label: { en: 'Fitness', az: 'Fitness', ru: 'Фитнес', tr: 'Fitness', de: 'Fitness', fr: 'Fitness', es: 'Fitness', zh: '健身', ar: 'لياقة', ja: 'フィットネス', it: 'Fitness', pt: 'Fitness' } },
-      { id: 'parenting', label: { en: 'Parenting', az: 'Uşaq Baxımı', ru: 'Материнство', tr: 'Ebeveynlik', de: 'Elternschaft', fr: 'Parentalité', es: 'Maternidad', zh: '育儿', ar: 'أمومة', ja: '育児', it: 'Genitorialità', pt: 'Maternidade' } },
-      { id: 'fashion', label: { en: 'Fashion', az: 'Moda', ru: 'Мода', tr: 'Moda', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
-      { id: 'wellness', label: { en: 'Wellness & Health', az: 'Sağlamlıq', ru: 'Здоровье', tr: 'Sağlık', de: 'Wellness', fr: 'Bien-être', es: 'Bienestar', zh: '健康', ar: 'صحة', ja: 'ウェルネス', it: 'Benessere', pt: 'Bem-estar' } },
-    ]
-  },
   chinese: {
-    label: { en: 'China 🇨🇳', az: 'Çin 🇨🇳', ru: 'Китай 🇨🇳', tr: 'Çin 🇨🇳', de: 'China 🇨🇳', fr: 'Chine 🇨🇳', es: 'China 🇨🇳', zh: '中国 🇨🇳', ar: 'صين 🇨🇳', ja: '中国 🇨🇳', it: 'Cina 🇨🇳', pt: 'China 🇨🇳' },
+    label: { en: 'Local', az: 'Çin 🇨🇳', ru: 'Китай 🇨🇳', tr: 'Çin 🇨🇳', de: 'China 🇨🇳', fr: 'Chine 🇨🇳', es: 'China 🇨🇳', zh: '中国 🇨🇳', ar: 'صين 🇨🇳', ja: '中国 🇨🇳', it: 'Cina 🇨🇳', pt: 'China 🇨🇳' },
     items: [
       { id: 'all', label: { en: 'All', az: 'Hamısı', ru: 'Все', tr: 'Tümü', de: 'Alle', fr: 'Tous', es: 'Todos', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' } },
       { id: 'general', label: { en: 'General', az: 'Ümumi', ru: 'Общие', tr: 'Genel', de: 'Allgemein', fr: 'Général', es: 'General', zh: '综合', ar: 'عام', ja: '総合', it: 'Generale', pt: 'Geral' } },
@@ -136,24 +124,21 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'home', label: { en: 'Home & Garden', az: 'Ev & Bağ', ru: 'Дом и сад', tr: 'Ev & Bahçe', de: 'Haus & Garten', fr: 'Maison', es: 'Hogar', zh: '家居', ar: 'منزل', ja: '家庭', it: 'Casa', pt: 'Casa' } },
       { id: 'kids', label: { en: 'Kids & Baby', az: 'Uşaq', ru: 'Дети', tr: 'Çocuk', de: 'Kinder', fr: 'Enfants', es: 'Niños', zh: '儿童', ar: 'أطفال', ja: '子供', it: 'Bambini', pt: 'Crianças' } },
       { id: 'hobby', label: { en: 'Hobby & Tools', az: 'Hobbi', ru: 'Хобби', tr: 'Hobi', de: 'Hobby', fr: 'Loisirs', es: 'Hobby', zh: '爱好', ar: 'هوايات', ja: '趣味', it: 'Hobby', pt: 'Hobby' } },
-    ]
-  },
-  germany: {
-    label: { en: 'Germany 🇩🇪', az: 'Almaniya 🇩🇪', ru: 'Германия 🇩🇪', tr: 'Almanya 🇩🇪', de: 'Deutschland 🇩🇪', fr: 'Allemagne 🇩🇪', es: 'Alemania 🇩🇪', zh: '德国 🇩🇪', ar: 'ألمانيا 🇩🇪', ja: 'ドイツ 🇩🇪', it: 'Germania 🇩🇪', pt: 'Alemanha 🇩🇪' },
-    items: [
-      { id: 'behoerden', label: { en: 'Government', az: 'Dövlət', ru: 'Гос. органы', tr: 'Devlet', de: 'Behörden', fr: 'Gouvernement', es: 'Gobierno', zh: '政府', ar: 'حكومة', ja: '行政', it: 'Governo', pt: 'Governo' } },
-      { id: 'wohnung', label: { en: 'Housing', az: 'Mənzil', ru: 'Жильё', tr: 'Konut', de: 'Wohnung', fr: 'Logement', es: 'Vivienda', zh: '住房', ar: 'سكن', ja: '住居', it: 'Alloggio', pt: 'Moradia' } },
-      { id: 'bildung', label: { en: 'Education', az: 'Təhsil', ru: 'Образование', tr: 'Eğitim', de: 'Bildung', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'تعليم', ja: '教育', it: 'Istruzione', pt: 'Educação' } },
-      { id: 'arbeit', label: { en: 'Work', az: 'İş', ru: 'Работа', tr: 'İş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمل', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
-      { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
-      { id: 'tools', label: { en: 'Tools', az: 'Alətlər', ru: 'Инструменты', tr: 'Araçlar', de: 'Tools', fr: 'Outils', es: 'Herramientas', zh: '工具', ar: 'أدوات', ja: 'ツール', it: 'Strumenti', pt: 'Ferramentas' } },
-      { id: 'auto', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', ru: 'Авто и ПДД', tr: 'Oto & Trafik', de: 'Auto & Verkehr', fr: 'Auto', es: 'Auto', zh: '汽车', ar: 'سيارات', ja: '車', it: 'Auto', pt: 'Auto' } },
-      { id: 'familie', label: { en: 'Family', az: 'Ailə', ru: 'Семья', tr: 'Aile', de: 'Familie', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'عائلة', ja: '家族', it: 'Famiglia', pt: 'Família' } },
-      { id: 'miete', label: { en: 'Tenant & Landlord', az: 'Kirayəçi & Ev sahibi', ru: 'Аренда', tr: 'Kiracı', de: 'Mieter & Vermieter', fr: 'Locataire', es: 'Alquiler', zh: '租房', ar: 'إيجار', ja: '賃貸', it: 'Affitto', pt: 'Aluguel' } },
-      { id: 'gesundheit', label: { en: 'Healthcare', az: 'Səhiyyə', ru: 'Здоровье', tr: 'Sağlık', de: 'Gesundheit', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'صحة', ja: '医療', it: 'Salute', pt: 'Saúde' } },
-      { id: 'versicherung', label: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', tr: 'Sigorta', de: 'Versicherung', fr: 'Assurance', es: 'Seguro', zh: '保险', ar: 'تأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguro' } },
-      { id: 'rechte', label: { en: 'Your Rights', az: 'Hüquqlarınız', ru: 'Ваши права', tr: 'Haklarınız', de: 'Ihre Rechte', fr: 'Vos droits', es: 'Sus derechos', zh: '权利', ar: 'حقوقك', ja: '権利', it: 'I tuoi diritti', pt: 'Seus direitos' } },
-      { id: 'deutsch', label: { en: 'German Language', az: 'Alman dili', ru: 'Немецкий язык', tr: 'Almanca', de: 'Deutsch lernen', fr: 'Allemand', es: 'Alemán', zh: '德语', ar: 'ألمانية', ja: 'ドイツ語', it: 'Tedesco', pt: 'Alemão' } },
+    
+      { id: 'behoerden', section: 'germany', label: { en: 'Government', az: 'Dövlət', ru: 'Гос. органы', tr: 'Devlet', de: 'Behörden', fr: 'Gouvernement', es: 'Gobierno', zh: '政府', ar: 'حكومة', ja: '行政', it: 'Governo', pt: 'Governo' } },
+      { id: 'wohnung', section: 'germany', label: { en: 'Housing', az: 'Mənzil', ru: 'Жильё', tr: 'Konut', de: 'Wohnung', fr: 'Logement', es: 'Vivienda', zh: '住房', ar: 'سكن', ja: '住居', it: 'Alloggio', pt: 'Moradia' } },
+      { id: 'bildung', section: 'germany', label: { en: 'Education', az: 'Təhsil', ru: 'Образование', tr: 'Eğitim', de: 'Bildung', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'تعليم', ja: '教育', it: 'Istruzione', pt: 'Educação' } },
+      { id: 'arbeit', section: 'germany', label: { en: 'Work', az: 'İş', ru: 'Работа', tr: 'İş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمل', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
+      { id: 'aenderungen', section: 'germany', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
+      { id: 'tools', section: 'germany', label: { en: 'Tools', az: 'Alətlər', ru: 'Инструменты', tr: 'Araçlar', de: 'Tools', fr: 'Outils', es: 'Herramientas', zh: '工具', ar: 'أدوات', ja: 'ツール', it: 'Strumenti', pt: 'Ferramentas' } },
+      { id: 'auto', section: 'germany', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', ru: 'Авто и ПДД', tr: 'Oto & Trafik', de: 'Auto & Verkehr', fr: 'Auto', es: 'Auto', zh: '汽车', ar: 'سيارات', ja: '車', it: 'Auto', pt: 'Auto' } },
+      { id: 'familie', section: 'germany', label: { en: 'Family', az: 'Ailə', ru: 'Семья', tr: 'Aile', de: 'Familie', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'عائلة', ja: '家族', it: 'Famiglia', pt: 'Família' } },
+      { id: 'miete', section: 'germany', label: { en: 'Tenant & Landlord', az: 'Kirayəçi & Ev sahibi', ru: 'Аренда', tr: 'Kiracı', de: 'Mieter & Vermieter', fr: 'Locataire', es: 'Alquiler', zh: '租房', ar: 'إيجار', ja: '賃貸', it: 'Affitto', pt: 'Aluguel' } },
+      { id: 'gesundheit', section: 'germany', label: { en: 'Healthcare', az: 'Səhiyyə', ru: 'Здоровье', tr: 'Sağlık', de: 'Gesundheit', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'صحة', ja: '医療', it: 'Salute', pt: 'Saúde' } },
+      { id: 'versicherung', section: 'germany', label: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', tr: 'Sigorta', de: 'Versicherung', fr: 'Assurance', es: 'Seguro', zh: '保险', ar: 'تأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguro' } },
+      { id: 'rechte', section: 'germany', label: { en: 'Your Rights', az: 'Hüquqlarınız', ru: 'Ваши права', tr: 'Haklarınız', de: 'Ihre Rechte', fr: 'Vos droits', es: 'Sus derechos', zh: '权利', ar: 'حقوقك', ja: '権利', it: 'I tuoi diritti', pt: 'Seus direitos' } },
+      { id: 'deutsch', section: 'germany', label: { en: 'German Language', az: 'Alman dili', ru: 'Немецкий язык', tr: 'Almanca', de: 'Deutsch lernen', fr: 'Allemand', es: 'Alemán', zh: '德语', ar: 'ألمانية', ja: 'ドイツ語', it: 'Tedesco', pt: 'Alemão' } },
+    
     ]
   },
   platforms: {
@@ -218,7 +203,7 @@ function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: Dropd
       {section.items.map(item => (
         <Link
           key={item.id}
-          href={`/section/${sectionId}/${item.id}`}
+          href={`/section/${(item as any).section || sectionId}/${item.id}`}
           onClick={onClose}
           className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition-colors"
         >
@@ -366,7 +351,7 @@ export default function Header() {
                       {section.items.map(item => (
                         <Link
                           key={item.id}
-                          href={`/section/${id}/${item.id}`}
+                          href={`/section/${(item as any).section || id}/${item.id}`}
                           onClick={() => setMobileOpen(false)}
                           className="block px-4 py-2.5 text-xs text-[#6b6b80] hover:text-white transition"
                         >
