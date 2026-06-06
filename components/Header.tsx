@@ -83,11 +83,6 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     label: { en: 'Lifestyle', az: 'Təhsil', ru: 'Учёба', tr: 'Eğitim', de: 'Lernen', fr: 'Apprendre', es: 'Aprender', zh: '学习', ar: 'تعلم', ja: '学習', it: 'Impara', pt: 'Aprender' },
     items: [
       { id: 'science', label: { en: 'Science', az: 'Elm', ru: 'Наука', tr: 'Bilim', de: 'Wissenschaft', fr: 'Science', es: 'Ciencia', zh: '科学', ar: 'علوم', ja: '科学', it: 'Scienza', pt: 'Ciência' } },
-      { id: 'math', label: { en: 'Mathematics', az: 'Riyaziyyat', ru: 'Математика', tr: 'Matematik', de: 'Mathematik', fr: 'Mathématiques', es: 'Matemáticas', zh: '数学', ar: 'رياضيات', ja: '数学', it: 'Matematica', pt: 'Matemática' } },
-      { id: 'physics', label: { en: 'Physics', az: 'Fizika', ru: 'Физика', tr: 'Fizik', de: 'Physik', fr: 'Physique', es: 'Física', zh: '物理', ar: 'فيزياء', ja: '物理', it: 'Fisica', pt: 'Física' } },
-      { id: 'engineering', label: { en: 'Engineering', az: 'Mühəndislik', ru: 'Инженерия', tr: 'Mühendislik', de: 'Ingenieurwesen', fr: 'Ingénierie', es: 'Ingeniería', zh: '工程', ar: 'هندسة', ja: '工学', it: 'Ingegneria', pt: 'Engenharia' } },
-      { id: 'automation', label: { en: 'Automation', az: 'Avtomatika', ru: 'Автоматизация', tr: 'Otomasyon', de: 'Automatisierung', fr: 'Automatisation', es: 'Automatización', zh: '自动化', ar: 'أتمتة', ja: 'オートメーション', it: 'Automazione', pt: 'Automação' } },
-      { id: 'electrical', label: { en: 'Electrical', az: 'Elektrik', ru: 'Электрика', tr: 'Elektrik', de: 'Elektrotechnik', fr: 'Électronique', es: 'Electrónica', zh: '电子', ar: 'إلكترونيات', ja: '電子工学', it: 'Elettronica', pt: 'Eletrônica' } },
       { id: 'languages', label: { en: 'Languages', az: 'Dillər', ru: 'Языки', tr: 'Diller', de: 'Sprachen', fr: 'Langues', es: 'Idiomas', zh: '语言', ar: 'لغات', ja: '言語', it: 'Lingue', pt: 'Idiomas' } },
       { id: 'courses', label: { en: 'Free Courses', az: 'Pulsuz Kurslar', ru: 'Бесплатные курсы', tr: 'Ücretsiz Kurslar', de: 'Kostenlose Kurse', fr: 'Cours gratuits', es: 'Cursos gratis', zh: '免费课程', ar: 'دورات مجانية', ja: '無料コース', it: 'Corsi gratuiti', pt: 'Cursos grátis' } },
     
@@ -100,8 +95,6 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
     
     
       { id: 'current', section: 'weather', label: { en: 'Current', az: 'İndi', ru: 'Сейчас', tr: 'Şimdi', de: 'Aktuell', fr: 'Actuel', es: 'Actual', zh: '当前', ar: 'الحالي', ja: '現在', it: 'Attuale', pt: 'Atual' } },
-      { id: 'hourly', section: 'weather', label: { en: 'Hourly', az: 'Saatlıq', ru: 'По часам', tr: 'Saatlik', de: 'Stündlich', fr: 'Horaire', es: 'Por hora', zh: '逐时', ar: 'بالساعة', ja: '毎時', it: 'Orario', pt: 'Por hora' } },
-      { id: 'weekly', section: 'weather', label: { en: 'Weekly', az: 'Həftəlik', ru: 'Неделя', tr: 'Haftalık', de: 'Wöchentlich', fr: 'Hebdo', es: 'Semanal', zh: '每周', ar: 'أسبوعي', ja: '週間', it: 'Settimanale', pt: 'Semanal' } },
     
     ]
   },
@@ -185,7 +178,10 @@ function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: Dropd
         onClose()
       }
     }
-    function handleScroll() { onClose() }
+    function handleScroll(e: Event) {
+      if (dropdownRef.current && dropdownRef.current.contains(e.target as Node)) return
+      onClose()
+    }
     document.addEventListener('mousedown', handleClick)
     window.addEventListener('scroll', handleScroll, true)
     return () => {
