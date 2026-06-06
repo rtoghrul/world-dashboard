@@ -45,8 +45,8 @@ const WomenWidget = dynamic(() => import('@/components/WomenWidget'), { ssr: fal
 const PlatformsWidget = dynamic(() => import('@/components/PlatformsWidget'), { ssr: false, loading: WidgetLoader })
 const ChinesePlatformsWidget = dynamic(() => import('@/components/ChinesePlatformsWidget'), { ssr: false, loading: WidgetLoader })
 const GermanyWidget = dynamic(() => import('@/components/GermanyWidget'), { ssr: false, loading: WidgetLoader })
-const BenefitsWidget = dynamic(() => import('@/components/BenefitsWidget')
-const HorizonSourceWidget = dynamic(() => import('@/components/HorizonSourceWidget'), { ssr: false, loading: WidgetLoader }), { ssr: false, loading: WidgetLoader })
+const BenefitsWidget = dynamic(() => import('@/components/BenefitsWidget'), { ssr: false, loading: WidgetLoader })
+const HorizonSourceWidget = dynamic(() => import('@/components/HorizonSourceWidget'), { ssr: false, loading: WidgetLoader })
 
 const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store, chinese: ShoppingBag, germany: Newspaper, horizon: Newspaper }
 
