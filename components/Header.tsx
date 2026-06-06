@@ -118,22 +118,27 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'kids', label: { en: 'Kids & Baby', az: 'Uşaq', ru: 'Дети', tr: 'Çocuk', de: 'Kinder', fr: 'Enfants', es: 'Niños', zh: '儿童', ar: 'أطفال', ja: '子供', it: 'Bambini', pt: 'Crianças' } },
       { id: 'hobby', label: { en: 'Hobby & Tools', az: 'Hobbi', ru: 'Хобби', tr: 'Hobi', de: 'Hobby', fr: 'Loisirs', es: 'Hobby', zh: '爱好', ar: 'هوايات', ja: '趣味', it: 'Hobby', pt: 'Hobby' } },
     
-      { id: 'behoerden', section: 'germany', label: { en: 'Government', az: 'Dövlət', ru: 'Гос. органы', tr: 'Devlet', de: 'Behörden', fr: 'Gouvernement', es: 'Gobierno', zh: '政府', ar: 'حكومة', ja: '行政', it: 'Governo', pt: 'Governo' } },
-      { id: 'wohnung', section: 'germany', label: { en: 'Housing', az: 'Mənzil', ru: 'Жильё', tr: 'Konut', de: 'Wohnung', fr: 'Logement', es: 'Vivienda', zh: '住房', ar: 'سكن', ja: '住居', it: 'Alloggio', pt: 'Moradia' } },
-      { id: 'bildung', section: 'germany', label: { en: 'Education', az: 'Təhsil', ru: 'Образование', tr: 'Eğitim', de: 'Bildung', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'تعليم', ja: '教育', it: 'Istruzione', pt: 'Educação' } },
-      { id: 'arbeit', section: 'germany', label: { en: 'Work', az: 'İş', ru: 'Работа', tr: 'İş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمل', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
-      { id: 'aenderungen', section: 'germany', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
-      { id: 'tools', section: 'germany', label: { en: 'Tools', az: 'Alətlər', ru: 'Инструменты', tr: 'Araçlar', de: 'Tools', fr: 'Outils', es: 'Herramientas', zh: '工具', ar: 'أدوات', ja: 'ツール', it: 'Strumenti', pt: 'Ferramentas' } },
-      { id: 'auto', section: 'germany', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', ru: 'Авто и ПДД', tr: 'Oto & Trafik', de: 'Auto & Verkehr', fr: 'Auto', es: 'Auto', zh: '汽车', ar: 'سيارات', ja: '車', it: 'Auto', pt: 'Auto' } },
-      { id: 'familie', section: 'germany', label: { en: 'Family', az: 'Ailə', ru: 'Семья', tr: 'Aile', de: 'Familie', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'عائلة', ja: '家族', it: 'Famiglia', pt: 'Família' } },
-      { id: 'miete', section: 'germany', label: { en: 'Tenant & Landlord', az: 'Kirayəçi & Ev sahibi', ru: 'Аренда', tr: 'Kiracı', de: 'Mieter & Vermieter', fr: 'Locataire', es: 'Alquiler', zh: '租房', ar: 'إيجار', ja: '賃貸', it: 'Affitto', pt: 'Aluguel' } },
-      { id: 'gesundheit', section: 'germany', label: { en: 'Healthcare', az: 'Səhiyyə', ru: 'Здоровье', tr: 'Sağlık', de: 'Gesundheit', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'صحة', ja: '医療', it: 'Salute', pt: 'Saúde' } },
-      { id: 'versicherung', section: 'germany', label: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', tr: 'Sigorta', de: 'Versicherung', fr: 'Assurance', es: 'Seguro', zh: '保险', ar: 'تأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguro' } },
-      { id: 'rechte', section: 'germany', label: { en: 'Your Rights', az: 'Hüquqlarınız', ru: 'Ваши права', tr: 'Haklarınız', de: 'Ihre Rechte', fr: 'Vos droits', es: 'Sus derechos', zh: '权利', ar: 'حقوقك', ja: '権利', it: 'I tuoi diritti', pt: 'Seus direitos' } },
-      { id: 'deutsch', section: 'germany', label: { en: 'German Language', az: 'Alman dili', ru: 'Немецкий язык', tr: 'Almanca', de: 'Deutsch lernen', fr: 'Allemand', es: 'Alemán', zh: '德语', ar: 'ألمانية', ja: 'ドイツ語', it: 'Tedesco', pt: 'Alemão' } },
     
     ]
   },
+  germany: {
+    label: { en: 'Germany 🇩🇪', az: 'Almaniya 🇩🇪', ru: 'Германия 🇩🇪', tr: 'Almanya 🇩🇪', de: 'Deutschland 🇩🇪', fr: 'Allemagne 🇩🇪', es: 'Alemania 🇩🇪', zh: '德国 🇩🇪', ar: 'ألمانيا 🇩🇪', ja: 'ドイツ 🇩🇪', it: 'Germania 🇩🇪', pt: 'Alemanha 🇩🇪' },
+    items: [
+      { id: 'behoerden', label: { en: 'Government', az: 'Dövlət', ru: 'Гос. органы', tr: 'Devlet', de: 'Behörden', fr: 'Gouvernement', es: 'Gobierno', zh: '政府', ar: 'حكوмة', ja: '行政', it: 'Governo', pt: 'Governo' } },
+      { id: 'wohnung', label: { en: 'Housing', az: 'Mənzil', ru: 'Жильё', tr: 'Konut', de: 'Wohnung', fr: 'Logement', es: 'Vivienda', zh: '住房', ar: 'سكن', ja: '住居', it: 'Alloggio', pt: 'Moradia' } },
+      { id: 'bildung', label: { en: 'Education', az: 'Təhsil', ru: 'Образование', tr: 'Eğitim', de: 'Bildung', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'تعليм', ja: '教育', it: 'Istruzione', pt: 'Educação' } },
+      { id: 'arbeit', label: { en: 'Work', az: 'Iş', ru: 'Работа', tr: 'Iş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمл', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
+      { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
+      { id: 'auto', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', ru: 'Авто и ПДД', tr: 'Oto & Trafik', de: 'Auto & Verkehr', fr: 'Auto', es: 'Auto', zh: '汽车', ar: 'سيارات', ja: '車', it: 'Auto', pt: 'Auto' } },
+      { id: 'familie', label: { en: 'Family', az: 'Ailə', ru: 'Семья', tr: 'Aile', de: 'Familie', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'عائلة', ja: '家族', it: 'Famiglia', pt: 'Família' } },
+      { id: 'miete', label: { en: 'Tenant & Landlord', az: 'Kirayəçi', ru: 'Аренда', tr: 'Kiracı', de: 'Mieter & Vermieter', fr: 'Locataire', es: 'Alquiler', zh: '租房', ar: 'إيجار', ja: '購貸', it: 'Affitto', pt: 'Aluguel' } },
+      { id: 'gesundheit', label: { en: 'Healthcare', az: 'Səhiyyə', ru: 'Здоровье', tr: 'Sağlık', de: 'Gesundheit', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'صحة', ja: '医療', it: 'Salute', pt: 'Saúde' } },
+      { id: 'versicherung', label: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', tr: 'Sigorta', de: 'Versicherung', fr: 'Assurance', es: 'Seguro', zh: '保险', ar: 'تأмين', ja: '保険', it: 'Assicurazione', pt: 'Seguro' } },
+      { id: 'rechte', label: { en: 'Your Rights', az: 'Hüquqlarınız', ru: 'Ваши права', tr: 'Haklarınız', de: 'Ihre Rechte', fr: 'Vos droits', es: 'Sus derechos', zh: '权利', ar: 'حقوقك', ja: '権利', it: 'I tuoi diritti', pt: 'Seus direitos' } },
+      { id: 'deutsch', label: { en: 'German Language', az: 'Alman dili', ru: 'Немецкий язык', tr: 'Almanca', de: 'Deutsch lernen', fr: 'Allemand', es: 'Alemán', zh: '德语', ar: 'ألмانية', ja: 'ドイツ語', it: 'Tedesco', pt: 'Alemão' } },
+    ]
+  },
+
   horizon: {
     label: { en: "Horizon", az: "Horizon", ru: "Horizon", tr: "Horizon", de: "Horizon", fr: "Horizon", es: "Horizon", zh: "Horizon", ar: "Horizon", ja: "Horizon", it: "Horizon", pt: "Horizon" },
     items: [
