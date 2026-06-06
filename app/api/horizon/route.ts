@@ -11,23 +11,21 @@ export interface HorizonBriefing {
 }
 
 function parseMarkdown(content: string): HorizonBriefing {
-  const titleMatch = content.split('
-')[0]?.match(/(\d{4}-\d{2}-\d{2})/)
+  const lines = content.split(String.fromCharCode(10))
+  const titleMatch = lines[0]?.match(/(\d{4}-\d{2}-\d{2})/)
   const date = titleMatch?.[1] ?? new Date().toISOString().split('T')[0]
   const countMatch = content.match(/From (\d+) items, (\d+) important/)
   const totalFetched = parseInt(countMatch?.[1] ?? '0')
   const totalSelected = parseInt(countMatch?.[2] ?? '0')
   const items: HorizonItem[] = []
-  const sections = content.split(/
----
-/)
+  const sep = String.fromCharCode(10) + '---' + String.fromCharCode(10)
+  const sections = content.split(sep)
   for (const section of sections) {
     const hm = section.match(/^## \[(.+?)\]\((.+?)\) .+ ([\d.]+)\/10/m)
     if (!hm) continue
     const title = hm[1], url = hm[2], score = parseFloat(hm[3])
     const rm = section.match(/item-(\d+)/), rank = rm ? parseInt(rm[1]) : items.length + 1
-    const sm = section.match(/
-([a-z]+(?:\/[^\s]+)?) /)
+    const sm = section.match(new RegExp(String.fromCharCode(10) + '([a-z]+(?:\/[^\s]+)?) '))
     const source = sm?.[1] ?? 'unknown'
     const afterH = section.replace(/^## .+
 /, '').trim()
