@@ -187,6 +187,9 @@ export default function HomePage() {
 
           {/* Right sidebar */}
           <div className="space-y-5">
+            {/* Horizon Daily Briefing */}
+            <HorizonWidget />
+
             {/* Top Coins */}
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -241,8 +244,6 @@ export default function HomePage() {
             {/* Paper Trading */}
             <PortfolioSimulator />
 
-            {/* Horizon Daily Briefing */}
-            <HorizonWidget />
           </div>
         </div>
 
