@@ -11,20 +11,20 @@ interface HorizonBriefing {
   date: string; totalFetched: number; totalSelected: number; items: HorizonItem[]
 }
 
-const SOURCE_MAP: Record<string, string[]> = {
-  'hackernews':    ['hackernews'],
-  'reddit-ml':     ['reddit/r/MachineLearning'],
-  'reddit-tech':   ['reddit/r/technology'],
-  'reddit-ai':     ['reddit/r/artificial'],
-  'rss-techcrunch':['rss/TechCrunch'],
-  'rss-verge':     ['rss/The Verge'],
-  'rss-ars':       ['rss/Ars Technica'],
-  'rss-simon':     ['rss/Simon Willison'],
-  'tg-guardian':   ['telegram/guardian'],
-  'tg-hnfeed':     ['telegram/hacker_news_feed'],
-  'tg-wired':      ['telegram/wired'],
-  'tg-openai':     ['telegram/openai_news'],
-  'tg-bbc':        ['telegram/bbcbreaking'],
+const SOURCE_MAP: Record<string, string> = {
+  'hackernews':    'hackernews',
+  'reddit-ml':     'reddit · r/MachineLearning',
+  'reddit-tech':   'reddit · r/technology',
+  'reddit-ai':     'reddit · r/artificial',
+  'rss-techcrunch':'rss · TechCrunch',
+  'rss-verge':     'rss · The Verge',
+  'rss-ars':       'rss · Ars Technica',
+  'rss-simon':     'rss · Simon Willison',
+  'tg-guardian':   'telegram · guardian',
+  'tg-hnfeed':     'telegram · hacker_news_feed',
+  'tg-wired':      'telegram · wired',
+  'tg-openai':     'telegram · openai_news',
+  'tg-bbc':        'telegram · bbcbreaking',
 }
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -50,9 +50,9 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
   const { data, error, isLoading } = useSWR<HorizonBriefing>(GIST_URL, fetcher, { revalidateOnFocus: false })
   const [expanded, setExpanded] = useState<number | null>(null)
 
-  const sourcePrefixes = SOURCE_MAP[source] || []
+  const sourceKey = SOURCE_MAP[source] || ''
   const items = (data?.items ?? []).filter(item =>
-    sourcePrefixes.length === 0 || sourcePrefixes.some(p => item.source.toLowerCase().includes(p.toLowerCase()))
+    !sourceKey || item.source.toLowerCase().includes(sourceKey.toLowerCase())
   )
 
   const label = SOURCE_LABELS[source] || 'Horizon Briefing'
