@@ -24,6 +24,7 @@ import DailyStreak from '@/components/DailyStreak'
 import DailyQuiz from '@/components/DailyQuiz'
 import PortfolioSimulator from '@/components/PortfolioSimulator'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
+import HorizonWidget from '@/components/HorizonWidget'
 import { Sparkles, Download } from 'lucide-react'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -239,6 +240,9 @@ export default function HomePage() {
 
             {/* Paper Trading */}
             <PortfolioSimulator />
+
+            {/* Horizon Daily Briefing */}
+            <HorizonWidget />
           </div>
         </div>
 
