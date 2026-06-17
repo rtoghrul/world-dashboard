@@ -1,6 +1,6 @@
 'use client'
 
-import { ExternalLink, PiggyBank, Utensils, Pill, Shirt, Car, Baby, Home, BadgeEuro } from 'lucide-react'
+import { ExternalLink, PiggyBank, Utensils, Pill, Shirt, Car, Baby, Home, BadgeEuro, Gavel } from 'lucide-react'
 
 const groups = [
   { title: 'Food savings & food sharing', subtitle: 'Discounted restaurant, cafe and surplus food in Germany', icon: Utensils, items: [
@@ -51,6 +51,16 @@ const groups = [
     { name: 'Skyscanner', url: 'https://www.skyscanner.de', note: 'Flight price comparison' },
     { name: 'Omio', url: 'https://www.omio.de', note: 'Compare trains, buses and flights' },
   ]},
+  { title: 'Auctions & government deals', subtitle: 'German GovDeals-style auctions for surplus, seized and industrial equipment', icon: Gavel, items: [
+    { name: 'Zoll-Auktion', url: 'https://www.zoll-auktion.de', note: 'Official German public auctions: customs, police, cities, universities and surplus goods' },
+    { name: 'Justiz-Auktion', url: 'https://www.justiz-auktion.de', note: 'Court and justice auctions: seized items, electronics, bikes, tools and more' },
+    { name: 'Deutsche Internet Auktion', url: 'https://www.deutsche-internet-auktion.de', note: 'Municipal and public-sector auctions for vehicles, IT, furniture and equipment' },
+    { name: 'Troostwijk Auctions', url: 'https://www.troostwijkauctions.com/de', note: 'Industrial auctions: servers, workshop tools, machinery, warehouse and office equipment' },
+    { name: 'Surplex', url: 'https://www.surplex.com/de', note: 'Used industrial machines, technical equipment, CNC and factory liquidations' },
+    { name: 'VDM Versteigerungen', url: 'https://www.vdm-versteigerungen.de', note: 'Insolvency and industrial auctions with machines, electronics and business equipment' },
+    { name: 'Fundbüro Deutschland', url: 'https://www.fundbuero.de', note: 'Lost-and-found items from cities and transport operators' },
+    { name: 'Auktionshaus Karhausen', url: 'https://www.karhausen.de', note: 'IT assets, office equipment, industrial electronics and business liquidations' },
+  ]},
 ]
 
 export default function GermanySavingsWidget() {
@@ -62,7 +72,7 @@ export default function GermanySavingsWidget() {
         </div>
         <div>
           <h2 className="text-2xl font-bold gradient-text-static">Germany Savings Apps</h2>
-          <p className="text-xs text-[#8b8b9e]">Food, pharmacies, clothes, family, car and cashback tools</p>
+          <p className="text-xs text-[#8b8b9e]">Food, pharmacies, clothes, auctions, family, car and cashback tools</p>
         </div>
       </div>
 
@@ -99,7 +109,7 @@ export default function GermanySavingsWidget() {
       <div className="mt-5 rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-4 flex items-start gap-3">
         <Home className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
         <p className="text-xs text-amber-100/80 leading-relaxed">
-          Tip: before buying, check Idealo/MyDealz first, then cashback via Shoop or Payback, then compare delivery cost. For medicines, compare Medizinfuchs before ordering.
+          Tip: before buying, check Idealo/MyDealz first, then cashback via Shoop or Payback, then compare delivery cost. For used equipment and 3D printers, also check Zoll-Auktion, Justiz-Auktion, Troostwijk and Surplex.
         </p>
       </div>
     </div>
