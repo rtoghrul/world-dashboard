@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { ArrowLeft, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin, Heart, ShoppingBag, Store } from 'lucide-react'
+import { ArrowLeft, CloudSun, Film, Newspaper, Plane, Play, WalletCards, BarChart2, BookOpen, Share2, Bitcoin, Heart, ShoppingBag, Store, PiggyBank } from 'lucide-react'
 import Header from '@/components/Header'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import CommandPalette from '@/components/CommandPalette'
@@ -45,10 +45,11 @@ const WomenWidget = dynamic(() => import('@/components/WomenWidget'), { ssr: fal
 const PlatformsWidget = dynamic(() => import('@/components/PlatformsWidget'), { ssr: false, loading: WidgetLoader })
 const ChinesePlatformsWidget = dynamic(() => import('@/components/ChinesePlatformsWidget'), { ssr: false, loading: WidgetLoader })
 const GermanyWidget = dynamic(() => import('@/components/GermanyWidget'), { ssr: false, loading: WidgetLoader })
+const GermanySavingsWidget = dynamic(() => import('@/components/GermanySavingsWidget'), { ssr: false, loading: WidgetLoader })
 const BenefitsWidget = dynamic(() => import('@/components/BenefitsWidget'), { ssr: false, loading: WidgetLoader })
 const HorizonSourceWidget = dynamic(() => import('@/components/HorizonSourceWidget'), { ssr: false, loading: WidgetLoader })
 
-const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store, chinese: ShoppingBag, germany: Newspaper, horizon: Newspaper }
+const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, whale: WalletCards, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, shopping: ShoppingBag, platforms: Store, chinese: ShoppingBag, germany: Newspaper, horizon: Newspaper, savings: PiggyBank }
 
 const names: Record<string, Record<string, string>> = {
   az: { weather: 'Hava', horizon: 'Horizon Daily', crypto: 'Kripto Bazarları', whale: 'Balina Aktivliyi', news: 'Qlobal Xəbərlər', travel: 'Səyahət', viral: 'Viral Məzmun', entertainment: 'Əyləncə', social: 'Sosial Trendlər', stocks: 'Səhm Bazarları', education: 'Təhsil', markets: 'Bazarlar', aitools: 'AI Alətlər', software: 'Proqramlar', women: 'Qadınlar', shopping: 'Alış-veriş', platforms: 'Platformalar 🇩🇪', chinese: 'Çin Platformaları 🇨🇳', germany: 'Almaniyada Həyat 🇩🇪' },
@@ -85,6 +86,10 @@ const subKeyMap: Record<string, string> = {
   benefits:'subBenefits',
 }
 
+const localSubLabels: Record<string, Record<string, string>> = {
+  savings: { en: 'Savings Apps', az: 'Qənaət App-ları', ru: 'Экономия', de: 'Spar-Apps', tr: 'Tasarruf App’leri' },
+}
+
 const submenuMap: Record<string, string[]> = {
   weather: ['current', 'hourly', 'weekly'],
   crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed', 'benefits'],
@@ -103,7 +108,7 @@ const submenuMap: Record<string, string[]> = {
   shopping: ['all', 'electronics', 'fashion', 'grocery', 'pharmacy', 'auto', 'home', 'benefits'],
   platforms: ['general', 'clothes', 'pharma', 'food', 'electronics', 'autoparts', 'furniture', 'international', 'benefits'],
   chinese: ['all', 'general', 'fashion', 'electronics', 'home', 'kids', 'hobby', 'benefits'],
-  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch', 'benefits'],
+  germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'savings', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch', 'benefits'],
 }
 
 const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'technology', social: 'social' }
@@ -127,7 +132,6 @@ const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: 
 
 function Content({ main, sub }: { main: string; sub: string }) {
   try {
-    // Benefits tab for any section
     if (sub === 'benefits') {
       const sectionKey = main === 'crypto' ? 'markets' : main
       return <BenefitsWidget section={sectionKey} />
@@ -151,6 +155,7 @@ function Content({ main, sub }: { main: string; sub: string }) {
     if (main === 'shopping') return <PlatformsWidget initialCategory={sub || 'all'} />
     if (main === 'platforms') return <PlatformsWidget initialCategory={sub || 'all'} />
     if (main === 'chinese') return <ChinesePlatformsWidget initialCategory={sub || 'all'} />
+    if (main === 'germany' && sub === 'savings') return <GermanySavingsWidget />
     if (main === 'germany') return <GermanyWidget initialTab={sub || 'behoerden'} />
     if (main === 'horizon') return <HorizonSourceWidget source={sub || 'hackernews'} />
     if (main === 'education') {
@@ -178,6 +183,7 @@ export default function SectionPage() {
   const subs = submenuMap[main] || []
 
   const getSubLabel = (s: string) => {
+    if (localSubLabels[s]) return localSubLabels[s][lang] || localSubLabels[s].en
     const key = subKeyMap[s]
     if (key && tr && tr[key]) return tr[key]
     return s
