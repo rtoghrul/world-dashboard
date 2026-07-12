@@ -15,7 +15,7 @@ const groups = [
     { name: 'Marktguru', url: 'https://www.marktguru.de', note: 'Supermarket offers, coupons and cashback promotions' },
     { name: 'KaufDA', url: 'https://www.kaufda.de', note: 'Digital leaflets from Aldi, Lidl, REWE, Kaufland and more' },
     { name: 'MeinProspekt', url: 'https://www.meinprospekt.de', note: 'Weekly brochures and nearby store promotions' },
-    { name: 'Lidl Plus', url: 'https://www.lidl.de/c/lidl-plus/s10023043', note: 'Weekly food coupons and digital receipts' },
+    { name: 'Lidl Plus', url: 'https://www.lidl.de/c/lidl-plus', note: 'Weekly food coupons and digital receipts' },
     { name: 'Kaufland Card', url: 'https://www.kaufland.de/card.html', note: 'Supermarket discounts and points' },
     { name: 'REWE App', url: 'https://www.rewe.de/service/app/', note: 'Coupons, Payback and delivery service' },
   ]},
@@ -111,7 +111,7 @@ const groups = [
   ]},
   { title: 'Car, fuel & travel savings', subtitle: 'Useful for family trips, parking and fuel', icon: Car, items: [
     { name: 'Clever Tanken', url: 'https://www.clever-tanken.de', note: 'Compare fuel prices nearby' },
-    { name: 'ADAC Drive', url: 'https://www.adac.de/services/apps/adac-drive/', note: 'Fuel prices, route help and mobility tools' },
+    { name: 'ADAC Drive', url: 'https://www.adac.de/services/apps/', note: 'Fuel prices, route help and mobility tools' },
     { name: 'Parkopedia', url: 'https://www.parkopedia.de', note: 'Compare parking prices and availability' },
     { name: 'AutoUncle', url: 'https://www.autouncle.de', note: 'Used car price comparison' },
     { name: 'DAT Bewertung', url: 'https://www.dat.de/gebrauchtfahrzeugwerte/', note: 'Vehicle valuation and market value checks' },

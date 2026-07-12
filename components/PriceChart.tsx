@@ -27,9 +27,7 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
     async function fetchChart() {
       setLoading(true)
       try {
-        const res = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${range}`
-        )
+        const res = await fetch(`/api/chart?coin=${coinId}&days=${range}`)
         const json = await res.json()
 
         if (json.prices && Array.isArray(json.prices)) {

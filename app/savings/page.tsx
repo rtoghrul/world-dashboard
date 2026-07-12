@@ -67,7 +67,7 @@ const groups = [
     items: [
       { name: 'dm App', url: 'https://www.dm.de/services/services-im-markt/dm-app-1675614', note: 'Coupons for baby, health, cosmetics and household' },
       { name: 'Rossmann App', url: 'https://www.rossmann.de/de/app', note: 'Regular 10% coupons and family discounts' },
-      { name: 'Lidl Plus', url: 'https://www.lidl.de/c/lidl-plus/s10023043', note: 'Weekly food coupons and digital receipts' },
+      { name: 'Lidl Plus', url: 'https://www.lidl.de/c/lidl-plus', note: 'Weekly food coupons and digital receipts' },
       { name: 'Kaufland Card', url: 'https://www.kaufland.de/card.html', note: 'Supermarket discounts and points' },
       { name: 'REWE App', url: 'https://www.rewe.de/service/app/', note: 'Coupons, Payback and delivery service' },
       { name: 'Bring!', url: 'https://www.getbring.com', note: 'Shared shopping lists for family grocery planning' },
@@ -79,7 +79,7 @@ const groups = [
     icon: Car,
     items: [
       { name: 'Clever Tanken', url: 'https://www.clever-tanken.de', note: 'Compare fuel prices nearby' },
-      { name: 'ADAC Drive', url: 'https://www.adac.de/services/apps/adac-drive/', note: 'Fuel prices, route help and mobility tools' },
+      { name: 'ADAC Drive', url: 'https://www.adac.de/services/apps/', note: 'Fuel prices, route help and mobility tools' },
       { name: 'Parkopedia', url: 'https://www.parkopedia.de', note: 'Compare parking prices and availability' },
       { name: 'EasyPark', url: 'https://www.easypark.com/de', note: 'Pay parking by phone in many German cities' },
       { name: 'Skyscanner', url: 'https://www.skyscanner.de', note: 'Flight price comparison' },

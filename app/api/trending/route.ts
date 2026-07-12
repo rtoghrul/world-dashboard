@@ -5,17 +5,20 @@ export const revalidate = 300
 
 async function getGoogleTrends() {
   try {
+    // The old /trends/trendingsearches/daily/rss endpoint was discontinued (404)
     const res = await fetch(
-      'https://trends.google.com/trends/trendingsearches/daily/rss?geo=US',
+      'https://trends.google.com/trending/rss?geo=US',
       { next: { revalidate: 300 } }
     )
+    if (!res.ok) return []
     const text = await res.text()
-    const titles = text.match(/<title>(?!Daily Search Trends)(.*?)<\/title>/g) || []
-    return titles.slice(0, 5).map(t => ({
-      title: t.replace(/<\/?title>/g, ''),
-      source: 'google' as const,
-      volume: '',
-    }))
+    const items = text.match(/<item>[\s\S]*?<\/item>/g) || []
+    return items.slice(0, 5).flatMap(item => {
+      const rawTitle = item.match(/<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/)?.[1]?.trim()
+      if (!rawTitle || /^\d{3}$/.test(rawTitle)) return []
+      const traffic = item.match(/<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/)?.[1] || ''
+      return [{ title: rawTitle, source: 'google' as const, volume: traffic }]
+    })
   } catch {
     return []
   }

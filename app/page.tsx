@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
-import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2 } from 'lucide-react'
+import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2, Search, Film, Zap, GraduationCap, Plane, ShoppingBag, Gift, Cpu, MonitorSmartphone, Landmark } from 'lucide-react'
 import Header from '@/components/Header'
 import MainMenuDropdown from '@/components/MainMenuDropdown'
 import MarketTicker from '@/components/MarketTicker'
@@ -90,12 +90,28 @@ export default function HomePage() {
 
       {/* ═══ HERO SECTION ═══ */}
       <section className="relative overflow-hidden border-b border-white/[0.03]">
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.03] via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.06] via-transparent to-transparent" />
+          <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-indigo-600/10 blur-3xl" />
+          <div className="absolute -top-16 right-1/4 w-80 h-80 rounded-full bg-purple-600/10 blur-3xl" />
+          <div className="absolute top-10 right-0 w-72 h-72 rounded-full bg-cyan-500/[0.07] blur-3xl" />
+        </div>
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="gradient-text text-2xl sm:text-3xl font-bold tracking-tight">World Dashboard</h1>
-              <p className="text-[#6b6b80] text-xs sm:text-sm mt-1">Real-time intelligence · 15+ sections · 12 languages</p>
+              <p suppressHydrationWarning className="text-[11px] uppercase tracking-[0.2em] text-indigo-400/80 font-semibold mb-2">
+                {new Date().toLocaleDateString(lang === 'en' ? 'en-US' : lang, { weekday: 'long', day: 'numeric', month: 'long' })}
+              </p>
+              <h1 className="gradient-text text-3xl sm:text-5xl font-extrabold tracking-tight">World Dashboard</h1>
+              <p className="text-[#8b8b9e] text-sm sm:text-base mt-2 max-w-lg">Real-time markets, news & tools — 15+ sections, 12 languages, one place.</p>
+              <button
+                onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-[#8b8b9e] hover:text-white hover:border-indigo-500/40 transition-all"
+              >
+                <Search className="w-4 h-4" />
+                Search anything…
+                <kbd className="ml-2 px-1.5 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
+              </button>
             </div>
             <div className="flex items-center gap-3 sm:gap-4">
               {/* KPI Pills */}
@@ -138,6 +154,33 @@ export default function HomePage() {
       <LivePriceTicker />
 
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+        {/* ═══ EXPLORE GRID ═══ */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+          {[
+            { href: '/section/news/top', icon: Newspaper, label: 'News', accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
+            { href: '/section/markets/crypto-top', icon: Bitcoin, label: 'Markets', accent: 'from-amber-500/20 to-amber-500/5 border-amber-500/20 hover:border-amber-400/50', iconColor: 'text-amber-400' },
+            { href: '/section/entertainment/movies', icon: Film, label: 'Entertainment', accent: 'from-purple-500/20 to-purple-500/5 border-purple-500/20 hover:border-purple-400/50', iconColor: 'text-purple-400' },
+            { href: '/section/aitools/chatbots', icon: Cpu, label: 'AI Tools', accent: 'from-violet-500/20 to-violet-500/5 border-violet-500/20 hover:border-violet-400/50', iconColor: 'text-violet-400' },
+            { href: '/section/software/android', icon: MonitorSmartphone, label: 'Software', accent: 'from-cyan-500/20 to-cyan-500/5 border-cyan-500/20 hover:border-cyan-400/50', iconColor: 'text-cyan-400' },
+            { href: '/section/viral/youtube', icon: Zap, label: 'Viral', accent: 'from-pink-500/20 to-pink-500/5 border-pink-500/20 hover:border-pink-400/50', iconColor: 'text-pink-400' },
+            { href: '/section/education/science', icon: GraduationCap, label: 'Education', accent: 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20 hover:border-emerald-400/50', iconColor: 'text-emerald-400' },
+            { href: '/section/travel/flight-hotel', icon: Plane, label: 'Travel', accent: 'from-sky-500/20 to-sky-500/5 border-sky-500/20 hover:border-sky-400/50', iconColor: 'text-sky-400' },
+            { href: '/section/germany/behoerden', icon: Landmark, label: 'Germany 🇩🇪', accent: 'from-yellow-500/20 to-yellow-500/5 border-yellow-500/20 hover:border-yellow-400/50', iconColor: 'text-yellow-400' },
+            { href: '/section/chinese/all', icon: ShoppingBag, label: 'China 🇨🇳', accent: 'from-red-500/20 to-red-500/5 border-red-500/20 hover:border-red-400/50', iconColor: 'text-red-400' },
+            { href: '/section/horizon/hackernews', icon: Globe2, label: 'Horizon', accent: 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20 hover:border-indigo-400/50', iconColor: 'text-indigo-400' },
+            { href: '/benefits', icon: Gift, label: 'Benefits', accent: 'from-orange-500/20 to-orange-500/5 border-orange-500/20 hover:border-orange-400/50', iconColor: 'text-orange-400' },
+          ].map(tile => (
+            <Link
+              key={tile.href}
+              href={tile.href}
+              className={`group flex flex-col items-center gap-2 py-4 px-2 rounded-2xl border bg-gradient-to-b ${tile.accent} transition-all hover:scale-[1.03] hover:-translate-y-0.5`}
+            >
+              <tile.icon className={`w-6 h-6 ${tile.iconColor} group-hover:scale-110 transition-transform`} />
+              <span className="text-xs font-semibold text-white/90 text-center leading-tight">{tile.label}</span>
+            </Link>
+          ))}
+        </div>
+
         {/* Daily Streak */}
         <div className="mb-4">
           <DailyStreak />

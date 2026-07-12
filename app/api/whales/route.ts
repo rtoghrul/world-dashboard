@@ -22,6 +22,13 @@ function btcUsdFallback() {
 }
 
 async function getBtcPrice() {
+  // Binance first: keyless and effectively never rate-limited at this volume
+  try {
+    const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', { next: { revalidate: 120 } })
+    const json = await res.json()
+    const price = Number(json?.price)
+    if (price > 0) return price
+  } catch {}
   try {
     const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd', { next: { revalidate: 120 } })
     const json = await res.json()
@@ -36,14 +43,39 @@ function shortAddress(addr?: string) {
   return addr
 }
 
+// Latest mined block via mempool.space — a block holds thousands of txs, so a
+// 50-tx sample reliably contains genuine whale transfers (the 10-tx unconfirmed
+// sample alone almost never does)
+async function getBlockTxs(): Promise<any[]> {
+  try {
+    const tip = await (await fetch('https://mempool.space/api/blocks/tip/hash', { next: { revalidate: 120 } })).text()
+    if (!/^[0-9a-f]{64}$/.test(tip)) return []
+    const [p1, p2] = await Promise.all([
+      fetch(`https://mempool.space/api/block/${tip}/txs/0`, { next: { revalidate: 120 } }).then(r => r.ok ? r.json() : []),
+      fetch(`https://mempool.space/api/block/${tip}/txs/25`, { next: { revalidate: 120 } }).then(r => r.ok ? r.json() : []),
+    ])
+    const rows = [...(Array.isArray(p1) ? p1 : []), ...(Array.isArray(p2) ? p2 : [])]
+    // Convert mempool.space shape to the blockchain.info shape mapped below
+    return rows.map((tx: any) => ({
+      hash: tx.txid,
+      time: tx.status?.block_time,
+      inputs: (tx.vin || []).map((i: any) => ({ prev_out: { addr: i.prevout?.scriptpubkey_address } })),
+      out: (tx.vout || []).map((o: any) => ({ value: o.value, addr: o.scriptpubkey_address })),
+    }))
+  } catch {
+    return []
+  }
+}
+
 export async function GET() {
   try {
-    const [price, res] = await Promise.all([
+    const [price, res, blockTxs] = await Promise.all([
       getBtcPrice(),
-      fetch('https://blockchain.info/unconfirmed-transactions?format=json', { next: { revalidate: 120 } }),
+      fetch('https://blockchain.info/unconfirmed-transactions?format=json', { next: { revalidate: 120 } }).catch(() => null),
+      getBlockTxs(),
     ])
-    const data = await res.json()
-    const txs = Array.isArray(data?.txs) ? data.txs : []
+    const data = res ? await res.json().catch(() => null) : null
+    const txs = [...(Array.isArray(data?.txs) ? data.txs : []), ...blockTxs]
 
     const whales: WhaleTx[] = txs
       .map((tx: any) => {
