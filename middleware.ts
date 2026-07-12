@@ -32,12 +32,9 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  if (!user && !PUBLIC_PATHS.includes(pathname)) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
+  // Site is public; only /admin requires the admin account.
   if (pathname === '/admin' && user?.email !== ADMIN_EMAIL) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL(user ? '/' : '/login', request.url))
   }
 
   if (user && PUBLIC_PATHS.includes(pathname)) {
