@@ -1,17 +1,18 @@
 'use client'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, ArrowRight, Newspaper, Bitcoin, Film, Zap, Download, GraduationCap, Plane, Cloud, ShoppingBag, Globe2 } from 'lucide-react'
+import { Search, ArrowRight, Newspaper, Bitcoin, Film, Zap, Download, GraduationCap, Plane, Cloud, ShoppingBag, Globe2, Gift } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const sectionIcons: Record<string, any> = {
   news: Newspaper, markets: Bitcoin, entertainment: Film, viral: Zap,
   aitools: Zap, software: Download, education: GraduationCap,
   travel: Plane, weather: Cloud, women: ShoppingBag, chinese: ShoppingBag,
-  germany: Globe2, platforms: ShoppingBag,
+  germany: Globe2, platforms: ShoppingBag, benefits: Gift,
 }
 
 const allSections = [
+  { id: '/benefits', label: 'Benefits Hub — Subsidies, Discounts & Free Tools', section: 'benefits' },
   { id: 'news/top', label: 'Top News', section: 'news' },
   { id: 'news/war', label: 'War & Conflicts', section: 'news' },
   { id: 'news/politics', label: 'Politics', section: 'news' },
@@ -90,7 +91,7 @@ export default function CommandPalette() {
   useEffect(() => { setSelectedIndex(0) }, [filtered])
 
   function navigate(item: typeof allSections[0]) {
-    router.push(`/section/${item.id}`)
+    router.push(item.id.startsWith('/') ? item.id : `/section/${item.id}`)
     setOpen(false)
   }
 

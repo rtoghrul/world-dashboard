@@ -94,7 +94,7 @@ const submenuMap: Record<string, string[]> = {
   weather: ['current', 'hourly', 'weekly'],
   crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed', 'benefits'],
   whale: ['large-transfers', 'wallets', 'exchanges'],
-  news: ['top', 'war', 'politics', 'economy', 'tech', 'ai', 'science', 'sports', 'health', 'industry', 'benefits'],
+  news: ['top', 'war', 'politics', 'economy', 'tech', 'ai', 'science', 'sports', 'health', 'industry'],
   markets: ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed', 'whale', 'stocks-top', 'gainers', 'losers', 'benefits'],
   travel: ['flight-hotel', 'flight', 'hotel', 'last-minute', 'benefits'],
   viral: ['youtube', 'tiktok', 'instagram', 'music', 'shorts', 'trending', 'benefits'],

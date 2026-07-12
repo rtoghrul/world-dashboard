@@ -1,14 +1,14 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
-import { ExternalLink, Gift, Star, Banknote, Sparkles, BadgePercent, Zap } from 'lucide-react'
+import { ExternalLink, Gift, Star, Banknote, Sparkles, BadgePercent, Zap, Search, CheckCircle2, Circle, Wrench } from 'lucide-react'
 
 export interface BenefitItem {
   name: string
   url: string
   desc: Record<string, string>
   saving?: string
-  type: 'free' | 'subsidy' | 'discount' | 'tip' | 'earn'
+  type: 'free' | 'subsidy' | 'discount' | 'tip' | 'earn' | 'tool'
   important?: boolean
 }
 
@@ -24,7 +24,9 @@ const typeConfig: Record<string, { label: string; color: string; icon: any }> = 
   discount: { label: 'DISCOUNT', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30', icon: BadgePercent },
   tip: { label: 'TIP', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: Sparkles },
   earn: { label: 'EARN $', color: 'bg-rose-500/20 text-rose-300 border-rose-500/30', icon: Zap },
+  tool: { label: 'TOOL', color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30', icon: Wrench },
 }
+const fallbackType = { label: 'TIP', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: Sparkles }
 
 // ═══════════════════════════════════════════
 // ALL BENEFITS DATA
@@ -36,7 +38,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
       id: 'housing',
       title: { en: '🏠 Housing & Mortgage', az: '🏠 Mənzil & İpoteka', de: '🏠 Wohnung & Hypothek', ru: '🏠 Жильё и ипотека' },
       items: [
-        { name: 'Baukindergeld', url: 'https://www.kfw.de/inlandsfoerderung/Privatpersonen/Neubau/', desc: { en: '€12,000 per child for first home buyers from KfW', az: 'KfW-dən ilk ev alanlara hər uşağa €12,000', de: '12.000€ pro Kind für Erstimmobilienkäufer (KfW)', ru: '€12,000 на ребёнка для первого жилья' }, saving: '€12K/child', type: 'subsidy', important: true },
+        { name: 'Jung kauft Alt (KfW 308)', url: 'https://www.kfw.de/inlandsfoerderung/Privatpersonen/Bestandsimmobilie/F%C3%B6rderprodukte/Jung-kauft-Alt-(308)/', desc: { en: 'Cheap KfW loan up to €150K for families buying older homes to renovate', az: 'Köhnə ev alan ailələr üçün €150K-a qədər ucuz KfW krediti', de: 'Günstiger KfW-Kredit bis 150.000€ für Familien, die Altbau kaufen', ru: 'Льготный кредит KfW до €150K для семей, покупающих старое жильё' }, saving: '€150K loan', type: 'subsidy', important: true },
         { name: 'KfW-Förderung (Kredit 300)', url: 'https://www.kfw.de/inlandsfoerderung/Privatpersonen/Neubau/F%C3%B6rderprodukte/Klimafreundlicher-Neubau-(297-298)/', desc: { en: 'Up to €150,000 low-interest loan for energy-efficient homes', az: 'Enerji-effektiv evlər üçün €150,000-a qədər aşağı faizli kredit', de: 'Bis 150.000€ zinsgünstiges Darlehen für Effizienzhaus', ru: 'До €150,000 льготный кредит на энергоэффективный дом' }, saving: '€150K loan', type: 'subsidy', important: true },
         { name: 'Wohnungsbauprämie', url: 'https://www.bundesfinanzministerium.de', desc: { en: '€70-140/year state bonus for Bausparvertrag savings', az: 'Bausparvertrag yığımı üçün illik €70-140 dövlət bonusu', de: '70-140€/Jahr Staatsprämie für Bausparvertrag', ru: '€70-140/год гос. премия за стройсбережения' }, saving: '€140/yr', type: 'subsidy' },
         { name: 'Wohngeld 2025', url: 'https://www.bmwsb.bund.de/Webs/BMWSB/DE/themen/wohnen/wohnraumfoerderung/wohngeld/wohngeld-node.html', desc: { en: 'Housing allowance - up to €370/month for low income', az: 'Mənzil müavinəti - aşağı gəlir üçün aylıq €370-ə qədər', de: 'Wohngeld - bis 370€/Monat für Geringverdiener', ru: 'Жилищное пособие - до €370/мес' }, saving: '€370/mo', type: 'subsidy', important: true },
@@ -48,8 +50,8 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
       id: 'auto',
       title: { en: '🚗 Car & Transport', az: '🚗 Avtomobil & Nəqliyyat', de: '🚗 Auto & Verkehr', ru: '🚗 Авто и транспорт' },
       items: [
-        { name: 'Deutschlandticket €58/mo', url: 'https://deutschlandticket.de', desc: { en: 'Unlimited public transport across Germany - trains, buses, trams', az: 'Bütün Almaniyada limitsiz ictimai nəqliyyat - qatar, avtobus, tramvay', de: 'Unbegrenzt Nahverkehr in ganz Deutschland', ru: 'Безлимитный общ. транспорт по всей Германии' }, saving: '€58/mo', type: 'discount', important: true },
-        { name: 'E-Auto Förderung (THG-Quote)', url: 'https://www.umweltbundesamt.de/themen/verkehr-laerm/emissionshandel/thg-quote', desc: { en: 'EV owners earn €250-400/year selling CO2 quota', az: 'Elektromobil sahibləri CO2 kvotası sataraq illik €250-400 qazanır', de: 'E-Auto-Besitzer verdienen 250-400€/Jahr mit THG-Quote', ru: 'Владельцы EV зарабатывают €250-400/год на квотах CO2' }, saving: '€400/yr', type: 'earn', important: true },
+        { name: 'Deutschlandticket €63/mo', url: 'https://deutschlandticket.de', desc: { en: 'Unlimited public transport across Germany - trains, buses, trams', az: 'Bütün Almaniyada limitsiz ictimai nəqliyyat - qatar, avtobus, tramvay', de: 'Unbegrenzt Nahverkehr in ganz Deutschland', ru: 'Безлимитный общ. транспорт по всей Германии' }, saving: '€63/mo', type: 'discount', important: true },
+        { name: 'E-Auto Förderung (THG-Quote)', url: 'https://www.umweltbundesamt.de/themen/verkehr-laerm/emissionshandel/thg-quote', desc: { en: 'EV owners earn ~€80-150/year selling their CO2 quota', az: 'Elektromobil sahibləri CO2 kvotası sataraq illik ~€80-150 qazanır', de: 'E-Auto-Besitzer verdienen ~80-150€/Jahr mit der THG-Quote', ru: 'Владельцы EV зарабатывают ~€80-150/год на квотах CO2' }, saving: '€150/yr', type: 'earn', important: true },
         { name: 'Pendlerpauschale', url: 'https://www.finanztip.de/pendlerpauschale/', desc: { en: 'Commuter tax deduction - €0.30/km (€0.38 from 21st km)', az: 'İşə gedən vergi endirimi - km başına €0.30 (21-ci km-dən €0.38)', de: 'Entfernungspauschale - 0,30€/km (ab 21. km: 0,38€)', ru: 'Налоговый вычет за дорогу - €0.30/км' }, saving: '~€1500/yr', type: 'subsidy' },
         { name: 'Jobticket (steuerfrei)', url: 'https://www.haufe.de/personal/entgelt/jobticket-steuerbefreiung_78_472544.html', desc: { en: 'Tax-free employer transit pass - ask your HR!', az: 'Vergisiz işəgötürən nəqliyyat bileti - HR-dan soruş!', de: 'Steuerfreies Jobticket vom Arbeitgeber - HR fragen!', ru: 'Безналоговый проездной от работодателя' }, saving: 'Tax-free', type: 'tip' },
         { name: 'Dienstwagen 0.25% Regel (E-Auto)', url: 'https://www.adac.de/rund-ums-fahrzeug/elektromobilitaet/kaufen-leasing/dienstwagen-elektro/', desc: { en: 'Company EV taxed at only 0.25% - massive tax saving vs 1%', az: 'Şirkət elektromobili yalnız 0.25% vergilənir - 1%-ə nisbətən böyük qənaət', de: 'Dienstwagen E-Auto nur 0,25% - viel weniger als 1%', ru: 'Служебный EV только 0.25% налог - огромная экономия' }, saving: '75% less tax', type: 'tip', important: true },
@@ -60,9 +62,9 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
       id: 'family',
       title: { en: '👨‍👩‍👧 Family Benefits', az: '👨‍👩‍👧 Ailə Müavinətləri', de: '👨‍👩‍👧 Familienleistungen', ru: '👨‍👩‍👧 Семейные пособия' },
       items: [
-        { name: 'Kindergeld: €250/child/mo', url: 'https://www.arbeitsagentur.de/familie-und-kinder/kindergeld', desc: { en: 'Universal child benefit - €250/month per child, no income limit', az: 'Universal uşaq müavinəti - hər uşağa aylıq €250, gəlir limiti yox', de: 'Kindergeld - 250€/Monat pro Kind, keine Einkommensgrenze', ru: '€250/мес на каждого ребёнка, без лимита дохода' }, saving: '€250/mo', type: 'subsidy', important: true },
+        { name: 'Kindergeld: €259/child/mo', url: 'https://www.arbeitsagentur.de/familie-und-kinder/kindergeld', desc: { en: 'Universal child benefit - €259/month per child (2026), no income limit', az: 'Universal uşaq müavinəti - hər uşağa aylıq €259 (2026), gəlir limiti yox', de: 'Kindergeld - 259€/Monat pro Kind (2026), keine Einkommensgrenze', ru: '€259/мес на каждого ребёнка (2026), без лимита дохода' }, saving: '€259/mo', type: 'subsidy', important: true },
         { name: 'Elterngeld: 65-67% salary', url: 'https://familienportal.de/familienportal/familienleistungen/elterngeld', desc: { en: 'Parental leave pay - 65-67% of net salary for 12-14 months', az: 'Valideyn məzuniyyəti - xalis maaşın 65-67%-i, 12-14 ay', de: 'Elterngeld - 65-67% des Nettogehalts, 12-14 Monate', ru: 'Родительское пособие - 65-67% от зарплаты, 12-14 мес' }, saving: '~€1800/mo', type: 'subsidy', important: true },
-        { name: 'Kinderzuschlag: +€292/mo', url: 'https://www.arbeitsagentur.de/familie-und-kinder/kinderzuschlag', desc: { en: 'Extra supplement for low-income families - up to €292/child/month', az: 'Aşağı gəlirli ailələr üçün əlavə - hər uşağa aylıq €292-ə qədər', de: 'Kinderzuschlag für Geringverdiener - bis 292€/Kind/Monat', ru: 'Доплата малоимущим - до €292/ребёнок/мес' }, saving: '€292/mo', type: 'subsidy', important: true },
+        { name: 'Kinderzuschlag: +€297/mo', url: 'https://www.arbeitsagentur.de/familie-und-kinder/kinderzuschlag', desc: { en: 'Extra supplement for low-income families - up to €297/child/month', az: 'Aşağı gəlirli ailələr üçün əlavə - hər uşağa aylıq €297-ə qədər', de: 'Kinderzuschlag für Geringverdiener - bis 297€/Kind/Monat', ru: 'Доплата малоимущим - до €297/ребёнок/мес' }, saving: '€297/mo', type: 'subsidy', important: true },
         { name: 'Kita kostenlos (Berlin)', url: 'https://www.berlin.de/sen/jugend/familie-und-kinder/kindertagesbetreuung/', desc: { en: 'Free kindergarten in Berlin - €0 from age 1 to school', az: 'Berlində pulsuz uşaq bağçası - 1 yaşdan məktəbə qədər €0', de: 'Kita kostenlos in Berlin - 0€ ab 1 Jahr bis Schulalter', ru: 'Бесплатный детский сад в Берлине' }, saving: '€0 Kita', type: 'free', important: true },
         { name: 'Bildung und Teilhabe (BuT)', url: 'https://www.bmas.de/DE/Arbeit/Grundsicherung-Buergergeld/Bildungspaket/bildungspaket.html', desc: { en: 'Free school supplies, lunch, trips, tutoring for low-income kids', az: 'Aşağı gəlirli uşaqlar üçün pulsuz məktəb ləvazimatı, nahar, ekskursiya', de: 'Kostenlose Schulsachen, Mittagessen, Ausflüge, Nachhilfe', ru: 'Бесплатные школьные принадлежности, обеды, экскурсии' }, saving: '€195+/yr', type: 'free' },
         { name: 'Mutterschaftsgeld', url: 'https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/mutterschaftsleistungen', desc: { en: 'Maternity pay - full salary for 6 weeks before + 8 weeks after birth', az: 'Analıq ödənişi - doğuşdan 6 həftə əvvəl + 8 həftə sonra tam maaş', de: 'Mutterschaftsgeld - volles Gehalt 6 Wo. vor + 8 Wo. nach Geburt', ru: 'Пособие по беременности - полная зарплата 14 недель' }, saving: 'Full salary', type: 'subsidy', important: true },
@@ -86,8 +88,8 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
       id: 'free-ai',
       title: { en: '🆓 Best Free AI Tools', az: '🆓 Ən Yaxşı Pulsuz AI Alətlər', de: '🆓 Beste kostenlose KI-Tools', ru: '🆓 Лучшие бесплатные ИИ' },
       items: [
-        { name: 'ChatGPT Free (GPT-4o mini)', url: 'https://chat.openai.com', desc: { en: 'Free tier includes GPT-4o mini, web browsing, file upload', az: 'Pulsuz plan GPT-4o mini, web axtarış, fayl yükləmə daxildir', de: 'Gratis: GPT-4o mini, Web-Suche, Datei-Upload', ru: 'Бесплатно: GPT-4o mini, веб-поиск, загрузка файлов' }, type: 'free', important: true },
-        { name: 'Claude 3.5 Sonnet (Free)', url: 'https://claude.ai', desc: { en: 'Free access to Claude 3.5 - best for coding & analysis', az: 'Claude 3.5-ə pulsuz giriş - kodlaşdırma üçün ən yaxşı', de: 'Gratis Claude 3.5 - ideal für Code & Analyse', ru: 'Бесплатный Claude 3.5 - лучший для кода' }, type: 'free', important: true },
+        { name: 'ChatGPT Free', url: 'https://chatgpt.com', desc: { en: 'Free tier with latest GPT models, web browsing, file upload', az: 'Ən son GPT modelləri, web axtarış, fayl yükləmə ilə pulsuz plan', de: 'Gratis: neueste GPT-Modelle, Web-Suche, Datei-Upload', ru: 'Бесплатно: новейшие GPT-модели, веб-поиск, файлы' }, type: 'free', important: true },
+        { name: 'Claude (Free)', url: 'https://claude.ai', desc: { en: 'Free access to the latest Claude models - best for coding & analysis', az: 'Ən son Claude modellərinə pulsuz giriş - kodlaşdırma üçün ən yaxşı', de: 'Gratis Zugang zu den neuesten Claude-Modellen - ideal für Code & Analyse', ru: 'Бесплатный доступ к новейшим моделям Claude - лучший для кода' }, type: 'free', important: true },
         { name: 'Google Gemini (Free)', url: 'https://gemini.google.com', desc: { en: 'Free Gemini Pro - multimodal, Google integration, unlimited', az: 'Pulsuz Gemini Pro - multimodal, Google inteqrasiya, limitsiz', de: 'Gratis Gemini Pro - multimodal, Google-Integration', ru: 'Бесплатный Gemini Pro - мультимодальный' }, type: 'free', important: true },
         { name: 'Microsoft Copilot (Free)', url: 'https://copilot.microsoft.com', desc: { en: 'GPT-4 powered, DALL-E 3 image gen, free with Microsoft account', az: 'GPT-4, DALL-E 3 şəkil yaratma, Microsoft hesabı ilə pulsuz', de: 'GPT-4, DALL-E 3 Bilder, gratis mit Microsoft-Konto', ru: 'GPT-4, DALL-E 3, бесплатно с аккаунтом Microsoft' }, type: 'free', important: true },
         { name: 'Perplexity AI (Free)', url: 'https://perplexity.ai', desc: { en: 'AI search with sources - 5 Pro searches/day free', az: 'Mənbələrlə AI axtarış - gündə 5 Pro axtarış pulsuz', de: 'KI-Suche mit Quellen - 5 Pro-Suchen/Tag gratis', ru: 'ИИ поиск с источниками - 5 Pro запросов/день' }, type: 'free' },
@@ -108,7 +110,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
       id: 'cheap-ai',
       title: { en: '🏷️ Cheapest Premium AI', az: '🏷️ Ən Ucuz Premium AI', de: '🏷️ Günstigste Premium-KI', ru: '🏷️ Самые дешёвые Premium ИИ' },
       items: [
-        { name: 'ChatGPT Plus Student: $10/mo', url: 'https://openai.com/chatgpt/pricing', desc: { en: 'Student discount: 50% off ChatGPT Plus ($10 instead of $20)', az: 'Tələbə endirimi: ChatGPT Plus 50% ucuz ($20 əvəzinə $10)', de: 'Studentenrabatt: 50% auf ChatGPT Plus ($10 statt $20)', ru: 'Студенческая скидка: 50% на ChatGPT Plus' }, saving: '50% off', type: 'discount', important: true },
+        { name: 'Google AI Pro for Students (FREE)', url: 'https://gemini.google/students/', desc: { en: 'Students get Google AI Pro (Gemini) free for 12 months', az: 'Tələbələr Google AI Pro (Gemini) 12 ay pulsuz alır', de: 'Studenten erhalten Google AI Pro (Gemini) 12 Monate gratis', ru: 'Студентам Google AI Pro (Gemini) бесплатно на 12 месяцев' }, saving: '12 mo free', type: 'free', important: true },
         { name: 'Cursor AI (Free 2 weeks)', url: 'https://cursor.sh', desc: { en: 'Best AI code editor - 2 weeks Pro free trial', az: 'Ən yaxşı AI kod editoru - 2 həftə Pro pulsuz sınaq', de: 'Bester KI-Code-Editor - 2 Wochen Pro gratis', ru: 'Лучший AI-редактор кода - 2 недели Pro бесплатно' }, type: 'free' },
         { name: 'Midjourney via Discord: $10/mo', url: 'https://midjourney.com', desc: { en: 'Best AI image generator - Basic plan ~200 images/month', az: 'Ən yaxşı AI şəkil generatoru - Basic plan aylıq ~200 şəkil', de: 'Beste KI-Bildgenerierung - Basic ~200 Bilder/Monat', ru: 'Лучший генератор изображений - ~200/мес за $10' }, saving: '$10/mo', type: 'discount' },
         { name: 'Leonardo.ai (150 free/day)', url: 'https://leonardo.ai', desc: { en: '150 free image generations per day - no credit card', az: 'Gündə 150 pulsuz şəkil yaratma - kredit kartı lazım deyil', de: '150 kostenlose Bilder/Tag - keine Kreditkarte nötig', ru: '150 бесплатных изображений/день - без карты' }, type: 'free', important: true },
@@ -172,7 +174,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
         { name: 'Tubi (100% FREE)', url: 'https://tubitv.com', desc: { en: 'Completely free streaming - thousands of movies & shows (ad-supported)', az: 'Tamamilə pulsuz streaming - minlərlə film & serial (reklam dəstəkli)', de: 'Komplett gratis streamen - Tausende Filme & Serien', ru: 'Полностью бесплатный стриминг - тысячи фильмов' }, type: 'free', important: true },
         { name: 'Pluto TV (FREE)', url: 'https://pluto.tv', desc: { en: 'Free live TV channels + on-demand movies', az: 'Pulsuz canlı TV kanalları + tələbə filmlər', de: 'Gratis Live-TV + On-Demand-Filme', ru: 'Бесплатное ТВ + фильмы по запросу' }, type: 'free', important: true },
         { name: 'Kanopy (FREE with library)', url: 'https://www.kanopy.com', desc: { en: 'Free with library card - indie films, documentaries, Criterion', az: 'Kitabxana kartı ilə pulsuz - müstəqil filmlər, sənədli', de: 'Gratis mit Bibliotheksausweis - Indie, Dokus, Criterion', ru: 'Бесплатно с читательским билетом - инди, документальные' }, type: 'free' },
-        { name: 'YouTube Premium Family: €2.99', url: 'https://www.youtube.com/premium', desc: { en: 'Via Turkey/Argentina VPN trick - family plan €2.99 instead of €17.99', az: 'Türkiyə/Argentina VPN ilə - ailə planı €17.99 əvəzinə €2.99', de: 'Via Türkei-VPN - Familienplan 2,99€ statt 17,99€', ru: 'Через VPN Турции - семейный план €2.99 вместо €17.99' }, saving: '83% off', type: 'tip', important: true },
+        { name: 'YouTube Premium Lite', url: 'https://www.youtube.com/premium', desc: { en: 'Ad-free YouTube at roughly half the full Premium price', az: 'Tam Premium qiymətinin təxminən yarısına reklamsız YouTube', de: 'Werbefreies YouTube für etwa den halben Premium-Preis', ru: 'YouTube без рекламы примерно за полцены Premium' }, saving: '~50% off', type: 'discount', important: true },
       ]
     },
   ],
@@ -319,32 +321,154 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
 // BENEFITS WIDGET COMPONENT
 // ═══════════════════════════════════════════
 
+// ═══════════════════════════════════════════
+// CLAIMED-ITEMS TRACKING (localStorage)
+// ═══════════════════════════════════════════
+
+const CLAIMED_KEY = 'wd-benefits-claimed'
+
+function loadClaimed(): Set<string> {
+  try {
+    const raw = localStorage.getItem(CLAIMED_KEY)
+    return new Set(raw ? (JSON.parse(raw) as string[]) : [])
+  } catch {
+    return new Set()
+  }
+}
+
+export function useClaimedBenefits() {
+  const [claimed, setClaimed] = useState<Set<string>>(new Set())
+  useEffect(() => { setClaimed(loadClaimed()) }, [])
+  const toggle = (id: string) => {
+    setClaimed(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      try { localStorage.setItem(CLAIMED_KEY, JSON.stringify(Array.from(next))) } catch {}
+      return next
+    })
+  }
+  return { claimed, toggle }
+}
+
+const FILTER_TYPES = ['all', 'free', 'subsidy', 'discount', 'earn', 'tip'] as const
+
+const uiLabels: Record<string, Record<string, string>> = {
+  en: { title: 'Benefits & Savings', subtitle: 'Free resources, discounts, subsidies', search: 'Search benefits...', all: 'All', claimed: 'claimed', noResults: 'No benefits match your search', empty: 'No benefits collected for this section yet — check the full hub', hub: 'Open Benefits Hub' },
+  az: { title: 'Faydalar & Qənaətlər', subtitle: 'Pulsuz resurslar, endirimlər, dövlət yardımları', search: 'Faydaları axtar...', all: 'Hamısı', claimed: 'istifadə edildi', noResults: 'Axtarışa uyğun fayda tapılmadı', empty: 'Bu bölmə üçün hələ fayda yoxdur — tam mərkəzə bax', hub: 'Faydalar Mərkəzi' },
+  ru: { title: 'Выгода и экономия', subtitle: 'Бесплатное, скидки, субсидии', search: 'Поиск выгод...', all: 'Все', claimed: 'использовано', noResults: 'Ничего не найдено', empty: 'Для этого раздела пока нет выгод — смотрите общий хаб', hub: 'Открыть хаб выгод' },
+  de: { title: 'Vorteile & Sparen', subtitle: 'Gratis, Rabatte, Förderungen', search: 'Vorteile suchen...', all: 'Alle', claimed: 'genutzt', noResults: 'Keine Treffer', empty: 'Für diesen Bereich gibt es noch keine Vorteile — zum Hub', hub: 'Vorteils-Hub öffnen' },
+}
+
 export default function BenefitsWidget({ section }: { section: string }) {
   const { lang } = useLang()
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
+  const [typeFilter, setTypeFilter] = useState<string>('all')
+  const { claimed, toggle } = useClaimedBenefits()
 
-  const benefitsSections = BENEFITS_DATA[section]
-  if (!benefitsSections || benefitsSections.length === 0) return null
+  const t = uiLabels[lang] || uiLabels.en
+
+  // section === 'all' → aggregate every category (used by the /benefits hub)
+  const benefitsSections = useMemo<BenefitsSection[]>(() => {
+    if (section === 'all') {
+      return Object.entries(BENEFITS_DATA).flatMap(([key, secs]) =>
+        secs.map(s => ({ ...s, id: `${key}-${s.id}` }))
+      )
+    }
+    return BENEFITS_DATA[section] || []
+  }, [section])
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return benefitsSections
+      .map(sec => ({
+        ...sec,
+        items: sec.items.filter(item => {
+          if (typeFilter !== 'all' && item.type !== typeFilter) return false
+          if (!q) return true
+          const desc = item.desc[lang] || item.desc.en || ''
+          return item.name.toLowerCase().includes(q) || desc.toLowerCase().includes(q)
+        }),
+      }))
+      .filter(sec => sec.items.length > 0)
+  }, [benefitsSections, query, typeFilter, lang])
+
+  const totalItems = benefitsSections.reduce((n, s) => n + s.items.length, 0)
+  const claimedCount = benefitsSections.reduce(
+    (n, s) => n + s.items.filter(it => claimed.has(`${s.id}:${it.name}`)).length, 0)
+
+  if (benefitsSections.length === 0) {
+    return (
+      <div className="rounded-xl border border-amber-500/10 bg-amber-500/[0.02] p-8 text-center">
+        <Gift className="w-8 h-8 text-amber-400/40 mx-auto mb-3" />
+        <p className="text-sm text-[#8b8b9e] mb-4">{t.empty}</p>
+        <a href="/benefits" className="inline-block px-4 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/20 transition">
+          {t.hub}
+        </a>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">
       {/* Benefits header */}
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border border-amber-500/30 flex items-center justify-center">
-          <Star className="w-4 h-4 text-amber-400" />
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border border-amber-500/30 flex items-center justify-center">
+            <Star className="w-4 h-4 text-amber-400" />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-amber-300">{t.title}</h2>
+            <p className="text-[10px] text-amber-300/50">{t.subtitle}</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-base font-bold text-amber-300">
-            {lang === 'az' ? 'Faydalar & Qənaətlər' : lang === 'ru' ? 'Выгода и экономия' : lang === 'de' ? 'Vorteile & Sparen' : 'Benefits & Savings'}
-          </h2>
-          <p className="text-[10px] text-amber-300/50">
-            {lang === 'az' ? 'Pulsuz resurslar, endirimlər, dövlət yardımları' : lang === 'ru' ? 'Бесплатное, скидки, субсидии' : lang === 'de' ? 'Gratis, Rabatte, Förderungen' : 'Free resources, discounts, subsidies'}
-          </p>
+        {/* Progress */}
+        <div className="flex items-center gap-2">
+          <div className="w-24 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all" style={{ width: `${totalItems ? (claimedCount / totalItems) * 100 : 0}%` }} />
+          </div>
+          <span className="text-[10px] text-[#8b8b9e] font-mono">{claimedCount}/{totalItems} {t.claimed}</span>
         </div>
       </div>
 
-      {benefitsSections.map(sec => {
-        const isExpanded = expandedSection === sec.id
+      {/* Search + type filters */}
+      <div className="flex flex-col sm:flex-row gap-2">
+        <div className="relative flex-1">
+          <Search className="w-3.5 h-3.5 text-[#6b6b80] absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder={t.search}
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white placeholder-[#6b6b80] focus:outline-none focus:border-amber-500/40 transition"
+          />
+        </div>
+        <div className="flex gap-1 overflow-x-auto scrollbar-thin">
+          {FILTER_TYPES.map(ft => {
+            const active = typeFilter === ft
+            const cfg = ft === 'all' ? null : typeConfig[ft]
+            return (
+              <button
+                key={ft}
+                onClick={() => setTypeFilter(ft)}
+                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold whitespace-nowrap border transition ${
+                  active ? (cfg ? cfg.color : 'bg-white/[0.1] text-white border-white/20') : 'bg-transparent text-[#6b6b80] border-white/[0.06] hover:text-white'
+                }`}
+              >
+                {ft === 'all' ? t.all : cfg!.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="rounded-xl border border-white/[0.04] bg-white/[0.01] p-8 text-center text-xs text-[#8b8b9e]">
+          {t.noResults}
+        </div>
+      )}
+
+      {filtered.map(sec => {
+        const isExpanded = expandedSection === sec.id || query.trim() !== '' || typeFilter !== 'all'
         const displayItems = isExpanded ? sec.items : sec.items.slice(0, 4)
 
         return (
@@ -355,25 +479,28 @@ export default function BenefitsWidget({ section }: { section: string }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 px-3 pb-3">
               {displayItems.map((item, i) => {
-                const config = typeConfig[item.type]
+                const config = typeConfig[item.type] || fallbackType
                 const TypeIcon = config.icon
+                const claimId = `${sec.id}:${item.name}`
+                const isClaimed = claimed.has(claimId)
                 return (
-                  <a
+                  <div
                     key={i}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`group block p-3 rounded-lg border transition-all hover:scale-[1.01] active:scale-[0.99] ${
-                      item.important
+                    className={`group relative p-3 rounded-lg border transition-all hover:scale-[1.01] active:scale-[0.99] ${
+                      isClaimed
+                        ? 'border-emerald-500/25 bg-emerald-500/[0.04]'
+                        : item.important
                         ? 'border-amber-500/20 bg-amber-500/[0.03] hover:border-amber-400/40'
                         : 'border-white/[0.04] bg-white/[0.01] hover:border-amber-500/20'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h4 className="text-xs font-semibold text-white group-hover:text-amber-300 transition-colors leading-tight">{item.name}</h4>
-                      <ExternalLink className="w-3 h-3 text-white/20 group-hover:text-amber-400 transition shrink-0 mt-0.5" />
-                    </div>
-                    <p className="text-[10px] text-[#8b8b9e] mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h4 className={`text-xs font-semibold transition-colors leading-tight ${isClaimed ? 'text-emerald-300' : 'text-white group-hover:text-amber-300'}`}>{item.name}</h4>
+                        <ExternalLink className="w-3 h-3 text-white/20 group-hover:text-amber-400 transition shrink-0 mt-0.5" />
+                      </div>
+                      <p className="text-[10px] text-[#8b8b9e] mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
+                    </a>
                     <div className="flex items-center gap-1.5">
                       <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold border ${config.color}`}>
                         <TypeIcon className="w-2.5 h-2.5" />
@@ -385,18 +512,35 @@ export default function BenefitsWidget({ section }: { section: string }) {
                         </span>
                       )}
                       {item.important && <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />}
+                      <button
+                        onClick={e => { e.preventDefault(); toggle(claimId) }}
+                        title={isClaimed ? 'Mark as not used' : 'Mark as used / claimed'}
+                        className="ml-auto p-0.5 rounded hover:bg-white/[0.06] transition"
+                      >
+                        {isClaimed
+                          ? <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          : <Circle className="w-4 h-4 text-white/20 group-hover:text-white/40" />}
+                      </button>
                     </div>
-                  </a>
+                  </div>
                 )
               })}
             </div>
 
-            {sec.items.length > 4 && (
+            {sec.items.length > 4 && !isExpanded && (
               <button
-                onClick={() => setExpandedSection(isExpanded ? null : sec.id)}
+                onClick={() => setExpandedSection(sec.id)}
                 className="w-full py-2 text-[11px] font-medium text-amber-400 hover:bg-amber-500/5 border-t border-amber-500/10 transition-colors"
               >
-                {isExpanded ? '▲' : `▼ ${sec.items.length - 4} more`}
+                {`▼ ${sec.items.length - 4} more`}
+              </button>
+            )}
+            {sec.items.length > 4 && isExpanded && expandedSection === sec.id && query.trim() === '' && typeFilter === 'all' && (
+              <button
+                onClick={() => setExpandedSection(null)}
+                className="w-full py-2 text-[11px] font-medium text-amber-400 hover:bg-amber-500/5 border-t border-amber-500/10 transition-colors"
+              >
+                ▲
               </button>
             )}
           </div>

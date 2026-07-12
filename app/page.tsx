@@ -311,6 +311,22 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Benefits Hub banner */}
+        <Link href="/benefits" className="group block mt-6 rounded-xl border border-amber-500/20 bg-gradient-to-r from-amber-500/[0.06] via-yellow-500/[0.03] to-transparent p-4 hover:border-amber-400/40 transition-all">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold text-sm group-hover:text-amber-300 transition-colors">Benefits Hub</h3>
+                <p className="text-xs text-[#8b8b9e]">Subsidies, discounts, free tools & earning tips — track what you&apos;ve claimed</p>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
+
         {/* AI Tools & Software Preview Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
           {/* AI Tools Preview */}
