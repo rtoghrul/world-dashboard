@@ -43,11 +43,11 @@ const SOURCE_LABELS: Record<string, string> = {
   'tg-bbc':        'Telegram — BBC Breaking',
 }
 
-const GIST_URL = 'https://gist.githubusercontent.com/rtoghrul/b6c9ff6f0daf20f33f09edc263dfb328/raw/horizon-briefing.json'
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 export default function HorizonSourceWidget({ source }: { source: string }) {
-  const { data, error, isLoading } = useSWR<HorizonBriefing>(GIST_URL, fetcher, { revalidateOnFocus: false })
+  // /api/horizon serves the gist while fresh and falls back to a live-built briefing when stale
+  const { data, error, isLoading } = useSWR<HorizonBriefing>('/api/horizon', fetcher, { revalidateOnFocus: false })
   const [expanded, setExpanded] = useState<number | null>(null)
 
   const sourceKey = SOURCE_MAP[source] || ''
