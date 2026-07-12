@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
-import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2, Search, Film, Zap, GraduationCap, Plane, ShoppingBag, Gift, Cpu, MonitorSmartphone, Landmark } from 'lucide-react'
+import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2, Search, Film, Zap, GraduationCap, Plane, ShoppingBag, Gift, Cpu, MonitorSmartphone, Landmark, Lightbulb, MapPin } from 'lucide-react'
 import Header from '@/components/Header'
 import MainMenuDropdown from '@/components/MainMenuDropdown'
 import MarketTicker from '@/components/MarketTicker'
@@ -10,8 +10,6 @@ import DailyBrief from '@/components/DailyBrief'
 import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
-import QuickActions from '@/components/QuickActions'
-import LivePriceTicker from '@/components/LivePriceTicker'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 import PortfolioTracker from '@/components/PortfolioTracker'
@@ -20,9 +18,7 @@ import { NewsItem, NewsCard } from '@/components/NewsWidget'
 import { Coin, formatNum } from '@/components/CryptoWidget'
 import TrendingWidget from '@/components/TrendingWidget'
 import CalendarWidget from '@/components/CalendarWidget'
-import DailyStreak from '@/components/DailyStreak'
-import DailyQuiz from '@/components/DailyQuiz'
-import PortfolioSimulator from '@/components/PortfolioSimulator'
+import PolymarketWidget from '@/components/PolymarketWidget'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import HorizonWidget from '@/components/HorizonWidget'
 import { Sparkles, Download } from 'lucide-react'
@@ -148,14 +144,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <QuickActions />
-
       <MarketTicker />
-      <LivePriceTicker />
 
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         {/* ═══ EXPLORE GRID ═══ */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
           {[
             { href: '/section/news/top', icon: Newspaper, label: 'News', accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
             { href: '/section/markets/crypto-top', icon: Bitcoin, label: 'Markets', accent: 'from-amber-500/20 to-amber-500/5 border-amber-500/20 hover:border-amber-400/50', iconColor: 'text-amber-400' },
@@ -169,6 +162,8 @@ export default function HomePage() {
             { href: '/section/chinese/all', icon: ShoppingBag, label: 'China 🇨🇳', accent: 'from-red-500/20 to-red-500/5 border-red-500/20 hover:border-red-400/50', iconColor: 'text-red-400' },
             { href: '/section/horizon/hackernews', icon: Globe2, label: 'Horizon', accent: 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20 hover:border-indigo-400/50', iconColor: 'text-indigo-400' },
             { href: '/benefits', icon: Gift, label: 'Benefits', accent: 'from-orange-500/20 to-orange-500/5 border-orange-500/20 hover:border-orange-400/50', iconColor: 'text-orange-400' },
+            { href: '/facts', icon: Lightbulb, label: 'Facts', accent: 'from-lime-500/20 to-lime-500/5 border-lime-500/20 hover:border-lime-400/50', iconColor: 'text-lime-400' },
+            { href: '/nearby', icon: MapPin, label: 'Nearby', accent: 'from-teal-500/20 to-teal-500/5 border-teal-500/20 hover:border-teal-400/50', iconColor: 'text-teal-400' },
           ].map(tile => (
             <Link
               key={tile.href}
@@ -179,11 +174,6 @@ export default function HomePage() {
               <span className="text-xs font-semibold text-white/90 text-center leading-tight">{tile.label}</span>
             </Link>
           ))}
-        </div>
-
-        {/* Daily Streak */}
-        <div className="mb-4">
-          <DailyStreak />
         </div>
 
         {/* AI Daily Brief */}
@@ -284,16 +274,13 @@ export default function HomePage() {
             {/* Trending */}
             <TrendingWidget />
 
-            {/* Paper Trading */}
-            <PortfolioSimulator />
-
           </div>
         </div>
 
-        {/* Second row: Calendar + Quiz + Live Stats */}
+        {/* Second row: Calendar + Prediction Markets + Live Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
           <CalendarWidget />
-          <DailyQuiz />
+          <PolymarketWidget />
           <div className="hidden lg:block">
             <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
               <div className="flex items-center gap-2 mb-3">

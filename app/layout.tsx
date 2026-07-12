@@ -1,5 +1,5 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from '@/lib/LanguageContext'
 import { ThemeProvider } from '@/lib/ThemeContext'
@@ -9,13 +9,17 @@ import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import ScrollProgress from '@/components/ScrollProgress'
 import MainMenuDropdown from '@/components/MainMenuDropdown'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' })
+
+export const viewport: Viewport = {
+  themeColor: '#0891b2',
+}
 
 export const metadata: Metadata = {
   title: { default: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment', template: '%s | World Dashboard' },
   description: 'Your all-in-one hub: AI tools directory, crypto markets, global news, free software downloads, movies, viral content, education and more. Updated in real-time.',
   manifest: '/manifest.json',
-  themeColor: '#6366f1',
   icons: {
     icon: '/api/icon?size=32',
     apple: '/api/icon?size=180',
@@ -45,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/api/icon?size=180" />
       </head>
-      <body className={`${inter.className} bg-gray-950 min-h-screen`} style={{ background: '#030305', minHeight: '100vh' }}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} min-h-screen`} style={{ background: '#050810', minHeight: '100vh' }}>
         <ThemeProvider>
           <LanguageProvider>
             <MainMenuDropdown />

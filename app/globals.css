@@ -24,21 +24,27 @@
 }
 
 :root {
-  --bg-primary: #050507;
-  --bg-secondary: #0a0a0f;
-  --bg-card: rgba(12, 12, 20, 0.7);
-  --bg-card-hover: rgba(18, 18, 30, 0.85);
-  --border-subtle: rgba(255, 255, 255, 0.04);
-  --border-hover: rgba(255, 255, 255, 0.08);
+  --bg-primary: #050810;
+  --bg-secondary: #0a0f1d;
+  --bg-card: rgba(13, 18, 32, 0.7);
+  --bg-card-hover: rgba(19, 26, 44, 0.85);
+  --border-subtle: rgba(148, 163, 184, 0.08);
+  --border-hover: rgba(148, 163, 184, 0.16);
   --accent-primary: #6366f1;
-  --accent-glow: rgba(99, 102, 241, 0.15);
-  --text-primary: #f0f0f5;
-  --text-secondary: #8b8b9e;
-  --text-muted: #4a4a5e;
-  --glass-bg: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --accent-secondary: #22d3ee;
+  --accent-glow: rgba(34, 211, 238, 0.12);
+  --text-primary: #f1f5fb;
+  --text-secondary: #94a0b8;
+  --text-muted: #556077;
+  --glass-bg: rgba(148, 163, 184, 0.03);
+  --glass-border: rgba(148, 163, 184, 0.09);
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display), 'Inter', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 html.light {
@@ -75,7 +81,7 @@ html {
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-body), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
 }
@@ -89,9 +95,9 @@ body::before {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(139, 92, 246, 0.04), transparent),
-    radial-gradient(ellipse 50% 30% at 20% 80%, rgba(59, 130, 246, 0.03), transparent);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 211, 238, 0.07), transparent),
+    radial-gradient(ellipse 60% 40% at 85% 40%, rgba(99, 102, 241, 0.06), transparent),
+    radial-gradient(ellipse 50% 35% at 10% 85%, rgba(16, 185, 129, 0.04), transparent);
   pointer-events: none;
   z-index: 0;
 }
@@ -438,10 +444,10 @@ body::after {
 
 .section-card:hover {
   transform: translateY(-4px) scale(1.01);
-  border-color: rgba(99, 102, 241, 0.2);
+  border-color: rgba(34, 211, 238, 0.25);
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(99, 102, 241, 0.1),
+    0 0 0 1px rgba(34, 211, 238, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
@@ -475,7 +481,7 @@ body.focus-mode footer {
    ANIMATED GRADIENT TEXT
    ═══════════════════════════════════════════ */
 .gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 40%, #6366f1 70%, #c084fc 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 35%, #22d3ee 60%, #818cf8 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -484,7 +490,7 @@ body.focus-mode footer {
 }
 
 .gradient-text-static {
-  background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 50%, #818cf8 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 50%, #67e8f9 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
