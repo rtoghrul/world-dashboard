@@ -1,4 +1,4 @@
-const CACHE_NAME = 'world-dashboard-v2';
+const CACHE_NAME = 'world-dashboard-v3';
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',
@@ -47,7 +47,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets - stale while revalidate
+  // Never intercept dev-server or non-hashed script requests — serving stale
+  // JS against fresh HTML silently kills hydration
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') return;
+
+  // Static assets - stale while revalidate (safe in prod: /_next assets are content-hashed)
   if (url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|woff2?)$/)) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) =>

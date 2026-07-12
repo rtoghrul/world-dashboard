@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Globe, ChevronDown, LogOut, X, Search } from 'lucide-react'
+import { Globe, ChevronDown, LogOut, LogIn, X, Search } from 'lucide-react'
 import LanguagePicker from '@/components/LanguagePicker'
 import { useLang } from '@/lib/LanguageContext'
 import NotificationCenter from '@/components/NotificationCenter'
@@ -13,7 +13,8 @@ import FocusMode from '@/components/FocusMode'
 import WhatsNew from '@/components/WhatsNew'
 import { createClient } from '@/lib/supabase'
 
-const menuStructure: Record<string, { label: Record<string,string>; items: { id: string; label: Record<string,string> }[] }> = {
+type MenuItem = { id: string; label: Record<string, string>; section?: string; href?: string }
+const menuStructure: Record<string, { label: Record<string,string>; items: MenuItem[] }> = {
   news: {
     label: { en: 'News', az: 'Xəbərlər', ru: 'Новости', tr: 'Haberler', de: 'Nachrichten', fr: 'Actualités', es: 'Noticias', zh: '新闻', ar: 'أخبار', ja: 'ニュース', it: 'Notizie', pt: 'Notícias' },
     items: [
@@ -51,7 +52,8 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'gaming', label: { en: 'Gaming', az: 'Oyunlar', ru: 'Игры', tr: 'Oyunlar', de: 'Spiele', fr: 'Jeux', es: 'Juegos', zh: '游戏', ar: 'ألعاب', ja: 'ゲーム', it: 'Giochi', pt: 'Jogos' } },
       { id: 'upcoming', label: { en: 'Upcoming', az: 'Gözlənilən', ru: 'Скоро', tr: 'Yakında', de: 'Demnächst', fr: 'À venir', es: 'Próximamente', zh: '即将上映', ar: 'قادم', ja: '近日公開', it: 'In arrivo', pt: 'Em breve' } },
       { id: 'cartoons', label: { en: 'Cartoons', az: 'Cizgi filmlər', ru: 'Мультфильмы', tr: 'Çizgi Film', de: 'Zeichentrick', fr: 'Dessins animés', es: 'Dibujos', zh: '动画', ar: 'رسوم', ja: 'アニメ', it: 'Cartoni', pt: 'Desenhos' } },
-    
+      { id: 'facts', href: '/facts', label: { en: 'Facts 💡', az: 'Faktlar 💡', ru: 'Факты 💡', tr: 'Bilgiler 💡', de: 'Fakten 💡', fr: 'Faits 💡', es: 'Datos 💡', zh: '趣闻 💡', ar: 'حقائق 💡', ja: '豆知識 💡', it: 'Fatti 💡', pt: 'Fatos 💡' } },
+
       { id: 'youtube', section: 'viral', label: { en: 'YouTube', az: 'YouTube', ru: 'YouTube', tr: 'YouTube', de: 'YouTube', fr: 'YouTube', es: 'YouTube', zh: 'YouTube', ar: 'يوتيوب', ja: 'YouTube', it: 'YouTube', pt: 'YouTube' } },
       { id: 'tiktok', section: 'viral', label: { en: 'TikTok', az: 'TikTok', ru: 'TikTok', tr: 'TikTok', de: 'TikTok', fr: 'TikTok', es: 'TikTok', zh: 'TikTok', ar: 'تيك توك', ja: 'TikTok', it: 'TikTok', pt: 'TikTok' } },
       { id: 'instagram', section: 'viral', label: { en: 'Instagram', az: 'Instagram', ru: 'Instagram', tr: 'Instagram', de: 'Instagram', fr: 'Instagram', es: 'Instagram', zh: 'Instagram', ar: 'إنستغرام', ja: 'Instagram', it: 'Instagram', pt: 'Instagram' } },
@@ -129,6 +131,7 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
       { id: 'bildung', label: { en: 'Education', az: 'Təhsil', ru: 'Образование', tr: 'Eğitim', de: 'Bildung', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'تعليм', ja: '教育', it: 'Istruzione', pt: 'Educação' } },
       { id: 'arbeit', label: { en: 'Work', az: 'Iş', ru: 'Работа', tr: 'Iş', de: 'Arbeit', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'عمл', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' } },
       { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər', ru: 'Изменения', tr: 'Değişiklikler', de: 'Änderungen 2025', fr: 'Changements', es: 'Cambios', zh: '变化', ar: 'تغييرات', ja: '変更', it: 'Modifiche', pt: 'Mudanças' } },
+      { id: 'savings', label: { en: 'Savings Apps 💶', az: 'Qənaət Appları 💶', ru: 'Экономия 💶', tr: 'Tasarruf 💶', de: 'Spar-Apps 💶', fr: 'Économies 💶', es: 'Ahorro 💶', zh: '省钱 💶', ar: 'توفير 💶', ja: '節約 💶', it: 'Risparmio 💶', pt: 'Economia 💶' } },
       { id: 'auto', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', ru: 'Авто и ПДД', tr: 'Oto & Trafik', de: 'Auto & Verkehr', fr: 'Auto', es: 'Auto', zh: '汽车', ar: 'سيارات', ja: '車', it: 'Auto', pt: 'Auto' } },
       { id: 'familie', label: { en: 'Family', az: 'Ailə', ru: 'Семья', tr: 'Aile', de: 'Familie', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'عائلة', ja: '家族', it: 'Famiglia', pt: 'Família' } },
       { id: 'miete', label: { en: 'Tenant & Landlord', az: 'Kirayəçi', ru: 'Аренда', tr: 'Kiracı', de: 'Mieter & Vermieter', fr: 'Locataire', es: 'Alquiler', zh: '租房', ar: 'إيجار', ja: '購貸', it: 'Affitto', pt: 'Aluguel' } },
@@ -172,7 +175,26 @@ const menuStructure: Record<string, { label: Record<string,string>; items: { id:
   },
 }
 
-const menuKeys = Object.keys(menuStructure)
+// Consolidate shopping: fold the China menu into the German platforms menu → one
+// Shopping menu. Built as a new object (no mutation) so server and client render
+// identical structures and HMR can't double-apply the merge.
+const { chinese: chineseMenu, ...restMenus } = menuStructure
+const menus: typeof menuStructure = {
+  ...restMenus,
+  platforms: {
+    label: { en: 'Shopping 🛒', az: 'Alış-veriş 🛒', ru: 'Покупки 🛒', tr: 'Alışveriş 🛒', de: 'Shopping 🛒', fr: 'Achats 🛒', es: 'Compras 🛒', zh: '购物 🛒', ar: 'تسوق 🛒', ja: 'ショッピング 🛒', it: 'Shopping 🛒', pt: 'Compras 🛒' },
+    items: [
+      ...menuStructure.platforms.items,
+      ...chineseMenu.items.map(item => ({
+        ...item,
+        section: 'chinese',
+        label: Object.fromEntries(Object.entries(item.label).map(([l, v]) => [l, `🇨🇳 ${v}`])),
+      })),
+    ],
+  },
+}
+
+const menuKeys = Object.keys(menus)
 
 interface DropdownPortalProps {
   sectionId: string
@@ -222,7 +244,7 @@ function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: Dropd
       {section.items.map(item => (
         <Link
           key={item.id}
-          href={`/section/${(item as any).section || sectionId}/${item.id}`}
+          href={item.href || `/section/${item.section || sectionId}/${item.id}`}
           onClick={onClose}
           className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition-colors"
         >
@@ -242,6 +264,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
@@ -251,7 +274,10 @@ export default function Header() {
       try {
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
-        if (user) setIsAdmin(user.email === 'eagleeye385@gmail.com')
+        if (user) {
+          setLoggedIn(true)
+          setIsAdmin(user.email === 'eagleeye385@gmail.com')
+        }
       } catch {}
     }
     init()
@@ -291,7 +317,7 @@ export default function Header() {
 
             <nav className="hidden md:flex items-center mx-2 flex-1 overflow-x-auto scrollbar-thin">
               {menuKeys.map((id) => {
-                const section = menuStructure[id]
+                const section = menus[id]
                 return (
                   <button
                     key={id}
@@ -324,9 +350,15 @@ export default function Header() {
                 </Link>
               )}
               <NotificationCenter />
-              <button onClick={handleLogout} className="p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition" title="Logout">
-                <LogOut className="w-4 h-4" />
-              </button>
+              {loggedIn ? (
+                <button onClick={handleLogout} className="p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition" title="Logout">
+                  <LogOut className="w-4 h-4" />
+                </button>
+              ) : (
+                <Link href="/login" className="p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition" title="Login">
+                  <LogIn className="w-4 h-4" />
+                </Link>
+              )}
               <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 rounded-lg text-[#6b6b80] hover:text-white hover:bg-white/[0.04] transition">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
@@ -338,7 +370,7 @@ export default function Header() {
       {mounted && openMenu && buttonRect && (
         <DropdownPortal
           sectionId={openMenu}
-          section={menuStructure[openMenu]}
+          section={menus[openMenu]}
           lang={lang}
           buttonRect={buttonRect}
           onClose={closeMenu}
@@ -356,7 +388,7 @@ export default function Header() {
               </button>
             </div>
             <div className="py-2">
-              {Object.entries(menuStructure).map(([id, section]) => (
+              {Object.entries(menus).map(([id, section]) => (
                 <div key={id}>
                   <button
                     onClick={() => setMobileExpandedSection(mobileExpandedSection === id ? null : id)}
@@ -370,7 +402,7 @@ export default function Header() {
                       {section.items.map(item => (
                         <Link
                           key={item.id}
-                          href={`/section/${(item as any).section || id}/${item.id}`}
+                          href={item.href || `/section/${item.section || id}/${item.id}`}
                           onClick={() => setMobileOpen(false)}
                           className="block px-4 py-2.5 text-xs text-[#6b6b80] hover:text-white transition"
                         >

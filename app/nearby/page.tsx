@@ -71,7 +71,7 @@ export default function NearbyPage() {
         } catch {}
       }
       if (!data) throw new Error('all endpoints failed')
-      const out = (data.elements || []).map(e => {
+      const out = (data.elements || []).map((e): Place | null => {
         const lat = e.lat ?? e.center?.lat, lon = e.lon ?? e.center?.lon
         if (!lat || !lon) return null
         const cat = selectedCats.find(c => c.q.some(x => match(x, e.tags))) || selectedCats[0]

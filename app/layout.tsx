@@ -7,7 +7,6 @@ import AIAssistant from '@/components/AIAssistant'
 import CommandPalette from '@/components/CommandPalette'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import ScrollProgress from '@/components/ScrollProgress'
-import MainMenuDropdown from '@/components/MainMenuDropdown'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' })
@@ -52,7 +51,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} min-h-screen`} style={{ background: '#050810', minHeight: '100vh' }}>
         <ThemeProvider>
           <LanguageProvider>
-            <MainMenuDropdown />
             {children}
             <AIAssistant />
             <CommandPalette />

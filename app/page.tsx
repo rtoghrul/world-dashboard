@@ -4,7 +4,6 @@ import Link from 'next/link'
 import useSWR from 'swr'
 import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2, Search, Film, Zap, GraduationCap, Plane, ShoppingBag, Gift, Cpu, MonitorSmartphone, Landmark, Lightbulb, MapPin } from 'lucide-react'
 import Header from '@/components/Header'
-import MainMenuDropdown from '@/components/MainMenuDropdown'
 import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
 import CommandPalette from '@/components/CommandPalette'
@@ -82,7 +81,6 @@ export default function HomePage() {
       <ServiceWorkerRegistrar />
       <CommandPalette />
       <Header />
-      <MainMenuDropdown />
 
       {/* ═══ HERO SECTION ═══ */}
       <section className="relative overflow-hidden border-b border-white/[0.03]">
