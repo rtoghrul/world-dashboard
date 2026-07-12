@@ -19,14 +19,23 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      setError(tr.authInvalidCreds)
-      setLoading(false)
-    } else {
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        // Only credential errors get the generic message; surface everything else
+        // (paused backend, unconfirmed email, rate limits) so it's diagnosable
+        const invalidCreds = error.message?.toLowerCase().includes('invalid login credentials')
+        setError(invalidCreds ? tr.authInvalidCreds : error.message)
+        setLoading(false)
+        return
+      }
       router.push('/')
       router.refresh()
+    } catch (err) {
+      // createClient/network throws (missing env vars, backend unreachable)
+      setError(err instanceof Error ? err.message : 'Sign-in service unreachable. Please try again later.')
+      setLoading(false)
     }
   }
 

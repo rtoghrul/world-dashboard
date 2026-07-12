@@ -19,18 +19,24 @@ export default function RegisterPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.signUp({ email, password })
-    if (error) {
-      setError(tr.authRegisterFailed)
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase.auth.signUp({ email, password })
+      if (error) {
+        // Show the real reason (weak password, existing account, backend down)
+        setError(error.message || tr.authRegisterFailed)
+        setLoading(false)
+        return
+      }
+      if (data.user) {
+        await supabase.from('profiles').upsert({ id: data.user.id, email: data.user.email })
+      }
+      router.push('/')
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : tr.authRegisterFailed)
       setLoading(false)
-      return
     }
-    if (data.user) {
-      await supabase.from('profiles').upsert({ id: data.user.id, email: data.user.email })
-    }
-    router.push('/')
-    router.refresh()
   }
 
   return (
