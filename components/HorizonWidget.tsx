@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import useSWR from 'swr'
 
-interface HorizonItem { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[] }
+interface HorizonItem { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[]; image?: string | null }
 interface HorizonBriefing { date: string; totalFetched: number; totalSelected: number; items: HorizonItem[] }
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -39,6 +39,13 @@ export default function HorizonWidget() {
             <div key={item.rank} className="rounded-lg hover:bg-gray-800 transition-colors">
               <button className="w-full text-left p-2 flex items-start gap-2" onClick={() => setExpanded(expanded === item.rank ? null : item.rank)}>
                 <span className="text-gray-600 text-xs w-5 mt-0.5 shrink-0">{item.rank}.</span>
+                {item.image ? (
+                  <img src={item.image} alt="" className="w-10 h-10 rounded-md object-cover shrink-0 bg-gray-800" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                ) : (
+                  <div className="w-10 h-10 rounded-md bg-gray-800 shrink-0 flex items-center justify-center text-base">
+                    {item.source.includes('reddit') ? '🤖' : item.source.includes('telegram') ? '✈️' : item.source.includes('hackernews') ? '🔥' : '📰'}
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-2">
                     <p className="text-gray-200 text-sm leading-snug flex-1">{item.title}</p>

@@ -5,10 +5,34 @@ export const revalidate = 1800
 const GIST_URL = 'https://gist.githubusercontent.com/rtoghrul/b6c9ff6f0daf20f33f09edc263dfb328/raw/horizon-briefing.json'
 const STALE_MS = 48 * 60 * 60 * 1000
 
-type Item = { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[] }
+type Item = { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[]; image?: string | null }
 
 function strip(html: string) {
   return html.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim()
+}
+
+function unescapeUrl(url: string) {
+  return url.replace(/&amp;/g, '&')
+}
+
+// Fetch an article's og:image/twitter:image so link-only sources (HN, RSS) get a thumbnail too.
+// Bounded by a short timeout since this runs per-item and must not stall the whole route.
+async function fetchOgImage(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(4000),
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboardBot/1.0)' },
+      next: { revalidate: 1800 },
+    })
+    if (!res.ok) return null
+    const html = await res.text()
+    const og = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)?.[1]
+      || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)?.[1]
+      || html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)?.[1]
+    return og ? unescapeUrl(og) : null
+  } catch {
+    return null
+  }
 }
 
 // Rank-normalized score: best item in a source gets `top`, each next slightly less
@@ -41,11 +65,16 @@ async function getReddit(sub: string, label: string, tag: string): Promise<Item[
       .map((c: any) => c.data)
       .filter((p: any) => p?.title && !p.stickied)
       .slice(0, 6)
-      .map((p: any, i: number) => ({
-        rank: 0, title: p.title, url: p.url?.startsWith('http') ? p.url : `https://reddit.com${p.permalink}`,
-        score: rankScore(i, 8.8), summary: strip(p.selftext || '').slice(0, 200) || `${p.score} upvotes · ${p.num_comments} comments on r/${sub}`,
-        source: `reddit · r/${label}`, tags: [tag],
-      }))
+      .map((p: any, i: number) => {
+        const previewImg = p.preview?.images?.[0]?.source?.url
+        const thumb = typeof p.thumbnail === 'string' && p.thumbnail.startsWith('http') ? p.thumbnail : null
+        const image = previewImg ? unescapeUrl(previewImg) : thumb
+        return {
+          rank: 0, title: p.title, url: p.url?.startsWith('http') ? p.url : `https://reddit.com${p.permalink}`,
+          score: rankScore(i, 8.8), summary: strip(p.selftext || '').slice(0, 200) || `${p.score} upvotes · ${p.num_comments} comments on r/${sub}`,
+          source: `reddit · r/${label}`, tags: [tag], image,
+        }
+      })
   } catch { return [] }
 }
 
@@ -66,14 +95,19 @@ async function getRss(url: string, label: string, tag: string): Promise<Item[]> 
 async function getTelegram(channel: string, label: string): Promise<Item[]> {
   try {
     const html = await (await fetch(`https://t.me/s/${channel}`, { next: { revalidate: 1800 } })).text()
-    const blocks = html.match(/<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/g) || []
-    return blocks.slice(-5).reverse().flatMap((block, i) => {
-      const link = block.match(/href="(https?:\/\/(?!t\.me)[^"]+)"/)?.[1]
-      const text = strip(block)
+    // Each message is wrapped in its own message div; split on that boundary so the
+    // photo (if any) and the text of the SAME message stay together.
+    const messages = html.split('tgme_widget_message_wrap').slice(1)
+    return messages.slice(-5).reverse().flatMap((msg, i) => {
+      const textBlock = msg.match(/<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/)?.[0] || ''
+      const link = textBlock.match(/href="(https?:\/\/(?!t\.me)[^"]+)"/)?.[1]
+      const text = strip(textBlock)
       if (!text || text.length < 30) return []
+      const image = msg.match(/tgme_widget_message_photo_wrap[^"]*"[^>]*style="[^"]*background-image:url\('([^']+)'\)/)?.[1]
       return [{
         rank: 0, title: text.slice(0, 110), url: link || `https://t.me/s/${channel}`,
         score: rankScore(i, 8.2), summary: text.slice(0, 220), source: `telegram · ${label}`, tags: ['News'],
+        image: image ? unescapeUrl(image) : null,
       }]
     })
   } catch { return [] }
@@ -96,10 +130,19 @@ async function buildLiveBriefing() {
     getTelegram('bbcbreaking', 'bbcbreaking'),
   ])
   const totalFetched = groups.reduce((n, g) => n + g.length, 0)
-  const items = groups.flat()
+  let items = groups.flat()
     .sort((a, b) => b.score - a.score)
     .slice(0, 50)
     .map((item, i) => ({ ...item, rank: i + 1 }))
+
+  // Reddit/Telegram already carry an image where available; HN links and RSS items
+  // don't, so fetch og:image for those — bounded to the final 50, run in parallel.
+  items = await Promise.all(items.map(async item => {
+    if (item.image) return item
+    if (item.source !== 'hackernews' && !item.source.startsWith('rss')) return item
+    return { ...item, image: await fetchOgImage(item.url) }
+  }))
+
   return { date: new Date().toISOString().slice(0, 10), totalFetched, totalSelected: items.length, items, live: true }
 }
 
