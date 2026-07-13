@@ -37,7 +37,6 @@ const menuStructure: Record<string, { label: Record<string,string>; items: MenuI
       { id: 'bitcoin', label: { en: 'Bitcoin', az: 'Bitcoin', ru: 'Bitcoin', tr: 'Bitcoin', de: 'Bitcoin', fr: 'Bitcoin', es: 'Bitcoin', zh: 'Bitcoin', ar: 'بيتكوين', ja: 'Bitcoin', it: 'Bitcoin', pt: 'Bitcoin' } },
       { id: 'ethereum', label: { en: 'Ethereum', az: 'Ethereum', ru: 'Ethereum', tr: 'Ethereum', de: 'Ethereum', fr: 'Ethereum', es: 'Ethereum', zh: 'Ethereum', ar: 'إيثيريوم', ja: 'Ethereum', it: 'Ethereum', pt: 'Ethereum' } },
       { id: 'fear-greed', label: { en: 'Fear & Greed', az: 'Qorxu & Tamah', ru: 'Страх & Жадность', tr: 'Korku & Açgöz', de: 'Angst & Gier', fr: 'Peur & Avidité', es: 'Miedo & Codicia', zh: '恐惧与贪婪', ar: 'خوف وطمع', ja: '恐怖と貪欲', it: 'Paura & Avidità', pt: 'Medo & Ganância' } },
-      { id: 'whale', label: { en: 'Whale Activity', az: 'Balina', ru: 'Киты', tr: 'Balina', de: 'Wale', fr: 'Baleines', es: 'Ballenas', zh: '鲸鱼', ar: 'حيتان', ja: 'クジラ', it: 'Balene', pt: 'Baleias' } },
       { id: 'stocks-top', label: { en: 'Stocks', az: 'Səhmlər', ru: 'Акции', tr: 'Hisseler', de: 'Aktien', fr: 'Actions', es: 'Acciones', zh: '股票', ar: 'أسهم', ja: '株式', it: 'Azioni', pt: 'Ações' } },
       { id: 'gainers', label: { en: 'Top Gainers', az: 'Qalxanlar', ru: 'Рост', tr: 'Kazananlar', de: 'Gewinner', fr: 'Gagnants', es: 'Ganadores', zh: '涨幅榜', ar: 'رابحون', ja: '上昇', it: 'In rialzo', pt: 'Em alta' } },
       { id: 'losers', label: { en: 'Top Losers', az: 'Düşənlər', ru: 'Падение', tr: 'Kaybedenler', de: 'Verlierer', fr: 'Perdants', es: 'Perdedores', zh: '跌幅榜', ar: 'خاسرون', ja: '下落', it: 'In ribasso', pt: 'Em baixa' } },
@@ -93,7 +92,9 @@ const menuStructure: Record<string, { label: Record<string,string>; items: MenuI
       { id: 'fitness', section: 'women', label: { en: 'Fitness', az: 'Fitness', ru: 'Фитнес', tr: 'Fitness', de: 'Fitness', fr: 'Fitness', es: 'Fitness', zh: '健身', ar: 'لياقة', ja: 'フィットネス', it: 'Fitness', pt: 'Fitness' } },
       { id: 'parenting', section: 'women', label: { en: 'Parenting', az: 'Uşaq Baxımı', ru: 'Материнство', tr: 'Ebeveynlik', de: 'Elternschaft', fr: 'Parentalité', es: 'Maternidad', zh: '育儿', ar: 'أمومة', ja: '育児', it: 'Genitorialità', pt: 'Maternidade' } },
       { id: 'fashion', section: 'women', label: { en: 'Fashion', az: 'Moda', ru: 'Мода', tr: 'Moda', de: 'Mode', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'أزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' } },
-      { id: 'wellness', section: 'women', label: { en: 'Wellness & Health', az: 'Sağlamlıq', ru: 'Здоровье', tr: 'Sağlık', de: 'Wellness', fr: 'Bien-être', es: 'Bienestar', zh: '健康', ar: 'صحة', ja: 'ウェルネス', it: 'Benessere', pt: 'Bem-estar' } },
+      { id: 'all', section: 'health', label: { en: 'Health 🩺', az: 'Sağlamlıq 🩺', ru: 'Здоровье 🩺', tr: 'Sağlık 🩺', de: 'Gesundheit 🩺', fr: 'Santé 🩺', es: 'Salud 🩺', zh: '健康 🩺', ar: 'صحة 🩺', ja: '健康 🩺', it: 'Salute 🩺', pt: 'Saúde 🩺' } },
+      { id: 'pharmacy', section: 'health', label: { en: 'Pharmacy', az: 'Aptek', ru: 'Аптека', tr: 'Eczane', de: 'Apotheke', fr: 'Pharmacie', es: 'Farmacia', zh: '药店', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' } },
+      { id: 'insurance', section: 'health', label: { en: 'Health Insurance', az: 'Tibbi Sığorta', ru: 'Медстраховка', tr: 'Sağlık Sigortası', de: 'Krankenversicherung', fr: 'Assurance santé', es: 'Seguro médico', zh: '医疗保险', ar: 'تأمين صحي', ja: '医療保険', it: 'Assicurazione sanitaria', pt: 'Seguro saúde' } },
     
     
       { id: 'current', section: 'weather', label: { en: 'Current', az: 'İndi', ru: 'Сейчас', tr: 'Şimdi', de: 'Aktuell', fr: 'Actuel', es: 'Actual', zh: '当前', ar: 'الحالي', ja: '現在', it: 'Attuale', pt: 'Atual' } },

@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Sparkles, Clock, TrendingUp, TrendingDown, Newspaper, Cloud, Zap } from 'lucide-react'
+import { Sparkles, Clock, TrendingUp, TrendingDown, Newspaper, Cloud, Zap, Cpu } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const COPY: Record<string, Record<string, string>> = {
@@ -12,6 +12,7 @@ const COPY: Record<string, Record<string, string>> = {
   topStories: { en: 'Top Stories', az: 'Əsas Xəbərlər', ru: 'Главные', tr: 'Öne Çıkanlar', de: 'Top-Meldungen', fr: 'À la une', es: 'Destacadas', zh: '头条', ar: 'أهم الأخبار', ja: 'トップニュース', it: 'Notizie Top', pt: 'Destaques' },
   cryptoMovers: { en: 'Crypto Movers', az: 'Kripto Hərəkəti', ru: 'Крипто движения', tr: 'Kripto Hareketleri', de: 'Krypto Bewegungen', fr: 'Crypto Mouvements', es: 'Movimientos Cripto', zh: '加密动态', ar: 'تحركات العملات', ja: '仮想通貨動向', it: 'Movimenti Crypto', pt: 'Movimentos Cripto' },
   trending: { en: 'Trending', az: 'Trend', ru: 'Тренды', tr: 'Trend', de: 'Trending', fr: 'Tendances', es: 'Tendencias', zh: '热门', ar: 'رائج', ja: 'トレンド', it: 'Tendenze', pt: 'Tendências' },
+  aiRadar: { en: 'AI & Tech Radar', az: 'AI & Texno Radar', ru: 'ИИ и техно радар', tr: 'YZ & Teknoloji Radarı', de: 'KI & Tech Radar', fr: 'Radar IA & Tech', es: 'Radar IA y Tech', zh: 'AI科技雷达', ar: 'رادار الذ.ا.', ja: 'AI&テクノレーダー', it: 'Radar IA & Tech', pt: 'Radar IA & Tech' },
   tip: { en: 'Tip: Press', az: 'Məsləhət:', ru: 'Совет:', tr: 'İpucu:', de: 'Tipp:', fr: 'Conseil:', es: 'Consejo:', zh: '提示:', ar: 'نصيحة:', ja: 'ヒント:', it: 'Suggerimento:', pt: 'Dica:' },
   quickSearch: { en: 'for quick search', az: 'sürətli axtarış', ru: 'быстрый поиск', tr: 'hızlı arama', de: 'Schnellsuche', fr: 'recherche rapide', es: 'búsqueda rápida', zh: '快速搜索', ar: 'بحث سريع', ja: 'クイック検索', it: 'ricerca rapida', pt: 'busca rápida' },
 }
@@ -23,6 +24,7 @@ interface BriefData {
   cryptoMovers: { name: string; symbol: string; change: number; price: string }[]
   weather: { temp: string; condition: string; city: string }
   trending: string[]
+  aiRadar: { title: string; url: string; source: string }[]
 }
 
 export default function DailyBrief() {
@@ -33,11 +35,12 @@ export default function DailyBrief() {
   useEffect(() => {
     async function fetchBrief() {
       try {
-        const [cryptoRes, newsRes, weatherRes, trendingRes] = await Promise.allSettled([
-          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&sparkline=false&price_change_percentage=24h'),
+        const [cryptoRes, newsRes, weatherRes, trendingRes, horizonRes] = await Promise.allSettled([
+          fetch('/api/crypto?per_page=5'),
           fetch('/api/news?category=top'),
           fetch('https://api.open-meteo.com/v1/forecast?latitude=40.41&longitude=49.87&current=temperature_2m,weather_code&timezone=auto'),
-          fetch('/api/trending')
+          fetch('/api/trending'),
+          fetch('/api/horizon'),
         ])
 
         // Crypto
@@ -94,6 +97,19 @@ export default function DailyBrief() {
           } catch {}
         }
 
+        // AI & Tech Radar — top AI/tech items from the Horizon briefing
+        let aiRadar: BriefData['aiRadar'] = []
+        if (horizonRes.status === 'fulfilled') {
+          try {
+            const hData = await horizonRes.value.json()
+            const hItems = Array.isArray(hData?.items) ? hData.items : []
+            aiRadar = hItems
+              .filter((it: any) => Array.isArray(it.tags) && it.tags.some((t: string) => /ai|tech/i.test(t)))
+              .slice(0, 3)
+              .map((it: any) => ({ title: it.title, url: it.url, source: it.source }))
+          } catch {}
+        }
+
         // Greeting
         const hour = new Date().getHours()
         let greeting = COPY.morning[lang] || COPY.morning.en
@@ -107,6 +123,7 @@ export default function DailyBrief() {
           cryptoMovers: movers,
           weather,
           trending,
+          aiRadar,
         })
       } catch (e) {
         setData({
@@ -124,6 +141,7 @@ export default function DailyBrief() {
           ],
           weather: { temp: '22°C', condition: 'Partly Cloudy', city: 'Baku' },
           trending: ['AI Agents', 'Bitcoin ETF', 'NVIDIA', 'Fed Rate'],
+          aiRadar: [],
         })
       } finally {
         setLoading(false)
@@ -138,7 +156,8 @@ export default function DailyBrief() {
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-48 bg-white/[0.06] rounded-lg" />
           <div className="h-4 w-32 bg-white/[0.04] rounded" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <div className="h-32 bg-white/[0.04] rounded-xl" />
             <div className="h-32 bg-white/[0.04] rounded-xl" />
             <div className="h-32 bg-white/[0.04] rounded-xl" />
             <div className="h-32 bg-white/[0.04] rounded-xl" />
@@ -173,7 +192,7 @@ export default function DailyBrief() {
       </div>
 
       {/* Content grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Top News */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
           <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
@@ -209,6 +228,23 @@ export default function DailyBrief() {
             ))}
           </div>
         </div>
+
+        {/* AI & Tech Radar */}
+        {data.aiRadar.length > 0 && (
+          <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
+            <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Cpu className="w-3.5 h-3.5" /> {c('aiRadar')}
+            </h3>
+            <div className="space-y-3">
+              {data.aiRadar.map((item, i) => (
+                <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block group">
+                  <p className="text-sm text-[#d0d0e0] leading-snug group-hover:text-white transition-colors">{item.title}</p>
+                  <p className="text-[11px] text-[#5b5b70] mt-0.5">{item.source}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Trending */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">

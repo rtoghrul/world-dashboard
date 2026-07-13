@@ -1,14 +1,14 @@
 'use client'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, ArrowRight, Newspaper, Bitcoin, Film, Zap, Download, GraduationCap, Plane, Cloud, ShoppingBag, Globe2, Gift } from 'lucide-react'
+import { Search, ArrowRight, Newspaper, Bitcoin, Film, Zap, Download, GraduationCap, Plane, Cloud, ShoppingBag, Globe2, Gift, Stethoscope } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const sectionIcons: Record<string, any> = {
   news: Newspaper, markets: Bitcoin, entertainment: Film, viral: Zap,
   aitools: Zap, software: Download, education: GraduationCap,
   travel: Plane, weather: Cloud, women: ShoppingBag, chinese: ShoppingBag,
-  germany: Globe2, platforms: ShoppingBag, benefits: Gift,
+  germany: Globe2, platforms: ShoppingBag, benefits: Gift, health: Stethoscope,
 }
 
 const allSections = [
@@ -24,7 +24,6 @@ const allSections = [
   { id: 'markets/bitcoin', label: 'Bitcoin', section: 'markets' },
   { id: 'markets/ethereum', label: 'Ethereum', section: 'markets' },
   { id: 'markets/fear-greed', label: 'Fear & Greed Index', section: 'markets' },
-  { id: 'markets/whale', label: 'Whale Activity', section: 'markets' },
   { id: 'markets/stocks-top', label: 'Stocks', section: 'markets' },
   { id: 'markets/gainers', label: 'Top Gainers', section: 'markets' },
   { id: 'markets/losers', label: 'Top Losers', section: 'markets' },
@@ -50,6 +49,9 @@ const allSections = [
   { id: 'weather/current', label: 'Weather', section: 'weather' },
   { id: 'germany/behoerden', label: 'Germany - Government', section: 'germany' },
   { id: 'germany/wohnung', label: 'Germany - Housing', section: 'germany' },
+  { id: 'health/pharmacy', label: 'Pharmacy', section: 'health' },
+  { id: 'health/insurance', label: 'Health Insurance', section: 'health' },
+  { id: 'health/symptoms', label: 'Symptoms & Info', section: 'health' },
 ]
 
 export default function CommandPalette() {
