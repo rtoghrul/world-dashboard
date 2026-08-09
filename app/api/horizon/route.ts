@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
 
 export const revalidate = 1800
+// Bound the function runtime so the live fallback never times out on Vercel
+export const maxDuration = 60
 
 const GIST_URL = 'https://gist.githubusercontent.com/rtoghrul/b6c9ff6f0daf20f33f09edc263dfb328/raw/horizon-briefing.json'
-const STALE_MS = 48 * 60 * 60 * 1000
+// Gist counts as fresh for 6h (was 48h) — the live briefing takes over quickly when the pipeline is down
+const STALE_MS = 6 * 60 * 60 * 1000
 
 type Item = { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[]; image?: string | null }
 
@@ -42,9 +45,9 @@ function rankScore(i: number, top: number) {
 
 async function getHackerNews(): Promise<Item[]> {
   try {
-    const ids: number[] = await (await fetch('https://hacker-news.firebaseio.com/v0/topstories.json', { next: { revalidate: 1800 } })).json()
+    const ids: number[] = await (await fetch('https://hacker-news.firebaseio.com/v0/topstories.json', { signal: AbortSignal.timeout(8000), next: { revalidate: 1800 } })).json()
     const stories = await Promise.all(ids.slice(0, 12).map(id =>
-      fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`, { next: { revalidate: 1800 } }).then(r => r.json()).catch(() => null)
+      fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`, { signal: AbortSignal.timeout(8000), next: { revalidate: 1800 } }).then(r => r.json()).catch(() => null)
     ))
     return stories
       .filter(s => s?.title && (s.url || s.id))
@@ -57,11 +60,8 @@ async function getHackerNews(): Promise<Item[]> {
 }
 
 async function getReddit(sub: string, label: string, tag: string): Promise<Item[]> {
-  try {
-    const data = await (await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=8`, {
-      headers: { 'User-Agent': 'WorldDashboard/1.0' }, next: { revalidate: 1800 },
-    })).json()
-    return (data?.data?.children || [])
+  const parse = (json: any): Item[] => {
+    return (json?.data?.children || [])
       .map((c: any) => c.data)
       .filter((p: any) => p?.title && !p.stickied)
       .slice(0, 6)
@@ -75,12 +75,39 @@ async function getReddit(sub: string, label: string, tag: string): Promise<Item[
           source: `reddit · r/${label}`, tags: [tag], image,
         }
       })
+  }
+  // Try the JSON API first (old.reddit.com is less aggressively blocked than www)
+  try {
+    const res = await fetch(`https://old.reddit.com/r/${sub}/hot.json?limit=8&raw_json=1`, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
+      signal: AbortSignal.timeout(8000),
+      next: { revalidate: 1800 },
+    })
+    if (res.ok) {
+      const parsed = parse(await res.json())
+      if (parsed.length) return parsed
+    }
+  } catch {}
+  // Fallback: Reddit RSS — much more permissive than the JSON API
+  try {
+    const text = await (await fetch(`https://www.reddit.com/r/${sub}/hot.rss`, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
+      signal: AbortSignal.timeout(8000),
+      next: { revalidate: 1800 },
+    })).text()
+    const entries = text.match(/<(item|entry)[\s>][\s\S]*?<\/\1>/g) || []
+    return entries.slice(0, 6).flatMap((entry, i) => {
+      const title = strip(entry.match(/<title[^>]*>([\s\S]*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[|\]\]>/g, '') || '')
+      const link = entry.match(/<link[^>]*href="([^"]+)"/)?.[1] || ''
+      if (!title || !link) return []
+      return [{ rank: 0, title, url: link, score: rankScore(i, 8.8), summary: `Trending post on r/${label}`, source: `reddit · r/${label}`, tags: [tag] }]
+    })
   } catch { return [] }
 }
 
 async function getRss(url: string, label: string, tag: string): Promise<Item[]> {
   try {
-    const text = await (await fetch(url, { next: { revalidate: 1800 } })).text()
+    const text = await (await fetch(url, { signal: AbortSignal.timeout(8000), next: { revalidate: 1800 } })).text()
     const entries = text.match(/<(item|entry)[\s>][\s\S]*?<\/\1>/g) || []
     return entries.slice(0, 6).flatMap((entry, i) => {
       const title = strip(entry.match(/<title[^>]*>([\s\S]*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[|\]\]>/g, '') || '')
@@ -94,7 +121,7 @@ async function getRss(url: string, label: string, tag: string): Promise<Item[]> 
 
 async function getTelegram(channel: string, label: string): Promise<Item[]> {
   try {
-    const html = await (await fetch(`https://t.me/s/${channel}`, { next: { revalidate: 1800 } })).text()
+    const html = await (await fetch(`https://t.me/s/${channel}`, { signal: AbortSignal.timeout(8000), next: { revalidate: 1800 } })).text()
     // Each message is wrapped in its own message div; split on that boundary so the
     // photo (if any) and the text of the SAME message stay together.
     const messages = html.split('tgme_widget_message_wrap').slice(1)
@@ -136,9 +163,11 @@ async function buildLiveBriefing() {
     .map((item, i) => ({ ...item, rank: i + 1 }))
 
   // Reddit/Telegram already carry an image where available; HN links and RSS items
-  // don't, so fetch og:image for those — bounded to the final 50, run in parallel.
-  items = await Promise.all(items.map(async item => {
+  // don't, so fetch og:image for those — bounded to the first 15 to keep the
+  // serverless function inside its runtime limit.
+  items = await Promise.all(items.map(async (item, i) => {
     if (item.image) return item
+    if (i >= 15) return item
     if (item.source !== 'hackernews' && !item.source.startsWith('rss')) return item
     return { ...item, image: await fetchOgImage(item.url) }
   }))
@@ -149,7 +178,7 @@ async function buildLiveBriefing() {
 export async function GET() {
   // Prefer the gist (AI-ranked by the external pipeline) while it's fresh
   try {
-    const res = await fetch(GIST_URL, { next: { revalidate: 3600 } })
+    const res = await fetch(GIST_URL, { signal: AbortSignal.timeout(8000), next: { revalidate: 3600 } })
     if (res.ok) {
       const data = await res.json()
       const age = Date.now() - new Date(data?.date).getTime()

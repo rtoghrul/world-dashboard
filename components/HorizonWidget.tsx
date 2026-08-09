@@ -9,7 +9,8 @@ interface HorizonBriefing { date: string; totalFetched: number; totalSelected: n
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 export default function HorizonWidget() {
-  const { data, error, isLoading } = useSWR<HorizonBriefing>('/api/horizon', fetcher, { revalidateOnFocus: false, dedupingInterval: 3600000 })
+  // Auto-refresh every 5 minutes so the briefing updates while the tab stays open
+  const { data, error, isLoading } = useSWR<HorizonBriefing>('/api/horizon', fetcher, { refreshInterval: 300000, revalidateOnFocus: true, dedupingInterval: 60000 })
   const [expanded, setExpanded] = useState<number | null>(null)
   const [showAll, setShowAll] = useState(false)
   const items = data?.items ?? []
@@ -29,8 +30,8 @@ export default function HorizonWidget() {
       {isLoading && [...Array(5)].map((_, i) => <div key={i} className="h-10 bg-gray-800 rounded-lg animate-pulse" />)}
       {error && (
         <div className="text-center py-6 text-gray-500 text-sm">
-          <p>📭 No briefing yet</p>
-          <p className="text-xs mt-1">Runs daily at 7am UTC</p>
+          <p>📭 Sources temporarily unreachable</p>
+          <p className="text-xs mt-1">Retrying automatically — no action needed</p>
         </div>
       )}
       {!isLoading && !error && (

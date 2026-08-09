@@ -16,6 +16,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://world-dashboard-delta-umber.vercel.app'),
   title: { default: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment', template: '%s | World Dashboard' },
   description: 'Your all-in-one hub: AI tools directory, crypto markets, global news, free software downloads, movies, viral content, education and more. Updated in real-time.',
   manifest: '/manifest.json',
