@@ -72,7 +72,7 @@ export default function MarketTicker() {
   }
 
   return (
-    <div className="border-b border-white/[0.03] bg-[#050507]/80">
+    <div className="border-b border-white/[0.03] bg-[#050507]">
       <div className="max-w-screen-2xl mx-auto px-5">
         <div className="flex items-center gap-0 py-2 overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-1.5 mr-3 flex-shrink-0">

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { formatNewsDate } from '@/lib/dates'
 import { Newspaper, RefreshCw, X, ExternalLink } from 'lucide-react'
 
 interface NewsItem {
@@ -143,7 +144,7 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
               <div className="flex items-center gap-2 text-gray-600 text-[11px] mb-4">
                 <img src={faviconUrl(modal.link)} alt="" className="w-4 h-4 rounded" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
                 <span>{modal.source || getDomain(modal.link)}</span>
-                {modal.pubDate && <><span>&middot;</span><span>{new Date(modal.pubDate).toLocaleDateString()}</span></>}
+                {modal.pubDate && <><span>&middot;</span><span>{formatNewsDate(modal.pubDate)}</span></>}
               </div>
               <a href={modal.link} target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg text-white text-xs font-medium">

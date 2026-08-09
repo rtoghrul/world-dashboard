@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import useSWR from 'swr'
+import { formatNewsDate } from '@/lib/dates'
 
 interface HorizonItem { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[]; image?: string | null }
 interface HorizonBriefing { date: string; totalFetched: number; totalSelected: number; items: HorizonItem[] }
@@ -23,7 +24,7 @@ export default function HorizonWidget() {
           <span className="text-lg">📡</span>
           <div>
             <h2 className="text-white font-semibold text-sm">Horizon Daily Briefing</h2>
-            {data && <p className="text-gray-500 text-xs">{data.date} · {data.totalSelected} of {data.totalFetched} items</p>}
+            {data && <p className="text-gray-500 text-xs">{formatNewsDate(data.date)} · {data.totalSelected} of {data.totalFetched} items</p>}
           </div>
         </div>
       </div>
@@ -69,7 +70,7 @@ export default function HorizonWidget() {
         </div>
       )}
       {items.length > 10 && (
-        <button onClick={() => setShowAll(!showAll)} className="text-xs text-gray-500 hover:text-gray-300 text-center py-1">
+        <button onClick={() => setShowAll(!showAll)} className="w-full py-2 mt-1 border-t border-gray-800 text-xs text-gray-500 hover:text-gray-300 text-center transition whitespace-nowrap">
           {showAll ? '▲ Show less' : '▼ Show all ' + items.length + ' items'}
         </button>
       )}

@@ -3,6 +3,7 @@ import useSWR from 'swr'
 import { useMemo, useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import { formatNewsDate } from '@/lib/dates'
 import type { ReactNode } from 'react'
 import NewsModal, { type ModalItem } from './NewsModal'
 

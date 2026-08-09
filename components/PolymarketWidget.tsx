@@ -75,8 +75,7 @@ export default function PolymarketWidget() {
     ? data.filter(m => m.question && (!query || m.question.toLowerCase().includes(query.toLowerCase())))
     : []
 
-  const top = Array.isArray(data) ? data.find(m => m.question) : null
-  const topOdds = top ? parseOutcomes(top) : null
+  const previewMarkets = Array.isArray(data) ? data.filter(m => m.question).slice(0, 2) : []
 
   return (
     <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
@@ -103,27 +102,30 @@ export default function PolymarketWidget() {
         <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
       </div>
 
-      {/* Collapsed preview */}
+      {/* Collapsed preview — show the top 2 markets so the section never looks empty */}
       {collapsed && (
-        <div className="px-5 py-3">
+        <div className="px-5 py-3 space-y-2.5">
           {isLoading && <div className="h-4 bg-gray-800 rounded w-3/4 animate-pulse" />}
-          {top && (
-            <div className="flex items-start gap-3">
-              <span className="text-lg flex-shrink-0">🎯</span>
-              <div className="min-w-0">
-                <p className="text-white text-xs font-medium line-clamp-1">{top.question}</p>
-                {topOdds && (
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-emerald-400 text-xs">{tr.yes} {topOdds.yes}%</span>
-                    <div className="flex-1 h-1 bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${topOdds.yes}%` }} />
+          {previewMarkets.map(m => {
+            const odds = parseOutcomes(m)
+            return (
+              <div key={m.id} className="flex items-start gap-2.5">
+                <span className="text-sm flex-shrink-0 mt-0.5">🎯</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-white text-xs font-medium line-clamp-1">{m.question}</p>
+                  {odds && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-emerald-400 text-xs">{tr.yes} {odds.yes}%</span>
+                      <div className="flex-1 h-1 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${odds.yes}%` }} />
+                      </div>
+                      <span className="text-red-400 text-xs">{tr.no} {odds.no}%</span>
                     </div>
-                    <span className="text-red-400 text-xs">{tr.no} {topOdds.no}%</span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )
+          })}
         </div>
       )}
 

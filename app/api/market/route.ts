@@ -17,6 +17,7 @@ export async function GET() {
     return NextResponse.json({
       total_market_cap: globalData?.data?.total_market_cap?.usd ?? null,
       market_cap_change_24h: globalData?.data?.market_cap_change_percentage_24h_usd ?? null,
+      total_volume: globalData?.data?.total_volume?.usd ?? null,
       btc_dominance: globalData?.data?.market_cap_percentage?.btc ?? null,
       eth_dominance: globalData?.data?.market_cap_percentage?.eth ?? null,
       active_coins: globalData?.data?.active_cryptocurrencies ?? null,

@@ -132,9 +132,11 @@ export default function PortfolioTracker() {
       <div className="divide-y divide-white/[0.03]">
         {pricedHoldings.length === 0 && (
           <div className="px-5 py-10 text-center">
-            <PieChart className="w-8 h-8 text-[#3a3a4a] mx-auto mb-3" />
-            <p className="text-sm text-[#6b6b80]">No holdings yet</p>
-            <p className="text-xs text-[#4a4a5a] mt-1">Add your crypto to track performance</p>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-emerald-500/10 border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
+              <PieChart className="w-6 h-6 text-[#5b5b70]" />
+            </div>
+            <p className="text-sm text-[#6b6b80] font-medium">No holdings yet</p>
+            <p className="text-xs text-[#4a4a5a] mt-1.5 max-w-[230px] mx-auto leading-relaxed">Add your first crypto holding to track value &amp; profit in real time</p>
             <button
               onClick={() => setShowAddModal(true)}
               className="mt-4 px-4 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 text-xs font-medium border border-indigo-500/20 hover:bg-indigo-500/20 transition"

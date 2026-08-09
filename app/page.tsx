@@ -24,6 +24,10 @@ import { Sparkles, Download } from 'lucide-react'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
+function StatPulse() {
+  return <div className="w-16 h-3 bg-white/[0.05] rounded animate-pulse" />
+}
+
 type MarketData = {
   total_market_cap: number | null
   market_cap_change_24h: number | null
@@ -291,40 +295,40 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">{t.btcDom}</span>
                   <span className="text-white text-xs font-mono">
-                    {market?.btc_dominance ? `${market.btc_dominance.toFixed(1)}%` : '—'}
+                    {market === undefined ? <StatPulse /> : (market?.btc_dominance ? `${market.btc_dominance.toFixed(1)}%` : '—')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">{t.volume}</span>
                   <span className="text-white text-xs font-mono">
-                    {market?.total_volume ? formatNum(market.total_volume) : '—'}
+                    {market === undefined ? <StatPulse /> : (market?.total_volume ? formatNum(market.total_volume) : '—')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">{t.activeCoins}</span>
                   <span className="text-white text-xs font-mono">
-                    {market?.active_coins ? market.active_coins.toLocaleString() : '—'}
+                    {market === undefined ? <StatPulse /> : (market?.active_coins ? market.active_coins.toLocaleString() : '—')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">S&amp;P 500</span>
-                  {sp500 ? (
+                  {stocks === undefined ? <StatPulse /> : (sp500 ? (
                     <span className={`text-xs font-mono ${sp500.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {sp500.change >= 0 ? '+' : ''}{sp500.changePercent?.toFixed(2) || sp500.change?.toFixed(2)}%
                     </span>
-                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
+                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>)}
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">NASDAQ</span>
-                  {nasdaq ? (
+                  {stocks === undefined ? <StatPulse /> : (nasdaq ? (
                     <span className={`text-xs font-mono ${nasdaq.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {nasdaq.change >= 0 ? '+' : ''}{nasdaq.changePercent?.toFixed(2) || nasdaq.change?.toFixed(2)}%
                     </span>
-                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
+                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>)}
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">{t.fearGreed}</span>
-                  {market?.fear_greed ? (
+                  {market === undefined ? <StatPulse /> : (market?.fear_greed ? (
                     <span className={`text-xs font-mono font-bold ${
                       market.fear_greed <= 25 ? 'text-red-400' :
                       market.fear_greed <= 45 ? 'text-orange-400' :
@@ -333,7 +337,7 @@ export default function HomePage() {
                     }`}>
                       {market.fear_greed} · {market.fear_greed_label}
                     </span>
-                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>}
+                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>)}
                 </div>
               </div>
             </div>

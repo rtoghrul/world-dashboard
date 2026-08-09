@@ -2,6 +2,7 @@
 import useSWR from 'swr'
 import { useState } from 'react'
 import Link from 'next/link'
+import { formatNewsDate } from '@/lib/dates'
 import {
   Newspaper,
   Cpu,
@@ -98,7 +99,7 @@ export function NewsCard({ item }: { item: NewsItem }) {
           <div className="flex items-center gap-2 mt-1">
             <span className="text-gray-600 text-xs">{item.source}</span>
             <span className="text-gray-700 text-xs">·</span>
-            <span className="text-gray-600 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
+            <span className="text-gray-600 text-xs">{item.pubDate ? formatNewsDate(item.pubDate) : ''}</span>
           </div>
         </div>
       </button>
