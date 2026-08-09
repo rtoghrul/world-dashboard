@@ -59,51 +59,9 @@ async function getHackerNews(): Promise<Item[]> {
   } catch { return [] }
 }
 
-async function getReddit(sub: string, label: string, tag: string): Promise<Item[]> {
-  const parse = (json: any): Item[] => {
-    return (json?.data?.children || [])
-      .map((c: any) => c.data)
-      .filter((p: any) => p?.title && !p.stickied)
-      .slice(0, 6)
-      .map((p: any, i: number) => {
-        const previewImg = p.preview?.images?.[0]?.source?.url
-        const thumb = typeof p.thumbnail === 'string' && p.thumbnail.startsWith('http') ? p.thumbnail : null
-        const image = previewImg ? unescapeUrl(previewImg) : thumb
-        return {
-          rank: 0, title: p.title, url: p.url?.startsWith('http') ? p.url : `https://reddit.com${p.permalink}`,
-          score: rankScore(i, 8.8), summary: strip(p.selftext || '').slice(0, 200) || `${p.score} upvotes · ${p.num_comments} comments on r/${sub}`,
-          source: `reddit · r/${label}`, tags: [tag], image,
-        }
-      })
-  }
-  // Try the JSON API first (old.reddit.com is less aggressively blocked than www)
-  try {
-    const res = await fetch(`https://old.reddit.com/r/${sub}/hot.json?limit=8&raw_json=1`, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
-      signal: AbortSignal.timeout(8000),
-      next: { revalidate: 1800 },
-    })
-    if (res.ok) {
-      const parsed = parse(await res.json())
-      if (parsed.length) return parsed
-    }
-  } catch {}
-  // Fallback: Reddit RSS — much more permissive than the JSON API
-  try {
-    const text = await (await fetch(`https://www.reddit.com/r/${sub}/hot.rss`, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
-      signal: AbortSignal.timeout(8000),
-      next: { revalidate: 1800 },
-    })).text()
-    const entries = text.match(/<(item|entry)[\s>][\s\S]*?<\/\1>/g) || []
-    return entries.slice(0, 6).flatMap((entry, i) => {
-      const title = strip(entry.match(/<title[^>]*>([\s\S]*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[|\]\]>/g, '') || '')
-      const link = entry.match(/<link[^>]*href="([^"]+)"/)?.[1] || ''
-      if (!title || !link) return []
-      return [{ rank: 0, title, url: link, score: rankScore(i, 8.8), summary: `Trending post on r/${label}`, source: `reddit · r/${label}`, tags: [tag] }]
-    })
-  } catch { return [] }
-}
+// NOTE: getReddit() was removed — Reddit blocks datacenter IPs (403 on both the
+// JSON API and RSS from Vercel), so it always contributed zero items in production.
+// Replaced by reliable RSS feeds in buildLiveBriefing().
 
 async function getRss(url: string, label: string, tag: string): Promise<Item[]> {
   try {
@@ -141,11 +99,13 @@ async function getTelegram(channel: string, label: string): Promise<Item[]> {
 }
 
 async function buildLiveBriefing() {
+  // Note: Reddit JSON/RSS block datacenter IPs (403 from Vercel), so the live
+  // briefing uses reliable RSS feeds instead. getReddit() was removed for this reason.
   const groups = await Promise.all([
     getHackerNews(),
-    getReddit('MachineLearning', 'MachineLearning', 'AI'),
-    getReddit('technology', 'technology', 'Tech'),
-    getReddit('artificial', 'artificial', 'AI'),
+    getRss('https://www.technologyreview.com/feed/', 'MIT Tech Review', 'AI'),
+    getRss('https://feeds.bbci.co.uk/news/technology/rss.xml', 'BBC Tech', 'Tech'),
+    getRss('https://www.wired.com/feed/rss', 'Wired', 'Tech'),
     getRss('https://techcrunch.com/feed/', 'TechCrunch', 'Tech'),
     getRss('https://www.theverge.com/rss/index.xml', 'The Verge', 'Tech'),
     getRss('https://feeds.arstechnica.com/arstechnica/index', 'Ars Technica', 'Tech'),
