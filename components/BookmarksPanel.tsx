@@ -2,6 +2,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Bookmark, BookmarkCheck, X, ExternalLink, Trash2, Clock } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
+
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Reading List', az: 'Oxu Siyahısı', ru: 'Список чтения', de: 'Leseliste', tr: 'Okuma Listesi', fr: 'Liste de lecture', es: 'Lista de lectura', it: 'Lista di lettura', pt: 'Lista de leitura', zh: '阅读列表', ar: 'قائمة القراءة', ja: 'リーディングリスト' },
+  empty: { en: 'No saved articles yet', az: 'Hələ saxlanmış məqalə yoxdur', ru: 'Пока нет сохранённых статей', de: 'Noch keine gespeicherten Artikel', tr: 'Henüz kayıtlı makale yok', fr: 'Aucun article enregistré', es: 'Aún no hay artículos guardados', it: 'Nessun articolo salvato', pt: 'Nenhum artigo salvo', zh: '暂无已保存文章', ar: 'لا توجد مقالات محفوظة بعد', ja: '保存された記事はありません' },
+  hint: { en: 'Click the bookmark icon on any article', az: 'Hər hansı məqalədə əlfəcin ikonuna klikləyin', ru: 'Нажмите значок закладки в любой статье', de: 'Klicken Sie auf das Lesezeichen-Symbol', tr: 'Herhangi bir makalede yer imi simgesine tıklayın', fr: 'Cliquez sur l\'icône favori d\'un article', es: 'Haz clic en el icono de marcador', it: 'Clicca l\'icona segnalibro', pt: 'Clique no ícone de favorito', zh: '点击任意文章的书签图标', ar: 'انقر على أيقونة الإشارة في أي مقال', ja: '記事のブックマークアイコンをクリック' },
+}
 
 export interface BookmarkItem {
   id: string
@@ -62,6 +69,8 @@ export function BookmarkButton({ title, url, source }: { title: string; url: str
 }
 
 export default function BookmarksPanel() {
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [open, setOpen] = useState(false)
   const { bookmarks, removeBookmark } = useBookmarks()
   const btnRef = useRef<HTMLButtonElement>(null)
@@ -112,7 +121,7 @@ export default function BookmarksPanel() {
             <div className="flex items-center justify-between p-4 border-b border-white/[0.05]">
               <div className="flex items-center gap-2">
                 <Bookmark className="w-4 h-4 text-indigo-400" />
-                <h2 className="text-white font-semibold text-sm">Reading List</h2>
+            <h2 className="text-white font-semibold text-sm">{c('title')}</h2>
                 <span className="text-[10px] text-[#4a4a5e]">{bookmarks.length} saved</span>
               </div>
               <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#4a4a5e]">
@@ -124,8 +133,8 @@ export default function BookmarksPanel() {
               {bookmarks.length === 0 ? (
                 <div className="p-8 text-center">
                   <Bookmark className="w-8 h-8 text-[#4a4a5e] mx-auto mb-3" />
-                  <p className="text-[#8b8b9e] text-xs">No saved articles yet</p>
-                  <p className="text-[#4a4a5e] text-[10px] mt-1">Click the bookmark icon on any article</p>
+              <p className="text-[#8b8b9e] text-xs">{c('empty')}</p>
+              <p className="text-[#4a4a5e] text-[10px] mt-1">{c('hint')}</p>
                 </div>
               ) : (
                 <div className="divide-y divide-white/[0.03]">
