@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { TrendingUp, Flame, Hash, ExternalLink, RefreshCw } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
 
 interface TrendItem {
   title: string
@@ -9,7 +10,13 @@ interface TrendItem {
   url?: string
 }
 
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Trending Now', az: 'İndi Trend', ru: 'В тренде', de: 'Jetzt im Trend', tr: 'Şu An Trend', fr: 'Tendances', es: 'Tendencias', it: 'Di tendenza', pt: 'Em alta', zh: '热门趋势', ar: 'الرائج الآن', ja: 'トレンド' },
+}
+
 export default function TrendingWidget() {
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [trends, setTrends] = useState<TrendItem[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -38,7 +45,7 @@ export default function TrendingWidget() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Flame className="w-4 h-4 text-orange-400" />
-          <h3 className="text-white font-semibold text-sm">Trending Now</h3>
+          <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
           <span className="live-dot" />
         </div>
         <button onClick={fetchTrends} className="p-1.5 rounded-md hover:bg-white/[0.05] text-[#4a4a5e] hover:text-white transition">

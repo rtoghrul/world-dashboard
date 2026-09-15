@@ -89,6 +89,38 @@ const platforms: Platform[] = [
   { name: 'Wish', url: 'https://wish.com', category: 'international', desc: { en: 'Budget shopping, hit or miss quality', az: 'Büdcə alış-veriş, keyfiyyət müxtəlif', de: 'Budget-Shopping, Qualität variiert', ru: 'Бюджетный шопинг, качество разное' }, origin: '🇺🇸 USA' },
   { name: 'Banggood', url: 'https://banggood.com', category: 'international', desc: { en: 'Electronics & gadgets from China, EU stock', az: 'Çindən elektronika, AB anbar', de: 'Elektronik & Gadgets aus China, EU-Lager', ru: 'Электроника из Китая, склад в ЕС' }, origin: '🇨🇳 China' },
   { name: 'Joom', url: 'https://joom.com/de', category: 'international', desc: { en: 'Curated marketplace, European warehouses', az: 'Seçilmiş marketplace, Avropa anbarları', de: 'Kuratierter Marktplatz, EU-Lager', ru: 'Курированный маркетплейс, склады в ЕС' }, origin: '🇱🇻 Latvia' },
+  // General — extended
+  { name: 'Tchibo', url: 'https://www.tchibo.de', category: 'general', desc: { en: 'Coffee + weekly rotating lifestyle deals', az: 'Qəhvə + həftəlik dəyişən təkliflər', ru: 'Кофе и товары недели' }, origin: '🇩🇪 Germany' },
+  { name: 'QVC', url: 'https://www.qvc.de', category: 'general', desc: { en: 'Live-shopping TV store, everything category', az: 'Canlı TV mağazası, hər kateqoriya', ru: 'ТВ-магазин, все категории' }, origin: '🇩🇪 Germany' },
+  { name: 'Baur', url: 'https://www.baur.de', category: 'general', desc: { en: 'Fashion, home & tech catalog store', az: 'Moda, ev və texnologiya kataloqu', ru: 'Мода, дом и техника' }, origin: '🇩🇪 Germany' },
+  { name: 'Zooplus', url: 'https://www.zooplus.de', category: 'general', desc: { en: 'Everything for pets, huge selection', az: 'Evcil heyvanlar üçün hər şey', ru: 'Всё для животных' }, origin: '🇩🇪 Germany' },
+  // Clothes — extended
+  { name: 'Deichmann', url: 'https://www.deichmann.com', category: 'clothes', desc: { en: 'Europe\'s largest shoe retailer', az: 'Avropanın ən böyük ayaqqabı satıcısı', ru: 'Крупнейшая обувная сеть Европы' }, origin: '🇩🇪 Germany' },
+  { name: 'Snipes', url: 'https://www.snipes.com', category: 'clothes', desc: { en: 'Sneakers & streetwear culture', az: 'Sneaker və streetwear mədəniyyəti', ru: 'Кроссовки и стритвир' }, origin: '🇩🇪 Germany' },
+  { name: 'Uniqlo', url: 'https://www.uniqlo.com/de', category: 'clothes', desc: { en: 'Japanese basics, LifeWear quality', az: 'Yapon əsas geyimlər, LifeWear', ru: 'Японские базовые вещи' }, origin: '🇯🇵 Japan' },
+  // Pharmacy — extended
+  { name: 'Zur Rose', url: 'https://www.zurrose.de', category: 'pharma', desc: { en: 'Large online pharmacy, e-prescriptions', az: 'Böyük onlayn aptek, e-reseptlər', ru: 'Крупная онлайн-аптека, е-рецепты' }, origin: '🇨🇭 Switzerland' },
+  { name: 'Müller', url: 'https://www.mueller.de', category: 'pharma', desc: { en: 'Drugstore: beauty, toys, home, stationery', az: 'Drogeriya: kosmetika, oyuncaq, ev', ru: 'Дрогери: косметика, игрушки, дом' }, origin: '🇩🇪 Germany' },
+  // Food — extended
+  { name: 'Knuspr', url: 'https://www.knuspr.de', category: 'food', desc: { en: 'Full supermarket delivery, own brands', az: 'Tam supermarket çatdırılması', ru: 'Доставка продуктов домой' }, origin: '🇩🇪 Germany' },
+  { name: 'Alnatura', url: 'https://www.alnatura.de', category: 'food', desc: { en: 'Organic supermarket range', az: 'Organik supermarket məhsulları', ru: 'Органические продукты' }, origin: '🇩🇪 Germany' },
+  { name: 'Too Good To Go', url: 'https://toogoodtogo.com', category: 'food', desc: { en: 'Rescue surplus food at low prices', az: 'Artıq qidanı ucuza qurtar', ru: 'Спасение еды со скидкой' }, origin: '🇩🇰 Denmark' },
+  // Electronics — extended
+  { name: 'Galaxus', url: 'https://www.galaxus.de', category: 'electronics', desc: { en: 'Swiss giant, huge range beyond tech', az: 'İsveçrə nəhəngi, geniş çeşid', ru: 'Швейцарский гигант, огромный выбор' }, origin: '🇨🇭 Switzerland' },
+  { name: 'Coolblue', url: 'https://www.coolblue.de', category: 'electronics', desc: { en: 'NL retailer known for top service', az: 'NL satıcısı, mükəmməl servis', ru: 'Нидерландский ритейлер, топ-сервис' }, origin: '🇳🇱 Netherlands' },
+  { name: 'Conrad', url: 'https://www.conrad.de', category: 'electronics', desc: { en: 'Electronics & maker supplies since 1923', az: '1923-dən elektronika və maker malları', ru: 'Электроника и товары для мейкеров' }, origin: '🇩🇪 Germany' },
+  { name: 'ComputerUniverse', url: 'https://www.computeruniverse.net', category: 'electronics', desc: { en: 'Notebooks, TVs, hi-fi deals', az: 'Noutbuk, TV, hi-fi təklifləri', ru: 'Ноутбуки, ТВ, hi-fi' }, origin: '🇩🇪 Germany' },
+  // Auto Parts — extended
+  { name: 'Daparto', url: 'https://www.daparto.de', category: 'autoparts', desc: { en: 'Price comparison for car parts', az: 'Maşın hissələri qiymət müqayisəsi', ru: 'Сравнение цен на запчасти' }, origin: '🇩🇪 Germany' },
+  // Furniture — extended
+  { name: 'Poco', url: 'https://www.poco.de', category: 'furniture', desc: { en: 'Budget furniture & home, huge stores', az: 'Büdcə mebel və ev malları', ru: 'Бюджетная мебель и товары для дома' }, origin: '🇩🇪 Germany' },
+  { name: 'Höffner', url: 'https://www.hoeffner.de', category: 'furniture', desc: { en: 'German furniture megastore chain', az: 'Alman mebel megastore şəbəkəsi', ru: 'Немецкая сеть мебельных магазинов' }, origin: '🇩🇪 Germany' },
+  { name: 'ManoMano', url: 'https://www.manomano.de', category: 'furniture', desc: { en: 'DIY, garden & home marketplace', az: 'DIY, bağ və ev marketplace', ru: 'Маркетплейс DIY и сада' }, origin: '🇫🇷 France' },
+  { name: 'Westwing', url: 'https://www.westwing.de', category: 'furniture', desc: { en: 'Premium home & living inspiration', az: 'Premium ev və yaşam dizaynı', ru: 'Премиум товары для дома' }, origin: '🇩🇪 Germany' },
+  // International — extended
+  { name: 'Etsy', url: 'https://www.etsy.com', category: 'international', desc: { en: 'Handmade, vintage & craft marketplace', az: 'Əl işləri, vintage və kraft marketplace', ru: 'Хендмейд, винтаж и крафт' }, origin: '🇺🇸 USA' },
+  { name: 'bol.com', url: 'https://www.bol.com', category: 'international', desc: { en: 'Netherlands\' biggest marketplace, ships to DE', az: 'NL-nin ən böyük marketplace, DE-yə göndərir', ru: 'Крупнейший маркетплейс Нидерландов' }, origin: '🇳🇱 Netherlands' },
+  { name: 'Fruugo', url: 'https://www.fruugo.de', category: 'international', desc: { en: 'Global marketplace with local pricing', az: 'Qlobal marketplace, yerli qiymətlər', ru: 'Глобальный маркетплейс' }, origin: '🇬🇧 UK' },
 ]
 
 export default function PlatformsWidget({ initialCategory }: { initialCategory?: string }) {

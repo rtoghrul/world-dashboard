@@ -1,4 +1,4 @@
-const CACHE_NAME = 'world-dashboard-v3';
+const CACHE_NAME = 'world-dashboard-v4';
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',

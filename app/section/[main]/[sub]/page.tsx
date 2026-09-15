@@ -148,7 +148,7 @@ function Content({ main, sub }: { main: string; sub: string }) {
     if (main === 'travel') return <TravelComparisonWidget defaultExpanded />
     if (main === 'viral') return <ViralWidget defaultExpanded />
     if (main === 'entertainment') return <EntertainmentWidget />
-    if (main === 'social') return <SocialWidget defaultExpanded />
+    if (main === 'social') return <SocialWidget defaultExpanded initialPlatform={sub} />
     if (main === 'stocks') return <StocksWidget defaultExpanded />
     if (main === 'aitools') return <AIToolsWidget defaultExpanded initialCategory={sub === 'chatbots' ? 'chatbots' : sub === 'image-gen' ? 'image' : sub === 'video-gen' ? 'video' : sub === 'writing' ? 'writing' : sub === 'coding' ? 'coding' : 'all'} />
     if (main === 'software') return <SoftwareWidget defaultExpanded initialPlatform={sub === 'android' ? 'android' : sub === 'ios' ? 'ios' : sub === 'windows' ? 'windows' : sub === 'mac' ? 'mac' : sub === 'browser-ext' ? 'extensions' : 'all'} />

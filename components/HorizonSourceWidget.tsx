@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import useSWR from 'swr'
+import { useLang } from '@/lib/LanguageContext'
 
 interface HorizonItem {
   rank: number; title: string; url: string; score: number
@@ -43,11 +44,24 @@ const SOURCE_LABELS: Record<string, string> = {
   'tg-bbc':        'Telegram — BBC Breaking',
 }
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const COPY: Record<string, Record<string, string>> = {
+  ranked: { en: 'Live-ranked', az: 'Canlı sıralama', ru: 'Живой рейтинг', de: 'Live-Ranking', tr: 'Canlı sıralama' },
+  fromSource: { en: 'items from this source', az: 'bu mənbədən xəbər', ru: 'материалов из этого источника', de: 'Beiträge dieser Quelle', tr: 'bu kaynaktan haber' },
+  noBriefing: { en: 'No briefing available yet', az: 'Hələ icmal yoxdur', ru: 'Обзор пока недоступен', de: 'Noch kein Überblick verfügbar', tr: 'Henüz özet yok' },
+  runsDaily: { en: 'Refreshes automatically from live sources', az: 'Canlı mənbələrdən avtomatik yenilənir', ru: 'Обновляется автоматически из живых источников', de: 'Aktualisiert automatisch aus Live-Quellen', tr: 'Canlı kaynaklardan otomatik güncellenir' },
+  noneToday: { en: 'No items from this source right now', az: 'Hazırda bu mənbədən xəbər yoxdur', ru: 'Сейчас нет материалов из этого источника', de: 'Derzeit keine Beiträge dieser Quelle', tr: 'Şu an bu kaynaktan haber yok' },
+  noneHint: { en: 'This source may not have had high-scoring content', az: 'Bu mənbədə yüksək bal toplayan məzmun olmaya bilər', ru: 'Возможно, у источника не было популярного контента', de: 'Möglicherweise keine relevanten Inhalte', tr: 'Bu kaynakta yüksek puanlı içerik olmayabilir' },
+  readFull: { en: 'Read full article →', az: 'Tam məqaləni oxu →', ru: 'Читать полностью →', de: 'Ganzen Artikel lesen →', tr: 'Tam makaleyi oku →' },
+}
+
+// no-store: never let the browser serve a stale briefing from the HTTP cache
+const fetcher = (url: string) => fetch(url, { cache: 'no-store' }).then(r => r.json())
 
 export default function HorizonSourceWidget({ source }: { source: string }) {
   // /api/horizon serves the gist while fresh and falls back to a live-built briefing when stale
   const { data, error, isLoading } = useSWR<HorizonBriefing>('/api/horizon', fetcher, { revalidateOnFocus: false })
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [expanded, setExpanded] = useState<number | null>(null)
 
   const sourceKey = SOURCE_MAP[source] || ''
@@ -63,7 +77,7 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
         <span className="text-xl">📡</span>
         <div>
           <h2 className="text-white font-semibold">{label}</h2>
-          {data && <p className="text-gray-500 text-xs">AI-ranked · {data.date} · {items.length} items from this source</p>}
+          {data && <p className="text-gray-500 text-xs">{c('ranked')} · {data.date} · {items.length} {c('fromSource')}</p>}
         </div>
       </div>
 
@@ -74,16 +88,16 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
       {error && (
         <div className="text-center py-10 text-gray-500">
           <p className="text-4xl mb-3">📭</p>
-          <p>No briefing available yet</p>
-          <p className="text-xs mt-1">Horizon runs daily at 7am UTC</p>
+          <p>{c('noBriefing')}</p>
+          <p className="text-xs mt-1">{c('runsDaily')}</p>
         </div>
       )}
 
       {!isLoading && !error && items.length === 0 && (
         <div className="text-center py-10 text-gray-500">
           <p className="text-4xl mb-3">🔍</p>
-          <p>No items from this source in today&apos;s briefing</p>
-          <p className="text-xs mt-1">This source may not have had high-scoring content today</p>
+          <p>{c('noneToday')}</p>
+          <p className="text-xs mt-1">{c('noneHint')}</p>
         </div>
       )}
 
@@ -124,7 +138,7 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-blue-400 text-sm hover:underline"
               >
-                Read full article →
+                {c('readFull')}
               </a>
             </div>
           )}

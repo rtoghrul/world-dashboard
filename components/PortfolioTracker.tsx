@@ -1,6 +1,20 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, TrendingUp, TrendingDown, PieChart, Wallet, X } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
+
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Portfolio', az: 'Portfel', ru: 'Портфель', de: 'Portfolio', tr: 'Portföy', fr: 'Portefeuille', es: 'Cartera', it: 'Portafoglio', pt: 'Carteira', zh: '投资组合', ar: 'المحفظة', ja: 'ポートフォリオ' },
+  add: { en: 'Add', az: 'Əlavə et', ru: 'Добавить', de: 'Hinzufügen', tr: 'Ekle', fr: 'Ajouter', es: 'Añadir', it: 'Aggiungi', pt: 'Adicionar', zh: '添加', ar: 'إضافة', ja: '追加' },
+  empty: { en: 'No holdings yet', az: 'Hələ aktiv yoxdur', ru: 'Пока нет активов', de: 'Noch keine Bestände', tr: 'Henüz varlık yok', fr: 'Aucune position', es: 'Sin posiciones', it: 'Nessuna posizione', pt: 'Sem posições', zh: '暂无持仓', ar: 'لا توجد أصول بعد', ja: '保有資産なし' },
+  addHolding: { en: 'Add Holding', az: 'Aktiv əlavə et', ru: 'Добавить актив', de: 'Bestand hinzufügen', tr: 'Varlık ekle', fr: 'Ajouter une position', es: 'Añadir posición', it: 'Aggiungi posizione', pt: 'Adicionar posição', zh: '添加持仓', ar: 'إضافة أصل', ja: '保有資産を追加' },
+  coinId: { en: 'Coin ID (coingecko)', az: 'Coin ID (coingecko)', ru: 'ID монеты (coingecko)', de: 'Coin-ID (coingecko)', tr: 'Coin ID (coingecko)', fr: 'ID crypto (coingecko)', es: 'ID de moneda (coingecko)', it: 'ID moneta (coingecko)', pt: 'ID da moeda (coingecko)', zh: '币种ID (coingecko)', ar: 'معرف العملة (coingecko)', ja: 'コインID (coingecko)' },
+  displayName: { en: 'Display Name', az: 'Göstərilən ad', ru: 'Отображаемое имя', de: 'Anzeigename', tr: 'Görünen ad', fr: 'Nom affiché', es: 'Nombre visible', it: 'Nome visualizzato', pt: 'Nome exibido', zh: '显示名称', ar: 'الاسم المعروض', ja: '表示名' },
+  amount: { en: 'Amount', az: 'Miqdar', ru: 'Количество', de: 'Menge', tr: 'Miktar', fr: 'Quantité', es: 'Cantidad', it: 'Quantità', pt: 'Quantidade', zh: '数量', ar: 'الكمية', ja: '数量' },
+  buyPrice: { en: 'Buy Price ($)', az: 'Alış qiyməti ($)', ru: 'Цена покупки ($)', de: 'Kaufpreis ($)', tr: 'Alış fiyatı ($)', fr: 'Prix d\'achat ($)', es: 'Precio de compra ($)', it: 'Prezzo d\'acquisto ($)', pt: 'Preço de compra ($)', zh: '买入价 ($)', ar: 'سعر الشراء ($)', ja: '購入価格 ($)' },
+  totalValue: { en: 'Total portfolio value', az: 'Portfelin ümumi dəyəri', ru: 'Общая стоимость портфеля', de: 'Gesamtwert des Portfolios', tr: 'Portföyün toplam değeri', fr: 'Valeur totale du portefeuille', es: 'Valor total de la cartera', it: 'Valore totale del portafoglio', pt: 'Valor total da carteira', zh: '投资组合总值', ar: 'إجمالي قيمة المحفظة', ja: 'ポートフォリオ総額' },
+  costBasis: { en: 'Cost basis', az: 'Xərc bazası', ru: 'Базовая стоимость', de: 'Einstandswert', tr: 'Maliyet', fr: 'Prix de revient', es: 'Coste base', it: 'Costo base', pt: 'Custo base', zh: '成本基础', ar: 'أساس التكلفة', ja: '取得原価' },
+}
 
 interface Holding {
   id: string
@@ -19,6 +33,8 @@ interface PricedHolding extends Holding {
 }
 
 export default function PortfolioTracker() {
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [holdings, setHoldings] = useState<Holding[]>([])
   const [pricedHoldings, setPricedHoldings] = useState<PricedHolding[]>([])
   const [showAddModal, setShowAddModal] = useState(false)
@@ -104,13 +120,13 @@ export default function PortfolioTracker() {
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.04]">
         <div className="flex items-center gap-2">
           <Wallet className="w-4 h-4 text-emerald-400" />
-          <h2 className="text-white font-semibold text-sm">Portfolio</h2>
+          <h2 className="text-white font-semibold text-sm">{c('title')}</h2>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 text-xs font-medium border border-indigo-500/20 hover:bg-indigo-500/20 transition"
         >
-          <Plus className="w-3.5 h-3.5" /> Add
+          <Plus className="w-3.5 h-3.5" /> {c('add')}
         </button>
       </div>
 
@@ -124,7 +140,7 @@ export default function PortfolioTracker() {
               {totalPnl >= 0 ? '+' : ''}{totalPnlPercent.toFixed(2)}% (${Math.abs(totalPnl).toLocaleString(undefined, { maximumFractionDigits: 2 })})
             </span>
           </div>
-          <p className="text-[11px] text-[#5b5b70] mt-1">Total portfolio value • Cost basis: ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+          <p className="text-[11px] text-[#5b5b70] mt-1">{c('totalValue')} • {c('costBasis')}: ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
         </div>
       )}
 
@@ -135,7 +151,7 @@ export default function PortfolioTracker() {
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-emerald-500/10 border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
               <PieChart className="w-6 h-6 text-[#5b5b70]" />
             </div>
-            <p className="text-sm text-[#6b6b80] font-medium">No holdings yet</p>
+              <p className="text-sm text-[#6b6b80] font-medium">{c('empty')}</p>
             <p className="text-xs text-[#4a4a5a] mt-1.5 max-w-[230px] mx-auto leading-relaxed">Add your first crypto holding to track value &amp; profit in real time</p>
             <button
               onClick={() => setShowAddModal(true)}
@@ -176,14 +192,14 @@ export default function PortfolioTracker() {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAddModal(false)} />
           <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-[#0f0f15] border border-white/[0.08] p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-white font-semibold text-sm">Add Holding</h3>
+          <h3 className="text-white font-semibold text-sm">{c('addHolding')}</h3>
               <button onClick={() => setShowAddModal(false)} className="text-[#6b6b80] hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] text-[#6b6b80] mb-1 block">Coin ID (coingecko)</label>
+            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('coinId')}</label>
                 <input
                   type="text"
                   value={newHolding.symbol}
@@ -193,7 +209,7 @@ export default function PortfolioTracker() {
                 />
               </div>
               <div>
-                <label className="text-[11px] text-[#6b6b80] mb-1 block">Display Name</label>
+            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('displayName')}</label>
                 <input
                   type="text"
                   value={newHolding.name}
@@ -204,7 +220,7 @@ export default function PortfolioTracker() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] text-[#6b6b80] mb-1 block">Amount</label>
+            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('amount')}</label>
                   <input
                     type="number"
                     value={newHolding.amount}
@@ -214,7 +230,7 @@ export default function PortfolioTracker() {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-[#6b6b80] mb-1 block">Buy Price ($)</label>
+            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('buyPrice')}</label>
                   <input
                     type="number"
                     value={newHolding.buyPrice}

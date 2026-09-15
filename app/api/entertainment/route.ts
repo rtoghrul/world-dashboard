@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { translateTexts } from '@/lib/translate'
 
 export const revalidate = 3600
 
@@ -81,8 +82,6 @@ async function wiki(seed: Seed) { for (const title of [seed.title, `${seed.title
 async function seedItems(type: MediaType, mode: string, q: string, genre: string, from: number | null, to: number | null): Promise<Item[]> { let seeds = SEEDS.filter((seed: Seed) => seed.type === type); if (mode === 'trending') seeds = seeds.filter((seed: Seed) => seed.trend); if (mode === 'anticipated') seeds = seeds.filter((seed: Seed) => seed.anticipated || seed.year >= new Date().getFullYear()); seeds = seeds.filter((seed: Seed) => (!q || seed.title.toLowerCase().includes(q.toLowerCase())) && (!genre || seed.genres.some((g: string) => g.toLowerCase() === genre.toLowerCase())) && (!from || seed.year >= from) && (!to || seed.year <= to)); return Promise.all(seeds.map(async (seed: Seed): Promise<Item> => { const w = await wiki(seed); return { id: `seed-${seed.type}-${norm(seed.title)}`, type: seed.type, title: seed.title, originalTitle: seed.title, year: String(seed.year), image: w?.image || fallback(seed), summary: w?.summary || `${seed.title} · ${seed.year}`, genres: seed.genres, rating: null, url: w?.url || H + 'www.google.com/search?q=' + encodeURIComponent(seed.title), trailerUrl: H + 'www.youtube.com/results?search_query=' + encodeURIComponent(seed.title + ' trailer'), source: w?.image ? 'Wikipedia' : 'Local' } })) }
 async function enrich(item: Item): Promise<Item> { if (!OMDB_KEY) return item; try { const url = new URL(H + 'www.omdbapi.com/'); url.searchParams.set('apikey', OMDB_KEY); url.searchParams.set('t', item.originalTitle || item.title); if (item.year) url.searchParams.set('y', item.year); const data = await (await fetch(url.toString(), { next: { revalidate: 3600 } })).json(); if (data?.Response === 'False') return item; return { ...item, image: item.image.startsWith('data:') && data.Poster && data.Poster !== 'N/A' ? data.Poster : item.image, summary: item.summary || data.Plot || item.summary, rating: item.rating || (data.imdbRating && data.imdbRating !== 'N/A' ? Number(data.imdbRating) : null), url: data.imdbID ? H + `www.imdb.com/title/${data.imdbID}/` : item.url, source: `${item.source}+OMDb` } } catch { return item } }
 function unique(items: Item[]) { const seen = new Set<string>(); return items.filter((item: Item) => { const key = `${item.type}-${norm(item.originalTitle || item.title)}-${item.year}`; if (seen.has(key)) return false; seen.add(key); return true }) }
-async function trTexts(texts: string[], l: string) { if (!l || l === 'en' || !texts.length) return texts; try { const res = await fetch(H + 'translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=' + l + '&dt=t&q=' + encodeURIComponent(texts.join('\n---\n'))); const data = await res.json(); return (data?.[0]?.map((x: any) => x?.[0]).join('') || texts.join('\n---\n')).split('\n---\n') } catch { return texts } }
-
 export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams
   const type = (sp.get('type') || 'movie') as MediaType | 'all'
@@ -101,6 +100,6 @@ export async function GET(req: Request) {
   }
   items = unique(items).sort((a: Item, b: Item) => Number(!a.image.startsWith('data:')) - Number(!b.image.startsWith('data:')) || Number(b.rating || 0) - Number(a.rating || 0) || Number(b.year || 0) - Number(a.year || 0)).slice(0, 80)
   if (OMDB_KEY) items = await Promise.all(items.slice(0, 50).map((item: Item) => enrich(item)))
-  if (l !== 'en') { const titles = await trTexts(items.map((item: Item) => item.title), l); const summaries = await trTexts(items.map((item: Item) => item.summary || ''), l); items = items.map((item: Item, index: number) => ({ ...item, title: titles[index] || item.title, summary: summaries[index] || item.summary })) }
+  if (l !== 'en') { const titles = await translateTexts(items.map((item: Item) => item.title), l); const summaries = await translateTexts(items.map((item: Item) => item.summary || ''), l); items = items.map((item: Item, index: number) => ({ ...item, title: titles[index] || item.title, summary: summaries[index] || item.summary })) }
   return NextResponse.json(items)
 }

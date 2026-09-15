@@ -3,15 +3,29 @@
 import { useState } from 'react'
 import useSWR from 'swr'
 import { formatNewsDate } from '@/lib/dates'
+import { useLang } from '@/lib/LanguageContext'
 
 interface HorizonItem { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[]; image?: string | null }
 interface HorizonBriefing { date: string; totalFetched: number; totalSelected: number; items: HorizonItem[] }
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Horizon Daily Briefing', az: 'Horizon Gündəlik İcmal', ru: 'Ежедневный обзор Horizon', de: 'Horizon Tagesüberblick', tr: 'Horizon Günlük Özet', fr: 'Briefing quotidien Horizon', es: 'Briefing diario Horizon' },
+  items: { en: 'items', az: 'xəbər', ru: 'новостей', de: 'Beiträge', tr: 'haber', fr: 'actualités', es: 'noticias' },
+  unreachable: { en: 'Sources temporarily unreachable', az: 'Mənbələr müvəqqəti əlçatmazdır', ru: 'Источники временно недоступны', de: 'Quellen vorübergehend nicht erreichbar', tr: 'Kaynaklara ulaşılamıyor', fr: 'Sources temporairement indisponibles', es: 'Fuentes no disponibles' },
+  retrying: { en: 'Retrying automatically — no action needed', az: 'Avtomatik yenidən cəhd edilir', ru: 'Повторная попытка автоматически', de: 'Automatischer Neuversuch', tr: 'Otomatik yeniden deneniyor', fr: 'Nouvelle tentative automatique', es: 'Reintentando automáticamente' },
+  showAll: { en: 'Show all', az: 'Hamısını göstər', ru: 'Показать все', de: 'Alle anzeigen', tr: 'Tümünü göster', fr: 'Tout afficher', es: 'Mostrar todo' },
+  showLess: { en: 'Show less', az: 'Az göstər', ru: 'Скрыть', de: 'Weniger anzeigen', tr: 'Daha az', fr: 'Réduire', es: 'Mostrar menos' },
+  readFull: { en: 'Read full article →', az: 'Tam məqaləni oxu →', ru: 'Читать полностью →', de: 'Ganzen Artikel lesen →', tr: 'Tam makaleyi oku →', fr: 'Lire l\'article complet →', es: 'Leer artículo completo →' },
+}
+
+// no-store: never let the browser serve a stale briefing from the HTTP cache
+const fetcher = (url: string) => fetch(url, { cache: 'no-store' }).then(r => r.json())
 
 export default function HorizonWidget() {
   // Auto-refresh every 5 minutes so the briefing updates while the tab stays open
   const { data, error, isLoading } = useSWR<HorizonBriefing>('/api/horizon', fetcher, { refreshInterval: 300000, revalidateOnFocus: true, dedupingInterval: 60000 })
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [expanded, setExpanded] = useState<number | null>(null)
   const [showAll, setShowAll] = useState(false)
   const items = data?.items ?? []
@@ -23,16 +37,16 @@ export default function HorizonWidget() {
         <div className="flex items-center gap-2">
           <span className="text-lg">📡</span>
           <div>
-            <h2 className="text-white font-semibold text-sm">Horizon Daily Briefing</h2>
-            {data && <p className="text-gray-500 text-xs">{formatNewsDate(data.date)} · {data.totalSelected} of {data.totalFetched} items</p>}
+            <h2 className="text-white font-semibold text-sm">{c('title')}</h2>
+            {data && <p className="text-gray-500 text-xs">{formatNewsDate(data.date)} · {data.totalSelected}/{data.totalFetched} {c('items')}</p>}
           </div>
         </div>
       </div>
       {isLoading && [...Array(5)].map((_, i) => <div key={i} className="h-10 bg-gray-800 rounded-lg animate-pulse" />)}
       {error && (
         <div className="text-center py-6 text-gray-500 text-sm">
-          <p>📭 Sources temporarily unreachable</p>
-          <p className="text-xs mt-1">Retrying automatically — no action needed</p>
+          <p>📭 {c('unreachable')}</p>
+          <p className="text-xs mt-1">{c('retrying')}</p>
         </div>
       )}
       {!isLoading && !error && (
@@ -62,7 +76,7 @@ export default function HorizonWidget() {
               {expanded === item.rank && (
                 <div className="px-2 pb-3 ml-7">
                   <p className="text-gray-400 text-xs leading-relaxed mb-2">{item.summary}</p>
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-xs hover:underline">Read full article →</a>
+                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-xs hover:underline">{c('readFull')}</a>
                 </div>
               )}
             </div>
@@ -71,7 +85,7 @@ export default function HorizonWidget() {
       )}
       {items.length > 10 && (
         <button onClick={() => setShowAll(!showAll)} className="w-full py-2 mt-1 border-t border-gray-800 text-xs text-gray-500 hover:text-gray-300 text-center transition whitespace-nowrap">
-          {showAll ? '▲ Show less' : '▼ Show all ' + items.length + ' items'}
+          {showAll ? '▲ ' + c('showLess') : '▼ ' + c('showAll') + ' ' + items.length + ' ' + c('items')}
         </button>
       )}
     </div>

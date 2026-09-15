@@ -2,6 +2,21 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Bell, Plus, X, TrendingUp, TrendingDown, Trash2, AlertTriangle } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
+
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Notifications', az: 'Bildirişlər', ru: 'Уведомления', de: 'Benachrichtigungen', tr: 'Bildirimler', fr: 'Notifications', es: 'Notificaciones', it: 'Notifiche', pt: 'Notificações', zh: '通知', ar: 'الإشعارات', ja: '通知' },
+  clear: { en: 'Clear', az: 'Təmizlə', ru: 'Очистить', de: 'Leeren', tr: 'Temizle', fr: 'Effacer', es: 'Limpiar', it: 'Cancella', pt: 'Limpar', zh: '清除', ar: 'مسح', ja: 'クリア' },
+  empty: { en: 'No notifications yet', az: 'Hələ bildiriş yoxdur', ru: 'Пока нет уведомлений', de: 'Noch keine Benachrichtigungen', tr: 'Henüz bildirim yok', fr: 'Aucune notification', es: 'Sin notificaciones', it: 'Nessuna notifica', pt: 'Sem notificações', zh: '暂无通知', ar: 'لا توجد إشعارات بعد', ja: '通知なし' },
+  emptyHint: { en: 'Set price alerts to get notified', az: 'Bildiriş almaq üçün qiymət alarmı qur', ru: 'Настройте ценовые оповещения', de: 'Preisalarme einrichten', tr: 'Fiyat uyarısı kurun', fr: 'Créez des alertes de prix', es: 'Crea alertas de precio', it: 'Imposta avvisi di prezzo', pt: 'Crie alertas de preço', zh: '设置价格提醒', ar: 'أنشئ تنبيهات الأسعار', ja: '価格アラートを設定' },
+  newAlert: { en: 'New Price Alert', az: 'Yeni qiymət alarmı', ru: 'Новое ценовое оповещение', de: 'Neuer Preisalarm', tr: 'Yeni fiyat uyarısı', fr: 'Nouvelle alerte de prix', es: 'Nueva alerta de precio', it: 'Nuovo avviso di prezzo', pt: 'Novo alerta de preço', zh: '新建价格提醒', ar: 'تنبيه سعر جديد', ja: '新しい価格アラート' },
+  coin: { en: 'Coin', az: 'Coin', ru: 'Монета', de: 'Coin', tr: 'Coin', fr: 'Crypto', es: 'Moneda', it: 'Moneta', pt: 'Moeda', zh: '币种', ar: 'العملة', ja: 'コイン' },
+  condition: { en: 'Condition', az: 'Şərt', ru: 'Условие', de: 'Bedingung', tr: 'Koşul', fr: 'Condition', es: 'Condición', it: 'Condizione', pt: 'Condição', zh: '条件', ar: 'الشرط', ja: '条件' },
+  above: { en: 'Goes Above', az: 'Yuxarı keçərsə', ru: 'Поднимается выше', de: 'Steigt über', tr: 'Üzerine çıkarsa', fr: 'Dépasse', es: 'Supera', it: 'Sale sopra', pt: 'Sobe acima de', zh: '高于', ar: 'يتجاوز لأعلى', ja: '上回り' },
+  below: { en: 'Goes Below', az: 'Aşağı düşərsə', ru: 'Опускается ниже', de: 'Fällt unter', tr: 'Altına düşerse', fr: 'En dessous', es: 'Baja de', it: 'Scende sotto', pt: 'Cai abaixo de', zh: '低于', ar: 'ينخفض لأدنى', ja: '下回り' },
+  targetPrice: { en: 'Target Price ($)', az: 'Hədəf qiymət ($)', ru: 'Целевая цена ($)', de: 'Zielpreis ($)', tr: 'Hedef fiyat ($)', fr: 'Prix cible ($)', es: 'Precio objetivo ($)', it: 'Prezzo target ($)', pt: 'Preço-alvo ($)', zh: '目标价格 ($)', ar: 'السعر المستهدف ($)', ja: '目標価格 ($)' },
+  setAlert: { en: 'Set Alert', az: 'Alarm qur', ru: 'Создать оповещение', de: 'Alarm erstellen', tr: 'Uyarı kur', fr: 'Créer l\'alerte', es: 'Crear alerta', it: 'Imposta avviso', pt: 'Criar alerta', zh: '设置提醒', ar: 'تعيين التنبيه', ja: 'アラート設定' },
+}
 
 interface PriceAlert {
   id: string
@@ -20,6 +35,8 @@ interface Notification {
 }
 
 export default function NotificationCenter() {
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [alerts, setAlerts] = useState<PriceAlert[]>([])
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [showPanel, setShowPanel] = useState(false)
@@ -157,7 +174,7 @@ export default function NotificationCenter() {
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-            <h3 className="text-white font-semibold text-sm">Notifications</h3>
+          <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowAddAlert(true)}
@@ -166,7 +183,7 @@ export default function NotificationCenter() {
                 <Plus className="w-3 h-3" /> Alert
               </button>
               {notifications.length > 0 && (
-                <button onClick={clearNotifications} className="text-[10px] text-[#6b6b80] hover:text-white transition">Clear</button>
+          <button onClick={clearNotifications} className="text-[10px] text-[#6b6b80] hover:text-white transition">{c('clear')}</button>
               )}
             </div>
           </div>
@@ -193,8 +210,8 @@ export default function NotificationCenter() {
             {notifications.length === 0 ? (
               <div className="px-4 py-10 text-center">
                 <Bell className="w-6 h-6 text-[#3a3a4a] mx-auto mb-2" />
-                <p className="text-xs text-[#5b5b70]">No notifications yet</p>
-                <p className="text-[10px] text-[#3a3a4a] mt-1">Set price alerts to get notified</p>
+          <p className="text-xs text-[#5b5b70]">{c('empty')}</p>
+          <p className="text-[10px] text-[#3a3a4a] mt-1">{c('emptyHint')}</p>
               </div>
             ) : (
               notifications.slice(0, 20).map(notif => (
@@ -217,14 +234,14 @@ export default function NotificationCenter() {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAddAlert(false)} />
           <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-[#0f0f15] border border-white/[0.08] p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-white font-semibold text-sm">New Price Alert</h3>
+          <h3 className="text-white font-semibold text-sm">{c('newAlert')}</h3>
               <button onClick={() => setShowAddAlert(false)} className="text-[#6b6b80] hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] text-[#6b6b80] mb-1 block">Coin</label>
+                        <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('coin')}</label>
                 <select
                   value={newAlert.coin}
                   onChange={e => setNewAlert(p => ({ ...p, coin: e.target.value }))}
@@ -240,24 +257,24 @@ export default function NotificationCenter() {
                 </select>
               </div>
               <div>
-                <label className="text-[11px] text-[#6b6b80] mb-1 block">Condition</label>
+                <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('condition')}</label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setNewAlert(p => ({ ...p, condition: 'above' }))}
                     className={`flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg text-xs font-medium border transition ${newAlert.condition === 'above' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-white/[0.02] border-white/[0.06] text-[#6b6b80]'}`}
                   >
-                    <TrendingUp className="w-3.5 h-3.5" /> Goes Above
+                    <TrendingUp className="w-3.5 h-3.5" /> {c('above')}
                   </button>
                   <button
                     onClick={() => setNewAlert(p => ({ ...p, condition: 'below' }))}
                     className={`flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg text-xs font-medium border transition ${newAlert.condition === 'below' ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-white/[0.02] border-white/[0.06] text-[#6b6b80]'}`}
                   >
-                    <TrendingDown className="w-3.5 h-3.5" /> Goes Below
+                    <TrendingDown className="w-3.5 h-3.5" /> {c('below')}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="text-[11px] text-[#6b6b80] mb-1 block">Target Price ($)</label>
+                <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('targetPrice')}</label>
                 <input
                   type="number"
                   value={newAlert.target}
@@ -270,7 +287,7 @@ export default function NotificationCenter() {
                 onClick={addAlert}
                 className="w-full mt-2 py-2.5 rounded-lg bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition"
               >
-                Set Alert
+                {c('setAlert')}
               </button>
             </div>
           </div>

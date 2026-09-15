@@ -101,7 +101,7 @@ export default function HomePage() {
                 {new Date().toLocaleDateString(lang === 'en' ? 'en-US' : lang, { weekday: 'long', day: 'numeric', month: 'long' })}
               </p>
               <h1 className="gradient-text text-3xl sm:text-5xl font-extrabold tracking-tight">World Dashboard</h1>
-              <p className="text-[#8b8b9e] text-sm sm:text-base mt-2 max-w-lg">Real-time markets, news & tools — 15+ sections, 12 languages, one place.</p>
+              <p className="text-[#8b8b9e] text-sm sm:text-base mt-2 max-w-lg">Real-time markets, news & tools — 15+ sections, 500+ sites, 12 languages, one place.</p>
               <button
                 onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
                 className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-[#8b8b9e] hover:text-white hover:border-indigo-500/40 transition-all"
@@ -368,17 +368,18 @@ export default function HomePage() {
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-purple-400" />
                 <h3 className="text-white font-semibold text-sm">{t.aiTools}</h3>
+                <span className="px-1.5 py-0.5 rounded bg-purple-500/15 text-[10px] font-semibold text-purple-300">+100</span>
               </div>
               <Link href="/section/aitools/chatbots" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
                 {t.viewAll} <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {['ChatGPT', 'Claude', 'Gemini', 'Midjourney'].map(name => (
-                <div key={name} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-purple-500/30 transition">
+              {[['ChatGPT', '/section/aitools/chatbots'], ['Claude', '/section/aitools/chatbots'], ['Gemini', '/section/aitools/chatbots'], ['Midjourney', '/section/aitools/image']].map(([name, href]) => (
+                <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-purple-500/30 transition">
                   <p className="text-xs text-white font-medium">{name}</p>
                   <p className="text-[10px] text-emerald-400">🆓 Free</p>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -389,17 +390,18 @@ export default function HomePage() {
               <div className="flex items-center gap-2">
                 <Download className="w-4 h-4 text-cyan-400" />
                 <h3 className="text-white font-semibold text-sm">{t.software}</h3>
+                <span className="px-1.5 py-0.5 rounded bg-cyan-500/15 text-[10px] font-semibold text-cyan-300">+70</span>
               </div>
               <Link href="/section/software/android" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
                 {t.viewAll} <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {['ReVanced', 'TrollStore', 'uBlock Origin', 'MAS'].map(name => (
-                <div key={name} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-cyan-500/30 transition">
+              {[['ReVanced', '/section/software/android'], ['TrollStore', '/section/software/ios'], ['uBlock Origin', '/section/software/browser-ext'], ['MAS', '/section/software/windows']].map(([name, href]) => (
+                <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-cyan-500/30 transition">
                   <p className="text-xs text-white font-medium">{name}</p>
                   <p className="text-[10px] text-emerald-400">🆓 Free</p>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

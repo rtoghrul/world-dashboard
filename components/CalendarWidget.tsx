@@ -1,6 +1,16 @@
 'use client'
 import { useState } from 'react'
 import { Calendar, ChevronLeft, ChevronRight, Film, Bitcoin, BarChart2, Zap } from 'lucide-react'
+import { useLang } from '@/lib/LanguageContext'
+
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Events Calendar', az: 'Tədbir Təqvimi', ru: 'Календарь событий', de: 'Event-Kalender', tr: 'Etkinlik Takvimi', fr: 'Calendrier', es: 'Calendario', it: 'Calendario', pt: 'Calendário', zh: '事件日历', ar: 'تقويم الأحداث', ja: 'イベントカレンダー' },
+  upcoming: { en: 'Upcoming', az: 'Yaxınlaşan', ru: 'Скоро', de: 'Demnächst', tr: 'Yaklaşan', fr: 'À venir', es: 'Próximos', it: 'In arrivo', pt: 'Próximos', zh: '即将到来', ar: 'القادم', ja: 'まもなく' },
+  crypto: { en: 'Crypto', az: 'Kripto', ru: 'Крипто', de: 'Krypto', tr: 'Kripto', fr: 'Crypto', es: 'Cripto', it: 'Cripto', pt: 'Cripto', zh: '加密货币', ar: 'العملات', ja: '暗号資産' },
+  earnings: { en: 'Earnings', az: 'Hesabat', ru: 'Отчёты', de: 'Quartalszahlen', tr: 'Bilanço', fr: 'Résultats', es: 'Resultados', it: 'Bilanci', pt: 'Resultados', zh: '财报', ar: 'الأرباح', ja: '決算' },
+  movie: { en: 'Movie', az: 'Film', ru: 'Кино', de: 'Film', tr: 'Film', fr: 'Film', es: 'Película', it: 'Film', pt: 'Filme', zh: '电影', ar: 'أفلام', ja: '映画' },
+  general: { en: 'General', az: 'Ümumi', ru: 'Общее', de: 'Allgemein', tr: 'Genel', fr: 'Général', es: 'General', it: 'Generale', pt: 'Geral', zh: '综合', ar: 'عام', ja: '一般' },
+}
 
 interface CalendarEvent {
   date: string
@@ -22,6 +32,8 @@ const sampleEvents: CalendarEvent[] = [
 ]
 
 export default function CalendarWidget() {
+  const { lang } = useLang()
+  const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
@@ -33,8 +45,16 @@ export default function CalendarWidget() {
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1))
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1))
 
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  let monthNames: string[]
+  let dayNames: string[]
+  try {
+    monthNames = Array.from({ length: 12 }, (_, i) => new Intl.DateTimeFormat(lang, { month: 'long' }).format(new Date(2026, i, 1)))
+    // 2026-02-01 is a Sunday → covers Su..Sa
+    dayNames = Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(lang, { weekday: 'short' }).format(new Date(2026, 1, 1 + i)))
+  } catch {
+    monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  }
 
   const getEventsForDate = (day: number) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -68,7 +88,7 @@ export default function CalendarWidget() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-indigo-400" />
-          <h3 className="text-white font-semibold text-sm">Events Calendar</h3>
+          <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
         </div>
         <div className="flex items-center gap-1">
           <button onClick={prevMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#4a4a5e]">
@@ -122,14 +142,14 @@ export default function CalendarWidget() {
         {Object.entries(typeColors).map(([type, color]) => (
           <div key={type} className="flex items-center gap-1">
             <span className={`w-2 h-2 rounded-full ${color}`} />
-            <span className="text-[9px] text-[#4a4a5e] capitalize">{type}</span>
+            <span className="text-[9px] text-[#4a4a5e]">{c(type)}</span>
           </div>
         ))}
       </div>
 
       {/* Upcoming events */}
       <div className="border-t border-white/[0.04] pt-3">
-        <p className="text-[10px] text-[#4a4a5e] uppercase tracking-wider mb-2">Upcoming</p>
+        <p className="text-[10px] text-[#4a4a5e] uppercase tracking-wider mb-2">{c('upcoming')}</p>
         <div className="space-y-1.5">
           {upcomingEvents.map((e, i) => {
             const Icon = typeIcons[e.type]

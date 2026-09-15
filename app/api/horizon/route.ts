@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server'
 
-export const revalidate = 1800
+// Always render per-request: the briefing must never be served from a stale
+// full-route cache. Freshness is controlled by the CDN Cache-Control header below.
+export const dynamic = 'force-dynamic'
 // Bound the function runtime so the live fallback never times out on Vercel
 export const maxDuration = 60
 
 const GIST_URL = 'https://gist.githubusercontent.com/rtoghrul/b6c9ff6f0daf20f33f09edc263dfb328/raw/horizon-briefing.json'
-// Gist counts as fresh for 6h (was 48h) — the live briefing takes over quickly when the pipeline is down
-const STALE_MS = 6 * 60 * 60 * 1000
+// The gist is only trusted while it is genuinely recent. The external AI-ranking
+// pipeline that writes it has been dead since 2026-06-06, so in practice the live
+// briefing below is what everyone sees. If the pipeline comes back, it resumes
+// automatically with no code change.
+const STALE_MS = 8 * 60 * 60 * 1000
 
 type Item = { rank: number; title: string; url: string; score: number; summary: string; source: string; tags: string[]; image?: string | null }
 
@@ -143,7 +148,7 @@ export async function GET() {
       const data = await res.json()
       const age = Date.now() - new Date(data?.date).getTime()
       if (data?.items?.length && Number.isFinite(age) && age < STALE_MS) {
-        return NextResponse.json(data, { headers: { 'Cache-Control': 's-maxage=3600, stale-while-revalidate=600' } })
+        return NextResponse.json(data, { headers: { 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800' } })
       }
     }
   } catch {}
@@ -152,7 +157,7 @@ export async function GET() {
   try {
     const briefing = await buildLiveBriefing()
     if (briefing.items.length === 0) throw new Error('No sources reachable')
-    return NextResponse.json(briefing, { headers: { 'Cache-Control': 's-maxage=1800, stale-while-revalidate=600' } })
+    return NextResponse.json(briefing, { headers: { 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800' } })
   } catch {
     return NextResponse.json({ error: 'Failed to load briefing' }, { status: 500 })
   }

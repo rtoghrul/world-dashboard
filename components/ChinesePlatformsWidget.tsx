@@ -70,6 +70,23 @@ const platforms: Platform[] = [
   { name: 'Banggood Hobby', category: 'hobby', url: 'https://banggood.com/rc-toys.html', desc: { en: 'RC cars, drones, 3D printing, Arduino, DIY', az: 'RC maşınlar, dronlar, 3D çap, Arduino, DIY', de: 'RC-Autos, Drohnen, 3D-Druck, Arduino, DIY', ru: 'RC-машинки, дроны, 3D-печать, Arduino' }, deliveryDays: '3-10', hasEUWarehouse: true, rating: 4.5, popular: true },
   { name: 'AliExpress Tools', category: 'hobby', url: 'https://aliexpress.com/category/tools.html', desc: { en: 'Hand tools, power tools, measuring instruments', az: 'Əl alətləri, elektrik alətləri, ölçü cihazları', de: 'Handwerkzeuge, Elektrowerkzeuge, Messgeräte', ru: 'Ручные и электроинструменты, измерители' }, deliveryDays: '7-15', hasEUWarehouse: true, rating: 4.4 },
   { name: 'Creality (3D Printers)', category: 'hobby', url: 'https://creality.com', desc: { en: 'World\u2019s #1 consumer 3D printers, EU support', az: 'Dünyanın №1 3D printerləri, AB dəstəyi', de: 'Weltweit #1 Consumer-3D-Drucker, EU-Support', ru: 'Лучшие 3D-принтеры для дома, поддержка ЕС' }, deliveryDays: '3-7', hasEUWarehouse: true, rating: 4.6, popular: true, highlight: true },
+  // General — extended
+  { name: 'MiniintheBox', category: 'general', url: 'https://www.miniinthebox.com', desc: { en: 'Gadgets & lifestyle goods at low prices', az: 'Qadjet və həyat malları ucuz', ru: 'Гаджеты и товары по низким ценам' }, deliveryDays: '12-20', hasEUWarehouse: false, rating: 4.0 },
+  // Fashion — extended
+  { name: 'Cupshe', category: 'fashion', url: 'https://www.cupshe.com', desc: { en: 'Swimwear & beachwear #1, EU returns', az: 'Mayo və çimərlik geyimləri №1', ru: 'Купальники и пляжная одежда №1' }, deliveryDays: '6-12', hasEUWarehouse: true, rating: 4.3, popular: true },
+  { name: 'Halara', category: 'fashion', url: 'https://thehalara.com', desc: { en: 'Viral athleisure & activewear brand', az: 'Viral idman geyimləri brendi', ru: 'Вирусный бренд спортодежды' }, deliveryDays: '7-14', hasEUWarehouse: true, rating: 4.2 },
+  // Electronics — extended
+  { name: 'Baseus', category: 'electronics', url: 'https://www.baseus.com', desc: { en: 'Premium chargers, cables, car mounts', az: 'Premium şarj, kabel, avto daşıyıcı', ru: 'Премиум зарядки, кабели' }, deliveryDays: '3-7', hasEUWarehouse: true, rating: 4.7, popular: true },
+  { name: 'Haylou', category: 'electronics', url: 'https://www.haylou.com', desc: { en: 'Budget earbuds & wearables', az: 'Büdcə qulaqcıq və wearables', ru: 'Бюджетные наушники и гаджеты' }, deliveryDays: '7-15', hasEUWarehouse: true, rating: 4.4 },
+  // Home — extended
+  { name: 'Narwal', category: 'home', url: 'https://www.narwal.com', desc: { en: 'Self-cleaning robot vacuums & mops', az: 'Özünü təmizləyən robot tozsoranlar', ru: 'Роботы-пылесосы с самоочисткой' }, deliveryDays: '3-7', hasEUWarehouse: true, rating: 4.6, popular: true, highlight: true },
+  { name: 'Eufy (Anker)', category: 'home', url: 'https://www.eufy.com', desc: { en: 'Security cams, smart home, vacuums', az: 'Təhlükəsizlik kameraları, smart ev', ru: 'Камеры, умный дом, пылесосы' }, deliveryDays: '2-5', hasEUWarehouse: true, rating: 4.6, popular: true },
+  // Kids — extended
+  { name: 'hibobi', category: 'kids', url: 'https://www.hibobi.com', desc: { en: 'Baby & kids clothing, mom-approved', az: 'Uşaq geyimləri, ana təsdiqli', ru: 'Одежда для малышей' }, deliveryDays: '8-16', hasEUWarehouse: false, rating: 4.1 },
+  // Hobby — extended
+  { name: 'Bambu Lab', category: 'hobby', url: 'https://bambulab.com', desc: { en: 'Fastest consumer 3D printers on the market', az: 'Bazarın ən sürətli 3D printerləri', ru: 'Самые быстрые 3D-принтеры' }, deliveryDays: '3-7', hasEUWarehouse: true, rating: 4.9, popular: true, highlight: true },
+  { name: 'Elegoo', category: 'hobby', url: 'https://www.elegoo.com', desc: { en: 'Resin printers & Arduino kits, EU stock', az: 'Rezin printer və Arduino dəstləri', ru: 'Смоляные принтеры, наборы Arduino' }, deliveryDays: '4-9', hasEUWarehouse: true, rating: 4.6 },
+  { name: 'Anycubic', category: 'hobby', url: 'https://www.anycubic.com', desc: { en: 'Popular 3D printers for beginners', az: 'Yeni başlayanlar üçün 3D printerlər', ru: 'Популярные 3D-принтеры' }, deliveryDays: '4-9', hasEUWarehouse: true, rating: 4.5 },
 ]
 
 export default function ChinesePlatformsWidget({ initialCategory }: { initialCategory?: string }) {
