@@ -10,12 +10,14 @@ export function generateStaticParams() {
   return factCategories.map(category => ({ id: category.id }))
 }
 
-export function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const category = getFactCategory(params.id)
   return pageMetadata(`/facts/${category.id}`, `${category.title} Facts — Mind-Blowing Facts`, category.description)
 }
 
-export default function FactsCategoryPage({ params }: { params: { id: string } }) {
+export default async function FactsCategoryPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const category = getFactCategory(params.id)
   const facts = getFactsForCategory(params.id)
 

@@ -139,7 +139,8 @@ const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: 
 }
 
 function Content({ main, sub }: { main: string; sub: string }) {
-  try {
+  // Render errors are caught by the <ErrorBoundary> around <Content> (a try/catch here cannot catch them).
+  {
     if (sub === 'benefits') {
       const sectionKey = main === 'crypto' ? 'markets' : main
       return <BenefitsWidget section={sectionKey} />
@@ -170,13 +171,6 @@ function Content({ main, sub }: { main: string; sub: string }) {
       return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />
     }
     return <NewsHub embedded />
-  } catch (err) {
-    return (
-      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center">
-        <p className="text-red-400 text-sm">Widget render error</p>
-        <button onClick={() => window.location.reload()} className="mt-3 px-4 py-2 rounded-lg bg-fg/[0.06] text-ink-1 text-sm">Reload</button>
-      </div>
-    )
   }
 }
 

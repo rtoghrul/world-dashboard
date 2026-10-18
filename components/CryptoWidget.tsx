@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { TrendingUp, TrendingDown, Search, ArrowRight, ChevronDown } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
+import { ui } from '@/lib/i18n/ui'
 import SectionNews from './SectionNews'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
@@ -47,18 +48,18 @@ export function Sparkline({ data }: { data: number[] }) {
 }
 
 export function CryptoTable({ coins }: { coins: Coin[] }) {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
           <tr className="text-ink-3 text-xs">
-            <th className="px-4 py-2 text-left">#</th>
-            <th className="px-4 py-2 text-left">{tr.rank}</th>
-            <th className="px-4 py-2 text-right">{tr.price}</th>
-            <th className="px-4 py-2 text-right">{tr.change24h}</th>
-            <th className="px-4 py-2 text-right hidden md:table-cell">{tr.marketCap}</th>
-            <th className="px-4 py-2 text-right hidden lg:table-cell">7d</th>
+            <th scope="col" className="px-4 py-2 text-left"><abbr title={tr.rank} className="no-underline">#</abbr></th>
+            <th scope="col" className="px-4 py-2 text-left">{ui('common.coin', lang)}</th>
+            <th scope="col" className="px-4 py-2 text-right">{tr.price}</th>
+            <th scope="col" className="px-4 py-2 text-right">{tr.change24h}</th>
+            <th scope="col" className="px-4 py-2 text-right hidden md:table-cell">{tr.marketCap}</th>
+            <th scope="col" className="px-4 py-2 text-right hidden lg:table-cell">7d</th>
           </tr>
         </thead>
         <tbody>

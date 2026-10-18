@@ -1,4 +1,5 @@
 'use client'
+import { timeAgo } from '@/lib/i18n/ui'
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Bookmark, BookmarkCheck, X, ExternalLink, Trash2, Clock } from 'lucide-react'
@@ -86,14 +87,7 @@ export default function BookmarksPanel() {
     return () => window.removeEventListener('keydown', handler)
   }, [])
 
-  const timeAgo = (ts: number) => {
-    const diff = Date.now() - ts
-    const mins = Math.floor(diff / 60000)
-    if (mins < 60) return `${mins}m ago`
-    const hrs = Math.floor(mins / 60)
-    if (hrs < 24) return `${hrs}h ago`
-    return `${Math.floor(hrs / 24)}d ago`
-  }
+
 
   return (
     <>
@@ -148,7 +142,7 @@ export default function BookmarksPanel() {
                           <div className="flex items-center gap-2 mt-1">
                             {b.source && <span className="text-[10px] text-ink-4">{b.source}</span>}
                             <span className="text-[10px] text-ink-4 flex items-center gap-0.5">
-                              <Clock className="w-2.5 h-2.5" /> {timeAgo(b.savedAt)}
+                              <Clock className="w-2.5 h-2.5" /> <span suppressHydrationWarning>{timeAgo(new Date(b.savedAt).toISOString(), lang)}</span>
                             </span>
                           </div>
                         </div>

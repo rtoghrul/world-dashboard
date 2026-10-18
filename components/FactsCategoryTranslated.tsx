@@ -52,8 +52,8 @@ const categoryNames: Record<string, Partial<Record<SupportedLang, string>>> = {
   technology: { en: 'Technology', az: 'Texnologiya', ru: 'Технологии', de: 'Technologie', tr: 'Teknoloji', fr: 'Technologie', es: 'Tecnología', zh: '科技', ar: 'التكنولوجيا', ja: 'テクノロジー', it: 'Tecnologia', pt: 'Tecnologia' },
   psychology: { en: 'Psychology', az: 'Psixologiya', ru: 'Психология', de: 'Psychologie', tr: 'Psikoloji', fr: 'Psychologie', es: 'Psicología', zh: '心理学', ar: 'علم النفس', ja: '心理学', it: 'Psicologia', pt: 'Psicologia' },
   mysteries: { en: 'Mysteries', az: 'Sirlər', ru: 'Тайны', de: 'Mysterien', tr: 'Gizemler', fr: 'Mystères', es: 'Misterios', zh: '未解之谜', ar: 'الألغاز', ja: 'ミステリー', it: 'Misteri', pt: 'Mistérios' },
-  'ancient-world': { en: 'Ancient World', az: 'Qədim dünya', ru: 'Древний мир', de: 'Antike Welt', tr: 'Antik dünya' },
-  'weird-facts': { en: 'Weird Facts', az: 'Qəribə faktlar', ru: 'Странные факты', de: 'Seltsame Fakten', tr: 'Tuhaf faktlar' },
+  'ancient-world': { en: 'Ancient World', az: 'Qədim dünya', ru: 'Древний мир', de: 'Antike Welt', tr: 'Antik dünya', fr: 'Monde antique', es: 'Mundo antiguo', zh: '古代世界', ar: 'العالم القديم', ja: '古代世界', it: 'Mondo antico', pt: 'Mundo antigo' },
+  'weird-facts': { en: 'Weird Facts', az: 'Qəribə faktlar', ru: 'Странные факты', de: 'Seltsame Fakten', tr: 'Tuhaf faktlar', fr: 'Faits insolites', es: 'Datos curiosos', zh: '奇闻趣事', ar: 'حقائق غريبة', ja: '奇妙な雑学', it: 'Fatti bizzarri', pt: 'Fatos curiosos' },
 }
 
 function normalizeLang(value?: string | null): SupportedLang {

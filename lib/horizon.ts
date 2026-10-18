@@ -101,6 +101,8 @@ export type HorizonBriefing = {
   date: string
   generatedAt: string
   live: boolean
+  /** 'daily' = today's cached edition, 'live' = built for this request, 'gist' = external pipeline */
+  edition?: 'daily' | 'live' | 'gist'
   totalFetched: number
   totalSelected: number
   items: HorizonItem[]

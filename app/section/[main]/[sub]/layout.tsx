@@ -5,11 +5,12 @@ import { pageMetadata } from '@/lib/seo'
 // Drop emoji/flags from menu labels for <title> text (surrogate pairs, symbols, joiners).
 const stripEmoji = (s: string) => s.replace(/[\uD800-\uDFFF\u2600-\u27BF\uFE0F\u200D]/g, '').replace(/\s+/g, ' ').trim()
 
-type Params = { params: { main: string; sub: string } }
+type Params = { params: Promise<{ main: string; sub: string }> }
 
 // Titles come from the same menu data as the header, so every section gets a real title
 // and description instead of the generic site-wide one.
-export function generateMetadata({ params }: Params): Metadata {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const path = `/section/${params.main}/${params.sub}`
   for (const [id, section] of Object.entries(menus)) {
     const item = section.items.find(i => (i.section || id) === params.main && i.id === params.sub)

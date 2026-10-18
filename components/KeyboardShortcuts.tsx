@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useRouter } from 'next/navigation'
 import { X, Keyboard } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
@@ -36,6 +37,7 @@ export default function KeyboardShortcuts() {
   const { lang } = useLang()
   const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
   const [open, setOpen] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     let lastKey = ''
@@ -57,11 +59,11 @@ export default function KeyboardShortcuts() {
       // G+key navigation
       if (lastKey === 'g' && now - lastTime < 1000) {
         switch (e.key) {
-          case 'h': window.location.href = '/'; break
-          case 'n': window.location.href = '/section/news/top'; break
-          case 'c': window.location.href = '/section/crypto/top'; break
-          case 's': window.location.href = '/section/stocks/overview'; break
-          case 'm': window.location.href = '/section/entertainment/movies'; break
+          case 'h': router.push('/'); break
+          case 'n': router.push('/news'); break
+          case 'c': router.push('/section/crypto/top'); break
+          case 's': router.push('/section/stocks/top'); break
+          case 'm': router.push('/section/entertainment/movies'); break
         }
       }
       lastKey = e.key
@@ -69,7 +71,7 @@ export default function KeyboardShortcuts() {
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [])
+  }, [router])
 
   if (!open) return null
 

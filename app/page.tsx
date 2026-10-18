@@ -391,7 +391,7 @@ export default function HomePage() {
               {[['ChatGPT', '/section/aitools/chatbots'], ['Claude', '/section/aitools/chatbots'], ['Gemini', '/section/aitools/chatbots'], ['Midjourney', '/section/aitools/image-gen']].map(([name, href]) => (
                 <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-fg/[0.02] border border-line hover:border-purple-500/30 transition">
                   <p className="text-xs text-ink-1 font-medium">{name}</p>
-                  <p className="text-[10px] text-emerald-400">🆓 Free</p>
+                  <p className="text-[10px] text-emerald-400"><span aria-hidden="true">🆓 </span>{ui('common.free', lang)}</p>
                 </Link>
               ))}
             </div>
@@ -413,7 +413,7 @@ export default function HomePage() {
               {[['ReVanced', '/section/software/android'], ['TrollStore', '/section/software/ios'], ['uBlock Origin', '/section/software/browser-ext'], ['MAS', '/section/software/windows']].map(([name, href]) => (
                 <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-fg/[0.02] border border-line hover:border-cyan-500/30 transition">
                   <p className="text-xs text-ink-1 font-medium">{name}</p>
-                  <p className="text-[10px] text-emerald-400">🆓 Free</p>
+                  <p className="text-[10px] text-emerald-400"><span aria-hidden="true">🆓 </span>{ui('common.free', lang)}</p>
                 </Link>
               ))}
             </div>

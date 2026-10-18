@@ -6,7 +6,8 @@ import { pageMetadata } from '@/lib/seo'
 
 export const metadata = pageMetadata('/news', 'World News', 'Live headlines from free, trusted sources by region (Azerbaijan, Caucasus, Europe, Middle East, Asia, Africa, Americas) and topic, plus news in your own language.')
 
-export default function NewsPage({ searchParams }: { searchParams?: { category?: string } }) {
+export default async function NewsPage(props: { searchParams?: Promise<{ category?: string }> }) {
+  const searchParams = await props.searchParams;
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
