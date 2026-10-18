@@ -209,7 +209,7 @@ export default function FactsNewsStylePage({ id, page }: { id: string; page?: st
           {cards.map((card, index) => (
             <article key={`${card.source}-${index}`} className="rounded-2xl border border-white/[0.06] bg-[#0a0a10]/90 overflow-hidden hover:border-indigo-400/30 transition">
               <div className="aspect-[16/9] bg-white/[0.03] overflow-hidden">
-                <img src={card.image} alt={getText(card.title, lang)} className="h-full w-full object-cover hover:scale-[1.03] transition duration-500" />
+                <img loading="lazy" decoding="async" src={card.image} alt={getText(card.title, lang)} className="h-full w-full object-cover hover:scale-[1.03] transition duration-500" />
               </div>
               <div className="p-5">
                 <div className="flex items-center justify-between gap-3 mb-3">

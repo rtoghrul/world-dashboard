@@ -6,7 +6,6 @@ import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Gl
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
-import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
 import { useLang } from '@/lib/LanguageContext'
@@ -83,7 +82,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative z-[1] w-full">
       <ServiceWorkerRegistrar />
-      <CommandPalette />
       <Header />
 
       {/* ═══ HERO SECTION ═══ */}
@@ -253,7 +251,7 @@ export default function HomePage() {
                   const up = coin.price_change_percentage_24h >= 0
                   return (
                     <Link key={coin.id} href="/section/crypto/top" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition border-b border-white/[0.03] last:border-0">
-                      <img src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
+                      <img loading="lazy" decoding="async" src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-xs font-medium">{coin.name}</p>
                         <p className="text-[#4a4a5e] text-[10px] uppercase">{coin.symbol}</p>

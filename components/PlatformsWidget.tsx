@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { ExternalLink, Store, ShoppingBag, Package, Truck, Cpu, CircleDot, Home, Globe2, Search } from 'lucide-react'
 import SectionNews from './SectionNews'
 
@@ -165,7 +166,7 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
             <button key={c.id} onClick={() => setCategory(c.id)}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${category === c.id ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
-              {c.label[lang] || c.label.en}
+              {pickLabel(c.label, lang)}
             </button>
           )
         })}

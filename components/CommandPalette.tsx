@@ -112,8 +112,8 @@ export default function CommandPalette() {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-start justify-center pt-[15vh]">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
+    <div className="fixed inset-0 z-[99999] flex items-start justify-center pt-[15vh]" role="dialog" aria-modal="true" aria-label="Search sections">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
       <div className="relative w-full max-w-lg mx-4 rounded-2xl bg-[#111118] border border-white/[0.08] shadow-2xl shadow-black/80 overflow-hidden animate-scale-in">
         {/* Search input */}
         <div className="flex items-center gap-3 px-4 py-4 border-b border-white/[0.06]">
@@ -123,6 +123,11 @@ export default function CommandPalette() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
+            aria-label="Search sections"
+            role="combobox"
+            aria-expanded="true"
+            aria-controls="command-palette-results"
+            aria-activedescendant={filtered[selectedIndex] ? `command-palette-option-${selectedIndex}` : undefined}
             placeholder={lang === 'az' ? 'Axtarış...' : lang === 'ru' ? 'Поиск...' : lang === 'de' ? 'Suchen...' : 'Search sections...'}
             className="flex-1 bg-transparent text-white text-sm placeholder-[#4a4a5e] outline-none"
           />
@@ -130,7 +135,7 @@ export default function CommandPalette() {
         </div>
 
         {/* Results */}
-        <div className="max-h-[50vh] overflow-y-auto py-2">
+        <div id="command-palette-results" role="listbox" className="max-h-[50vh] overflow-y-auto py-2">
           {filtered.length === 0 && (
             <p className="text-center text-[#6b6b80] text-sm py-8">No results found</p>
           )}
@@ -139,7 +144,12 @@ export default function CommandPalette() {
             return (
               <button
                 key={item.id}
+                id={`command-palette-option-${i}`}
+                role="option"
+                aria-selected={i === selectedIndex}
+                tabIndex={-1}
                 onClick={() => navigate(item)}
+                onMouseEnter={() => setSelectedIndex(i)}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                   i === selectedIndex ? 'bg-indigo-500/10 text-white' : 'text-[#a0a0b0] hover:bg-white/[0.04] hover:text-white'
                 }`}
@@ -147,7 +157,7 @@ export default function CommandPalette() {
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                   i === selectedIndex ? 'bg-indigo-500/20' : 'bg-white/[0.04]'
                 }`}>
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4" aria-hidden="true" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{item.label}</p>

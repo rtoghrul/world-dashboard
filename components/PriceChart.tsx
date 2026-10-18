@@ -127,7 +127,7 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
                 }}
                 labelStyle={{ color: '#6b6b80', fontSize: 11 }}
                 itemStyle={{ color: '#fff', fontSize: 12 }}
-                formatter={(value: number) => [`$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`, 'Price']}
+                formatter={(value) => [`$${Number(value ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`, 'Price']}
               />
               <Area
                 type="monotone"

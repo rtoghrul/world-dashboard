@@ -28,7 +28,7 @@ export default function NewsModal({ item, onClose }: { item: ModalItem; onClose:
         onClick={e => e.stopPropagation()}
       >
         {item.thumbnail && (
-          <img
+          <img loading="lazy" decoding="async"
             src={item.thumbnail}
             alt=""
             className="w-full h-44 object-cover"

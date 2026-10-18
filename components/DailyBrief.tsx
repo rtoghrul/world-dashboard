@@ -18,7 +18,8 @@ const COPY: Record<string, Record<string, string>> = {
 }
 
 interface BriefData {
-  greeting: string
+  /** COPY key, resolved at render time so it follows the current language. */
+  greeting: 'morning' | 'afternoon' | 'evening'
   time: string
   topNews: { title: string; source: string }[]
   cryptoMovers: { name: string; symbol: string; change: number; price: string }[]
@@ -112,9 +113,9 @@ export default function DailyBrief() {
 
         // Greeting
         const hour = new Date().getHours()
-        let greeting = COPY.morning[lang] || COPY.morning.en
-        if (hour >= 12 && hour < 17) greeting = COPY.afternoon[lang] || COPY.afternoon.en
-        else if (hour >= 17) greeting = COPY.evening[lang] || COPY.evening.en
+        let greeting: BriefData['greeting'] = 'morning'
+        if (hour >= 12 && hour < 17) greeting = 'afternoon'
+        else if (hour >= 17) greeting = 'evening'
 
         setData({
           greeting,
@@ -127,7 +128,7 @@ export default function DailyBrief() {
         })
       } catch (e) {
         setData({
-          greeting: COPY.morning[lang] || COPY.morning.en,
+          greeting: 'morning',
           time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
           topNews: [
             { title: 'Markets open higher on tech earnings', source: 'Bloomberg' },
@@ -178,7 +179,7 @@ export default function DailyBrief() {
         <div>
           <h2 className="text-xl font-semibold text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-indigo-400" />
-            {data.greeting} ☀️
+            {c(data.greeting)} ☀️
           </h2>
           <p className="text-sm text-[#6b6b80] mt-0.5 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />

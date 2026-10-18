@@ -73,7 +73,7 @@ export default function TopicNewsWidget({
 
   const apiPath = useMemo(() => `/api/engineering?topic=${topic}&lang=${lang}`, [topic, lang])
   const { data: rawData, isLoading, error, mutate } = useSWR<Item[]>(apiPath, fetcher, { refreshInterval: 900000 })
-  const items = Array.isArray(rawData) ? rawData : []
+  const items = useMemo(() => (Array.isArray(rawData) ? rawData : []), [rawData])
 
   const filtered = useMemo(() => {
     if (!query.trim()) return items

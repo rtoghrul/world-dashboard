@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { Heart, Sparkles, Baby, Dumbbell, Palette, Apple, ExternalLink, Star } from 'lucide-react'
 import SectionNews from './SectionNews'
 
@@ -98,7 +99,7 @@ export default function WomenWidget({ initialCategory }: { initialCategory?: str
             <button key={c.id} onClick={() => setTab(c.id)}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
-              {c.label[lang] || c.label.en}
+              {pickLabel(c.label, lang)}
             </button>
           )
         })}

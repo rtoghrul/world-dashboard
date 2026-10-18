@@ -73,7 +73,7 @@ export type NewsItem = {
 function CardImage({ item }: { item: NewsItem }) {
   const [failed, setFailed] = useState(false)
   if (item.thumbnail && !failed) {
-    return <img src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gray-800" onError={() => setFailed(true)} />
+    return <img loading="lazy" decoding="async" src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gray-800" onError={() => setFailed(true)} />
   }
   const first = item.source?.trim()?.charAt(0)?.toUpperCase() || 'N'
   return (

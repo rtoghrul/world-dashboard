@@ -108,7 +108,7 @@ export default function HorizonSourceWidget({ source }: { source: string }) {
             onClick={() => setExpanded(expanded === item.rank ? null : item.rank)}
           >
             {item.image ? (
-              <img src={item.image} alt="" className="w-16 h-16 rounded-lg object-cover shrink-0 bg-gray-800" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              <img loading="lazy" decoding="async" src={item.image} alt="" className="w-16 h-16 rounded-lg object-cover shrink-0 bg-gray-800" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
             ) : (
               <div className="w-16 h-16 rounded-lg bg-gray-800 shrink-0 flex items-center justify-center text-2xl">
                 {item.source.includes('reddit') ? '🤖' : item.source.includes('telegram') ? '✈️' : item.source.includes('hackernews') ? '🔥' : '📰'}

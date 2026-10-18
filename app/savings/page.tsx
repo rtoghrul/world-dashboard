@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, PiggyBank, Utensils, Pill, Shirt, ShoppingBag, Car, Baby, Home, BadgeEuro } from 'lucide-react'
 import Header from '@/components/Header'
-import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
 
@@ -91,7 +90,6 @@ const groups = [
 export default function SavingsPage() {
   return (
     <div className="min-h-screen relative z-[1] bg-gray-950">
-      <CommandPalette />
       <Header />
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center gap-3 mb-6">

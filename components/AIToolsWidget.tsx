@@ -1,6 +1,7 @@
 'use client'
 import { useMemo, useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { Bot, Image, Video, PenTool, Code, Sparkles, ExternalLink, Star, Zap, Music, Brain, Briefcase, Search } from 'lucide-react'
 import SectionNews from './SectionNews'
 
@@ -217,7 +218,7 @@ export default function AIToolsWidget({ defaultExpanded, initialCategory }: { de
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap border transition ${activeCategory === cat.id ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' : 'bg-white/[0.03] text-[#8b8b9e] border-white/[0.06] hover:text-white'}`}
             >
               <Icon className="w-3.5 h-3.5" />
-              {cat.label[lang] || cat.label.en}
+              {pickLabel(cat.label, lang)}
               <span className={`ml-0.5 px-1.5 rounded-full text-[10px] ${activeCategory === cat.id ? 'bg-purple-500/30 text-purple-200' : 'bg-white/[0.06] text-[#6b6b80]'}`}>{count}</span>
             </button>
           )

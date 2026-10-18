@@ -69,7 +69,7 @@ export function CryptoTable({ coins }: { coins: Coin[] }) {
                 <td className="px-4 py-2 text-gray-500 text-xs">{coin.market_cap_rank}</td>
                 <td className="px-4 py-2">
                   <div className="flex items-center gap-2">
-                    <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" />
+                    <img loading="lazy" decoding="async" src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" />
                     <div>
                       <div className="text-white font-medium text-xs">{coin.name}</div>
                       <div className="text-gray-500 text-xs uppercase">{coin.symbol}</div>
@@ -152,7 +152,7 @@ export default function CryptoWidget({ defaultExpanded = false }: { defaultExpan
           {isLoading && <div className="h-4 bg-gray-800 rounded w-48 animate-pulse" />}
           {btc && (
             <>
-              <img src={btc.image} alt="BTC" className="w-6 h-6 rounded-full flex-shrink-0" />
+              <img loading="lazy" decoding="async" src={btc.image} alt="BTC" className="w-6 h-6 rounded-full flex-shrink-0" />
               <span className="text-white text-sm font-medium">{btc.name}</span>
               <span className="text-white font-mono text-sm">${btc.current_price.toLocaleString()}</span>
               <span className={`text-xs font-semibold ${btc.price_change_percentage_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>

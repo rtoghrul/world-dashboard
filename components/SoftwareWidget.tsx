@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { Smartphone, Monitor, Apple, Globe, ExternalLink, Star, Sparkles, ArrowRight } from 'lucide-react'
 import SectionNews from './SectionNews'
 
@@ -150,7 +151,7 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
             <button key={p.id} onClick={() => setPlatform(p.id)}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${platform === p.id ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
-              {p.label[lang] || p.label.en}
+              {pickLabel(p.label, lang)}
             </button>
           )
         })}

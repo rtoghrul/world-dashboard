@@ -41,7 +41,7 @@ export default function NotificationCenter() {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [showPanel, setShowPanel] = useState(false)
   const [showAddAlert, setShowAddAlert] = useState(false)
-  const [newAlert, setNewAlert] = useState({ coin: 'bitcoin', condition: 'above' as const, target: '' })
+  const [newAlert, setNewAlert] = useState({ coin: 'bitcoin', condition: 'above' as 'above' | 'below', target: '' })
   const [mounted, setMounted] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLButtonElement>(null)
@@ -68,7 +68,7 @@ export default function NotificationCenter() {
 
     async function checkAlerts() {
       try {
-        const ids = [...new Set(alerts.map(a => a.coin))].join(',')
+        const ids = Array.from(new Set(alerts.map(a => a.coin))).join(',')
         const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`)
         const prices = await res.json()
 

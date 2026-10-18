@@ -131,7 +131,7 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setModal(null)}>
           <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
             {modal.thumbnail && (
-              <img src={modal.thumbnail} alt="" className="w-full h-44 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              <img loading="lazy" decoding="async" src={modal.thumbnail} alt="" className="w-full h-44 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
             )}
             <div className="p-4">
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -142,7 +142,7 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
                 <p className="text-gray-400 text-xs leading-relaxed mb-3">{modal.description}</p>
               )}
               <div className="flex items-center gap-2 text-gray-600 text-[11px] mb-4">
-                <img src={faviconUrl(modal.link)} alt="" className="w-4 h-4 rounded" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                <img loading="lazy" decoding="async" src={faviconUrl(modal.link)} alt="" className="w-4 h-4 rounded" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
                 <span>{modal.source || getDomain(modal.link)}</span>
                 {modal.pubDate && <><span>&middot;</span><span>{formatNewsDate(modal.pubDate)}</span></>}
               </div>
@@ -166,9 +166,9 @@ function NewsCard({ item, lang, onOpen }: { item: NewsItem; lang: string; onOpen
     <button onClick={onOpen} className="w-full text-left flex gap-3 px-1 py-2.5 rounded-lg hover:bg-gray-800/50 transition group">
       <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800">
         {hasImg ? (
-          <img src={item.thumbnail} alt="" className="w-full h-full object-cover" onError={() => setImgErr(true)} />
+          <img loading="lazy" decoding="async" src={item.thumbnail} alt="" className="w-full h-full object-cover" onError={() => setImgErr(true)} />
         ) : (
-          <img src={faviconUrl(item.link)} alt="" className="w-full h-full object-contain p-2" onError={e => { (e.target as HTMLImageElement).src = '' }} />
+          <img loading="lazy" decoding="async" src={faviconUrl(item.link)} alt="" className="w-full h-full object-contain p-2" onError={e => { (e.target as HTMLImageElement).src = '' }} />
         )}
       </div>
       <div className="flex-1 min-w-0">

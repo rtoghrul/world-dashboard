@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { ArrowLeft, Gift } from 'lucide-react'
 import Header from '@/components/Header'
 import ErrorBoundary from '@/components/ErrorBoundary'
-import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
 import { useLang } from '@/lib/LanguageContext'
@@ -24,7 +23,6 @@ export default function BenefitsPage() {
 
   return (
     <div className="min-h-screen relative z-[1] bg-gray-950">
-      <CommandPalette />
       <Header />
 
       <main className="max-w-screen-2xl mx-auto px-5 py-6">

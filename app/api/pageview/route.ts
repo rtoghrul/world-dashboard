@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function POST() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cookieStore = cookies() as any
 
   const supabase = createServerClient(

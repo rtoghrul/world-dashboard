@@ -56,7 +56,7 @@ export default function HorizonWidget() {
               <button className="w-full text-left p-2 flex items-start gap-2" onClick={() => setExpanded(expanded === item.rank ? null : item.rank)}>
                 <span className="text-gray-600 text-xs w-5 mt-0.5 shrink-0">{item.rank}.</span>
                 {item.image ? (
-                  <img src={item.image} alt="" className="w-10 h-10 rounded-md object-cover shrink-0 bg-gray-800" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                  <img loading="lazy" decoding="async" src={item.image} alt="" className="w-10 h-10 rounded-md object-cover shrink-0 bg-gray-800" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
                 ) : (
                   <div className="w-10 h-10 rounded-md bg-gray-800 shrink-0 flex items-center justify-center text-base">
                     {item.source.includes('reddit') ? '🤖' : item.source.includes('telegram') ? '✈️' : item.source.includes('hackernews') ? '🔥' : '📰'}
