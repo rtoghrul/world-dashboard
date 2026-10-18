@@ -15,8 +15,8 @@ const footerSections: { title: L10n; links: { label: L10n; href: string }[] }[] 
     links: [
       { label: { en: 'Crypto', az: 'Kripto', ru: 'Крипто', de: 'Krypto', tr: 'Kripto', fr: 'Crypto', es: 'Cripto', zh: '加密货币', ar: 'العملات المشفرة', ja: '暗号資産', it: 'Crypto', pt: 'Cripto' }, href: '/section/markets/crypto-top' },
       { label: { en: 'Stocks', az: 'Səhmlər', ru: 'Акции', de: 'Aktien', tr: 'Hisseler', fr: 'Actions', es: 'Acciones', zh: '股票', ar: 'الأسهم', ja: '株式', it: 'Azioni', pt: 'Ações' }, href: '/section/markets/stocks-top' },
-      { label: { en: 'Bitcoin', ar: 'بيتكوين' }, href: '/section/markets/bitcoin' },
-      { label: { en: 'Ethereum', ar: 'إيثيريوم' }, href: '/section/markets/ethereum' },
+      { label: { en: 'Bitcoin', ar: 'بيتكوين', az: 'Bitcoin', ru: 'Bitcoin', de: 'Bitcoin', tr: 'Bitcoin', fr: 'Bitcoin', es: 'Bitcoin', zh: 'Bitcoin', ja: 'Bitcoin', it: 'Bitcoin', pt: 'Bitcoin' }, href: '/section/markets/bitcoin' },
+      { label: { en: 'Ethereum', ar: 'إيثيريوم', az: 'Ethereum', ru: 'Ethereum', de: 'Ethereum', tr: 'Ethereum', fr: 'Ethereum', es: 'Ethereum', zh: 'Ethereum', ja: 'Ethereum', it: 'Ethereum', pt: 'Ethereum' }, href: '/section/markets/ethereum' },
     ]
   },
   {
@@ -43,7 +43,7 @@ const footerSections: { title: L10n; links: { label: L10n; href: string }[] }[] 
       { label: uiAll('news.title'), href: '/news' },
       { label: uiAll('links.title'), href: '/links' },
       { label: uiAll('home.radar'), href: '/section/horizon/all' },
-      { label: { en: 'YouTube', ar: 'يوتيوب' }, href: '/section/viral/youtube' },
+      { label: { en: 'YouTube', ar: 'يوتيوب', az: 'YouTube', ru: 'YouTube', de: 'YouTube', tr: 'YouTube', fr: 'YouTube', es: 'YouTube', zh: 'YouTube', ja: 'YouTube', it: 'YouTube', pt: 'YouTube' }, href: '/section/viral/youtube' },
       { label: { en: 'Weather', az: 'Hava', ru: 'Погода', de: 'Wetter', tr: 'Hava durumu', fr: 'Météo', es: 'Tiempo', zh: '天气', ar: 'الطقس', ja: '天気', it: 'Meteo', pt: 'Clima' }, href: '/section/weather/current' },
       { label: { en: 'Travel', az: 'Səyahət', ru: 'Путешествия', de: 'Reisen', tr: 'Seyahat', fr: 'Voyages', es: 'Viajes', zh: '旅行', ar: 'السفر', ja: '旅行', it: 'Viaggi', pt: 'Viagens' }, href: '/section/travel/flight' },
       { label: { en: 'Germany 🇩🇪', az: 'Almaniya 🇩🇪', ru: 'Германия 🇩🇪', de: 'Deutschland 🇩🇪', tr: 'Almanya 🇩🇪', fr: 'Allemagne 🇩🇪', es: 'Alemania 🇩🇪', zh: '德国 🇩🇪', ar: 'ألمانيا 🇩🇪', ja: 'ドイツ 🇩🇪', it: 'Germania 🇩🇪', pt: 'Alemanha 🇩🇪' }, href: '/section/germany/behoerden' },

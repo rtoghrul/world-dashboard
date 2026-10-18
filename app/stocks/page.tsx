@@ -56,6 +56,19 @@ const COPY: Record<string, L> = {
   source: { en: 'Data from Yahoo Finance · Refreshes every 60s', az: 'Məlumat Yahoo Finance-dəndir · Hər 60 san yenilənir', ru: 'Данные Yahoo Finance · Обновление каждые 60 с', de: 'Daten von Yahoo Finance · Aktualisierung alle 60 s', tr: 'Veriler Yahoo Finance’tan · 60 sn’de bir yenilenir', fr: 'Données Yahoo Finance · Actualisation toutes les 60 s', es: 'Datos de Yahoo Finance · Se actualiza cada 60 s', zh: '数据来自 Yahoo Finance · 每 60 秒刷新', ar: 'البيانات من Yahoo Finance · تُحدَّث كل 60 ثانية', ja: 'データ: Yahoo Finance · 60秒ごとに更新', it: 'Dati da Yahoo Finance · Aggiornamento ogni 60 s', pt: 'Dados do Yahoo Finance · Atualiza a cada 60 s' },
 }
 
+// Sortable headers are real buttons (keyboard-accessible) and expose aria-sort.
+function SortHeader({ col, label, align = 'right', sortKey, sortAsc, onSort }: { col: SortKey; label: string; align?: 'left' | 'right'; sortKey: SortKey; sortAsc: boolean; onSort: (k: SortKey) => void }) {
+  const active = sortKey === col
+  return (
+    <th scope="col" aria-sort={active ? (sortAsc ? 'ascending' : 'descending') : 'none'} className={`px-4 py-2.5 ${align === 'left' ? 'text-left' : 'text-right'}`}>
+      <button type="button" onClick={() => onSort(col)} className="inline-flex items-center gap-1 select-none hover:text-ink-1 transition">
+        <span className={active ? 'text-emerald-400' : ''}>{label}</span>
+        {active && <span aria-hidden="true" className="text-xs">{sortAsc ? '↑' : '↓'}</span>}
+      </button>
+    </th>
+  )
+}
+
 export default function StocksPage() {
   const { lang } = useLang()
   const c = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
@@ -93,19 +106,6 @@ export default function StocksPage() {
       setSortAsc(false)
     }
     setPage(1)
-  }
-
-  // Sortable headers are real buttons (keyboard-accessible) and expose aria-sort.
-  function SortHeader({ col, label, align = 'right' }: { col: SortKey; label: string; align?: 'left' | 'right' }) {
-    const active = sortKey === col
-    return (
-      <th scope="col" aria-sort={active ? (sortAsc ? 'ascending' : 'descending') : 'none'} className={`px-4 py-2.5 ${align === 'left' ? 'text-left' : 'text-right'}`}>
-        <button type="button" onClick={() => toggleSort(col)} className="inline-flex items-center gap-1 select-none hover:text-ink-1 transition">
-          <span className={active ? 'text-emerald-400' : ''}>{label}</span>
-          {active && <span aria-hidden="true" className="text-xs">{sortAsc ? '↑' : '↓'}</span>}
-        </button>
-      </th>
-    )
   }
 
   return (
@@ -171,11 +171,11 @@ export default function StocksPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-ink-3 text-xs border-b border-line">
-                      <SortHeader col="symbol" label={c('symbol')} align="left" />
+                      <SortHeader sortKey={sortKey} sortAsc={sortAsc} onSort={toggleSort} col="symbol" label={c('symbol')} align="left" />
                       <th scope="col" className="px-4 py-2.5 text-left">{c('name')}</th>
-                      <SortHeader col="price" label={c('price')} />
-                      <SortHeader col="change" label={c('change')} />
-                      <SortHeader col="changePercent" label={c('changePct')} />
+                      <SortHeader sortKey={sortKey} sortAsc={sortAsc} onSort={toggleSort} col="price" label={c('price')} />
+                      <SortHeader sortKey={sortKey} sortAsc={sortAsc} onSort={toggleSort} col="change" label={c('change')} />
+                      <SortHeader sortKey={sortKey} sortAsc={sortAsc} onSort={toggleSort} col="changePercent" label={c('changePct')} />
                     </tr>
                   </thead>
                   <tbody>

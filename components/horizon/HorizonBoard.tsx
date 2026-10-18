@@ -29,7 +29,8 @@ type View = 'top' | 'latest' | 'saved'
 
 export default function HorizonBoard({ initialSource = 'all' }: { initialSource?: string }) {
   const { lang } = useLang()
-  const { data, error, isLoading, isValidating, mutate } = useSWR('/api/horizon', fetcher, { revalidateOnFocus: false, refreshInterval: 900000 })
+  const [edition, setEdition] = useState<'daily' | 'live'>('daily')
+  const { data, error, isLoading, isValidating, mutate } = useSWR(edition === 'live' ? '/api/horizon?live=1' : '/api/horizon', fetcher, { revalidateOnFocus: false, refreshInterval: edition === 'live' ? 600000 : 1800000, keepPreviousData: true })
   const [view, setView] = useState<View>('top')
   const [topic, setTopic] = useState<HorizonTopic | 'all'>('all')
   const [source, setSource] = useState(initialSource)
@@ -77,6 +78,15 @@ export default function HorizonBoard({ initialSource = 'all' }: { initialSource?
             <p className="text-sm text-ink-3 mt-1 max-w-xl">{ui('hz.subtitle', lang)}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs text-ink-3">
+            <div role="group" aria-label={ui('hz.title', lang)} className="inline-flex rounded-full border border-line p-0.5 bg-surface-2/50">
+              {(['daily', 'live'] as const).map(e => (
+                <button key={e} aria-pressed={edition === e} onClick={() => setEdition(e)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition ${edition === e ? 'bg-brand text-white' : 'text-ink-3 hover:text-ink-1'}`}>
+                  {e === 'live' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-400 mr-1.5 align-middle" aria-hidden="true" />}
+                  {ui(e === 'daily' ? 'hz.daily' : 'hz.live', lang)}
+                </button>
+              ))}
+            </div>
             {data && <span className="wd-chip pointer-events-none">{ui('hz.stories', lang, { n: data.items.length })}</span>}
             {sources.length > 0 && (
               <span className="wd-chip pointer-events-none"><span className={`w-1.5 h-1.5 rounded-full ${okCount === sources.length ? 'bg-emerald-400' : 'bg-amber-400'}`} aria-hidden="true" />{ui('hz.online', lang, { a: okCount, b: sources.length })}</span>

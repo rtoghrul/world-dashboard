@@ -6,17 +6,19 @@ export function generateStaticParams() {
   return factCategories.map(category => ({ id: category.id }))
 }
 
-export function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const category = getFactCategory(params.id)
   return pageMetadata(`/facts/${category.id}`, `${category.title} Facts — Mind-Blowing Facts`, category.description)
 }
 
-export default function DirectFactsCategoryPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string }
-  searchParams?: { page?: string }
-}) {
+export default async function DirectFactsCategoryPage(
+  props: {
+    params: Promise<{ id: string }>
+    searchParams?: Promise<{ page?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   return <FactsCategoryTranslated id={params.id} page={searchParams?.page} />
 }
