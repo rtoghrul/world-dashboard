@@ -41,17 +41,17 @@ const copy: Record<SupportedLang, Copy> = {
 
 const categoryNames: Record<string, Partial<Record<SupportedLang, string>>> = {
   astronomy: { en: 'Astronomy', az: 'Astronomiya', ru: 'Астрономия', de: 'Astronomie', tr: 'Astronomi', fr: 'Astronomie', es: 'Astronomía', zh: '天文学', ar: 'علم الفلك', ja: '天文学', it: 'Astronomia', pt: 'Astronomia' },
-  history: { en: 'History', az: 'Tarix', ru: 'История', de: 'Geschichte', tr: 'Tarih' },
-  human: { en: 'Human', az: 'İnsan', ru: 'Человек', de: 'Mensch', tr: 'İnsan' },
-  nature: { en: 'Nature', az: 'Təbiət', ru: 'Природа', de: 'Natur', tr: 'Doğa' },
-  animals: { en: 'Animals', az: 'Heyvanlar', ru: 'Животные', de: 'Tiere', tr: 'Hayvanlar' },
-  science: { en: 'Science', az: 'Elm', ru: 'Наука', de: 'Wissenschaft', tr: 'Bilim' },
-  ocean: { en: 'Ocean', az: 'Okean', ru: 'Океан', de: 'Ozean', tr: 'Okyanus' },
-  space: { en: 'Space', az: 'Kosmos', ru: 'Космос', de: 'Weltraum', tr: 'Uzay' },
-  earth: { en: 'Earth', az: 'Yer', ru: 'Земля', de: 'Erde', tr: 'Dünya' },
-  technology: { en: 'Technology', az: 'Texnologiya', ru: 'Технологии', de: 'Technologie', tr: 'Teknoloji' },
-  psychology: { en: 'Psychology', az: 'Psixologiya', ru: 'Психология', de: 'Psychologie', tr: 'Psikoloji' },
-  mysteries: { en: 'Mysteries', az: 'Sirlər', ru: 'Тайны', de: 'Mysterien', tr: 'Gizemler' },
+  history: { en: 'History', az: 'Tarix', ru: 'История', de: 'Geschichte', tr: 'Tarih', fr: 'Histoire', es: 'Historia', zh: '历史', ar: 'التاريخ', ja: '歴史', it: 'Storia', pt: 'História' },
+  human: { en: 'Human', az: 'İnsan', ru: 'Человек', de: 'Mensch', tr: 'İnsan', fr: 'Humain', es: 'Humano', zh: '人体', ar: 'الإنسان', ja: '人間', it: 'Umano', pt: 'Humano' },
+  nature: { en: 'Nature', az: 'Təbiət', ru: 'Природа', de: 'Natur', tr: 'Doğa', fr: 'Nature', es: 'Naturaleza', zh: '自然', ar: 'الطبيعة', ja: '自然', it: 'Natura', pt: 'Natureza' },
+  animals: { en: 'Animals', az: 'Heyvanlar', ru: 'Животные', de: 'Tiere', tr: 'Hayvanlar', fr: 'Animaux', es: 'Animales', zh: '动物', ar: 'الحيوانات', ja: '動物', it: 'Animali', pt: 'Animais' },
+  science: { en: 'Science', az: 'Elm', ru: 'Наука', de: 'Wissenschaft', tr: 'Bilim', fr: 'Science', es: 'Ciencia', zh: '科学', ar: 'العلوم', ja: '科学', it: 'Scienza', pt: 'Ciência' },
+  ocean: { en: 'Ocean', az: 'Okean', ru: 'Океан', de: 'Ozean', tr: 'Okyanus', fr: 'Océan', es: 'Océano', zh: '海洋', ar: 'المحيط', ja: '海', it: 'Oceano', pt: 'Oceano' },
+  space: { en: 'Space', az: 'Kosmos', ru: 'Космос', de: 'Weltraum', tr: 'Uzay', fr: 'Espace', es: 'Espacio', zh: '太空', ar: 'الفضاء', ja: '宇宙', it: 'Spazio', pt: 'Espaço' },
+  earth: { en: 'Earth', az: 'Yer', ru: 'Земля', de: 'Erde', tr: 'Dünya', fr: 'Terre', es: 'Tierra', zh: '地球', ar: 'الأرض', ja: '地球', it: 'Terra', pt: 'Terra' },
+  technology: { en: 'Technology', az: 'Texnologiya', ru: 'Технологии', de: 'Technologie', tr: 'Teknoloji', fr: 'Technologie', es: 'Tecnología', zh: '科技', ar: 'التكنولوجيا', ja: 'テクノロジー', it: 'Tecnologia', pt: 'Tecnologia' },
+  psychology: { en: 'Psychology', az: 'Psixologiya', ru: 'Психология', de: 'Psychologie', tr: 'Psikoloji', fr: 'Psychologie', es: 'Psicología', zh: '心理学', ar: 'علم النفس', ja: '心理学', it: 'Psicologia', pt: 'Psicologia' },
+  mysteries: { en: 'Mysteries', az: 'Sirlər', ru: 'Тайны', de: 'Mysterien', tr: 'Gizemler', fr: 'Mystères', es: 'Misterios', zh: '未解之谜', ar: 'الألغاز', ja: 'ミステリー', it: 'Misteri', pt: 'Mistérios' },
   'ancient-world': { en: 'Ancient World', az: 'Qədim dünya', ru: 'Древний мир', de: 'Antike Welt', tr: 'Antik dünya' },
   'weird-facts': { en: 'Weird Facts', az: 'Qəribə faktlar', ru: 'Странные факты', de: 'Seltsame Fakten', tr: 'Tuhaf faktlar' },
 }
@@ -144,7 +144,7 @@ export default function FactsCategoryTranslated({ id, page }: { id: string; page
   return (
     <div className="min-h-screen relative z-[1] w-full pb-20 md:pb-0">
       <Header />
-      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         <Link href="/facts" className="inline-flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 transition mb-5">
           <ArrowLeft className="w-3.5 h-3.5" /> {t.back}
         </Link>
@@ -180,18 +180,18 @@ export default function FactsCategoryTranslated({ id, page }: { id: string; page
         </section>
 
         <nav className="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Facts pagination">
-          <Link href={`/facts/${id}?page=${Math.max(1, currentPage - 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === 1 ? 'pointer-events-none border-white/[0.04] text-[#4a4a5e]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.previous}</Link>
+          <Link href={`/facts/${id}?page=${Math.max(1, currentPage - 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === 1 ? 'pointer-events-none border-white/[0.04] text-[#7c7c92]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.previous}</Link>
           {visiblePages.map((pageNumber, index) => {
             const previousPage = visiblePages[index - 1]
             const showDots = previousPage && pageNumber - previousPage > 1
             return (
               <span key={pageNumber} className="flex items-center gap-2">
-                {showDots && <span className="text-[#6b6b80]">...</span>}
+                {showDots && <span className="text-[#7c7c92]">...</span>}
                 <Link href={`/facts/${id}?page=${pageNumber}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === pageNumber ? 'border-indigo-400/40 bg-indigo-500/15 text-indigo-100' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{pageNumber}</Link>
               </span>
             )
           })}
-          <Link href={`/facts/${id}?page=${Math.min(totalPages, currentPage + 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === totalPages ? 'pointer-events-none border-white/[0.04] text-[#4a4a5e]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.next}</Link>
+          <Link href={`/facts/${id}?page=${Math.min(totalPages, currentPage + 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === totalPages ? 'pointer-events-none border-white/[0.04] text-[#7c7c92]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.next}</Link>
         </nav>
       </main>
       <Footer />

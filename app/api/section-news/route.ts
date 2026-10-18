@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { translateTexts } from '@/lib/translate'
+import { fetchWithTimeout } from '@/lib/http'
 
 export const revalidate = 600
 
@@ -206,7 +207,7 @@ function parseAtom(xml: string, sourceLabel: string): { title: string; link: str
 
 async function fetchFeed(url: string): Promise<{ title: string; link: string; pubDate: string; description: string; thumbnail: string; source: string }[]> {
   try {
-    const res = await fetch(url, {
+    const res = await fetchWithTimeout(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
       next: { revalidate: 600 },
     })

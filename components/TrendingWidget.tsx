@@ -48,7 +48,7 @@ export default function TrendingWidget() {
           <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
           <span className="live-dot" />
         </div>
-        <button onClick={fetchTrends} className="p-1.5 rounded-md hover:bg-white/[0.05] text-[#4a4a5e] hover:text-white transition">
+        <button onClick={fetchTrends} className="p-1.5 rounded-md hover:bg-white/[0.05] text-[#7c7c92] hover:text-white transition">
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
@@ -66,16 +66,16 @@ export default function TrendingWidget() {
         <div className="space-y-1.5 max-h-[280px] overflow-y-auto scrollbar-hide">
           {trends.slice(0, 10).map((t, i) => (
             <div key={i} className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/[0.03] transition group">
-              <span className="text-[10px] text-[#4a4a5e] font-mono w-4">{i + 1}</span>
-              <Hash className="w-3 h-3 text-[#4a4a5e]" />
+              <span className="text-[10px] text-[#7c7c92] font-mono w-4">{i + 1}</span>
+              <Hash className="w-3 h-3 text-[#7c7c92]" />
               <span className="text-white text-xs flex-1 truncate">{t.title}</span>
               <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${sourceColors[t.source]}`}>
                 {sourceLabels[t.source]}
               </span>
-              {t.volume && <span className="text-[10px] text-[#4a4a5e]">{t.volume}</span>}
+              {t.volume && <span className="text-[10px] text-[#7c7c92]">{t.volume}</span>}
               {t.url && (
                 <a href={t.url} target="_blank" rel="noopener" className="opacity-0 group-hover:opacity-100 transition">
-                  <ExternalLink className="w-3 h-3 text-[#4a4a5e]" />
+                  <ExternalLink className="w-3 h-3 text-[#7c7c92]" />
                 </a>
               )}
             </div>

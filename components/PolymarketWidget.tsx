@@ -40,7 +40,7 @@ export function MarketList({ markets, tr }: { markets: Market[]; tr: Record<stri
           <div key={market.id} className="px-5 py-3 hover:bg-gray-800/30 transition">
             <div className="flex items-start justify-between gap-2 mb-1.5">
               <p className="text-white text-xs font-medium line-clamp-2 flex-1">{market.question}</p>
-              <a href={`https://polymarket.com/event/${market.slug || market.id}`} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-indigo-400 transition flex-shrink-0">
+              <a href={`https://polymarket.com/event/${market.slug || market.id}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-indigo-400 transition flex-shrink-0">
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
@@ -53,7 +53,7 @@ export function MarketList({ markets, tr }: { markets: Market[]; tr: Record<stri
                 <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style={{ width: `${odds.yes}%` }} />
                 </div>
-                {vol && <p className="text-gray-600 text-xs mt-1">{tr.volume}: {vol}</p>}
+                {vol && <p className="text-gray-400 text-xs mt-1">{tr.volume}: {vol}</p>}
               </div>
             ) : (
               <div className="h-1 bg-gray-800 rounded-full" />
@@ -86,20 +86,20 @@ export default function PolymarketWidget() {
       >
         <div>
           <h2 className="text-white font-semibold text-sm">🎯 {tr.polymarket}</h2>
-          <p className="text-gray-500 text-xs">{tr.polymarketDesc}</p>
+          <p className="text-gray-400 text-xs">{tr.polymarketDesc}</p>
         </div>
         <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
           {!collapsed && (
             <>
               <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
-                <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+                <Search className="w-3 h-3 text-gray-400 flex-shrink-0" />
                 <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder={tr.search} className="bg-transparent text-white text-xs outline-none w-16 placeholder-gray-600" />
               </div>
               <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition flex-shrink-0">{tr.refresh}</button>
             </>
           )}
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+        <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
       </div>
 
       {/* Collapsed preview — show the top 2 markets so the section never looks empty */}
@@ -140,7 +140,7 @@ export default function PolymarketWidget() {
           ))}
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
           {!isLoading && !error && <MarketList markets={markets.slice(0, 5)} tr={tr} />}
-          {markets.length === 0 && !isLoading && !error && <div className="p-6 text-center text-gray-500 text-sm">{tr.noData}</div>}
+          {markets.length === 0 && !isLoading && !error && <div className="p-6 text-center text-gray-400 text-sm">{tr.noData}</div>}
           <div className="px-5 py-3 border-t border-gray-800/50">
             <Link href="/polymarket" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
               {tr.viewAll} <ArrowRight className="w-3 h-3" />

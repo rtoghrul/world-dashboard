@@ -40,7 +40,8 @@ Everything works without keys, using free public APIs. These optional variables 
 | Variable | Used for |
 | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Sign-in, the `/admin` page and page-view stats |
-| `NEXT_PUBLIC_SITE_URL` | Site URL sent with AI assistant requests |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL for metadata, sitemap and robots.txt (defaults to the vercel.app URL) |
+| `NEXT_PUBLIC_ADMIN_EMAILS` | Comma-separated emails allowed to open `/admin`. If unset, the original owner address in `lib/admin.ts` is used |
 | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` | The AI assistant |
 | `TMDB_API_KEY`, `TMDB_READ_ACCESS_TOKEN`, `OMDB_API_KEY` | Movies and series data |
 | `YOUTUBE_API_KEY` | YouTube trending |
@@ -51,10 +52,16 @@ Everything works without keys, using free public APIs. These optional variables 
 ```
 app/          Pages (App Router) and API routes under app/api/*
 components/   Widgets and UI components
-lib/          Translations, language/theme context, Supabase client, helpers
+lib/          Translations, menus, language/theme context, Supabase client, helpers
+              (http.ts: upstream timeouts, seo.ts: page metadata, admin.ts: admin allow-list)
 public/       Web manifest and service worker
 vercel.json   Daily cron jobs (Supabase keep-alive, Horizon refresh)
 ```
+
+## Security notes
+
+- `/admin` is gated in `middleware.ts` by `NEXT_PUBLIC_ADMIN_EMAILS`. The admin page reads data through the public Supabase key, so make sure row-level security on `profiles` and `page_views` only lets the admin read them.
+- Baseline security headers are set in `next.config.mjs`. There is no Content-Security-Policy yet because of the many third-party embeds.
 
 ## Deployment
 

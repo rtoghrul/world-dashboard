@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { STOCK_GROUPS } from '@/lib/stockGroups'
+import { fetchWithTimeout } from '@/lib/http'
 
 export const revalidate = 60
 
@@ -20,7 +21,7 @@ const SHORT_NAMES: Record<string, string> = {
 
 async function fetchQuote(symbol: string) {
   const encoded = encodeURIComponent(symbol)
-  const res = await fetch(
+  const res = await fetchWithTimeout(
     `https://query2.finance.yahoo.com/v8/finance/chart/${encoded}?range=1d&interval=1d`,
     { headers: { 'User-Agent': 'Mozilla/5.0' }, next: { revalidate: 60 } }
   )
@@ -49,6 +50,6 @@ export async function GET(req: Request) {
       .map(r => (r as PromiseFulfilledResult<Awaited<ReturnType<typeof fetchQuote>>>).value)
     return NextResponse.json(quotes)
   } catch {
-    return NextResponse.json({ error: 'Failed to fetch stock data' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch stock data' }, { status: 502 })
   }
 }

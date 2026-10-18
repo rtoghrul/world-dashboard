@@ -1,3 +1,4 @@
+import { fetchWithTimeout } from '@/lib/http'
 export type RssItem = {
   title: string
   link: string
@@ -57,7 +58,7 @@ export function parseRSS(xml: string, fallbackSource: string) {
 }
 
 export async function fetchRss(url: string, revalidateSeconds: number) {
-  const res = await fetch(url, {
+  const res = await fetchWithTimeout(url, {
     headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
     next: { revalidate: revalidateSeconds },
   })

@@ -43,14 +43,14 @@ export default function StocksWidget({ defaultExpanded = false }: { defaultExpan
           <BarChart2 className="w-4 h-4 text-emerald-400" />
           <div>
             <h2 className="text-white font-semibold text-sm">{tr.stocks}</h2>
-            <p className="text-gray-500 text-xs">{tr.stocksDesc}</p>
+            <p className="text-gray-400 text-xs">{tr.stocksDesc}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Link href="/stocks" onClick={e => e.stopPropagation()} className="flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 transition">
             View All <ArrowUpRight className="w-3 h-3" />
           </Link>
-          <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+          <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
         </div>
       </div>
 
@@ -76,14 +76,14 @@ export default function StocksWidget({ defaultExpanded = false }: { defaultExpan
       {/* Expanded content */}
       {!collapsed && (
         <div className="p-4 space-y-4">
-          {isLoading && <div className="p-6 text-center text-gray-500 animate-pulse text-sm">{tr.loading}</div>}
+          {isLoading && <div className="p-6 text-center text-gray-400 animate-pulse text-sm">{tr.loading}</div>}
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
 
           {data && (
             <>
               {/* Major Indices */}
               <div>
-                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">{tr.majorIndices}</p>
+                <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">{tr.majorIndices}</p>
                 <div className="grid grid-cols-3 gap-3">
                   {indices.map(q => {
                     const up = q.changePercent >= 0
@@ -103,11 +103,11 @@ export default function StocksWidget({ defaultExpanded = false }: { defaultExpan
 
               {/* Top Stocks */}
               <div>
-                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">{tr.topStocks}</p>
+                <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">{tr.topStocks}</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead>
-                      <tr className="text-gray-500">
+                      <tr className="text-gray-400">
                         <th className="px-3 py-1.5 text-left">Symbol</th>
                         <th className="px-3 py-1.5 text-left">Name</th>
                         <th className="px-3 py-1.5 text-right">{tr.price}</th>

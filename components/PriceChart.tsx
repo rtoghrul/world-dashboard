@@ -60,9 +60,9 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
   return (
     <div className="rounded-2xl bg-[#0a0a10] border border-white/[0.06] p-5">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-white font-semibold text-sm">{coinName} Price</h3>
+      <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-4">
+        <div className="min-w-0">
+          <h3 className="text-white font-semibold text-sm">{coinName}</h3>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-xl font-bold text-white">
               ${currentPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
@@ -74,12 +74,14 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
           </div>
         </div>
         {/* Time range selector */}
-        <div className="flex items-center gap-1 bg-white/[0.03] rounded-lg p-0.5 border border-white/[0.04]">
+        <div role="group" aria-label={`${coinName} chart range`} className="flex items-center gap-1 bg-white/[0.03] rounded-lg p-0.5 border border-white/[0.04]">
           {timeRanges.map(r => (
             <button
               key={r.days}
+              type="button"
+              aria-pressed={range === r.days}
               onClick={() => setRange(r.days)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition ${range === r.days ? 'bg-white/[0.08] text-white' : 'text-[#6b6b80] hover:text-white'}`}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition ${range === r.days ? 'bg-white/[0.08] text-white' : 'text-[#8b8b9e] hover:text-white'}`}
             >
               {r.label}
             </button>
@@ -106,7 +108,7 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
                 dataKey="time"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#4a4a5a', fontSize: 10 }}
+                tick={{ fill: '#7c7c92', fontSize: 10 }}
                 interval="preserveStartEnd"
                 minTickGap={50}
               />
@@ -114,7 +116,7 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
                 domain={['auto', 'auto']}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#4a4a5a', fontSize: 10 }}
+                tick={{ fill: '#7c7c92', fontSize: 10 }}
                 width={60}
                 tickFormatter={(v) => `$${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v.toFixed(0)}`}
               />

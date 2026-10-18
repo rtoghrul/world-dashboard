@@ -1,8 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { isAdminEmail } from '@/lib/admin'
 
-const ADMIN_EMAIL = 'eagleeye385@gmail.com'
 const PUBLIC_PATHS = ['/login', '/register']
 
 export async function middleware(request: NextRequest) {
@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Site is public; only /admin requires the admin account.
-  if (pathname === '/admin' && user?.email !== ADMIN_EMAIL) {
+  if (pathname === '/admin' && !isAdminEmail(user?.email)) {
     return NextResponse.redirect(new URL(user ? '/' : '/login', request.url))
   }
 

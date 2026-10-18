@@ -38,12 +38,12 @@ export default function NewsModal({ item, onClose }: { item: ModalItem; onClose:
         <div className="p-5">
           <div className="flex items-start justify-between gap-3 mb-3">
             <h2 className="text-white font-semibold text-sm leading-snug">{item.title}</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-white transition flex-shrink-0">
+            <button onClick={onClose} className="text-gray-400 hover:text-white transition flex-shrink-0">
               <X className="w-4 h-4" />
             </button>
           </div>
           <p className="text-gray-400 text-xs leading-relaxed mb-4">{item.description || '—'}</p>
-          <div className="flex items-center gap-2 text-gray-600 text-xs mb-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-4">
             <span>{item.source}</span>
             {item.pubDate && (
               <>

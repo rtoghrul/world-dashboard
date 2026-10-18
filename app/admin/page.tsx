@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { isAdminEmail } from '@/lib/admin'
 
 interface Profile { id: string; email: string; created_at: string }
 
@@ -16,7 +17,7 @@ export default function AdminPage() {
     const load = async () => {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user || user.email !== 'eagleeye385@gmail.com') {
+      if (!user || !isAdminEmail(user.email)) {
         router.push('/')
         return
       }
@@ -46,7 +47,7 @@ export default function AdminPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <main id="main-content" className="min-h-screen bg-gray-950 p-6">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -81,18 +82,18 @@ export default function AdminPage() {
             <h2 className="text-white font-medium">İstifadəçilər</h2>
           </div>
           {profiles.length === 0 ? (
-            <p className="text-gray-500 text-sm p-5">Hələ ki istifadəçi yoxdur.</p>
+            <p className="text-gray-400 text-sm p-5">Hələ ki istifadəçi yoxdur.</p>
           ) : (
             <div className="divide-y divide-gray-800">
               {profiles.map(p => (
                 <div key={p.id} className="px-5 py-3 flex items-center justify-between">
                   <div>
                     <p className="text-white text-sm">{p.email}</p>
-                    <p className="text-gray-500 text-xs mt-0.5">
+                    <p className="text-gray-400 text-xs mt-0.5">
                       {new Date(p.created_at).toLocaleDateString('az-AZ')}
                     </p>
                   </div>
-                  {p.email === 'eagleeye385@gmail.com' && (
+                  {isAdminEmail(p.email) && (
                     <span className="text-xs bg-indigo-600/20 text-indigo-400 px-2 py-0.5 rounded-full">Admin</span>
                   )}
                 </div>
@@ -101,6 +102,6 @@ export default function AdminPage() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   )
 }

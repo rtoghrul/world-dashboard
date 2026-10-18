@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { fetchWithTimeout } from '@/lib/http'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 300
@@ -6,7 +7,7 @@ export const revalidate = 300
 async function getGoogleTrends() {
   try {
     // The old /trends/trendingsearches/daily/rss endpoint was discontinued (404)
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       'https://trends.google.com/trending/rss?geo=US',
       { next: { revalidate: 300 } }
     )
@@ -26,7 +27,7 @@ async function getGoogleTrends() {
 
 async function getRedditTrending() {
   try {
-    const res = await fetch('https://www.reddit.com/r/all/hot.json?limit=5', {
+    const res = await fetchWithTimeout('https://www.reddit.com/r/all/hot.json?limit=5', {
       headers: { 'User-Agent': 'WorldDashboard/1.0' },
       next: { revalidate: 300 },
     })

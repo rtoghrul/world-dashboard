@@ -4,18 +4,35 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import { ArrowLeft, Search } from 'lucide-react'
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import MobileBottomNav from '@/components/MobileBottomNav'
 import { CryptoTable, Coin } from '@/components/CryptoWidget'
 import { useLang } from '@/lib/LanguageContext'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = async (url: string) => {
+  const r = await fetch(url)
+  if (!r.ok) throw new Error(`HTTP ${r.status}`)
+  const d = await r.json()
+  if (!Array.isArray(d)) throw new Error('Unexpected response')
+  return d
+}
+
+const COPY: Record<string, Record<string, string>> = {
+  title: { en: 'Crypto Markets', az: 'Kripto bazarları', ru: 'Криптовалютные рынки', de: 'Kryptomärkte', tr: 'Kripto Piyasaları', fr: 'Marchés crypto', es: 'Mercados cripto', zh: '加密市场', ar: 'أسواق العملات المشفرة', ja: '暗号資産市場', it: 'Mercati crypto', pt: 'Mercados cripto' },
+  search: { en: 'Search coins', az: 'Koin axtar', ru: 'Поиск монет', de: 'Coins suchen', tr: 'Coin ara', fr: 'Rechercher des cryptos', es: 'Buscar monedas', zh: '搜索币种', ar: 'ابحث عن عملة', ja: '銘柄を検索', it: 'Cerca monete', pt: 'Buscar moedas' },
+  back: { en: 'Back to home', az: 'Ana səhifəyə', ru: 'На главную', de: 'Zur Startseite', tr: 'Ana sayfaya dön', fr: "Retour à l'accueil", es: 'Volver al inicio', zh: '返回首页', ar: 'العودة للرئيسية', ja: 'ホームへ戻る', it: 'Torna alla home', pt: 'Voltar ao início' },
+  pages: { en: 'Pages', az: 'Səhifələr', ru: 'Страницы', de: 'Seiten', tr: 'Sayfalar', fr: 'Pages', es: 'Páginas', zh: '分页', ar: 'الصفحات', ja: 'ページ', it: 'Pagine', pt: 'Páginas' },
+  retry: { en: 'Try again', az: 'Yenidən cəhd et', ru: 'Повторить', de: 'Erneut versuchen', tr: 'Tekrar dene', fr: 'Réessayer', es: 'Reintentar', zh: '重试', ar: 'إعادة المحاولة', ja: '再試行', it: 'Riprova', pt: 'Tentar novamente' },
+}
 const PER_PAGE = 20
 
 export default function CryptoPage() {
-  const { tr } = useLang()
+  const { lang, tr } = useLang()
+  const c = (k: string) => COPY[k][lang] || COPY[k].en
   const [page, setPage] = useState(1)
   const [query, setQuery] = useState('')
 
-  const { data, error, isLoading } = useSWR<Coin[]>(
+  const { data, error, isLoading, mutate } = useSWR<Coin[]>(
     `/api/crypto?per_page=${PER_PAGE}&page=${page}`,
     fetcher,
     { refreshInterval: 60000 }
@@ -28,41 +45,48 @@ export default function CryptoPage() {
   const totalPages = 5
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-gray-950 flex flex-col">
       <Header />
-      <main className="max-w-screen-xl mx-auto px-4 py-6">
-        <div className="flex items-center gap-3 mb-5">
-          <Link href="/" className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
-            <ArrowLeft className="w-4 h-4" />
+      <main id="main-content" className="max-w-screen-xl w-full mx-auto px-4 py-6 pb-24 md:pb-6 flex-1">
+        <div className="flex flex-wrap items-center gap-3 mb-5">
+          <Link href="/" aria-label={c('back')} className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           </Link>
           <div>
-            <h1 className="text-white font-bold text-xl">₿ Crypto Markets</h1>
-            <p className="text-gray-500 text-xs">{tr.cryptoDesc}</p>
+            <h1 className="text-white font-bold text-xl">₿ {c('title')}</h1>
+            <p className="text-gray-400 text-xs">{tr.cryptoDesc}</p>
           </div>
-          <div className="ml-auto flex items-center gap-1.5 bg-gray-800 rounded-lg px-3 py-2">
-            <Search className="w-3.5 h-3.5 text-gray-500" />
+          <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-1.5 bg-gray-800 rounded-lg px-3 py-2">
+            <Search className="w-3.5 h-3.5 text-gray-400" aria-hidden="true" />
             <input
-              type="text"
+              type="search"
+              aria-label={c('search')}
               value={query}
               onChange={e => { setQuery(e.target.value); setPage(1) }}
               placeholder="Bitcoin, ETH..."
-              className="bg-transparent text-white text-sm outline-none w-36 placeholder-gray-600"
+              className="bg-transparent text-white text-sm outline-none flex-1 sm:w-36 placeholder-gray-400"
             />
           </div>
         </div>
 
         <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-          {isLoading && <div className="p-12 text-center text-gray-500 animate-pulse">{tr.loading}</div>}
-          {error && <div className="p-12 text-center text-red-400">{tr.error}</div>}
+          {isLoading && <div className="p-12 text-center text-gray-400 animate-pulse">{tr.loading}</div>}
+          {error && (
+            <div role="alert" className="p-12 text-center">
+              <p className="text-red-400">{tr.error}</p>
+              <button onClick={() => mutate()} className="mt-3 px-4 py-2 rounded-lg bg-gray-800 text-gray-200 text-sm hover:bg-gray-700">{c('retry')}</button>
+            </div>
+          )}
           {data && !error && <CryptoTable coins={filtered} />}
         </div>
 
         {!query && (
-          <div className="flex items-center justify-center gap-1 mt-5">
+          <nav aria-label={c('pages')} className="flex items-center justify-center gap-1 mt-5">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
               <button
                 key={p}
                 onClick={() => setPage(p)}
+                aria-current={page === p ? 'page' : undefined}
                 className={`w-8 h-8 rounded-lg text-sm font-medium transition ${
                   page === p ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
                 }`}
@@ -70,9 +94,11 @@ export default function CryptoPage() {
                 {p}
               </button>
             ))}
-          </div>
+          </nav>
         )}
       </main>
+      <Footer />
+      <MobileBottomNav />
     </div>
   )
 }

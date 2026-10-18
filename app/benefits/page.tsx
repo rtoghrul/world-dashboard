@@ -25,7 +25,7 @@ export default function BenefitsPage() {
     <div className="min-h-screen relative z-[1] bg-gray-950">
       <Header />
 
-      <main className="max-w-screen-2xl mx-auto px-5 py-6">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-5 py-6">
         <div className="flex items-center gap-3 mb-6 animate-slide-up">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] hover:border-amber-500/20 transition-all">
             <ArrowLeft className="w-5 h-5 text-white/80" />
@@ -35,11 +35,11 @@ export default function BenefitsPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold gradient-text-static">{t.title}</h1>
-            <p className="text-xs text-[#6b6b80]">{t.subtitle}</p>
+            <p className="text-xs text-[#7c7c92]">{t.subtitle}</p>
           </div>
         </div>
 
-        <ErrorBoundary fallbackMessage="Benefits failed to load. Please try refreshing the page.">
+        <ErrorBoundary>
           <BenefitsWidget section="all" />
         </ErrorBoundary>
       </main>

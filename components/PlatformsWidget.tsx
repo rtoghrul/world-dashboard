@@ -6,24 +6,24 @@ import { ExternalLink, Store, ShoppingBag, Package, Truck, Cpu, CircleDot, Home,
 import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
-  title: { en: 'Online Platforms — Germany 🇩🇪', az: 'Onlayn Platformalar — Almaniya 🇩🇪', ru: 'Онлайн-платформы — Германия 🇩🇪', de: 'Online-Plattformen — Deutschland 🇩🇪', tr: 'Online Platformlar — Almanya 🇩🇪' },
-  subtitle: { en: 'All platforms delivering to Germany (domestic & international)', az: 'Almaniyaya çatdırma edən bütün platformalar', ru: 'Все платформы с доставкой в Германию', de: 'Alle Plattformen mit Lieferung nach Deutschland', tr: 'Almanya’ya teslimat yapan tüm platformlar' },
-  visit: { en: 'Visit', az: 'Keç', ru: 'Перейти', de: 'Besuchen', tr: 'Git' },
-  all: { en: 'All', az: 'Hamısı', ru: 'Все', de: 'Alle', tr: 'Tümü' },
-  delivery: { en: 'Delivers to DE', az: 'DE-yə çatdırır', ru: 'Доставка в DE', de: 'Lieferung nach DE', tr: 'DE’ye teslimat' },
-  free_shipping: { en: 'Free shipping', az: 'Pulsuz çatdırılma', ru: 'Бесплатная доставка', de: 'Kostenloser Versand', tr: 'Ücretsiz kargo' },
+  title: { en: 'Online Platforms — Germany 🇩🇪', az: 'Onlayn Platformalar — Almaniya 🇩🇪', ru: 'Онлайн-платформы — Германия 🇩🇪', de: 'Online-Plattformen — Deutschland 🇩🇪', tr: 'Online Platformlar — Almanya 🇩🇪', fr: 'Plateformes en ligne — Allemagne 🇩🇪', es: 'Plataformas online — Alemania 🇩🇪', zh: '在线平台 — 德国 🇩🇪', ar: 'المنصات الإلكترونية — ألمانيا 🇩🇪', ja: 'オンライン通販 — ドイツ 🇩🇪', it: 'Piattaforme online — Germania 🇩🇪', pt: 'Plataformas online — Alemanha 🇩🇪' },
+  subtitle: { en: 'All platforms delivering to Germany (domestic & international)', az: 'Almaniyaya çatdırma edən bütün platformalar', ru: 'Все платформы с доставкой в Германию', de: 'Alle Plattformen mit Lieferung nach Deutschland', tr: 'Almanya’ya teslimat yapan tüm platformlar', fr: 'Toutes les plateformes livrant en Allemagne (nationales & internationales)', es: 'Todas las plataformas con envío a Alemania (nacionales e internacionales)', zh: '所有可配送至德国的平台（国内与国际）', ar: 'جميع المنصات التي توصل إلى ألمانيا (محلية ودولية)', ja: 'ドイツに配送する全サイト（国内・海外）', it: 'Tutte le piattaforme che consegnano in Germania (nazionali e internazionali)', pt: 'Todas as plataformas que entregam na Alemanha (nacionais e internacionais)' },
+  visit: { en: 'Visit', az: 'Keç', ru: 'Перейти', de: 'Besuchen', tr: 'Git', fr: 'Visiter', es: 'Visitar', zh: '访问', ar: 'زيارة', ja: '開く', it: 'Visita', pt: 'Visitar' },
+  all: { en: 'All', az: 'Hamısı', ru: 'Все', de: 'Alle', tr: 'Tümü', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' },
+  delivery: { en: 'Delivers to DE', az: 'DE-yə çatdırır', ru: 'Доставка в DE', de: 'Lieferung nach DE', tr: 'DE’ye teslimat', fr: 'Livre en DE', es: 'Envía a DE', zh: '配送至德国', ar: 'يوصل إلى ألمانيا', ja: 'ドイツへ配送', it: 'Consegna in DE', pt: 'Entrega na DE' },
+  free_shipping: { en: 'Free shipping', az: 'Pulsuz çatdırılma', ru: 'Бесплатная доставка', de: 'Kostenloser Versand', tr: 'Ücretsiz kargo', fr: 'Livraison gratuite', es: 'Envío gratis', zh: '免运费', ar: 'شحن مجاني', ja: '送料無料', it: 'Spedizione gratuita', pt: 'Frete grátis' },
 }
 
 const categories = [
-  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü' }, icon: Store },
-  { id: 'general', label: { en: 'General', az: 'Ümumi', de: 'Allgemein', ru: 'Общие', tr: 'Genel' }, icon: ShoppingBag },
-  { id: 'clothes', label: { en: 'Clothing', az: 'Geyim', de: 'Kleidung', ru: 'Одежда', tr: 'Giyim' }, icon: ShoppingBag },
-  { id: 'pharma', label: { en: 'Pharmacy', az: 'Aptek', de: 'Apotheke', ru: 'Аптека', tr: 'Eczane' }, icon: Package },
-  { id: 'food', label: { en: 'Food & Grocery', az: 'Ərzaq', de: 'Lebensmittel', ru: 'Продукты', tr: 'Market' }, icon: Truck },
-  { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', de: 'Elektronik', ru: 'Электроника', tr: 'Elektronik' }, icon: Cpu },
-  { id: 'autoparts', label: { en: 'Auto Parts', az: 'Maşın hissələri', de: 'Autoteile', ru: 'Автозапчасти', tr: 'Oto Parça' }, icon: CircleDot },
-  { id: 'furniture', label: { en: 'Furniture', az: 'Mebel', de: 'Möbel', ru: 'Мебель', tr: 'Mobilya' }, icon: Home },
-  { id: 'international', label: { en: 'International', az: 'Beynəlxalq', de: 'International', ru: 'Международные', tr: 'Uluslararası' }, icon: Globe2 },
+  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' }, icon: Store },
+  { id: 'general', label: { en: 'General', az: 'Ümumi', de: 'Allgemein', ru: 'Общие', tr: 'Genel', fr: 'Général', es: 'General', zh: '综合', ar: 'عام', ja: '総合', it: 'Generale', pt: 'Geral' }, icon: ShoppingBag },
+  { id: 'clothes', label: { en: 'Clothing', az: 'Geyim', de: 'Kleidung', ru: 'Одежда', tr: 'Giyim', fr: 'Vêtements', es: 'Ropa', zh: '服装', ar: 'الملابس', ja: '衣料品', it: 'Abbigliamento', pt: 'Roupas' }, icon: ShoppingBag },
+  { id: 'pharma', label: { en: 'Pharmacy', az: 'Aptek', de: 'Apotheke', ru: 'Аптека', tr: 'Eczane', fr: 'Pharmacie', es: 'Farmacia', zh: '药店', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' }, icon: Package },
+  { id: 'food', label: { en: 'Food & Grocery', az: 'Ərzaq', de: 'Lebensmittel', ru: 'Продукты', tr: 'Market', fr: 'Alimentation', es: 'Alimentación', zh: '食品杂货', ar: 'البقالة', ja: '食品・日用品', it: 'Alimentari', pt: 'Mercado' }, icon: Truck },
+  { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', de: 'Elektronik', ru: 'Электроника', tr: 'Elektronik', fr: 'Électronique', es: 'Electrónica', zh: '电子产品', ar: 'الإلكترونيات', ja: '家電', it: 'Elettronica', pt: 'Eletrônicos' }, icon: Cpu },
+  { id: 'autoparts', label: { en: 'Auto Parts', az: 'Maşın hissələri', de: 'Autoteile', ru: 'Автозапчасти', tr: 'Oto Parça', fr: 'Pièces auto', es: 'Recambios', zh: '汽车配件', ar: 'قطع غيار السيارات', ja: '自動車部品', it: 'Ricambi auto', pt: 'Autopeças' }, icon: CircleDot },
+  { id: 'furniture', label: { en: 'Furniture', az: 'Mebel', de: 'Möbel', ru: 'Мебель', tr: 'Mobilya', fr: 'Meubles', es: 'Muebles', zh: '家具', ar: 'الأثاث', ja: '家具', it: 'Mobili', pt: 'Móveis' }, icon: Home },
+  { id: 'international', label: { en: 'International', az: 'Beynəlxalq', de: 'International', ru: 'Международные', tr: 'Uluslararası', fr: 'International', es: 'Internacional', zh: '国际', ar: 'دولية', ja: '海外', it: 'Internazionale', pt: 'Internacional' }, icon: Globe2 },
 ]
 
 interface Platform {
@@ -146,7 +146,7 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       {/* Search */}
       <div className="relative mb-3">
@@ -164,7 +164,7 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
           const Icon = c.icon
           return (
             <button key={c.id} onClick={() => setCategory(c.id)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${category === c.id ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${category === c.id ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
               {pickLabel(c.label, lang)}
             </button>
@@ -181,7 +181,7 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
               <h3 className="font-semibold text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400">{p.name}</h3>
               <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
             <div className="flex items-center justify-between flex-wrap gap-1">
               <span className="text-[10px] text-gray-400">{p.origin}</span>
               {p.freeShipping && (

@@ -114,7 +114,7 @@ function ToolsSection({ toolKey }: { toolKey: string }) {
   if (!tools.length) return null
   return (
     <div>
-      <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+      <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
         <Wrench className="w-3 h-3" /> Useful Tools
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -123,9 +123,9 @@ function ToolsSection({ toolKey }: { toolKey: string }) {
             className={`flex items-center justify-between p-3 rounded-xl border transition hover:opacity-80 group ${t.bg}`}>
             <div>
               <p className={`text-xs font-semibold ${t.color}`}>{t.name}</p>
-              <p className="text-gray-500 text-xs mt-0.5">{t.desc}</p>
+              <p className="text-gray-400 text-xs mt-0.5">{t.desc}</p>
             </div>
-            <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0" />
+            <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-gray-400 flex-shrink-0" />
           </a>
         ))}
       </div>
@@ -149,11 +149,11 @@ function ScienceArticleCard({ article }: { article: ModalItem }) {
         )}
         <div className="flex-1 min-w-0">
           <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</h3>
-          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{article.description}</p>
+          <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">{article.description}</p>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-gray-600 text-xs">{article.source || 'ScienceDaily'}</span>
-            <span className="text-gray-700 text-xs">·</span>
-            <span className="text-gray-600 text-xs">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''}</span>
+            <span className="text-gray-400 text-xs">{article.source || 'ScienceDaily'}</span>
+            <span className="text-gray-400 text-xs">·</span>
+            <span className="text-gray-400 text-xs">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''}</span>
           </div>
         </div>
       </button>
@@ -212,10 +212,10 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
           <GraduationCap className="w-4 h-4 text-violet-400" />
           <div>
             <h2 className="text-white font-semibold text-sm">{tr.education}</h2>
-            <p className="text-gray-500 text-xs">{tr.educationDesc}</p>
+            <p className="text-gray-400 text-xs">{tr.educationDesc}</p>
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+        <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
       </div>
 
       {/* Collapsed preview */}
@@ -226,7 +226,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
               {s.emoji} {s.label}
             </span>
           ))}
-          <span className="text-gray-600 text-xs">· Engineering &amp; more</span>
+          <span className="text-gray-400 text-xs">· Engineering &amp; more</span>
         </div>
       )}
 
@@ -280,7 +280,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
 
               {/* Latest Research News */}
               <div>
-                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <BookOpen className="w-3 h-3" /> {tr.latestResearch} — {currentSubject.emoji} {currentSubject.label}
                 </p>
                 <div className="space-y-2">
@@ -314,7 +314,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
                   >
                     <div className="flex items-center justify-between gap-2">
                       {topic.icon}
-                      <ChevronDown className={`w-3 h-3 text-gray-500 group-hover:text-gray-300 flex-shrink-0 transition-transform duration-200 ${activeEngTopic === topic.id ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-3 h-3 text-gray-400 group-hover:text-gray-300 flex-shrink-0 transition-transform duration-200 ${activeEngTopic === topic.id ? 'rotate-180' : ''}`} />
                     </div>
                     <p className="text-white text-sm font-semibold mt-2">{topic.title}</p>
                     <p className="text-gray-400 text-xs mt-1 line-clamp-2">{topic.desc}</p>
@@ -344,7 +344,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
 
           {/* Free Courses */}
           <div>
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <GraduationCap className="w-3 h-3" /> {tr.freeCourses}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -358,9 +358,9 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
                 >
                   <div>
                     <p className={`text-xs font-semibold ${c.color}`}>{c.name}</p>
-                    <p className="text-gray-500 text-xs mt-0.5">{c.desc}</p>
+                    <p className="text-gray-400 text-xs mt-0.5">{c.desc}</p>
                   </div>
-                  <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400 flex-shrink-0" />
+                  <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-gray-400 flex-shrink-0" />
                 </a>
               ))}
             </div>

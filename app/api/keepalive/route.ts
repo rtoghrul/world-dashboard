@@ -13,8 +13,11 @@ export async function GET() {
   try {
     const supabase = createClient(url, key)
     const { error } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
-    return NextResponse.json({ ok: !error, at: new Date().toISOString(), error: error?.message ?? null })
+    if (error) console.error('keepalive: supabase error', error.message)
+    return NextResponse.json({ ok: !error, at: new Date().toISOString() }, { status: error ? 502 : 200 })
   } catch (err) {
-    return NextResponse.json({ ok: false, error: err instanceof Error ? err.message : 'unknown' }, { status: 500 })
+    // Log details server-side; don't echo internal error text to public callers.
+    console.error('keepalive failed', err)
+    return NextResponse.json({ ok: false }, { status: 502 })
   }
 }
