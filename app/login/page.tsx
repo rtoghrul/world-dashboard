@@ -40,7 +40,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-gray-950 text-white">
+    <main id="main-content" className="min-h-screen overflow-hidden bg-gray-950 text-white">
       <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative flex items-center px-6 py-12 sm:px-10 lg:px-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(79,70,229,0.28),transparent_32%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.16),transparent_28%),linear-gradient(135deg,rgba(15,23,42,0.9),rgba(3,7,18,1))]" />
@@ -86,7 +86,7 @@ export default function LoginPage() {
               <div>
                 <label htmlFor="email" className="mb-1 block text-sm text-gray-300">{tr.authEmail}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/30">
-                  <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                  <Mail className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
                   <input
                     id="email"
                     name="email"
@@ -96,7 +96,7 @@ export default function LoginPage() {
                     required
                     autoComplete="email"
                     spellCheck={false}
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-600"
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-400"
                     placeholder="name@example.com"
                   />
                 </div>
@@ -104,7 +104,7 @@ export default function LoginPage() {
               <div>
                 <label htmlFor="password" className="mb-1 block text-sm text-gray-300">{tr.authPassword}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/30">
-                  <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                  <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
                   <input
                     id="password"
                     name="password"
@@ -113,7 +113,7 @@ export default function LoginPage() {
                     onChange={e => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-600"
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-400"
                     placeholder="••••••••"
                   />
                 </div>
@@ -126,7 +126,7 @@ export default function LoginPage() {
               >
                 {loading ? tr.authLoading : tr.authSubmitLogin}
               </button>
-              <p className="text-center text-xs text-gray-500">
+              <p className="text-center text-xs text-gray-400">
                 {tr.authNoAccount}{' '}
                 <Link href="/register" className="font-medium text-indigo-300 hover:text-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">{tr.authRegister}</Link>
               </p>

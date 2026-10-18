@@ -40,7 +40,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-gray-950 text-white">
+    <main id="main-content" className="min-h-screen overflow-hidden bg-gray-950 text-white">
       <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative flex items-center px-6 py-12 sm:px-10 lg:px-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(79,70,229,0.28),transparent_32%),radial-gradient(circle_at_80%_10%,rgba(16,185,129,0.16),transparent_28%),linear-gradient(135deg,rgba(15,23,42,0.9),rgba(3,7,18,1))]" />
@@ -86,7 +86,7 @@ export default function RegisterPage() {
               <div>
                 <label htmlFor="email" className="mb-1 block text-sm text-gray-300">{tr.authEmail}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
-                  <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                  <Mail className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
                   <input
                     id="email"
                     name="email"
@@ -96,7 +96,7 @@ export default function RegisterPage() {
                     required
                     autoComplete="email"
                     spellCheck={false}
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-600"
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-400"
                     placeholder="name@example.com"
                   />
                 </div>
@@ -104,7 +104,7 @@ export default function RegisterPage() {
               <div>
                 <label htmlFor="password" className="mb-1 block text-sm text-gray-300">{tr.authPasswordMin}</label>
                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
-                  <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                  <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
                   <input
                     id="password"
                     name="password"
@@ -114,7 +114,7 @@ export default function RegisterPage() {
                     required
                     minLength={6}
                     autoComplete="new-password"
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-600"
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-400"
                     placeholder="••••••••"
                   />
                 </div>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
               >
                 {loading ? tr.authLoading : tr.authSubmitRegister}
               </button>
-              <p className="text-center text-xs text-gray-500">
+              <p className="text-center text-xs text-gray-400">
                 {tr.authHaveAccount}{' '}
                 <Link href="/login" className="font-medium text-emerald-300 hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">{tr.authLogin}</Link>
               </p>

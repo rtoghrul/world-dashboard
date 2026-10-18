@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo'
 import Link from 'next/link'
 import { ArrowLeft, Sparkles } from 'lucide-react'
 import Header from '@/components/Header'
@@ -11,10 +12,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { id: string } }) {
   const category = getFactCategory(params.id)
-  return {
-    title: `${category.title} Facts — Mind-Blowing Facts`,
-    description: category.description,
-  }
+  return pageMetadata(`/facts/${category.id}`, `${category.title} Facts — Mind-Blowing Facts`, category.description)
 }
 
 export default function FactsCategoryPage({ params }: { params: { id: string } }) {
@@ -25,7 +23,7 @@ export default function FactsCategoryPage({ params }: { params: { id: string } }
     <div className="min-h-screen relative z-[1] w-full pb-20 md:pb-0">
       <Header />
 
-      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         <div className="mb-6">
           <Link href="/" className="inline-flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 transition mb-5">
             <ArrowLeft className="w-3.5 h-3.5" /> Back to dashboard

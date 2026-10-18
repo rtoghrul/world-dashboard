@@ -7,6 +7,8 @@ import AIAssistant from '@/components/AIAssistant'
 import CommandPalette from '@/components/CommandPalette'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import ScrollProgress from '@/components/ScrollProgress'
+import SkipLink from '@/components/SkipLink'
+import { SITE_URL, SITE_NAME } from '@/lib/site'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' })
@@ -16,7 +18,8 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://world-dashboard-delta-umber.vercel.app'),
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: { default: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment', template: '%s | World Dashboard' },
   description: 'Your all-in-one hub: AI tools directory, crypto markets, global news, free software downloads, movies, viral content, education and more. Updated in real-time.',
   manifest: '/manifest.json',
@@ -31,13 +34,15 @@ export const metadata: Metadata = {
     title: 'World Dashboard — AI Tools, Crypto, News, Software, Entertainment',
     description: 'Your all-in-one hub: AI tools, crypto markets, global news, free software, movies, viral content and more.',
     images: [{ url: '/api/og', width: 1200, height: 630 }],
-    url: 'https://world-dashboard-delta-umber.vercel.app',
-    siteName: 'World Dashboard',
+    type: 'website',
+    url: '/',
+    siteName: SITE_NAME,
   },
   twitter: {
     card: 'summary_large_image',
     title: 'World Dashboard — Everything in One Place',
     description: 'AI Tools, Crypto, News, Free Software, Movies, Stocks — all updated real-time.',
+    images: ['/api/og'],
   },
 }
 
@@ -52,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} min-h-screen`} style={{ background: '#050810', minHeight: '100vh' }}>
         <ThemeProvider>
           <LanguageProvider>
+            <SkipLink />
             {children}
             <AIAssistant />
             <CommandPalette />

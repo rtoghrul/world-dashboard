@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Sparkles, Clock, TrendingUp, TrendingDown, Newspaper, Cloud, Zap, Cpu } from 'lucide-react'
+import { Sparkles, Clock, TrendingUp, TrendingDown, Newspaper, Cloud, Zap, Cpu, AlertTriangle, RefreshCw } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
 const COPY: Record<string, Record<string, string>> = {
@@ -17,138 +17,121 @@ const COPY: Record<string, Record<string, string>> = {
   quickSearch: { en: 'for quick search', az: 'sürətli axtarış', ru: 'быстрый поиск', tr: 'hızlı arama', de: 'Schnellsuche', fr: 'recherche rapide', es: 'búsqueda rápida', zh: '快速搜索', ar: 'بحث سريع', ja: 'クイック検索', it: 'ricerca rapida', pt: 'busca rápida' },
 }
 
+const EXTRA: Record<string, Record<string, string>> = {
+  unavailable: { en: 'Not available right now', az: 'Hazırda əlçatan deyil', ru: 'Сейчас недоступно', tr: 'Şu anda kullanılamıyor', de: 'Derzeit nicht verfügbar', fr: 'Indisponible pour le moment', es: 'No disponible ahora', zh: '暂时不可用', ar: 'غير متاح حالياً', ja: '現在利用できません', it: 'Non disponibile al momento', pt: 'Indisponível no momento' },
+  failed: { en: 'Couldn’t load your daily brief.', az: 'Günlük icmal yüklənmədi.', ru: 'Не удалось загрузить дайджест.', tr: 'Günlük özet yüklenemedi.', de: 'Tagesbriefing konnte nicht geladen werden.', fr: 'Impossible de charger votre résumé.', es: 'No se pudo cargar tu resumen.', zh: '无法加载每日简报。', ar: 'تعذر تحميل ملخصك اليومي.', ja: 'デイリーブリーフを読み込めませんでした。', it: 'Impossibile caricare il riassunto.', pt: 'Não foi possível carregar o resumo.' },
+  retry: { en: 'Try again', az: 'Yenidən cəhd et', ru: 'Повторить', tr: 'Tekrar dene', de: 'Erneut versuchen', fr: 'Réessayer', es: 'Reintentar', zh: '重试', ar: 'أعد المحاولة', ja: '再試行', it: 'Riprova', pt: 'Tentar novamente' },
+  baku: { en: 'Baku', az: 'Bakı', ru: 'Баку', tr: 'Bakü', de: 'Baku', fr: 'Bakou', es: 'Bakú', zh: '巴库', ar: 'باكو', ja: 'バクー', it: 'Baku', pt: 'Baku' },
+}
+
+// Open-Meteo WMO weather codes → translation keys in lib/translations.ts
+function weatherKey(code: number | undefined): string | null {
+  if (code == null) return null
+  if (code === 0) return 'weatherClear'
+  if (code === 1) return 'weatherMostlyClear'
+  if (code === 2) return 'weatherPartlyCloudy'
+  if (code === 3) return 'weatherOvercast'
+  if (code === 45 || code === 48) return 'weatherFoggy'
+  if (code >= 51 && code <= 57) return 'weatherDrizzle'
+  if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return 'weatherRain'
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'weatherSnow'
+  if (code >= 95) return 'weatherThunderstorm'
+  return null
+}
+
+const TIMEOUT_MS = 10000
+
+/** Fetch JSON with a timeout; resolves to null on any network/HTTP/parse failure. */
+async function getJSON<T = unknown>(url: string): Promise<T | null> {
+  const ctrl = new AbortController()
+  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS)
+  try {
+    const res = await fetch(url, { signal: ctrl.signal })
+    if (!res.ok) return null
+    return (await res.json()) as T
+  } catch {
+    return null
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 interface BriefData {
-  greeting: string
-  time: string
-  topNews: { title: string; source: string }[]
-  cryptoMovers: { name: string; symbol: string; change: number; price: string }[]
-  weather: { temp: string; condition: string; city: string }
-  trending: string[]
+  // Each section is null when its source failed, so we can show an honest empty state.
+  topNews: { title: string; source: string; link?: string }[] | null
+  cryptoMovers: { symbol: string; change: number; price: number }[] | null
+  weather: { temp: number; code?: number } | null
+  trending: string[] | null
   aiRadar: { title: string; url: string; source: string }[]
 }
 
+function greetingKey(): 'morning' | 'afternoon' | 'evening' {
+  const hour = new Date().getHours()
+  if (hour >= 12 && hour < 17) return 'afternoon'
+  if (hour >= 17 || hour < 4) return 'evening'
+  return 'morning'
+}
+
 export default function DailyBrief() {
-  const { lang } = useLang()
+  const { lang, tr } = useLang()
   const [data, setData] = useState<BriefData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
+    let cancelled = false
     async function fetchBrief() {
-      try {
-        const [cryptoRes, newsRes, weatherRes, trendingRes, horizonRes] = await Promise.allSettled([
-          fetch('/api/crypto?per_page=5'),
-          fetch('/api/news?category=top'),
-          fetch('https://api.open-meteo.com/v1/forecast?latitude=40.41&longitude=49.87&current=temperature_2m,weather_code&timezone=auto'),
-          fetch('/api/trending'),
-          fetch('/api/horizon'),
-        ])
+      setLoading(true)
+      const [cryptoData, newsData, wData, tData, hData] = await Promise.all([
+        getJSON<any[]>('/api/crypto?per_page=5'),
+        getJSON<any>('/api/news?category=top'),
+        getJSON<any>('https://api.open-meteo.com/v1/forecast?latitude=40.41&longitude=49.87&current=temperature_2m,weather_code&timezone=auto'),
+        getJSON<any[]>('/api/trending'),
+        getJSON<any>('/api/horizon'),
+      ])
 
-        // Crypto
-        const cryptoData = cryptoRes.status === 'fulfilled' ? await cryptoRes.value.json() : []
-        const movers = Array.isArray(cryptoData) ? cryptoData.slice(0, 4).map((c: any) => ({
-          name: c.name,
-          symbol: c.symbol?.toUpperCase(),
-          change: c.price_change_percentage_24h || 0,
-          price: `$${c.current_price?.toLocaleString() || '0'}`
-        })) : []
+      const movers = Array.isArray(cryptoData) && cryptoData.length > 0
+        ? cryptoData.slice(0, 4).map((c: any) => ({
+            symbol: String(c.symbol || '').toUpperCase(),
+            change: Number(c.price_change_percentage_24h) || 0,
+            price: Number(c.current_price) || 0,
+          }))
+        : null
 
-        // News — /api/news returns array directly, not { articles: [] }
-        const newsData = newsRes.status === 'fulfilled' ? await newsRes.value.json() : []
-        const newsArray = Array.isArray(newsData) ? newsData : (newsData?.articles || [])
-        const topNews = newsArray.length > 0
-          ? newsArray.slice(0, 3).map((a: any) => ({
-              title: a.title || a.headline || 'Breaking news',
-              source: a.source?.name || a.source || 'News'
-            }))
-          : [
-              { title: 'Markets react to global economic shifts', source: 'Reuters' },
-              { title: 'Tech sector leads S&P 500 gains', source: 'Bloomberg' },
-              { title: 'Central banks signal rate decisions', source: 'FT' },
-            ]
+      // /api/news returns an array directly, not { articles: [] }
+      const newsArray = Array.isArray(newsData) ? newsData : (Array.isArray(newsData?.articles) ? newsData.articles : [])
+      const topNews = newsArray.length > 0
+        ? newsArray.filter((a: any) => a?.title || a?.headline).slice(0, 3).map((a: any) => ({
+            title: a.title || a.headline,
+            source: typeof a.source === 'string' ? a.source : a.source?.name || '',
+            link: a.link || a.url,
+          }))
+        : null
 
-        // Weather from Open-Meteo (Baku coordinates)
-        let weather = { temp: '—', condition: 'Loading...', city: 'Baku' }
-        if (weatherRes.status === 'fulfilled') {
-          const wData = await weatherRes.value.json()
-          const temp = wData?.current?.temperature_2m
-          const code = wData?.current?.weather_code
-          const conditionMap: Record<number, string> = {
-            0: 'Clear', 1: 'Mostly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
-            45: 'Foggy', 48: 'Rime Fog', 51: 'Light Drizzle', 53: 'Drizzle',
-            55: 'Heavy Drizzle', 61: 'Light Rain', 63: 'Rain', 65: 'Heavy Rain',
-            71: 'Light Snow', 73: 'Snow', 75: 'Heavy Snow', 80: 'Rain Showers',
-            95: 'Thunderstorm', 96: 'Thunderstorm + Hail'
-          }
-          weather = {
-            temp: temp != null ? `${Math.round(temp)}°C` : '—',
-            condition: conditionMap[code] || 'Unknown',
-            city: 'Baku'
-          }
-        }
+      const temp = wData?.current?.temperature_2m
+      const weather = typeof temp === 'number' ? { temp, code: wData?.current?.weather_code } : null
 
-        // Trending
-        let trending = ['AI Agents', 'Bitcoin ETF', 'NVIDIA', 'Fed Rate Decision']
-        if (trendingRes.status === 'fulfilled') {
-          try {
-            const tData = await trendingRes.value.json()
-            if (Array.isArray(tData) && tData.length > 0) {
-              trending = tData.slice(0, 6).map((t: any) => t.title || t.name || t.query || t)
-            }
-          } catch {}
-        }
+      const trendingList = Array.isArray(tData)
+        ? tData.map((t: any) => (typeof t === 'string' ? t : t?.title || t?.name || t?.query)).filter((t: unknown): t is string => typeof t === 'string' && t.length > 0).slice(0, 6)
+        : []
+      const trending = trendingList.length > 0 ? trendingList : null
 
-        // AI & Tech Radar — top AI/tech items from the Horizon briefing
-        let aiRadar: BriefData['aiRadar'] = []
-        if (horizonRes.status === 'fulfilled') {
-          try {
-            const hData = await horizonRes.value.json()
-            const hItems = Array.isArray(hData?.items) ? hData.items : []
-            aiRadar = hItems
-              .filter((it: any) => Array.isArray(it.tags) && it.tags.some((t: string) => /ai|tech/i.test(t)))
-              .slice(0, 3)
-              .map((it: any) => ({ title: it.title, url: it.url, source: it.source }))
-          } catch {}
-        }
+      const hItems = Array.isArray(hData?.items) ? hData.items : []
+      const aiRadar = hItems
+        .filter((it: any) => Array.isArray(it.tags) && it.tags.some((t: string) => /ai|tech/i.test(t)))
+        .slice(0, 3)
+        .map((it: any) => ({ title: it.title, url: it.url, source: it.source }))
 
-        // Greeting
-        const hour = new Date().getHours()
-        let greeting = COPY.morning[lang] || COPY.morning.en
-        if (hour >= 12 && hour < 17) greeting = COPY.afternoon[lang] || COPY.afternoon.en
-        else if (hour >= 17) greeting = COPY.evening[lang] || COPY.evening.en
-
-        setData({
-          greeting,
-          time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-          topNews,
-          cryptoMovers: movers,
-          weather,
-          trending,
-          aiRadar,
-        })
-      } catch (e) {
-        setData({
-          greeting: COPY.morning[lang] || COPY.morning.en,
-          time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-          topNews: [
-            { title: 'Markets open higher on tech earnings', source: 'Bloomberg' },
-            { title: 'Crypto markets show strong momentum', source: 'CoinDesk' },
-            { title: 'Global outlook remains cautiously optimistic', source: 'Reuters' },
-          ],
-          cryptoMovers: [
-            { name: 'Bitcoin', symbol: 'BTC', change: 2.4, price: '$96,500' },
-            { name: 'Ethereum', symbol: 'ETH', change: -1.2, price: '$3,450' },
-            { name: 'Solana', symbol: 'SOL', change: 5.7, price: '$178' },
-          ],
-          weather: { temp: '22°C', condition: 'Partly Cloudy', city: 'Baku' },
-          trending: ['AI Agents', 'Bitcoin ETF', 'NVIDIA', 'Fed Rate'],
-          aiRadar: [],
-        })
-      } finally {
+      if (!cancelled) {
+        setData({ topNews, cryptoMovers: movers, weather, trending, aiRadar })
         setLoading(false)
       }
     }
     fetchBrief()
-  }, [])
+    return () => { cancelled = true }
+  }, [attempt])
+
+  const c = (key: string) => COPY[key]?.[lang] || EXTRA[key]?.[lang] || COPY[key]?.en || EXTRA[key]?.en || key
 
   if (loading) {
     return (
@@ -167,9 +150,29 @@ export default function DailyBrief() {
     )
   }
 
-  if (!data) return null
+  const allFailed = !data || (!data.topNews && !data.cryptoMovers && !data.weather && !data.trending && data.aiRadar.length === 0)
+  if (allFailed) {
+    return (
+      <div role="status" className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-white/[0.06] p-6 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <p className="text-sm text-[#a0a0b0] flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" aria-hidden="true" /> {c('failed')}
+        </p>
+        <button
+          type="button"
+          onClick={() => setAttempt(a => a + 1)}
+          className="inline-flex items-center gap-1.5 self-start sm:self-auto px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-xs text-white hover:bg-white/[0.1] transition"
+        >
+          <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" /> {c('retry')}
+        </button>
+      </div>
+    )
+  }
 
-  const c = (key: string) => COPY[key]?.[lang] || COPY[key]?.en || key
+  const locale = lang === 'zh' ? 'zh-CN' : lang
+  const time = new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+  const fmtPrice = (n: number) => `$${n.toLocaleString(locale, { maximumFractionDigits: n < 1 ? 4 : 2 })}`
+  const wKey = data.weather ? weatherKey(data.weather.code) : null
+  const unavailable = <p className="text-xs text-[#7c7c92]">{c('unavailable')}</p>
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-white/[0.06] p-6 mb-6">
@@ -178,47 +181,57 @@ export default function DailyBrief() {
         <div>
           <h2 className="text-xl font-semibold text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-indigo-400" />
-            {data.greeting} ☀️
+            {c(greetingKey())}
           </h2>
-          <p className="text-sm text-[#6b6b80] mt-0.5 flex items-center gap-1.5">
+          <p className="text-sm text-[#7c7c92] mt-0.5 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
-            {data.time} • {c('brief')} • {c('minRead')}
+            {time} • {c('brief')} • {c('minRead')}
           </p>
         </div>
-        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
-          <Cloud className="w-3.5 h-3.5 text-blue-400" />
-          <span className="text-xs text-[#a0a0b0]">{data.weather.city} {data.weather.temp} · {data.weather.condition}</span>
-        </div>
+        {data.weather && (
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+            <Cloud className="w-3.5 h-3.5 text-blue-400" aria-hidden="true" />
+            <span className="text-xs text-[#a0a0b0]">{c('baku')} {Math.round(data.weather.temp)}°C{wKey && tr[wKey] ? ` · ${tr[wKey]}` : ''}</span>
+          </div>
+        )}
       </div>
 
       {/* Content grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Top News */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-          <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Newspaper className="w-3.5 h-3.5" /> {c('topStories')}
           </h3>
-          <div className="space-y-3">
-            {data.topNews.map((news, i) => (
-              <div key={i}>
-                <p className="text-sm text-[#d0d0e0] leading-snug">{news.title}</p>
-                <p className="text-[11px] text-[#5b5b70] mt-0.5">{news.source}</p>
-              </div>
-            ))}
-          </div>
+          {data.topNews ? (
+            <div className="space-y-3">
+              {data.topNews.map((news, i) => {
+                const body = (
+                  <>
+                    <p className="text-sm text-[#d0d0e0] leading-snug group-hover:text-white transition-colors">{news.title}</p>
+                    {news.source && <p className="text-[11px] text-[#8a8aa0] mt-0.5">{news.source}</p>}
+                  </>
+                )
+                return news.link
+                  ? <a key={i} href={news.link} target="_blank" rel="noopener noreferrer" className="block group">{body}</a>
+                  : <div key={i}>{body}</div>
+              })}
+            </div>
+          ) : unavailable}
         </div>
 
         {/* Crypto Movers */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-          <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5" /> {c('cryptoMovers')}
           </h3>
+          {data.cryptoMovers ? (
           <div className="space-y-2.5">
             {data.cryptoMovers.map((coin, i) => (
               <div key={i} className="flex items-center justify-between">
                 <div>
                   <span className="text-sm text-white font-medium">{coin.symbol}</span>
-                  <span className="text-[11px] text-[#5b5b70] ml-1.5">{coin.price}</span>
+                  <span className="text-[11px] text-[#8a8aa0] ml-1.5">{fmtPrice(coin.price)}</span>
                 </div>
                 <span className={`text-xs font-medium flex items-center gap-0.5 ${coin.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                   {coin.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
@@ -227,19 +240,20 @@ export default function DailyBrief() {
               </div>
             ))}
           </div>
+          ) : unavailable}
         </div>
 
         {/* AI & Tech Radar */}
         {data.aiRadar.length > 0 && (
           <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-            <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5" /> {c('aiRadar')}
             </h3>
             <div className="space-y-3">
               {data.aiRadar.map((item, i) => (
                 <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block group">
                   <p className="text-sm text-[#d0d0e0] leading-snug group-hover:text-white transition-colors">{item.title}</p>
-                  <p className="text-[11px] text-[#5b5b70] mt-0.5">{item.source}</p>
+                  <p className="text-[11px] text-[#8a8aa0] mt-0.5">{item.source}</p>
                 </a>
               ))}
             </div>
@@ -248,18 +262,20 @@ export default function DailyBrief() {
 
         {/* Trending */}
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-          <h3 className="text-xs font-semibold text-[#6b6b80] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <TrendingUp className="w-3.5 h-3.5" /> {c('trending')}
           </h3>
-          <div className="flex flex-wrap gap-2">
-            {data.trending.map((topic, i) => (
-              <span key={i} className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-[#a0a0b0]">
-                #{typeof topic === 'string' ? topic : 'Trending'}
-              </span>
-            ))}
-          </div>
+          {data.trending ? (
+            <div className="flex flex-wrap gap-2">
+              {data.trending.map((topic, i) => (
+                <span key={i} className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-[#a0a0b0]">
+                  #{topic}
+                </span>
+              ))}
+            </div>
+          ) : unavailable}
           <div className="mt-4 pt-3 border-t border-white/[0.04]">
-            <p className="text-[11px] text-[#5b5b70]">💡 {c('tip')} <kbd className="px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd> {c('quickSearch')}</p>
+            <p className="text-[11px] text-[#8a8aa0]">💡 {c('tip')} <kbd className="px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd> {c('quickSearch')}</p>
           </div>
         </div>
       </div>

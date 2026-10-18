@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
 import { formatNewsDate } from '@/lib/dates'
 import { Newspaper, RefreshCw, X, ExternalLink } from 'lucide-react'
@@ -58,19 +58,29 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
   const [modal, setModal] = useState<NewsItem | null>(null)
   const t = (k: string) => COPY[k]?.[lang] || COPY[k]?.en || k
 
-  const fetchNews = () => {
+  const requestRef = useRef<AbortController | null>(null)
+  const fetchNews = useCallback(() => {
+    // Cancel the previous request so a slow response for an old tab can't overwrite the new one.
+    requestRef.current?.abort()
+    const ctrl = new AbortController()
+    requestRef.current = ctrl
+    const timer = setTimeout(() => ctrl.abort(), 15000)
     setLoading(true)
     setError(false)
     const params = new URLSearchParams({ section, tab, lang })
     if (destination) params.set('destination', destination)
     if (country) params.set('country', country)
-    fetch(`/api/section-news?${params.toString()}`)
-      .then(r => r.json())
-      .then(data => { setNews(data.items || []); setLoading(false) })
-      .catch(() => { setError(true); setLoading(false) })
-  }
+    fetch(`/api/section-news?${params.toString()}`, { signal: ctrl.signal })
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
+      .then(data => { if (requestRef.current === ctrl) { setNews(Array.isArray(data?.items) ? data.items : []); setLoading(false) } })
+      .catch(() => { if (requestRef.current === ctrl) { setError(true); setLoading(false) } })
+      .finally(() => clearTimeout(timer))
+  }, [section, tab, lang, destination, country])
 
-  useEffect(() => { fetchNews() }, [section, tab, lang, destination, country])
+  useEffect(() => {
+    fetchNews()
+    return () => requestRef.current?.abort()
+  }, [fetchNews])
 
   useEffect(() => {
     if (!modal) return
@@ -83,8 +93,8 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
     return (
       <div className="mt-5 pt-4 border-t border-gray-800/50">
         <div className="flex items-center gap-2 mb-3">
-          <Newspaper className="w-3.5 h-3.5 text-gray-500 animate-pulse" />
-          <span className="text-xs text-gray-500 animate-pulse">{t('loading')}</span>
+          <Newspaper className="w-3.5 h-3.5 text-gray-400 animate-pulse" />
+          <span className="text-xs text-gray-400 animate-pulse">{t('loading')}</span>
         </div>
         <div className="space-y-2">
           {[1,2,3].map(i => (
@@ -102,8 +112,8 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
     return (
       <div className="mt-5 pt-4 border-t border-gray-800/50">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-gray-600">{t('empty')}</span>
-          <button onClick={fetchNews} className="p-1 rounded hover:bg-gray-800 transition"><RefreshCw className="w-3 h-3 text-gray-600" /></button>
+          <span className="text-xs text-gray-400">{t('empty')}</span>
+          <button onClick={fetchNews} className="p-1 rounded hover:bg-gray-800 transition"><RefreshCw className="w-3 h-3 text-gray-400" /></button>
         </div>
       </div>
     )
@@ -114,11 +124,11 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
       <div className="mt-5 pt-4 border-t border-gray-800/50">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Newspaper className="w-3.5 h-3.5 text-gray-500" />
+            <Newspaper className="w-3.5 h-3.5 text-gray-400" />
             <span className="text-xs font-medium text-gray-300">{t('title')}</span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-gray-800 text-gray-500">{news.length}</span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-gray-800 text-gray-400">{news.length}</span>
           </div>
-          <button onClick={fetchNews} className="p-1 rounded hover:bg-gray-800 transition"><RefreshCw className="w-3 h-3 text-gray-600" /></button>
+          <button onClick={fetchNews} className="p-1 rounded hover:bg-gray-800 transition"><RefreshCw className="w-3 h-3 text-gray-400" /></button>
         </div>
         <div className="space-y-0.5">
           {news.map((item, i) => (
@@ -131,18 +141,18 @@ export default function SectionNews({ section, tab, accentColor = 'blue', destin
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setModal(null)}>
           <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
             {modal.thumbnail && (
-              <img src={modal.thumbnail} alt="" className="w-full h-44 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              <img loading="lazy" decoding="async" src={modal.thumbnail} alt="" className="w-full h-44 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
             )}
             <div className="p-4">
               <div className="flex items-start justify-between gap-3 mb-3">
                 <h2 className="text-white font-semibold text-sm leading-snug">{modal.title}</h2>
-                <button onClick={() => setModal(null)} className="text-gray-500 hover:text-white transition flex-shrink-0"><X className="w-4 h-4" /></button>
+                <button onClick={() => setModal(null)} className="text-gray-400 hover:text-white transition flex-shrink-0"><X className="w-4 h-4" /></button>
               </div>
               {modal.description && modal.description.length > 5 && (
                 <p className="text-gray-400 text-xs leading-relaxed mb-3">{modal.description}</p>
               )}
-              <div className="flex items-center gap-2 text-gray-600 text-[11px] mb-4">
-                <img src={faviconUrl(modal.link)} alt="" className="w-4 h-4 rounded" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              <div className="flex items-center gap-2 text-gray-400 text-[11px] mb-4">
+                <img loading="lazy" decoding="async" src={faviconUrl(modal.link)} alt="" className="w-4 h-4 rounded" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
                 <span>{modal.source || getDomain(modal.link)}</span>
                 {modal.pubDate && <><span>&middot;</span><span>{formatNewsDate(modal.pubDate)}</span></>}
               </div>
@@ -166,14 +176,14 @@ function NewsCard({ item, lang, onOpen }: { item: NewsItem; lang: string; onOpen
     <button onClick={onOpen} className="w-full text-left flex gap-3 px-1 py-2.5 rounded-lg hover:bg-gray-800/50 transition group">
       <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800">
         {hasImg ? (
-          <img src={item.thumbnail} alt="" className="w-full h-full object-cover" onError={() => setImgErr(true)} />
+          <img loading="lazy" decoding="async" src={item.thumbnail} alt="" className="w-full h-full object-cover" onError={() => setImgErr(true)} />
         ) : (
-          <img src={faviconUrl(item.link)} alt="" className="w-full h-full object-contain p-2" onError={e => { (e.target as HTMLImageElement).src = '' }} />
+          <img loading="lazy" decoding="async" src={faviconUrl(item.link)} alt="" className="w-full h-full object-contain p-2" onError={e => { (e.target as HTMLImageElement).src = '' }} />
         )}
       </div>
       <div className="flex-1 min-w-0">
         <h4 className="text-xs font-medium text-white line-clamp-2 group-hover:text-indigo-300 transition leading-snug">{item.title}</h4>
-        <div className="flex items-center gap-1.5 mt-1 text-[10px] text-gray-600">
+        <div className="flex items-center gap-1.5 mt-1 text-[10px] text-gray-400">
           <span>{item.source || getDomain(item.link)}</span>
           {item.pubDate && <><span>&middot;</span><span>{timeAgo(item.pubDate, lang)}</span></>}
         </div>

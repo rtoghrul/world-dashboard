@@ -3,7 +3,7 @@ export default function Loading() {
     <div className="min-h-screen bg-gray-950 relative z-[1]">
       <div className="sticky top-0 z-50 bg-[#07070b]/90 backdrop-blur-xl border-b border-white/[0.04] h-14" />
       <div className="border-b border-white/[0.04] bg-[#07070b]/80 h-10" />
-      <main className="max-w-screen-2xl mx-auto px-5 py-6">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-5 py-6">
         <div className="flex items-center gap-3 mb-6 animate-pulse">
           <div className="w-10 h-10 rounded-xl bg-white/[0.04]" />
           <div className="w-10 h-10 rounded-xl bg-white/[0.04]" />

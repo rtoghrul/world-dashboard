@@ -52,7 +52,7 @@ export default function ThemeToggle() {
         >
           <div className="w-56 bg-[#0f0f1a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden animate-fade-in">
             <div className="p-3 border-b border-white/[0.05]">
-              <p className="text-[10px] uppercase tracking-wider text-[#4a4a5e] font-medium mb-2">Theme</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#7c7c92] font-medium mb-2">Theme</p>
               <div className="flex gap-1">
                 {themes.map(t => {
                   const TIcon = t.icon
@@ -75,7 +75,7 @@ export default function ThemeToggle() {
             </div>
 
             <div className="p-3">
-              <p className="text-[10px] uppercase tracking-wider text-[#4a4a5e] font-medium mb-2">Accent Color</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#7c7c92] font-medium mb-2">Accent Color</p>
               <div className="flex gap-2 flex-wrap">
                 {accents.map(a => (
                   <button

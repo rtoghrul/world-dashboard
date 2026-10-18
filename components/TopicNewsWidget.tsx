@@ -37,11 +37,11 @@ function TopicNewsCard({ item }: { item: ModalItem }) {
         )}
         <div className="flex-1 min-w-0">
           <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
-          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
+          <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">{item.description}</p>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-gray-600 text-xs">{item.source}</span>
-            <span className="text-gray-700 text-xs">·</span>
-            <span className="text-gray-600 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
+            <span className="text-gray-400 text-xs">{item.source}</span>
+            <span className="text-gray-400 text-xs">·</span>
+            <span className="text-gray-400 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
           </div>
         </div>
       </button>
@@ -73,7 +73,7 @@ export default function TopicNewsWidget({
 
   const apiPath = useMemo(() => `/api/engineering?topic=${topic}&lang=${lang}`, [topic, lang])
   const { data: rawData, isLoading, error, mutate } = useSWR<Item[]>(apiPath, fetcher, { refreshInterval: 900000 })
-  const items = Array.isArray(rawData) ? rawData : []
+  const items = useMemo(() => (Array.isArray(rawData) ? rawData : []), [rawData])
 
   const filtered = useMemo(() => {
     if (!query.trim()) return items
@@ -94,14 +94,14 @@ export default function TopicNewsWidget({
             <span className={accentClass}>{icon}</span>
             <div>
               <h2 className="text-white font-semibold text-sm">{title}</h2>
-              <p className="text-gray-500 text-xs">{desc}</p>
+              <p className="text-gray-400 text-xs">{desc}</p>
             </div>
           </div>
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             {!collapsed && (
               <>
                 <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
-                  <Search className="w-3 h-3 text-gray-500 flex-shrink-0" aria-hidden="true" />
+                  <Search className="w-3 h-3 text-gray-400 flex-shrink-0" aria-hidden="true" />
                   <input
                     type="text"
                     name={`${topic}-search`}
@@ -117,7 +117,7 @@ export default function TopicNewsWidget({
                 </button>
               </>
             )}
-            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} aria-hidden="true" />
+            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -150,7 +150,7 @@ export default function TopicNewsWidget({
               )}
               <div className="min-w-0">
                 <p className="text-white text-xs font-medium line-clamp-2">{top.title}</p>
-                <p className="text-gray-500 text-xs mt-0.5">{top.source}</p>
+                <p className="text-gray-400 text-xs mt-0.5">{top.source}</p>
               </div>
             </div>
           )}

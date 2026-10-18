@@ -1,6 +1,7 @@
 'use client'
 import { useMemo, useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { Bot, Image, Video, PenTool, Code, Sparkles, ExternalLink, Star, Zap, Music, Brain, Briefcase, Search } from 'lucide-react'
 import SectionNews from './SectionNews'
 
@@ -11,20 +12,20 @@ const COPY: Record<string, Record<string, string>> = {
   paid: { en: 'Paid', az: 'Ödənişli', ru: 'Платно', tr: 'Ücretli', de: 'Kostenpflichtig', fr: 'Payant', es: 'De pago', zh: '付费', ar: 'مدفوع', ja: '有料', it: 'A pagamento', pt: 'Pago' },
   visit: { en: 'Visit', az: 'Keçid', ru: 'Перейти', tr: 'Ziyaret', de: 'Besuchen', fr: 'Visiter', es: 'Visitar', zh: '访问', ar: 'زيارة', ja: '訪問', it: 'Visita', pt: 'Visitar' },
   all: { en: 'All', az: 'Hamısı', ru: 'Все', tr: 'Tümü', de: 'Alle', fr: 'Tous', es: 'Todos', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' },
-  searchPh: { en: 'Search tools…', az: 'Alət axtar…', ru: 'Поиск инструментов…', tr: 'Araç ara…', de: 'Tools suchen…', fr: 'Rechercher…', es: 'Buscar herramientas…', zh: '搜索工具…', ja: 'ツールを検索…' },
-  none: { en: 'No tools match your search', az: 'Axtarışa uyğun alət yoxdur', ru: 'Ничего не найдено', tr: 'Sonuç bulunamadı', de: 'Keine Tools gefunden', fr: 'Aucun résultat', es: 'Sin resultados', zh: '没有找到工具', ja: '結果なし' },
+  searchPh: { en: 'Search tools…', az: 'Alət axtar…', ru: 'Поиск инструментов…', tr: 'Araç ara…', de: 'Tools suchen…', fr: 'Rechercher…', es: 'Buscar herramientas…', zh: '搜索工具…', ja: 'ツールを検索…', ar: 'ابحث عن الأدوات…', it: 'Cerca strumenti…', pt: 'Pesquisar ferramentas…' },
+  none: { en: 'No tools match your search', az: 'Axtarışa uyğun alət yoxdur', ru: 'Ничего не найдено', tr: 'Sonuç bulunamadı', de: 'Keine Tools gefunden', fr: 'Aucun résultat', es: 'Sin resultados', zh: '没有找到工具', ja: '結果なし', ar: 'لا توجد أدوات مطابقة', it: 'Nessuno strumento corrispondente', pt: 'Nenhuma ferramenta encontrada' },
 }
 
 const categories = [
-  { id: 'all', icon: Sparkles, label: { en: 'All', az: 'Hamısı', ru: 'Все', tr: 'Tümü' } },
-  { id: 'chatbots', icon: Bot, label: { en: 'Chatbots', az: 'Chatbotlar', ru: 'Чатботы', tr: 'Sohbet' } },
-  { id: 'image', icon: Image, label: { en: 'Image', az: 'Şəkil', ru: 'Изображения', tr: 'Görsel' } },
-  { id: 'video', icon: Video, label: { en: 'Video', az: 'Video', ru: 'Видео', tr: 'Video' } },
-  { id: 'audio', icon: Music, label: { en: 'Audio & Music', az: 'Audio & Musiqi', ru: 'Аудио и музыка', tr: 'Ses & Müzik' } },
-  { id: 'writing', icon: PenTool, label: { en: 'Writing', az: 'Yazı', ru: 'Текст', tr: 'Yazı' } },
-  { id: 'coding', icon: Code, label: { en: 'Coding', az: 'Kod', ru: 'Код', tr: 'Kod' } },
-  { id: 'productivity', icon: Briefcase, label: { en: 'Productivity', az: 'Məhsuldarlıq', ru: 'Продуктивность', tr: 'Verimlilik' } },
-  { id: 'agents', icon: Brain, label: { en: 'Agents', az: 'Agentlər', ru: 'Агенты', tr: 'Ajanlar' } },
+  { id: 'all', icon: Sparkles, label: { en: 'All', az: 'Hamısı', ru: 'Все', tr: 'Tümü', de: 'Alle', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' } },
+  { id: 'chatbots', icon: Bot, label: { en: 'Chatbots', az: 'Chatbotlar', ru: 'Чатботы', tr: 'Sohbet', de: 'Chatbots', fr: 'Chatbots', es: 'Chatbots', zh: '聊天机器人', ar: 'روبوتات الدردشة', ja: 'チャットボット', it: 'Chatbot', pt: 'Chatbots' } },
+  { id: 'image', icon: Image, label: { en: 'Image', az: 'Şəkil', ru: 'Изображения', tr: 'Görsel', de: 'Bild', fr: 'Image', es: 'Imagen', zh: '图像', ar: 'الصور', ja: '画像', it: 'Immagini', pt: 'Imagem' } },
+  { id: 'video', icon: Video, label: { en: 'Video', az: 'Video', ru: 'Видео', tr: 'Video', de: 'Video', fr: 'Vidéo', es: 'Vídeo', zh: '视频', ar: 'الفيديو', ja: '動画', it: 'Video', pt: 'Vídeo' } },
+  { id: 'audio', icon: Music, label: { en: 'Audio & Music', az: 'Audio & Musiqi', ru: 'Аудио и музыка', tr: 'Ses & Müzik', de: 'Audio & Musik', fr: 'Audio & musique', es: 'Audio y música', zh: '音频与音乐', ar: 'الصوت والموسيقى', ja: '音声・音楽', it: 'Audio e musica', pt: 'Áudio e música' } },
+  { id: 'writing', icon: PenTool, label: { en: 'Writing', az: 'Yazı', ru: 'Текст', tr: 'Yazı', de: 'Schreiben', fr: 'Rédaction', es: 'Escritura', zh: '写作', ar: 'الكتابة', ja: 'ライティング', it: 'Scrittura', pt: 'Escrita' } },
+  { id: 'coding', icon: Code, label: { en: 'Coding', az: 'Kod', ru: 'Код', tr: 'Kod', de: 'Programmieren', fr: 'Code', es: 'Programación', zh: '编程', ar: 'البرمجة', ja: 'コーディング', it: 'Programmazione', pt: 'Programação' } },
+  { id: 'productivity', icon: Briefcase, label: { en: 'Productivity', az: 'Məhsuldarlıq', ru: 'Продуктивность', tr: 'Verimlilik', de: 'Produktivität', fr: 'Productivité', es: 'Productividad', zh: '效率', ar: 'الإنتاجية', ja: '生産性', it: 'Produttività', pt: 'Produtividade' } },
+  { id: 'agents', icon: Brain, label: { en: 'Agents', az: 'Agentlər', ru: 'Агенты', tr: 'Ajanlar', de: 'Agenten', fr: 'Agents', es: 'Agentes', zh: '智能体', ar: 'الوكلاء', ja: 'エージェント', it: 'Agenti', pt: 'Agentes' } },
 ]
 
 interface AITool {
@@ -196,13 +197,13 @@ export default function AIToolsWidget({ defaultExpanded, initialCategory }: { de
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6b80]" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7c7c92]" />
         <input
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={c('searchPh')}
-          className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.07] text-sm text-white placeholder-[#6b6b80] focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/30 transition"
+          className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.07] text-sm text-white placeholder-[#7c7c92] focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500/30 transition"
         />
       </div>
 
@@ -217,8 +218,8 @@ export default function AIToolsWidget({ defaultExpanded, initialCategory }: { de
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap border transition ${activeCategory === cat.id ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' : 'bg-white/[0.03] text-[#8b8b9e] border-white/[0.06] hover:text-white'}`}
             >
               <Icon className="w-3.5 h-3.5" />
-              {cat.label[lang] || cat.label.en}
-              <span className={`ml-0.5 px-1.5 rounded-full text-[10px] ${activeCategory === cat.id ? 'bg-purple-500/30 text-purple-200' : 'bg-white/[0.06] text-[#6b6b80]'}`}>{count}</span>
+              {pickLabel(cat.label, lang)}
+              <span className={`ml-0.5 px-1.5 rounded-full text-[10px] ${activeCategory === cat.id ? 'bg-purple-500/30 text-purple-200' : 'bg-white/[0.06] text-[#7c7c92]'}`}>{count}</span>
             </button>
           )
         })}
@@ -253,7 +254,7 @@ export default function AIToolsWidget({ defaultExpanded, initialCategory }: { de
                   <p className="text-[10px] text-[#4b4b60] truncate">{new URL(tool.url).hostname.replace('www.', '')}</p>
                 </div>
               </div>
-              <p className="text-xs text-[#6b6b80] mb-3 line-clamp-2">{tool.desc[lang] || tool.desc.en}</p>
+              <p className="text-xs text-[#7c7c92] mb-3 line-clamp-2">{tool.desc[lang] || tool.desc.en}</p>
               <div className="flex items-center justify-between">
                 <span className={`px-2 py-0.5 rounded-md text-[10px] font-medium border ${pricingColor(tool.pricing)}`}>
                   {c(tool.pricing)}

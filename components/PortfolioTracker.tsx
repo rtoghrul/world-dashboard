@@ -14,6 +14,8 @@ const COPY: Record<string, Record<string, string>> = {
   buyPrice: { en: 'Buy Price ($)', az: 'Alış qiyməti ($)', ru: 'Цена покупки ($)', de: 'Kaufpreis ($)', tr: 'Alış fiyatı ($)', fr: 'Prix d\'achat ($)', es: 'Precio de compra ($)', it: 'Prezzo d\'acquisto ($)', pt: 'Preço de compra ($)', zh: '买入价 ($)', ar: 'سعر الشراء ($)', ja: '購入価格 ($)' },
   totalValue: { en: 'Total portfolio value', az: 'Portfelin ümumi dəyəri', ru: 'Общая стоимость портфеля', de: 'Gesamtwert des Portfolios', tr: 'Portföyün toplam değeri', fr: 'Valeur totale du portefeuille', es: 'Valor total de la cartera', it: 'Valore totale del portafoglio', pt: 'Valor total da carteira', zh: '投资组合总值', ar: 'إجمالي قيمة المحفظة', ja: 'ポートフォリオ総額' },
   costBasis: { en: 'Cost basis', az: 'Xərc bazası', ru: 'Базовая стоимость', de: 'Einstandswert', tr: 'Maliyet', fr: 'Prix de revient', es: 'Coste base', it: 'Costo base', pt: 'Custo base', zh: '成本基础', ar: 'أساس التكلفة', ja: '取得原価' },
+  emptyHint: { en: 'Add your first crypto holding to track value & profit in real time', az: 'Dəyəri və gəliri real vaxtda izləmək üçün ilk kripto aktivinizi əlavə edin', ru: 'Добавьте первый криптоактив, чтобы следить за стоимостью и прибылью в реальном времени', de: 'Füge deinen ersten Krypto-Bestand hinzu, um Wert und Gewinn live zu verfolgen', tr: 'Değeri ve kârı anlık izlemek için ilk kripto varlığınızı ekleyin', fr: 'Ajoutez votre première crypto pour suivre valeur et gains en temps réel', es: 'Añade tu primera cripto para seguir valor y beneficio en tiempo real', it: 'Aggiungi la tua prima crypto per seguire valore e profitto in tempo reale', pt: 'Adicione sua primeira cripto para acompanhar valor e lucro em tempo real', zh: '添加第一笔加密资产，实时跟踪价值与收益', ar: 'أضف أول أصل مشفر لتتبع القيمة والربح لحظياً', ja: '最初の暗号資産を追加して、評価額と損益をリアルタイムで確認' },
+  addFirst: { en: 'Add first holding', az: 'İlk aktivi əlavə et', ru: 'Добавить первый актив', de: 'Ersten Bestand hinzufügen', tr: 'İlk varlığı ekle', fr: 'Ajouter une première position', es: 'Añadir primera posición', it: 'Aggiungi la prima posizione', pt: 'Adicionar primeira posição', zh: '添加第一笔持仓', ar: 'أضف أول أصل', ja: '最初の資産を追加' },
 }
 
 interface Holding {
@@ -140,7 +142,7 @@ export default function PortfolioTracker() {
               {totalPnl >= 0 ? '+' : ''}{totalPnlPercent.toFixed(2)}% (${Math.abs(totalPnl).toLocaleString(undefined, { maximumFractionDigits: 2 })})
             </span>
           </div>
-          <p className="text-[11px] text-[#5b5b70] mt-1">{c('totalValue')} • {c('costBasis')}: ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+          <p className="text-[11px] text-[#7c7c92] mt-1">{c('totalValue')} • {c('costBasis')}: ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
         </div>
       )}
 
@@ -149,15 +151,15 @@ export default function PortfolioTracker() {
         {pricedHoldings.length === 0 && (
           <div className="px-5 py-10 text-center">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-emerald-500/10 border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
-              <PieChart className="w-6 h-6 text-[#5b5b70]" />
+              <PieChart className="w-6 h-6 text-[#7c7c92]" />
             </div>
-              <p className="text-sm text-[#6b6b80] font-medium">{c('empty')}</p>
-            <p className="text-xs text-[#4a4a5a] mt-1.5 max-w-[230px] mx-auto leading-relaxed">Add your first crypto holding to track value &amp; profit in real time</p>
+              <p className="text-sm text-[#7c7c92] font-medium">{c('empty')}</p>
+            <p className="text-xs text-[#7c7c92] mt-1.5 max-w-[230px] mx-auto leading-relaxed">{c('emptyHint')}</p>
             <button
               onClick={() => setShowAddModal(true)}
               className="mt-4 px-4 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 text-xs font-medium border border-indigo-500/20 hover:bg-indigo-500/20 transition"
             >
-              <Plus className="w-3.5 h-3.5 inline mr-1" /> Add first holding
+              <Plus className="w-3.5 h-3.5 inline mr-1" aria-hidden="true" /> {c('addFirst')}
             </button>
           </div>
         )}
@@ -169,9 +171,9 @@ export default function PortfolioTracker() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-white font-medium">{h.symbol}</span>
-                <span className="text-[11px] text-[#5b5b70]">{h.amount} coins</span>
+                <span className="text-[11px] text-[#7c7c92]">{h.amount} coins</span>
               </div>
-              <span className="text-[11px] text-[#5b5b70]">Buy: ${h.buyPrice.toLocaleString()}</span>
+              <span className="text-[11px] text-[#7c7c92]">Buy: ${h.buyPrice.toLocaleString()}</span>
             </div>
             <div className="text-right">
               <p className="text-sm text-white font-mono">${h.value.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
@@ -179,7 +181,7 @@ export default function PortfolioTracker() {
                 {h.pnl >= 0 ? '+' : ''}{h.pnlPercent.toFixed(1)}%
               </p>
             </div>
-            <button onClick={() => removeHolding(h.symbol)} className="opacity-0 group-hover:opacity-100 p-1 text-[#5b5b70] hover:text-red-400 transition">
+            <button onClick={() => removeHolding(h.symbol)} className="opacity-0 group-hover:opacity-100 p-1 text-[#7c7c92] hover:text-red-400 transition">
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -193,50 +195,50 @@ export default function PortfolioTracker() {
           <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-[#0f0f15] border border-white/[0.08] p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
           <h3 className="text-white font-semibold text-sm">{c('addHolding')}</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-[#6b6b80] hover:text-white">
+              <button onClick={() => setShowAddModal(false)} className="text-[#7c7c92] hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('coinId')}</label>
+            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('coinId')}</label>
                 <input
                   type="text"
                   value={newHolding.symbol}
                   onChange={e => setNewHolding(p => ({ ...p, symbol: e.target.value }))}
                   placeholder="bitcoin, ethereum, solana..."
-                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#4a4a5a]"
+                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
                 />
               </div>
               <div>
-            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('displayName')}</label>
+            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('displayName')}</label>
                 <input
                   type="text"
                   value={newHolding.name}
                   onChange={e => setNewHolding(p => ({ ...p, name: e.target.value }))}
                   placeholder="Bitcoin"
-                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#4a4a5a]"
+                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('amount')}</label>
+            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('amount')}</label>
                   <input
                     type="number"
                     value={newHolding.amount}
                     onChange={e => setNewHolding(p => ({ ...p, amount: e.target.value }))}
                     placeholder="0.5"
-                    className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#4a4a5a]"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
                   />
                 </div>
                 <div>
-            <label className="text-[11px] text-[#6b6b80] mb-1 block">{c('buyPrice')}</label>
+            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('buyPrice')}</label>
                   <input
                     type="number"
                     value={newHolding.buyPrice}
                     onChange={e => setNewHolding(p => ({ ...p, buyPrice: e.target.value }))}
                     placeholder="60000"
-                    className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#4a4a5a]"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
                   />
                 </div>
               </div>

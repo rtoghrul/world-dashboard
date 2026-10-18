@@ -91,11 +91,11 @@ export default function CalendarWidget() {
           <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={prevMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#4a4a5e]">
+          <button onClick={prevMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#7c7c92]">
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
           <span className="text-[11px] text-[#8b8b9e] min-w-[100px] text-center">{monthNames[month]} {year}</span>
-          <button onClick={nextMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#4a4a5e]">
+          <button onClick={nextMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#7c7c92]">
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -104,7 +104,7 @@ export default function CalendarWidget() {
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-0.5 mb-3">
         {dayNames.map(d => (
-          <div key={d} className="text-center text-[9px] text-[#4a4a5e] py-1">{d}</div>
+          <div key={d} className="text-center text-[9px] text-[#7c7c92] py-1">{d}</div>
         ))}
         {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
         {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -142,14 +142,14 @@ export default function CalendarWidget() {
         {Object.entries(typeColors).map(([type, color]) => (
           <div key={type} className="flex items-center gap-1">
             <span className={`w-2 h-2 rounded-full ${color}`} />
-            <span className="text-[9px] text-[#4a4a5e]">{c(type)}</span>
+            <span className="text-[9px] text-[#7c7c92]">{c(type)}</span>
           </div>
         ))}
       </div>
 
       {/* Upcoming events */}
       <div className="border-t border-white/[0.04] pt-3">
-        <p className="text-[10px] text-[#4a4a5e] uppercase tracking-wider mb-2">{c('upcoming')}</p>
+        <p className="text-[10px] text-[#7c7c92] uppercase tracking-wider mb-2">{c('upcoming')}</p>
         <div className="space-y-1.5">
           {upcomingEvents.map((e, i) => {
             const Icon = typeIcons[e.type]
@@ -161,7 +161,7 @@ export default function CalendarWidget() {
                 <div className="flex-1 min-w-0">
                   <p className="text-white text-[11px] truncate">{e.title}</p>
                 </div>
-                <span className="text-[9px] text-[#4a4a5e]">{e.date.slice(5)}</span>
+                <span className="text-[9px] text-[#7c7c92]">{e.date.slice(5)}</span>
               </div>
             )
           })}

@@ -178,7 +178,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
               <TrendingUp className="w-4 h-4 text-pink-400" />
               {tr.social}
             </h2>
-            <p className="text-gray-500 text-xs">{tr.socialDesc}</p>
+            <p className="text-gray-400 text-xs">{tr.socialDesc}</p>
           </div>
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             {!collapsed && (
@@ -196,7 +196,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
                 ))}
               </div>
             )}
-            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
           </div>
         </div>
       </div>
@@ -209,7 +209,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
               {p.icon} {p.name}
             </span>
           ))}
-          <span className="text-gray-500 text-xs">· {tr.trending} tags & links</span>
+          <span className="text-gray-400 text-xs">· {tr.trending} tags & links</span>
         </div>
       )}
 
@@ -219,7 +219,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Quick Links */}
             <div>
-              <p className="text-gray-500 text-xs mb-2 font-medium uppercase tracking-wide">Quick Links</p>
+              <p className="text-gray-400 text-xs mb-2 font-medium uppercase tracking-wide">Quick Links</p>
               <div className="space-y-1.5">
                 {current.links.map(link => (
                   <a
@@ -230,7 +230,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
                     className="flex items-center justify-between px-3 py-2 rounded-lg border transition bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] group"
                   >
                     <span className={`text-xs font-medium ${current.color}`}>{link.label}</span>
-                    <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400" />
+                    <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-gray-400" />
                   </a>
                 ))}
               </div>
@@ -238,7 +238,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
 
             {/* Trending Tags */}
             <div>
-              <p className="text-gray-500 text-xs mb-2 font-medium uppercase tracking-wide">Trending Tags</p>
+              <p className="text-gray-400 text-xs mb-2 font-medium uppercase tracking-wide">Trending Tags</p>
               <div className="flex flex-wrap gap-2">
                 {current.tags.map(t => (
                   <a

@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo'
 import FactsCategoryTranslated from '@/components/FactsCategoryTranslated'
 import { factCategories, getFactCategory } from '@/lib/facts'
 
@@ -7,10 +8,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { id: string } }) {
   const category = getFactCategory(params.id)
-  return {
-    title: `${category.title} Facts — Mind-Blowing Facts`,
-    description: category.description,
-  }
+  return pageMetadata(`/facts/${category.id}`, `${category.title} Facts — Mind-Blowing Facts`, category.description)
 }
 
 export default function DirectFactsCategoryPage({

@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, PiggyBank, Utensils, Pill, Shirt, ShoppingBag, Car, Baby, Home, BadgeEuro } from 'lucide-react'
 import Header from '@/components/Header'
-import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
 
@@ -91,9 +90,8 @@ const groups = [
 export default function SavingsPage() {
   return (
     <div className="min-h-screen relative z-[1] bg-gray-950">
-      <CommandPalette />
       <Header />
-      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center gap-3 mb-6">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] transition-all">
             <ArrowLeft className="w-5 h-5 text-white/80" />
@@ -118,7 +116,7 @@ export default function SavingsPage() {
                   </div>
                   <div>
                     <h2 className="text-white font-semibold text-sm">{group.title}</h2>
-                    <p className="text-[#6b6b80] text-xs mt-0.5">{group.subtitle}</p>
+                    <p className="text-[#7c7c92] text-xs mt-0.5">{group.subtitle}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -126,7 +124,7 @@ export default function SavingsPage() {
                     <a key={item.name} href={item.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-emerald-500/25 p-3 transition-all">
                       <div className="flex items-center justify-between gap-2">
                         <h3 className="text-white text-xs font-semibold">{item.name}</h3>
-                        <ExternalLink className="w-3.5 h-3.5 text-[#6b6b80] group-hover:text-emerald-300" />
+                        <ExternalLink className="w-3.5 h-3.5 text-[#7c7c92] group-hover:text-emerald-300" />
                       </div>
                       <p className="text-[#8b8b9e] text-[11px] mt-1 leading-relaxed">{item.note}</p>
                     </a>

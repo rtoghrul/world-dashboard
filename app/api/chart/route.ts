@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { fetchWithTimeout, clampInt } from '@/lib/http'
 
 export const revalidate = 300
 
@@ -24,10 +25,10 @@ function klinesParams(days: number): { interval: string; limit: number } {
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const coin = searchParams.get('coin') || 'bitcoin'
-  const days = Math.max(1, Number(searchParams.get('days') || '7'))
+  const days = clampInt(searchParams.get('days'), 7, 1, 365)
 
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       `https://api.coingecko.com/api/v3/coins/${encodeURIComponent(coin)}/market_chart?vs_currency=usd&days=${days}`,
       { next: { revalidate: 300 } }
     )
@@ -41,7 +42,7 @@ export async function GET(req: Request) {
       const symbol = SYMBOLS[coin]
       if (!symbol) throw new Error('No Binance symbol')
       const { interval, limit } = klinesParams(days)
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`,
         { next: { revalidate: 300 } }
       )
@@ -50,7 +51,7 @@ export async function GET(req: Request) {
       const prices = (Array.isArray(rows) ? rows : []).map((k: any[]) => [k[0], Number(k[4])])
       return NextResponse.json({ prices })
     } catch {
-      return NextResponse.json({ error: 'Failed to fetch chart data' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch chart data' }, { status: 502 })
     }
   }
 }

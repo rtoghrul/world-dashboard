@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { translateTexts } from '@/lib/translate'
+import { fetchWithTimeout } from '@/lib/http'
 
 export const revalidate = 300
 
@@ -103,16 +104,26 @@ function parseRSS(xml: string, source: string, category: string) {
   return items
 }
 
+// Channel title (first <title> after <channel>), shortened to the publisher name.
+// Falls back to the feed's hostname instead of showing a raw URL.
+function feedName(xml: string, url: string) {
+  const channel = xml.indexOf('<channel')
+  const m = (channel >= 0 ? xml.slice(channel) : xml).match(/<title>(?:<!\[CDATA\[)?([^\]<]+)/)
+  const raw = m ? m[1].replace(/&#8211;|&ndash;/g, '–').replace(/&amp;/g, '&').trim() : ''
+  const short = raw.split(/\s[–|-]\s/)[0].trim()
+  if (short) return short
+  try { return new URL(url).hostname.replace(/^www\.|^feeds?\./, '') } catch { return url }
+}
+
 async function fetchFeed(url: string, category: string) {
   try {
-    const res = await fetch(url, {
+    const res = await fetchWithTimeout(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WorldDashboard/1.0)' },
       next: { revalidate: 300 },
     })
     if (!res.ok) return []
     const xml = await res.text()
-    const titleMatch = xml.match(/<channel>\s*<title>(?:<!\[CDATA\[)?([^\]<]+)/)
-    const source = titleMatch ? titleMatch[1].trim() : url
+    const source = feedName(xml, url)
     return parseRSS(xml, source, category)
   } catch {
     return []

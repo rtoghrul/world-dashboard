@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { Smartphone, Monitor, Apple, Globe, ExternalLink, Star, Sparkles, ArrowRight } from 'lucide-react'
 import SectionNews from './SectionNews'
 
@@ -14,12 +15,12 @@ const COPY: Record<string, Record<string, string>> = {
 }
 
 const platformTabs = [
-  { id: 'all', icon: Globe, label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü' } },
-  { id: 'android', icon: Smartphone, label: { en: 'Android', az: 'Android', de: 'Android', ru: 'Android', tr: 'Android' } },
-  { id: 'ios', icon: Apple, label: { en: 'iOS', az: 'iOS', de: 'iOS', ru: 'iOS', tr: 'iOS' } },
-  { id: 'windows', icon: Monitor, label: { en: 'Windows', az: 'Windows', de: 'Windows', ru: 'Windows', tr: 'Windows' } },
-  { id: 'mac', icon: Apple, label: { en: 'Mac', az: 'Mac', de: 'Mac', ru: 'Mac', tr: 'Mac' } },
-  { id: 'extensions', icon: Globe, label: { en: 'Extensions', az: 'Əlavələr', de: 'Erweiterungen', ru: 'Расширения', tr: 'Eklentiler' } },
+  { id: 'all', icon: Globe, label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' } },
+  { id: 'android', icon: Smartphone, label: { en: 'Android', az: 'Android', de: 'Android', ru: 'Android', tr: 'Android', fr: 'Android', es: 'Android', zh: 'Android', ar: 'Android', ja: 'Android', it: 'Android', pt: 'Android' } },
+  { id: 'ios', icon: Apple, label: { en: 'iOS', az: 'iOS', de: 'iOS', ru: 'iOS', tr: 'iOS', fr: 'iOS', es: 'iOS', zh: 'iOS', ar: 'iOS', ja: 'iOS', it: 'iOS', pt: 'iOS' } },
+  { id: 'windows', icon: Monitor, label: { en: 'Windows', az: 'Windows', de: 'Windows', ru: 'Windows', tr: 'Windows', fr: 'Windows', es: 'Windows', zh: 'Windows', ar: 'Windows', ja: 'Windows', it: 'Windows', pt: 'Windows' } },
+  { id: 'mac', icon: Apple, label: { en: 'Mac', az: 'Mac', de: 'Mac', ru: 'Mac', tr: 'Mac', fr: 'Mac', es: 'Mac', zh: 'Mac', ar: 'Mac', ja: 'Mac', it: 'Mac', pt: 'Mac' } },
+  { id: 'extensions', icon: Globe, label: { en: 'Extensions', az: 'Əlavələr', de: 'Erweiterungen', ru: 'Расширения', tr: 'Eklentiler', fr: 'Extensions', es: 'Extensiones', zh: '扩展程序', ar: 'الإضافات', ja: '拡張機能', it: 'Estensioni', pt: 'Extensões' } },
 ]
 
 interface OfficialPair {
@@ -134,10 +135,10 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
 
       {/* Mode toggle: Official vs Free */}
       <div className="flex gap-2 mb-3">
-        <button onClick={() => setMode('official')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${mode === 'official' ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-200 dark:ring-indigo-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>
+        <button onClick={() => setMode('official')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${mode === 'official' ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-200 dark:ring-indigo-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400'}`}>
           {t('official')}
         </button>
-        <button onClick={() => setMode('free')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${mode === 'free' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 ring-1 ring-green-200 dark:ring-green-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>
+        <button onClick={() => setMode('free')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${mode === 'free' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 ring-1 ring-green-200 dark:ring-green-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400'}`}>
           {t('free')}
         </button>
       </div>
@@ -148,9 +149,9 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
           const Icon = p.icon
           return (
             <button key={p.id} onClick={() => setPlatform(p.id)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${platform === p.id ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${platform === p.id ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
-              {p.label[lang] || p.label.en}
+              {pickLabel(p.label, lang)}
             </button>
           )
         })}
@@ -168,7 +169,7 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
                   <h3 className="font-semibold text-sm">{pair.official.name}</h3>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-200 dark:bg-red-800/50 text-red-700 dark:text-red-300">{t('paid')}</span>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{pair.official.desc[lang] || pair.official.desc.en}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{pair.official.desc[lang] || pair.official.desc.en}</p>
                 <span className="text-[11px] font-semibold text-red-600 dark:text-red-400">{pair.official.price}</span>
               </a>
               {/* Arrow */}
@@ -182,7 +183,7 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
                   <h3 className="font-semibold text-sm text-green-700 dark:text-green-300">{pair.alternative.name}</h3>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-200 dark:bg-green-800/50 text-green-700 dark:text-green-300">{t('freeAlt')}</span>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{pair.alternative.desc[lang] || pair.alternative.desc.en}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{pair.alternative.desc[lang] || pair.alternative.desc.en}</p>
                 <div className="flex items-center gap-2">
                   {pair.alternative.openSource && <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">{t('openSource')}</span>}
                   <div className="flex items-center gap-0.5 text-[10px] text-amber-500"><Star className="w-3 h-3 fill-current" />{pair.alternative.rating}</div>
@@ -209,7 +210,7 @@ export default function SoftwareWidget({ defaultExpanded, initialPlatform }: { d
                   <h3 className="font-semibold text-sm group-hover:text-green-600 dark:group-hover:text-green-400">{item.name}</h3>
                   <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang] || item.desc.en}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang] || item.desc.en}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     {item.openSource && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">{t('openSource')}</span>}

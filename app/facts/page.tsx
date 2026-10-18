@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo'
 import Link from 'next/link'
 import { ArrowLeft, Sparkles } from 'lucide-react'
 import Header from '@/components/Header'
@@ -5,17 +6,14 @@ import Footer from '@/components/Footer'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import { factCategories } from '@/lib/facts'
 
-export const metadata = {
-  title: 'Facts — Mind-Blowing Facts',
-  description: 'Mind-blowing facts about astronomy, history, human body, nature, animals, science, ocean, space, earth, technology, psychology and mysteries.',
-}
+export const metadata = pageMetadata('/facts', 'Facts — Mind-Blowing Facts', 'Mind-blowing facts about astronomy, history, human body, nature, animals, science, ocean, space, earth, technology, psychology and mysteries.')
 
 export default function FactsShortcutPage() {
   return (
     <div className="min-h-screen relative z-[1] w-full pb-20 md:pb-0">
       <Header />
 
-      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         <Link href="/" className="inline-flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 transition mb-5">
           <ArrowLeft className="w-3.5 h-3.5" /> Back to dashboard
         </Link>

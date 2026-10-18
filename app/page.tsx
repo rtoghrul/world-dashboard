@@ -1,4 +1,5 @@
 'use client'
+import { fearGreedLabel } from '@/lib/fearGreed'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
@@ -6,13 +7,11 @@ import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Gl
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
-import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 import PortfolioTracker from '@/components/PortfolioTracker'
-import PriceChart from '@/components/PriceChart'
 import { NewsItem, NewsCard } from '@/components/NewsWidget'
 import { Coin, formatNum } from '@/components/CryptoWidget'
 import TrendingWidget from '@/components/TrendingWidget'
@@ -21,6 +20,43 @@ import PolymarketWidget from '@/components/PolymarketWidget'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import HorizonWidget from '@/components/HorizonWidget'
 import { Sparkles, Download } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+// recharts is the heaviest client dependency; load the charts after first paint.
+const PriceChart = dynamic(() => import('@/components/PriceChart'), {
+  ssr: false,
+  loading: () => <div className="rounded-2xl bg-[#0a0a10] border border-white/[0.06] p-5 h-[284px] animate-pulse" aria-hidden="true" />,
+})
+
+const HERO: Record<string, { tagline: string; search: string }> = {
+  en: { tagline: 'Real-time markets, news & tools — 15+ sections, 500+ sites, 12 languages, one place.', search: 'Search anything…' },
+  az: { tagline: 'Canlı bazarlar, xəbərlər və alətlər — 15+ bölmə, 500+ sayt, 12 dil, bir yerdə.', search: 'Nə istəsən axtar…' },
+  ru: { tagline: 'Рынки, новости и инструменты в реальном времени — 15+ разделов, 500+ сайтов, 12 языков в одном месте.', search: 'Искать что угодно…' },
+  de: { tagline: 'Märkte, News & Tools in Echtzeit — 15+ Bereiche, 500+ Seiten, 12 Sprachen, alles an einem Ort.', search: 'Alles durchsuchen…' },
+  tr: { tagline: 'Gerçek zamanlı piyasalar, haberler ve araçlar — 15+ bölüm, 500+ site, 12 dil, tek yerde.', search: 'Her şeyi ara…' },
+  fr: { tagline: 'Marchés, actualités et outils en temps réel — 15+ sections, 500+ sites, 12 langues, au même endroit.', search: 'Rechercher…' },
+  es: { tagline: 'Mercados, noticias y herramientas en tiempo real — 15+ secciones, 500+ sitios, 12 idiomas, en un solo lugar.', search: 'Busca lo que quieras…' },
+  zh: { tagline: '实时市场、新闻与工具 — 15+ 栏目、500+ 网站、12 种语言，一站汇集。', search: '搜索任何内容…' },
+  ar: { tagline: 'أسواق وأخبار وأدوات لحظية — أكثر من 15 قسماً و500 موقع و12 لغة في مكان واحد.', search: 'ابحث عن أي شيء…' },
+  ja: { tagline: 'リアルタイムの市場・ニュース・ツール — 15以上のセクション、500以上のサイト、12言語をひとつに。', search: '何でも検索…' },
+  it: { tagline: 'Mercati, notizie e strumenti in tempo reale — 15+ sezioni, 500+ siti, 12 lingue, in un unico posto.', search: 'Cerca qualsiasi cosa…' },
+  pt: { tagline: 'Mercados, notícias e ferramentas em tempo real — 15+ seções, 500+ sites, 12 idiomas, num só lugar.', search: 'Pesquise qualquer coisa…' },
+}
+
+const BENEFITS_BANNER: Record<string, { title: string; desc: string }> = {
+  en: { title: 'Benefits Hub', desc: 'Subsidies, discounts, free tools & earning tips — track what you’ve claimed' },
+  az: { title: 'Güzəşt Mərkəzi', desc: 'Subsidiyalar, endirimlər, pulsuz alətlər və qazanc tövsiyələri — aldıqlarınızı izləyin' },
+  ru: { title: 'Льготы и выгоды', desc: 'Субсидии, скидки, бесплатные инструменты и советы по заработку — отмечайте полученное' },
+  de: { title: 'Vorteils-Hub', desc: 'Zuschüsse, Rabatte, kostenlose Tools & Verdienst-Tipps — behalten Sie den Überblick' },
+  tr: { title: 'Avantaj Merkezi', desc: 'Destekler, indirimler, ücretsiz araçlar ve kazanç ipuçları — aldıklarınızı takip edin' },
+  fr: { title: 'Espace avantages', desc: 'Aides, réductions, outils gratuits et astuces pour gagner — suivez ce que vous avez obtenu' },
+  es: { title: 'Centro de beneficios', desc: 'Ayudas, descuentos, herramientas gratis y consejos para ganar — controla lo que has conseguido' },
+  zh: { title: '福利中心', desc: '补贴、折扣、免费工具与赚钱技巧 — 记录你已领取的福利' },
+  ar: { title: 'مركز المزايا', desc: 'دعم وخصومات وأدوات مجانية ونصائح للربح — تابع ما حصلت عليه' },
+  ja: { title: '特典ハブ', desc: '補助金・割引・無料ツール・稼ぎ方のヒント — 受け取った特典を管理' },
+  it: { title: 'Centro vantaggi', desc: 'Sussidi, sconti, strumenti gratuiti e consigli per guadagnare — tieni traccia di ciò che hai ottenuto' },
+  pt: { title: 'Central de benefícios', desc: 'Subsídios, descontos, ferramentas grátis e dicas para ganhar — acompanhe o que já conseguiu' },
+}
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -39,7 +75,7 @@ type MarketData = {
 }
 
 export default function HomePage() {
-  const { lang } = useLang()
+  const { lang, tr } = useLang()
   const { data: news } = useSWR<NewsItem[]>(`/api/news?category=top&lang=${lang}`, fetcher, { refreshInterval: 300000 })
   const { data: coins } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
   const { data: market } = useSWR<MarketData>('/api/market', fetcher, { refreshInterval: 300000 })
@@ -83,7 +119,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative z-[1] w-full">
       <ServiceWorkerRegistrar />
-      <CommandPalette />
       <Header />
 
       {/* ═══ HERO SECTION ═══ */}
@@ -101,13 +136,14 @@ export default function HomePage() {
                 {new Date().toLocaleDateString(lang === 'en' ? 'en-US' : lang, { weekday: 'long', day: 'numeric', month: 'long' })}
               </p>
               <h1 className="gradient-text text-3xl sm:text-5xl font-extrabold tracking-tight">World Dashboard</h1>
-              <p className="text-[#8b8b9e] text-sm sm:text-base mt-2 max-w-lg">Real-time markets, news & tools — 15+ sections, 500+ sites, 12 languages, one place.</p>
+              <p className="text-[#8b8b9e] text-sm sm:text-base mt-2 max-w-lg">{(HERO[lang] || HERO.en).tagline}</p>
               <button
+                type="button"
                 onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
                 className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-[#8b8b9e] hover:text-white hover:border-indigo-500/40 transition-all"
               >
-                <Search className="w-4 h-4" />
-                Search anything…
+                <Search className="w-4 h-4" aria-hidden="true" />
+                {(HERO[lang] || HERO.en).search}
                 <kbd className="ml-2 px-1.5 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
               </button>
             </div>
@@ -115,7 +151,7 @@ export default function HomePage() {
               {/* KPI Pills */}
               {market?.total_market_cap && (
                 <div className="glass px-3 py-1.5 rounded-full flex items-center gap-2">
-                  <span className="text-[10px] text-[#8b8b9e]">Crypto MCap</span>
+                  <span className="text-[10px] text-[#8b8b9e]">{tr.marketCap || 'Market cap'}</span>
                   <span className="text-xs text-white font-mono font-medium">{formatNum(market.total_market_cap)}</span>
                   {market.market_cap_change_24h !== null && (
                     <span className={`text-[10px] font-medium ${market.market_cap_change_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -148,25 +184,25 @@ export default function HomePage() {
 
       <MarketTicker />
 
-      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         {/* ═══ EXPLORE GRID ═══ */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-8">
           {[
-            { href: '/section/news/top', icon: Newspaper, label: 'News', accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
-            { href: '/section/markets/crypto-top', icon: Bitcoin, label: 'Markets', accent: 'from-amber-500/20 to-amber-500/5 border-amber-500/20 hover:border-amber-400/50', iconColor: 'text-amber-400' },
-            { href: '/section/entertainment/movies', icon: Film, label: 'Entertainment', accent: 'from-purple-500/20 to-purple-500/5 border-purple-500/20 hover:border-purple-400/50', iconColor: 'text-purple-400' },
-            { href: '/section/aitools/chatbots', icon: Cpu, label: 'AI Tools', accent: 'from-violet-500/20 to-violet-500/5 border-violet-500/20 hover:border-violet-400/50', iconColor: 'text-violet-400' },
-            { href: '/section/software/android', icon: MonitorSmartphone, label: 'Software', accent: 'from-cyan-500/20 to-cyan-500/5 border-cyan-500/20 hover:border-cyan-400/50', iconColor: 'text-cyan-400' },
-            { href: '/section/viral/youtube', icon: Zap, label: 'Viral', accent: 'from-pink-500/20 to-pink-500/5 border-pink-500/20 hover:border-pink-400/50', iconColor: 'text-pink-400' },
-            { href: '/section/education/science', icon: GraduationCap, label: 'Education', accent: 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20 hover:border-emerald-400/50', iconColor: 'text-emerald-400' },
-            { href: '/section/travel/flight-hotel', icon: Plane, label: 'Travel', accent: 'from-sky-500/20 to-sky-500/5 border-sky-500/20 hover:border-sky-400/50', iconColor: 'text-sky-400' },
-            { href: '/section/germany/behoerden', icon: Landmark, label: 'Germany 🇩🇪', accent: 'from-yellow-500/20 to-yellow-500/5 border-yellow-500/20 hover:border-yellow-400/50', iconColor: 'text-yellow-400' },
-            { href: '/section/chinese/all', icon: ShoppingBag, label: 'China 🇨🇳', accent: 'from-red-500/20 to-red-500/5 border-red-500/20 hover:border-red-400/50', iconColor: 'text-red-400' },
-            { href: '/section/horizon/hackernews', icon: Globe2, label: 'Horizon', accent: 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20 hover:border-indigo-400/50', iconColor: 'text-indigo-400' },
-            { href: '/benefits', icon: Gift, label: 'Benefits', accent: 'from-orange-500/20 to-orange-500/5 border-orange-500/20 hover:border-orange-400/50', iconColor: 'text-orange-400' },
-            { href: '/facts', icon: Lightbulb, label: 'Facts', accent: 'from-lime-500/20 to-lime-500/5 border-lime-500/20 hover:border-lime-400/50', iconColor: 'text-lime-400' },
-            { href: '/nearby', icon: MapPin, label: 'Nearby', accent: 'from-teal-500/20 to-teal-500/5 border-teal-500/20 hover:border-teal-400/50', iconColor: 'text-teal-400' },
-            { href: '/section/health/all', icon: Stethoscope, label: 'Health', accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
+            { href: '/section/news/top', icon: Newspaper, label: {en:'News',az:'Xəbərlər',ru:'Новости',de:'Nachrichten',tr:'Haberler',fr:'Actualités',es:'Noticias',zh:'新闻',ar:'أخبار',ja:'ニュース',it:'Notizie',pt:'Notícias'} as Record<string,string>, accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
+            { href: '/section/markets/crypto-top', icon: Bitcoin, label: {en:'Markets',az:'Bazarlar',ru:'Рынки',de:'Märkte',tr:'Piyasalar',fr:'Marchés',es:'Mercados',zh:'市场',ar:'أسواق',ja:'市場',it:'Mercati',pt:'Mercados'} as Record<string,string>, accent: 'from-amber-500/20 to-amber-500/5 border-amber-500/20 hover:border-amber-400/50', iconColor: 'text-amber-400' },
+            { href: '/section/entertainment/movies', icon: Film, label: {en:'Entertainment',az:'Əyləncə',ru:'Развлечения',de:'Unterhaltung',tr:'Eğlence',fr:'Divertissement',es:'Entretenimiento',zh:'娱乐',ar:'ترفيه',ja:'エンタメ',it:'Intrattenimento',pt:'Entretenimento'} as Record<string,string>, accent: 'from-purple-500/20 to-purple-500/5 border-purple-500/20 hover:border-purple-400/50', iconColor: 'text-purple-400' },
+            { href: '/section/aitools/chatbots', icon: Cpu, label: {en:'AI Tools',az:'AI Alətlər',ru:'ИИ-инструменты',de:'KI-Tools',tr:'YZ Araçları',fr:'Outils IA',es:'Herramientas IA',zh:'AI工具',ar:'أدوات الذكاء',ja:'AIツール',it:'Strumenti IA',pt:'Ferramentas IA'} as Record<string,string>, accent: 'from-violet-500/20 to-violet-500/5 border-violet-500/20 hover:border-violet-400/50', iconColor: 'text-violet-400' },
+            { href: '/section/software/android', icon: MonitorSmartphone, label: {en:'Software',az:'Proqramlar',ru:'Программы',de:'Software',tr:'Yazılım',fr:'Logiciels',es:'Software',zh:'软件',ar:'برامج',ja:'ソフトウェア',it:'Software',pt:'Software'} as Record<string,string>, accent: 'from-cyan-500/20 to-cyan-500/5 border-cyan-500/20 hover:border-cyan-400/50', iconColor: 'text-cyan-400' },
+            { href: '/section/viral/youtube', icon: Zap, label: {en:'Viral',az:'Viral',ru:'Вирусное',de:'Viral',tr:'Viral',fr:'Viral',es:'Viral',zh:'热门',ar:'رائج',ja:'バズ',it:'Virale',pt:'Viral'} as Record<string,string>, accent: 'from-pink-500/20 to-pink-500/5 border-pink-500/20 hover:border-pink-400/50', iconColor: 'text-pink-400' },
+            { href: '/section/education/science', icon: GraduationCap, label: {en:'Education',az:'Təhsil',ru:'Образование',de:'Bildung',tr:'Eğitim',fr:'Éducation',es:'Educación',zh:'教育',ar:'تعليم',ja:'教育',it:'Istruzione',pt:'Educação'} as Record<string,string>, accent: 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20 hover:border-emerald-400/50', iconColor: 'text-emerald-400' },
+            { href: '/section/travel/flight-hotel', icon: Plane, label: {en:'Travel',az:'Səyahət',ru:'Путешествия',de:'Reisen',tr:'Seyahat',fr:'Voyage',es:'Viajes',zh:'旅行',ar:'سفر',ja:'旅行',it:'Viaggi',pt:'Viagens'} as Record<string,string>, accent: 'from-sky-500/20 to-sky-500/5 border-sky-500/20 hover:border-sky-400/50', iconColor: 'text-sky-400' },
+            { href: '/section/germany/behoerden', icon: Landmark, label: {en:'Germany 🇩🇪',az:'Almaniya 🇩🇪',ru:'Германия 🇩🇪',de:'Deutschland 🇩🇪',tr:'Almanya 🇩🇪',fr:'Allemagne 🇩🇪',es:'Alemania 🇩🇪',zh:'德国 🇩🇪',ar:'ألمانيا 🇩🇪',ja:'ドイツ 🇩🇪',it:'Germania 🇩🇪',pt:'Alemanha 🇩🇪'} as Record<string,string>, accent: 'from-yellow-500/20 to-yellow-500/5 border-yellow-500/20 hover:border-yellow-400/50', iconColor: 'text-yellow-400' },
+            { href: '/section/chinese/all', icon: ShoppingBag, label: {en:'China 🇨🇳',az:'Çin 🇨🇳',ru:'Китай 🇨🇳',de:'China 🇨🇳',tr:'Çin 🇨🇳',fr:'Chine 🇨🇳',es:'China 🇨🇳',zh:'中国 🇨🇳',ar:'الصين 🇨🇳',ja:'中国 🇨🇳',it:'Cina 🇨🇳',pt:'China 🇨🇳'} as Record<string,string>, accent: 'from-red-500/20 to-red-500/5 border-red-500/20 hover:border-red-400/50', iconColor: 'text-red-400' },
+            { href: '/section/horizon/hackernews', icon: Globe2, label: {en:'Horizon',az:'Horizon',ru:'Horizon',de:'Horizon',tr:'Horizon',fr:'Horizon',es:'Horizon',zh:'Horizon',ar:'Horizon',ja:'Horizon',it:'Horizon',pt:'Horizon'} as Record<string,string>, accent: 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20 hover:border-indigo-400/50', iconColor: 'text-indigo-400' },
+            { href: '/benefits', icon: Gift, label: {en:'Benefits',az:'Güzəştlər',ru:'Льготы',de:'Vorteile',tr:'Avantajlar',fr:'Avantages',es:'Beneficios',zh:'福利',ar:'مزايا',ja:'特典',it:'Vantaggi',pt:'Benefícios'} as Record<string,string>, accent: 'from-orange-500/20 to-orange-500/5 border-orange-500/20 hover:border-orange-400/50', iconColor: 'text-orange-400' },
+            { href: '/facts', icon: Lightbulb, label: {en:'Facts',az:'Faktlar',ru:'Факты',de:'Fakten',tr:'Bilgiler',fr:'Faits',es:'Datos',zh:'趣闻',ar:'حقائق',ja:'豆知識',it:'Fatti',pt:'Fatos'} as Record<string,string>, accent: 'from-lime-500/20 to-lime-500/5 border-lime-500/20 hover:border-lime-400/50', iconColor: 'text-lime-400' },
+            { href: '/nearby', icon: MapPin, label: {en:'Nearby',az:'Yaxınlıqda',ru:'Рядом',de:'In der Nähe',tr:'Yakınımda',fr:'À proximité',es:'Cerca',zh:'附近',ar:'بالقرب',ja:'近く',it:'Nelle vicinanze',pt:'Por perto'} as Record<string,string>, accent: 'from-teal-500/20 to-teal-500/5 border-teal-500/20 hover:border-teal-400/50', iconColor: 'text-teal-400' },
+            { href: '/section/health/all', icon: Stethoscope, label: {en:'Health',az:'Sağlamlıq',ru:'Здоровье',de:'Gesundheit',tr:'Sağlık',fr:'Santé',es:'Salud',zh:'健康',ar:'صحة',ja:'健康',it:'Salute',pt:'Saúde'} as Record<string,string>, accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
           ].map(tile => (
             <Link
               key={tile.href}
@@ -174,7 +210,7 @@ export default function HomePage() {
               className={`group flex flex-col items-center gap-2 py-4 px-2 rounded-2xl border bg-gradient-to-b ${tile.accent} transition-all hover:scale-[1.03] hover:-translate-y-0.5`}
             >
               <tile.icon className={`w-6 h-6 ${tile.iconColor} group-hover:scale-110 transition-transform`} />
-              <span className="text-xs font-semibold text-white/90 text-center leading-tight">{tile.label}</span>
+              <span className="text-xs font-semibold text-white/90 text-center leading-tight">{tile.label[lang] || tile.label.en}</span>
             </Link>
           ))}
         </div>
@@ -253,10 +289,10 @@ export default function HomePage() {
                   const up = coin.price_change_percentage_24h >= 0
                   return (
                     <Link key={coin.id} href="/section/crypto/top" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition border-b border-white/[0.03] last:border-0">
-                      <img src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
+                      <img loading="lazy" decoding="async" src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-xs font-medium">{coin.name}</p>
-                        <p className="text-[#4a4a5e] text-[10px] uppercase">{coin.symbol}</p>
+                        <p className="text-[#7c7c92] text-[10px] uppercase">{coin.symbol}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-white text-xs font-mono">${coin.current_price.toLocaleString()}</p>
@@ -316,7 +352,7 @@ export default function HomePage() {
                     <span className={`text-xs font-mono ${sp500.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {sp500.change >= 0 ? '+' : ''}{sp500.changePercent?.toFixed(2) || sp500.change?.toFixed(2)}%
                     </span>
-                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>)}
+                  ) : <span className="text-[#7c7c92] text-xs font-mono">—</span>)}
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">NASDAQ</span>
@@ -324,7 +360,7 @@ export default function HomePage() {
                     <span className={`text-xs font-mono ${nasdaq.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {nasdaq.change >= 0 ? '+' : ''}{nasdaq.changePercent?.toFixed(2) || nasdaq.change?.toFixed(2)}%
                     </span>
-                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>)}
+                  ) : <span className="text-[#7c7c92] text-xs font-mono">—</span>)}
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b8b9e] text-xs">{t.fearGreed}</span>
@@ -335,9 +371,9 @@ export default function HomePage() {
                       market.fear_greed <= 55 ? 'text-yellow-400' :
                       market.fear_greed <= 75 ? 'text-lime-400' : 'text-emerald-400'
                     }`}>
-                      {market.fear_greed} · {market.fear_greed_label}
+                      {market.fear_greed} · {fearGreedLabel(market.fear_greed_label, lang)}
                     </span>
-                  ) : <span className="text-[#6b6b80] text-xs font-mono">—</span>)}
+                  ) : <span className="text-[#7c7c92] text-xs font-mono">—</span>)}
                 </div>
               </div>
             </div>
@@ -352,8 +388,8 @@ export default function HomePage() {
                 <Sparkles className="w-5 h-5 text-amber-400" />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm group-hover:text-amber-300 transition-colors">Benefits Hub</h3>
-                <p className="text-xs text-[#8b8b9e]">Subsidies, discounts, free tools & earning tips — track what you&apos;ve claimed</p>
+                <h3 className="text-white font-semibold text-sm group-hover:text-amber-300 transition-colors">{(BENEFITS_BANNER[lang] || BENEFITS_BANNER.en).title}</h3>
+                <p className="text-xs text-[#8b8b9e]">{(BENEFITS_BANNER[lang] || BENEFITS_BANNER.en).desc}</p>
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform" />

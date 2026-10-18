@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server'
+import { fetchWithTimeout, clampInt } from '@/lib/http'
 
 export const revalidate = 3600
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const regionCode = searchParams.get('region') || 'US'
-  const maxResults = searchParams.get('maxResults') || '12'
+  const regionCode = /^[A-Za-z]{2}$/.test(searchParams.get('region') || '') ? searchParams.get('region')!.toUpperCase() : 'US'
+  const maxResults = String(clampInt(searchParams.get('maxResults'), 12, 1, 50))
   const category = searchParams.get('category') || ''
   const apiKey = process.env.YOUTUBE_API_KEY
 
-  if (!apiKey) return NextResponse.json({ error: 'No API key' }, { status: 500 })
+  if (!apiKey) return NextResponse.json({ error: 'YouTube is not configured' }, { status: 503 })
 
   try {
     const params = new URLSearchParams({
@@ -24,7 +25,7 @@ export async function GET(req: Request) {
       params.set('videoCategoryId', category)
     }
 
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       `https://www.googleapis.com/youtube/v3/videos?${params.toString()}`,
       { next: { revalidate: 3600 } }
     )
@@ -47,6 +48,6 @@ export async function GET(req: Request) {
 
     return NextResponse.json(videos)
   } catch {
-    return NextResponse.json({ error: 'Failed to fetch YouTube data' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch YouTube data' }, { status: 502 })
   }
 }

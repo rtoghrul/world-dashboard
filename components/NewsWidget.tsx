@@ -73,13 +73,13 @@ export type NewsItem = {
 function CardImage({ item }: { item: NewsItem }) {
   const [failed, setFailed] = useState(false)
   if (item.thumbnail && !failed) {
-    return <img src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gray-800" onError={() => setFailed(true)} />
+    return <img loading="lazy" decoding="async" src={item.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gray-800" onError={() => setFailed(true)} />
   }
   const first = item.source?.trim()?.charAt(0)?.toUpperCase() || 'N'
   return (
     <div className="w-14 h-14 rounded-lg bg-gray-800 border border-gray-700/70 flex flex-col items-center justify-center flex-shrink-0">
       <span className="text-indigo-300 text-lg font-bold leading-none">{first}</span>
-      <span className="text-gray-500 text-[9px] mt-1">NEWS</span>
+      <span className="text-gray-400 text-[9px] mt-1">NEWS</span>
     </div>
   )
 }
@@ -95,11 +95,11 @@ export function NewsCard({ item }: { item: NewsItem }) {
         <CardImage item={item} />
         <div className="flex-1 min-w-0">
           <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
-          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
+          <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">{item.description}</p>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-gray-600 text-xs">{item.source}</span>
-            <span className="text-gray-700 text-xs">·</span>
-            <span className="text-gray-600 text-xs">{item.pubDate ? formatNewsDate(item.pubDate) : ''}</span>
+            <span className="text-gray-400 text-xs">{item.source}</span>
+            <span className="text-gray-400 text-xs">·</span>
+            <span className="text-gray-400 text-xs">{item.pubDate ? formatNewsDate(item.pubDate) : ''}</span>
           </div>
         </div>
       </button>
@@ -133,20 +133,20 @@ export default function NewsWidget({ defaultExpanded = false, initialTab = 'top'
           <div>
             <h2 className="text-white font-semibold text-sm">📰 {tr.news}</h2>
             {collapsed && activeCategory && (
-              <p className="text-gray-500 text-xs mt-0.5">{activeCategory.label} global news</p>
+              <p className="text-gray-400 text-xs mt-0.5">{activeCategory.label} global news</p>
             )}
           </div>
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             {!collapsed && (
               <>
                 <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
-                  <Search className="w-3 h-3 text-gray-500 flex-shrink-0" />
+                  <Search className="w-3 h-3 text-gray-400 flex-shrink-0" />
                   <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder={tr.search} className="bg-transparent text-white text-xs outline-none w-16 placeholder-gray-600" />
                 </div>
                 <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">{tr.refresh}</button>
               </>
             )}
-            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
           </div>
         </div>
         {!collapsed && (
@@ -184,7 +184,7 @@ export default function NewsWidget({ defaultExpanded = false, initialTab = 'top'
               <CardImage item={top} />
               <div className="min-w-0">
                 <p className="text-white text-xs font-medium line-clamp-2">{top.title}</p>
-                <p className="text-gray-500 text-xs mt-0.5">{top.source}</p>
+                <p className="text-gray-400 text-xs mt-0.5">{top.source}</p>
               </div>
             </div>
           )}
@@ -202,7 +202,7 @@ export default function NewsWidget({ defaultExpanded = false, initialTab = 'top'
             ))}
             {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
             {!isLoading && !error && filtered.length === 0 && (
-              <div className="p-6 text-center text-gray-500 text-sm">No news found in this category.</div>
+              <div className="p-6 text-center text-gray-400 text-sm">No news found in this category.</div>
             )}
             {filtered.slice(0, 5).map((item, i) => <NewsCard key={i} item={item} />)}
           </div>

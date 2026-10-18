@@ -174,13 +174,13 @@ export default function WeatherWidget() {
             <span className="text-white text-xl font-bold">{w.temp}\u00b0</span>
             <span className="text-gray-400 text-xs">{desc(w.code, lang)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-500 text-[11px] mt-0.5">
+          <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mt-0.5">
             <MapPin className="w-3 h-3" />
             <span>{w.city}</span>
             {time && <><span>\u00b7</span><span>{time}</span></>}
           </div>
         </div>
-        <div className="flex items-center gap-3 text-gray-500 text-[11px]">
+        <div className="flex items-center gap-3 text-gray-400 text-[11px]">
           <span className="flex items-center gap-1"><Wind className="w-3 h-3" />{w.wind}</span>
           <span className="flex items-center gap-1"><Droplets className="w-3 h-3" />{w.humidity}%</span>
           <ChevronDown className={`w-4 h-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
@@ -202,7 +202,7 @@ export default function WeatherWidget() {
                   {LOCATIONS.map(l => (
                     <button key={l.id} onClick={() => { setLocId(l.id); setPickerOpen(false) }}
                       className={`text-left px-2 py-1.5 rounded text-xs transition ${locId === l.id ? 'bg-blue-500/20 text-blue-300' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}>
-                      {l.name} {l.country && <span className="text-gray-600">{l.country}</span>}
+                      {l.name} {l.country && <span className="text-gray-400">{l.country}</span>}
                     </button>
                   ))}
                 </div>
@@ -210,8 +210,8 @@ export default function WeatherWidget() {
             </div>
             {/* Tab toggle */}
             <div className="flex gap-1 bg-gray-800 rounded-lg p-0.5">
-              <button onClick={() => setTab('hours')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'hours' ? 'bg-gray-700 text-white' : 'text-gray-500 hover:text-gray-300'}`}>12h</button>
-              <button onClick={() => setTab('days')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'days' ? 'bg-gray-700 text-white' : 'text-gray-500 hover:text-gray-300'}`}>7d</button>
+              <button onClick={() => setTab('hours')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'hours' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-gray-300'}`}>12h</button>
+              <button onClick={() => setTab('days')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'days' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-gray-300'}`}>7d</button>
             </div>
           </div>
 
@@ -223,7 +223,7 @@ export default function WeatherWidget() {
                   const hr = new Date(h.time).toLocaleTimeString(locale, { timeZone: tz, hour: '2-digit', minute: '2-digit' })
                   return (
                     <div key={i} className="flex flex-col items-center gap-1 w-14 py-1.5 rounded-lg hover:bg-gray-800/50">
-                      <span className="text-gray-500 text-[10px]">{hr}</span>
+                      <span className="text-gray-400 text-[10px]">{hr}</span>
                       <span className="text-lg leading-none">{icon(h.code)}</span>
                       <span className="text-white text-xs font-medium">{h.temp}\u00b0</span>
                     </div>
@@ -248,7 +248,7 @@ export default function WeatherWidget() {
                         <div className="absolute inset-y-0 bg-gradient-to-r from-blue-500 to-orange-400 rounded-full" style={{ left: '10%', right: '10%' }} />
                       </div>
                     </div>
-                    <span className="text-gray-500 text-xs w-8 text-right">{day.min}\u00b0</span>
+                    <span className="text-gray-400 text-xs w-8 text-right">{day.min}\u00b0</span>
                     <span className="text-white text-xs font-medium w-8 text-right">{day.max}\u00b0</span>
                   </div>
                 )

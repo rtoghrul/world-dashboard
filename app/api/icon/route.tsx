@@ -4,7 +4,8 @@ export const runtime = 'edge'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const size = parseInt(searchParams.get('size') || '512')
+  // Clamp so a huge ?size= can't make the edge function render giant images.
+  const size = Math.min(1024, Math.max(16, parseInt(searchParams.get('size') || '512', 10) || 512))
 
   return new ImageResponse(
     (

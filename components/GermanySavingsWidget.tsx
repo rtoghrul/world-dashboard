@@ -185,7 +185,7 @@ export default function GermanySavingsWidget() {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold text-sm">{group.title}</h3>
-                  <p className="text-[#6b6b80] text-xs mt-0.5">{group.subtitle}</p>
+                  <p className="text-[#7c7c92] text-xs mt-0.5">{group.subtitle}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -193,7 +193,7 @@ export default function GermanySavingsWidget() {
                   <a key={item.name} href={item.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-emerald-500/25 p-3 transition-all">
                     <div className="flex items-center justify-between gap-2">
                       <h4 className="text-white text-xs font-semibold">{item.name}</h4>
-                      <ExternalLink className="w-3.5 h-3.5 text-[#6b6b80] group-hover:text-emerald-300" />
+                      <ExternalLink className="w-3.5 h-3.5 text-[#7c7c92] group-hover:text-emerald-300" />
                     </div>
                     <p className="text-[#8b8b9e] text-[11px] mt-1 leading-relaxed">{item.note}</p>
                   </a>

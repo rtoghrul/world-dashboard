@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import { ArrowLeft, CloudSun, Film, Newspaper, Plane, Play, BarChart2, BookOpen, Share2, Bitcoin, Heart, HeartPulse, ShoppingBag, Store, PiggyBank } from 'lucide-react'
 import Header from '@/components/Header'
 import ErrorBoundary from '@/components/ErrorBoundary'
-import CommandPalette from '@/components/CommandPalette'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import Footer from '@/components/Footer'
 import { useLang } from '@/lib/LanguageContext'
@@ -87,10 +86,10 @@ const subKeyMap: Record<string, string> = {
 }
 
 const localSubLabels: Record<string, Record<string, string>> = {
-  savings: { en: 'Savings Apps', az: 'Qənaət App-ları', ru: 'Экономия', de: 'Spar-Apps', tr: 'Tasarruf App’leri' },
-  pharmacy: { en: 'Pharmacy', az: 'Aptek', ru: 'Аптека', de: 'Apotheke', tr: 'Eczane' },
-  symptoms: { en: 'Symptoms & Info', az: 'Simptomlar', ru: 'Симптомы', de: 'Symptome', tr: 'Belirtiler' },
-  insurance: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', de: 'Versicherung', tr: 'Sigorta' },
+  savings: { en: 'Savings Apps', az: 'Qənaət App-ları', ru: 'Экономия', de: 'Spar-Apps', tr: 'Tasarruf App’leri', fr: 'Applis d’économies', es: 'Apps de ahorro', zh: '省钱应用', ar: 'تطبيقات التوفير', ja: '節約アプリ', it: 'App di risparmio', pt: 'Apps de economia' },
+  pharmacy: { en: 'Pharmacy', az: 'Aptek', ru: 'Аптека', de: 'Apotheke', tr: 'Eczane', fr: 'Pharmacie', es: 'Farmacia', zh: '药店', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' },
+  symptoms: { en: 'Symptoms & Info', az: 'Simptomlar', ru: 'Симптомы', de: 'Symptome', tr: 'Belirtiler', fr: 'Symptômes & infos', es: 'Síntomas e información', zh: '症状与信息', ar: 'الأعراض والمعلومات', ja: '症状と情報', it: 'Sintomi e info', pt: 'Sintomas e informações' },
+  insurance: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', de: 'Versicherung', tr: 'Sigorta', fr: 'Assurance', es: 'Seguros', zh: '保险', ar: 'التأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguros' },
 }
 
 const submenuMap: Record<string, string[]> = {
@@ -193,7 +192,6 @@ export default function SectionPage() {
 
   return (
     <div className="min-h-screen relative z-[1] bg-gray-950">
-      <CommandPalette />
       <Header />
 
       <div className="border-b border-white/[0.04] bg-[#07070b]/90 backdrop-blur-xl sticky top-14 z-30">
@@ -206,7 +204,7 @@ export default function SectionPage() {
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   s === sub
                     ? 'bg-white/[0.08] text-white'
-                    : 'text-[#6b6b80] hover:text-white hover:bg-white/[0.03]'
+                    : 'text-[#7c7c92] hover:text-white hover:bg-white/[0.03]'
                 }`}
               >
               {getSubLabel(s)}
@@ -216,7 +214,7 @@ export default function SectionPage() {
         </div>
       </div>
 
-      <main className="max-w-screen-2xl mx-auto px-5 py-6">
+      <main id="main-content" className="max-w-screen-2xl mx-auto px-5 py-6">
         <div className="flex items-center gap-3 mb-6 animate-slide-up">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] hover:border-indigo-500/20 transition-all">
             <ArrowLeft className="w-5 h-5 text-white/80" />
@@ -226,11 +224,11 @@ export default function SectionPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold gradient-text-static">{title}</h1>
-            <p className="text-xs text-[#6b6b80]">{getSubLabel(sub)}</p>
+            <p className="text-xs text-[#7c7c92]">{getSubLabel(sub)}</p>
           </div>
         </div>
 
-        <ErrorBoundary fallbackMessage="This widget failed to load. Please try refreshing the page.">
+        <ErrorBoundary>
           <Content main={main} sub={sub} />
         </ErrorBoundary>
       </main>

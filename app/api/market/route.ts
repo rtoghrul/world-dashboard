@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server'
+import { fetchWithTimeout } from '@/lib/http'
 
 export const revalidate = 300
 
 export async function GET() {
   try {
     const [globalRes, fngRes] = await Promise.all([
-      fetch('https://api.coingecko.com/api/v3/global', { next: { revalidate: 300 } }),
-      fetch('https://api.alternative.me/fng/', { next: { revalidate: 3600 } }),
+      fetchWithTimeout('https://api.coingecko.com/api/v3/global', { next: { revalidate: 300 } }),
+      fetchWithTimeout('https://api.alternative.me/fng/', { next: { revalidate: 3600 } }),
     ])
 
     const [globalData, fngData] = await Promise.all([
@@ -25,6 +26,6 @@ export async function GET() {
       fear_greed_label: fngData?.data?.[0]?.value_classification ?? null,
     })
   } catch {
-    return NextResponse.json({ error: 'Failed to fetch market data' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch market data' }, { status: 502 })
   }
 }

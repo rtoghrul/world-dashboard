@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server'
+import { fetchWithTimeout } from '@/lib/http'
+
+const MAX_CHARS = 2000
+const MAX_TURNS = 12
 
 type Message = {
   role: 'user' | 'assistant'
@@ -47,8 +51,13 @@ function fallbackReply(message: string) {
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const message = String(body?.message || '')
-    const history = (body?.history || []) as Message[]
+    const message = String(body?.message || '').slice(0, MAX_CHARS)
+    // Only accept plain user/assistant turns from the client: no injected "system" messages,
+    // and bounded size so a single request can't run up the model bill.
+    const history: Message[] = (Array.isArray(body?.history) ? body.history : [])
+      .filter((m: any) => (m?.role === 'user' || m?.role === 'assistant') && typeof m?.content === 'string')
+      .slice(-MAX_TURNS)
+      .map((m: any) => ({ role: m.role, content: m.content.slice(0, MAX_CHARS) }))
     const apiKey = process.env.OPENROUTER_API_KEY
     const model = process.env.OPENROUTER_MODEL || 'openrouter/free'
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://world-dashboard-delta-umber.vercel.app'
@@ -89,7 +98,7 @@ Keep answers short, natural, and human.
 Language: ${detectedLanguage}
 `
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +114,7 @@ Language: ${detectedLanguage}
           ...history.map(item => ({ role: item.role, content: item.content })),
         ],
       }),
-    })
+    }, 25000) // LLM replies can be slow; still bounded so the function can't hang
 
     const data = await response.json()
     const reply = data?.choices?.[0]?.message?.content || fallbackReply(message)

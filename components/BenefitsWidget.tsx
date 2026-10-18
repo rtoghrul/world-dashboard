@@ -36,7 +36,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   germany: [
     {
       id: 'housing',
-      title: { en: '🏠 Housing & Mortgage', az: '🏠 Mənzil & İpoteka', de: '🏠 Wohnung & Hypothek', ru: '🏠 Жильё и ипотека' },
+      title: { en: '🏠 Housing & Mortgage', az: '🏠 Mənzil & İpoteka', de: '🏠 Wohnung & Hypothek', ru: '🏠 Жильё и ипотека', tr: '🏠 Konut ve mortgage', fr: '🏠 Logement & prêt immobilier', es: '🏠 Vivienda e hipoteca', zh: '🏠 住房与房贷', ar: '🏠 السكن والرهن العقاري', ja: '🏠 住宅・住宅ローン', it: '🏠 Casa e mutuo', pt: '🏠 Habitação e hipoteca' },
       items: [
         { name: 'Jung kauft Alt (KfW 308)', url: 'https://www.kfw.de/308', desc: { en: 'Cheap KfW loan up to €150K for families buying older homes to renovate', az: 'Köhnə ev alan ailələr üçün €150K-a qədər ucuz KfW krediti', de: 'Günstiger KfW-Kredit bis 150.000€ für Familien, die Altbau kaufen', ru: 'Льготный кредит KfW до €150K для семей, покупающих старое жильё' }, saving: '€150K loan', type: 'subsidy', important: true },
         { name: 'KfW-Förderung (Kredit 300)', url: 'https://www.kfw.de/297', desc: { en: 'Up to €150,000 low-interest loan for energy-efficient homes', az: 'Enerji-effektiv evlər üçün €150,000-a qədər aşağı faizli kredit', de: 'Bis 150.000€ zinsgünstiges Darlehen für Effizienzhaus', ru: 'До €150,000 льготный кредит на энергоэффективный дом' }, saving: '€150K loan', type: 'subsidy', important: true },
@@ -48,7 +48,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'auto',
-      title: { en: '🚗 Car & Transport', az: '🚗 Avtomobil & Nəqliyyat', de: '🚗 Auto & Verkehr', ru: '🚗 Авто и транспорт' },
+      title: { en: '🚗 Car & Transport', az: '🚗 Avtomobil & Nəqliyyat', de: '🚗 Auto & Verkehr', ru: '🚗 Авто и транспорт', tr: '🚗 Araba ve ulaşım', fr: '🚗 Voiture & transports', es: '🚗 Coche y transporte', zh: '🚗 汽车与交通', ar: '🚗 السيارات والنقل', ja: '🚗 車・交通', it: '🚗 Auto e trasporti', pt: '🚗 Carro e transporte' },
       items: [
         { name: 'Deutschlandticket €63/mo', url: 'https://deutschlandticket.de', desc: { en: 'Unlimited public transport across Germany - trains, buses, trams', az: 'Bütün Almaniyada limitsiz ictimai nəqliyyat - qatar, avtobus, tramvay', de: 'Unbegrenzt Nahverkehr in ganz Deutschland', ru: 'Безлимитный общ. транспорт по всей Германии' }, saving: '€63/mo', type: 'discount', important: true },
         { name: 'E-Auto Förderung (THG-Quote)', url: 'https://www.umweltbundesamt.de/themen/verkehr-laerm/emissionshandel/thg-quote', desc: { en: 'EV owners earn ~€80-150/year selling their CO2 quota', az: 'Elektromobil sahibləri CO2 kvotası sataraq illik ~€80-150 qazanır', de: 'E-Auto-Besitzer verdienen ~80-150€/Jahr mit der THG-Quote', ru: 'Владельцы EV зарабатывают ~€80-150/год на квотах CO2' }, saving: '€150/yr', type: 'earn', important: true },
@@ -60,7 +60,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'family',
-      title: { en: '👨‍👩‍👧 Family Benefits', az: '👨‍👩‍👧 Ailə Müavinətləri', de: '👨‍👩‍👧 Familienleistungen', ru: '👨‍👩‍👧 Семейные пособия' },
+      title: { en: '👨‍👩‍👧 Family Benefits', az: '👨‍👩‍👧 Ailə Müavinətləri', de: '👨‍👩‍👧 Familienleistungen', ru: '👨‍👩‍👧 Семейные пособия', tr: '👨‍👩‍👧 Aile yardımları', fr: '👨‍👩‍👧 Aides familiales', es: '👨‍👩‍👧 Ayudas familiares', zh: '👨‍👩‍👧 家庭福利', ar: '👨‍👩‍👧 مزايا الأسرة', ja: '👨‍👩‍👧 家族向け給付', it: '👨‍👩‍👧 Aiuti per famiglie', pt: '👨‍👩‍👧 Benefícios familiares' },
       items: [
         { name: 'Kindergeld: €259/child/mo', url: 'https://www.arbeitsagentur.de/familie-und-kinder/kindergeld', desc: { en: 'Universal child benefit - €259/month per child (2026), no income limit', az: 'Universal uşaq müavinəti - hər uşağa aylıq €259 (2026), gəlir limiti yox', de: 'Kindergeld - 259€/Monat pro Kind (2026), keine Einkommensgrenze', ru: '€259/мес на каждого ребёнка (2026), без лимита дохода' }, saving: '€259/mo', type: 'subsidy', important: true },
         { name: 'Elterngeld: 65-67% salary', url: 'https://familienportal.de/familienportal/familienleistungen/elterngeld', desc: { en: 'Parental leave pay - 65-67% of net salary for 12-14 months', az: 'Valideyn məzuniyyəti - xalis maaşın 65-67%-i, 12-14 ay', de: 'Elterngeld - 65-67% des Nettogehalts, 12-14 Monate', ru: 'Родительское пособие - 65-67% от зарплаты, 12-14 мес' }, saving: '~€1800/mo', type: 'subsidy', important: true },
@@ -72,7 +72,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'tax',
-      title: { en: '💰 Tax Savings', az: '💰 Vergi Qənaəti', de: '💰 Steuern sparen', ru: '💰 Экономия на налогах' },
+      title: { en: '💰 Tax Savings', az: '💰 Vergi Qənaəti', de: '💰 Steuern sparen', ru: '💰 Экономия на налогах', tr: '💰 Vergi tasarrufu', fr: '💰 Économies d’impôts', es: '💰 Ahorro fiscal', zh: '💰 节税', ar: '💰 توفير الضرائب', ja: '💰 節税', it: '💰 Risparmio fiscale', pt: '💰 Economia de impostos' },
       items: [
         { name: 'Homeoffice Pauschale: €1260/yr', url: 'https://www.finanztip.de/werbungskosten/', desc: { en: 'Work from home tax deduction - €6/day, max €1260/year', az: 'Evdən iş vergi endirimi - gündə €6, maks €1260/il', de: 'Homeoffice-Pauschale - 6€/Tag, max 1260€/Jahr', ru: 'Вычет за домашний офис - €6/день, макс €1260/год' }, saving: '€1260/yr', type: 'subsidy', important: true },
         { name: 'Werbungskosten: €1230 auto', url: 'https://www.finanztip.de/werbungskosten/', desc: { en: 'Automatic €1230 work expense deduction - no receipts needed', az: 'Avtomatik €1230 iş xərci endirimi - qəbz lazım deyil', de: 'Werbungskostenpauschale - 1230€ automatisch', ru: '€1230 автоматический вычет - без чеков' }, saving: '€1230', type: 'tip', important: true },
@@ -86,7 +86,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   aitools: [
     {
       id: 'free-ai',
-      title: { en: '🆓 Best Free AI Tools', az: '🆓 Ən Yaxşı Pulsuz AI Alətlər', de: '🆓 Beste kostenlose KI-Tools', ru: '🆓 Лучшие бесплатные ИИ' },
+      title: { en: '🆓 Best Free AI Tools', az: '🆓 Ən Yaxşı Pulsuz AI Alətlər', de: '🆓 Beste kostenlose KI-Tools', ru: '🆓 Лучшие бесплатные ИИ', tr: '🆓 En iyi ücretsiz YZ araçları', fr: '🆓 Meilleurs outils IA gratuits', es: '🆓 Mejores herramientas de IA gratis', zh: '🆓 最佳免费 AI 工具', ar: '🆓 أفضل أدوات الذكاء الاصطناعي المجانية', ja: '🆓 おすすめ無料AIツール', it: '🆓 Migliori strumenti IA gratuiti', pt: '🆓 Melhores ferramentas de IA grátis' },
       items: [
         { name: 'ChatGPT Free', url: 'https://chatgpt.com', desc: { en: 'Free tier with latest GPT models, web browsing, file upload', az: 'Ən son GPT modelləri, web axtarış, fayl yükləmə ilə pulsuz plan', de: 'Gratis: neueste GPT-Modelle, Web-Suche, Datei-Upload', ru: 'Бесплатно: новейшие GPT-модели, веб-поиск, файлы' }, type: 'free', important: true },
         { name: 'Claude (Free)', url: 'https://claude.ai', desc: { en: 'Free access to the latest Claude models - best for coding & analysis', az: 'Ən son Claude modellərinə pulsuz giriş - kodlaşdırma üçün ən yaxşı', de: 'Gratis Zugang zu den neuesten Claude-Modellen - ideal für Code & Analyse', ru: 'Бесплатный доступ к новейшим моделям Claude - лучший для кода' }, type: 'free', important: true },
@@ -97,7 +97,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'earn-ai',
-      title: { en: '💸 Earn Money with AI', az: '💸 AI ilə Pul Qazanmaq', de: '💸 Mit KI Geld verdienen', ru: '💸 Заработать с ИИ' },
+      title: { en: '💸 Earn Money with AI', az: '💸 AI ilə Pul Qazanmaq', de: '💸 Mit KI Geld verdienen', ru: '💸 Заработать с ИИ', tr: '💸 YZ ile para kazan', fr: '💸 Gagner de l’argent avec l’IA', es: '💸 Gana dinero con IA', zh: '💸 用 AI 赚钱', ar: '💸 اربح المال بالذكاء الاصطناعي', ja: '💸 AIで稼ぐ', it: '💸 Guadagna con l’IA', pt: '💸 Ganhe dinheiro com IA' },
       items: [
         { name: 'Freelance AI Content', url: 'https://www.upwork.com/freelance-jobs/artificial-intelligence/', desc: { en: 'Write AI-generated content on Upwork/Fiverr - $20-100/article', az: 'Upwork/Fiverr-də AI məzmun yaz - məqalə başına $20-100', de: 'KI-Inhalte auf Upwork/Fiverr - $20-100/Artikel', ru: 'AI-контент на Upwork/Fiverr - $20-100/статья' }, saving: '$20-100', type: 'earn', important: true },
         { name: 'AI Automation Agency', url: 'https://www.youtube.com/results?search_query=ai+automation+agency', desc: { en: 'Build AI automations for businesses - $2K-10K/client', az: 'Bizneslər üçün AI avtomatlaşdırma qur - müştəri başına $2K-10K', de: 'KI-Automatisierungen für Firmen - $2K-10K/Kunde', ru: 'AI автоматизация для бизнеса - $2K-10K/клиент' }, saving: '$2K-10K', type: 'earn', important: true },
@@ -108,7 +108,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'cheap-ai',
-      title: { en: '🏷️ Cheapest Premium AI', az: '🏷️ Ən Ucuz Premium AI', de: '🏷️ Günstigste Premium-KI', ru: '🏷️ Самые дешёвые Premium ИИ' },
+      title: { en: '🏷️ Cheapest Premium AI', az: '🏷️ Ən Ucuz Premium AI', de: '🏷️ Günstigste Premium-KI', ru: '🏷️ Самые дешёвые Premium ИИ', tr: '🏷️ En ucuz premium YZ', fr: '🏷️ IA premium la moins chère', es: '🏷️ IA premium más barata', zh: '🏷️ 最便宜的高级 AI', ar: '🏷️ أرخص ذكاء اصطناعي مميز', ja: '🏷️ 最安のプレミアムAI', it: '🏷️ IA premium più economica', pt: '🏷️ IA premium mais barata' },
       items: [
         { name: 'Google AI Pro for Students (FREE)', url: 'https://gemini.google/students/', desc: { en: 'Students get Google AI Pro (Gemini) free for 12 months', az: 'Tələbələr Google AI Pro (Gemini) 12 ay pulsuz alır', de: 'Studenten erhalten Google AI Pro (Gemini) 12 Monate gratis', ru: 'Студентам Google AI Pro (Gemini) бесплатно на 12 месяцев' }, saving: '12 mo free', type: 'free', important: true },
         { name: 'Cursor AI (Free 2 weeks)', url: 'https://cursor.sh', desc: { en: 'Best AI code editor - 2 weeks Pro free trial', az: 'Ən yaxşı AI kod editoru - 2 həftə Pro pulsuz sınaq', de: 'Bester KI-Code-Editor - 2 Wochen Pro gratis', ru: 'Лучший AI-редактор кода - 2 недели Pro бесплатно' }, type: 'free' },
@@ -121,7 +121,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   travel: [
     {
       id: 'cheap-flights',
-      title: { en: '✈️ Cheapest Flights', az: '✈️ Ən Ucuz Uçuşlar', de: '✈️ Günstigste Flüge', ru: '✈️ Самые дешёвые рейсы' },
+      title: { en: '✈️ Cheapest Flights', az: '✈️ Ən Ucuz Uçuşlar', de: '✈️ Günstigste Flüge', ru: '✈️ Самые дешёвые рейсы', tr: '✈️ En ucuz uçuşlar', fr: '✈️ Vols les moins chers', es: '✈️ Vuelos más baratos', zh: '✈️ 最便宜的机票', ar: '✈️ أرخص الرحلات', ja: '✈️ 格安航空券', it: '✈️ Voli più economici', pt: '✈️ Voos mais baratos' },
       items: [
         { name: 'Skyscanner Everywhere', url: 'https://www.skyscanner.net/transport/flights/from/everywhere/', desc: { en: 'Search "Everywhere" to find cheapest destination from your city', az: '"Hər yerə" axtarış - şəhərindən ən ucuz istiqaməti tap', de: '"Überall hin" suchen - günstigste Ziele finden', ru: 'Искать "Везде" - найти самый дешёвый рейс' }, type: 'tip', important: true },
         { name: 'Google Flights Price Tracking', url: 'https://www.google.com/travel/flights', desc: { en: 'Track prices & get alerts when they drop', az: 'Qiymətləri izlə & düşəndə xəbərdarlıq al', de: 'Preise verfolgen & Benachrichtigung bei Preisfall', ru: 'Отслеживать цены и получать уведомления' }, type: 'free', important: true },
@@ -132,7 +132,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'cheap-hotels',
-      title: { en: '🏨 Budget Accommodation', az: '🏨 Büdcə Yerləşmə', de: '🏨 Günstige Unterkünfte', ru: '🏨 Бюджетное жильё' },
+      title: { en: '🏨 Budget Accommodation', az: '🏨 Büdcə Yerləşmə', de: '🏨 Günstige Unterkünfte', ru: '🏨 Бюджетное жильё', tr: '🏨 Uygun konaklama', fr: '🏨 Hébergement petit budget', es: '🏨 Alojamiento económico', zh: '🏨 经济型住宿', ar: '🏨 إقامة اقتصادية', ja: '🏨 格安宿泊', it: '🏨 Alloggi economici', pt: '🏨 Hospedagem econômica' },
       items: [
         { name: 'Hostelworld (from €8/night)', url: 'https://www.hostelworld.com', desc: { en: 'Hostels worldwide from €8/night - perfect for solo travelers', az: 'Dünya üzrə hostellər gecə €8-dən - tək səyahətçilər üçün ideal', de: 'Hostels weltweit ab 8€/Nacht - ideal für Alleinreisende', ru: 'Хостелы от €8/ночь - идеально для одиночных' }, saving: 'from €8', type: 'discount', important: true },
         { name: 'Couchsurfing (FREE)', url: 'https://www.couchsurfing.com', desc: { en: 'Stay for free with locals - cultural exchange', az: 'Yerlilərdə pulsuz qal - mədəni mübadilə', de: 'Kostenlos bei Einheimischen übernachten', ru: 'Бесплатно у местных - культурный обмен' }, saving: '€0', type: 'free', important: true },
@@ -145,7 +145,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   software: [
     {
       id: 'free-software',
-      title: { en: '🆓 Best Free Alternatives', az: '🆓 Ən Yaxşı Pulsuz Alternativlər', de: '🆓 Beste kostenlose Alternativen', ru: '🆓 Лучшие бесплатные альтернативы' },
+      title: { en: '🆓 Best Free Alternatives', az: '🆓 Ən Yaxşı Pulsuz Alternativlər', de: '🆓 Beste kostenlose Alternativen', ru: '🆓 Лучшие бесплатные альтернативы', tr: '🆓 En iyi ücretsiz alternatifler', fr: '🆓 Meilleures alternatives gratuites', es: '🆓 Mejores alternativas gratis', zh: '🆓 最佳免费替代品', ar: '🆓 أفضل البدائل المجانية', ja: '🆓 おすすめ無料代替', it: '🆓 Migliori alternative gratuite', pt: '🆓 Melhores alternativas grátis' },
       items: [
         { name: 'LibreOffice → replaces MS Office', url: 'https://www.libreoffice.org', desc: { en: 'Full office suite - Word, Excel, PowerPoint equivalent, 100% free', az: 'Tam ofis paketi - Word, Excel, PowerPoint ekvivalenti, 100% pulsuz', de: 'Komplette Office-Suite - Word/Excel/PowerPoint-Ersatz', ru: 'Полный офис - замена Word/Excel/PowerPoint, бесплатно' }, type: 'free', important: true },
         { name: 'DaVinci Resolve → replaces Premiere', url: 'https://www.blackmagicdesign.com/products/davinciresolve', desc: { en: 'Professional video editor - Hollywood-grade, completely free', az: 'Peşəkar video redaktor - Hollywood səviyyəsi, tamamilə pulsuz', de: 'Profi-Videoeditor - Hollywood-Qualität, komplett gratis', ru: 'Проф. видеоредактор - уровень Голливуда, бесплатно' }, type: 'free', important: true },
@@ -156,7 +156,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'student-deals',
-      title: { en: '🎓 Student & Developer Deals', az: '🎓 Tələbə & Developer Endirimləri', de: '🎓 Studenten- & Entwickler-Deals', ru: '🎓 Скидки для студентов и разработчиков' },
+      title: { en: '🎓 Student & Developer Deals', az: '🎓 Tələbə & Developer Endirimləri', de: '🎓 Studenten- & Entwickler-Deals', ru: '🎓 Скидки для студентов и разработчиков', tr: '🎓 Öğrenci ve geliştirici fırsatları', fr: '🎓 Offres étudiants & développeurs', es: '🎓 Ofertas para estudiantes y desarrolladores', zh: '🎓 学生与开发者优惠', ar: '🎓 عروض الطلاب والمطورين', ja: '🎓 学生・開発者向け特典', it: '🎓 Offerte per studenti e sviluppatori', pt: '🎓 Ofertas para estudantes e desenvolvedores' },
       items: [
         { name: 'GitHub Student Pack (FREE)', url: 'https://education.github.com/pack', desc: { en: '$200K+ in free tools: Copilot, domains, hosting, JetBrains, Azure', az: '$200K+ pulsuz alət: Copilot, domenlər, hosting, JetBrains, Azure', de: '$200K+ in Gratis-Tools: Copilot, Domains, Hosting, JetBrains', ru: '$200K+ бесплатных инструментов: Copilot, домены, хостинг' }, saving: '$200K+', type: 'free', important: true },
         { name: 'JetBrains Free (Students)', url: 'https://www.jetbrains.com/community/education/', desc: { en: 'All JetBrains IDEs free for students - IntelliJ, PyCharm, WebStorm', az: 'Bütün JetBrains IDE-lər tələbələr üçün pulsuz', de: 'Alle JetBrains-IDEs gratis für Studenten', ru: 'Все IDE JetBrains бесплатно для студентов' }, saving: '$249/yr', type: 'free', important: true },
@@ -169,7 +169,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   entertainment: [
     {
       id: 'free-streaming',
-      title: { en: '🎬 Free & Cheap Streaming', az: '🎬 Pulsuz & Ucuz Streaming', de: '🎬 Gratis & günstig Streamen', ru: '🎬 Бесплатный стриминг' },
+      title: { en: '🎬 Free & Cheap Streaming', az: '🎬 Pulsuz & Ucuz Streaming', de: '🎬 Gratis & günstig Streamen', ru: '🎬 Бесплатный стриминг', tr: '🎬 Ücretsiz ve ucuz yayın', fr: '🎬 Streaming gratuit & pas cher', es: '🎬 Streaming gratis y barato', zh: '🎬 免费与低价流媒体', ar: '🎬 بث مجاني ورخيص', ja: '🎬 無料・格安ストリーミング', it: '🎬 Streaming gratis ed economico', pt: '🎬 Streaming grátis e barato' },
       items: [
         { name: 'Tubi (100% FREE)', url: 'https://tubitv.com', desc: { en: 'Completely free streaming - thousands of movies & shows (ad-supported)', az: 'Tamamilə pulsuz streaming - minlərlə film & serial (reklam dəstəkli)', de: 'Komplett gratis streamen - Tausende Filme & Serien', ru: 'Полностью бесплатный стриминг - тысячи фильмов' }, type: 'free', important: true },
         { name: 'Pluto TV (FREE)', url: 'https://pluto.tv', desc: { en: 'Free live TV channels + on-demand movies', az: 'Pulsuz canlı TV kanalları + tələbə filmlər', de: 'Gratis Live-TV + On-Demand-Filme', ru: 'Бесплатное ТВ + фильмы по запросу' }, type: 'free', important: true },
@@ -182,7 +182,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   markets: [
     {
       id: 'free-trading',
-      title: { en: '📊 Free Trading & Analysis', az: '📊 Pulsuz Ticarət & Analiz', de: '📊 Gratis Trading & Analyse', ru: '📊 Бесплатная торговля и аналитика' },
+      title: { en: '📊 Free Trading & Analysis', az: '📊 Pulsuz Ticarət & Analiz', de: '📊 Gratis Trading & Analyse', ru: '📊 Бесплатная торговля и аналитика', tr: '📊 Ücretsiz alım-satım ve analiz', fr: '📊 Trading & analyse gratuits', es: '📊 Trading y análisis gratis', zh: '📊 免费交易与分析', ar: '📊 تداول وتحليل مجاني', ja: '📊 無料トレード・分析', it: '📊 Trading e analisi gratuiti', pt: '📊 Trading e análise grátis' },
       items: [
         { name: 'TradingView Free', url: 'https://www.tradingview.com', desc: { en: 'Professional charts - 1 layout, 3 indicators free forever', az: 'Peşəkar qrafiklər - 1 layout, 3 indikator həmişə pulsuz', de: 'Profi-Charts - 1 Layout, 3 Indikatoren gratis', ru: 'Проф. графики - 1 макет, 3 индикатора бесплатно' }, type: 'free', important: true },
         { name: 'Trade Republic (€0 commission)', url: 'https://traderepublic.com', desc: { en: 'Commission-free stock & crypto trading in Germany', az: 'Almaniyada komisyasız səhm & kripto ticarəti', de: 'Provisionsfreier Aktien- & Kryptohandel in DE', ru: 'Торговля без комиссии в Германии' }, saving: '€0 fees', type: 'free', important: true },
@@ -195,7 +195,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   education: [
     {
       id: 'free-courses',
-      title: { en: '🎓 Free Certificates & Courses', az: '🎓 Pulsuz Sertifikatlar & Kurslar', de: '🎓 Gratis Zertifikate & Kurse', ru: '🎓 Бесплатные сертификаты и курсы' },
+      title: { en: '🎓 Free Certificates & Courses', az: '🎓 Pulsuz Sertifikatlar & Kurslar', de: '🎓 Gratis Zertifikate & Kurse', ru: '🎓 Бесплатные сертификаты и курсы', tr: '🎓 Ücretsiz sertifikalar ve kurslar', fr: '🎓 Certificats & cours gratuits', es: '🎓 Certificados y cursos gratis', zh: '🎓 免费证书与课程', ar: '🎓 شهادات ودورات مجانية', ja: '🎓 無料の資格・講座', it: '🎓 Certificati e corsi gratuiti', pt: '🎓 Certificados e cursos grátis' },
       items: [
         { name: 'Google Career Certificates', url: 'https://grow.google/certificates/', desc: { en: 'Free Google certificates in Data, IT, UX, Marketing (7 days trial)', az: 'Data, IT, UX, Marketinq üzrə pulsuz Google sertifikatları', de: 'Gratis Google-Zertifikate: Data, IT, UX, Marketing', ru: 'Бесплатные сертификаты Google: Data, IT, UX, Marketing' }, type: 'free', important: true },
         { name: 'freeCodeCamp (100% FREE)', url: 'https://www.freecodecamp.org', desc: { en: 'Full-stack web dev curriculum - 3000+ hours of free content', az: 'Full-stack web dev kurikulumu - 3000+ saat pulsuz məzmun', de: 'Full-Stack-Web-Kurs - 3000+ Stunden gratis', ru: 'Full-stack курс - 3000+ часов бесплатно' }, type: 'free', important: true },
@@ -209,7 +209,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   women: [
     {
       id: 'beauty-savings',
-      title: { en: '💄 Beauty & Skincare Savings', az: '💄 Gözəllik & Dəriyə Qənaət', de: '💄 Beauty & Hautpflege sparen', ru: '💄 Экономия на красоте' },
+      title: { en: '💄 Beauty & Skincare Savings', az: '💄 Gözəllik & Dəriyə Qənaət', de: '💄 Beauty & Hautpflege sparen', ru: '💄 Экономия на красоте', tr: '💄 Güzellik ve cilt bakımında tasarruf', fr: '💄 Économies beauté & soins', es: '💄 Ahorro en belleza y cuidado de la piel', zh: '💄 美妆护肤省钱', ar: '💄 توفير في التجميل والعناية بالبشرة', ja: '💄 美容・スキンケアの節約', it: '💄 Risparmi su bellezza e skincare', pt: '💄 Economia em beleza e skincare' },
       items: [
         { name: 'The Ordinary (from €4)', url: 'https://theordinary.com', desc: { en: 'Lab-quality skincare from €4 - same ingredients as luxury brands', az: 'Laboratoriya keyfiyyətli dəri baxımı €4-dən - lüks brendlərlə eyni inqredientlər', de: 'Labor-Qualität ab 4€ - gleiche Wirkstoffe wie Luxusmarken', ru: 'Лабораторная косметика от €4 - те же ингредиенты что и люкс' }, saving: 'from €4', type: 'discount', important: true },
         { name: 'Rossmann/dm 10% Coupons', url: 'https://www.rossmann.de/de/coupons', desc: { en: 'Regular 10% off coupons via app - stack with sales', az: 'Tətbiq vasitəsilə müntəzəm 10% endirim kuponları', de: 'Regelmäßig 10% Rabatt-Coupons via App - mit Sales kombinierbar', ru: 'Регулярные купоны -10% через приложение' }, saving: '10% off', type: 'discount', important: true },
@@ -220,7 +220,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'health-wellness',
-      title: { en: '🧘 Health & Wellness Free', az: '🧘 Sağlamlıq & Wellness Pulsuz', de: '🧘 Gesundheit & Wellness gratis', ru: '🧘 Здоровье бесплатно' },
+      title: { en: '🧘 Health & Wellness Free', az: '🧘 Sağlamlıq & Wellness Pulsuz', de: '🧘 Gesundheit & Wellness gratis', ru: '🧘 Здоровье бесплатно', tr: '🧘 Ücretsiz sağlık ve zindelik', fr: '🧘 Santé & bien-être gratuits', es: '🧘 Salud y bienestar gratis', zh: '🧘 免费健康与养生', ar: '🧘 صحة وعافية مجاناً', ja: '🧘 無料の健康・ウェルネス', it: '🧘 Salute e benessere gratis', pt: '🧘 Saúde e bem-estar grátis' },
       items: [
         { name: 'Nike Training Club (FREE)', url: 'https://www.nike.com/ntc-app', desc: { en: 'Hundreds of free workout videos - yoga, HIIT, strength', az: 'Yüzlərlə pulsuz məşq videosu - yoga, HIIT, güc', de: 'Hunderte kostenlose Workouts - Yoga, HIIT, Kraft', ru: 'Сотни бесплатных тренировок - йога, HIIT, сила' }, type: 'free', important: true },
         { name: 'Yazio Free (Calorie Counter)', url: 'https://www.yazio.com', desc: { en: 'Free calorie counter - German app, great food database', az: 'Pulsuz kalori sayğacı - Alman tətbiqi, geniş qida bazası', de: 'Kostenloser Kalorienzähler - große Lebensmittel-DB', ru: 'Бесплатный счётчик калорий - немецкое приложение' }, type: 'free' },
@@ -230,7 +230,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'mom-benefits',
-      title: { en: '🤰 Mom & Pregnancy Benefits', az: '🤰 Ana & Hamiləlik Müavinətləri', de: '🤰 Mutter- & Schwangerschafts-Vorteile', ru: '🤰 Пособия для мам' },
+      title: { en: '🤰 Mom & Pregnancy Benefits', az: '🤰 Ana & Hamiləlik Müavinətləri', de: '🤰 Mutter- & Schwangerschafts-Vorteile', ru: '🤰 Пособия для мам', tr: '🤰 Anne ve hamilelik yardımları', fr: '🤰 Aides maternité & grossesse', es: '🤰 Ayudas para madres y embarazo', zh: '🤰 妈妈与孕期福利', ar: '🤰 مزايا الأمهات والحمل', ja: '🤰 ママ・妊娠中の給付', it: '🤰 Aiuti per mamme e gravidanza', pt: '🤰 Benefícios para mães e gestantes' },
       items: [
         { name: 'Baby Welcome Boxes (FREE)', url: 'https://www.pampers.de/registrierung', desc: { en: 'Free baby boxes from Pampers, dm, Rossmann, Amazon - register now!', az: 'Pampers, dm, Rossmann, Amazon-dan pulsuz körpə qutuları - indi qeydiyyatdan keç!', de: 'Gratis Baby-Boxen von Pampers, dm, Rossmann, Amazon', ru: 'Бесплатные baby-боксы от Pampers, dm, Rossmann, Amazon' }, type: 'free', important: true },
         { name: 'Bundesstiftung Mutter & Kind', url: 'https://www.bundesstiftung-mutter-und-kind.de', desc: { en: 'Financial help for pregnant women in need - up to €1500', az: 'Ehtiyacı olan hamilə qadınlara maliyyə yardımı - €1500-ə qədər', de: 'Finanzielle Hilfe für Schwangere in Notlage - bis 1500€', ru: 'Финансовая помощь беременным в нужде - до €1500' }, saving: '€1500', type: 'subsidy', important: true },
@@ -242,7 +242,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   chinese: [
     {
       id: 'cheap-chinese',
-      title: { en: '🇨🇳 Best Deals from China', az: '🇨🇳 Çindən Ən Yaxşı Təkliflər', de: '🇨🇳 Beste China-Deals', ru: '🇨🇳 Лучшие предложения из Китая' },
+      title: { en: '🇨🇳 Best Deals from China', az: '🇨🇳 Çindən Ən Yaxşı Təkliflər', de: '🇨🇳 Beste China-Deals', ru: '🇨🇳 Лучшие предложения из Китая', tr: '🇨🇳 Çin’den en iyi fırsatlar', fr: '🇨🇳 Meilleures offres de Chine', es: '🇨🇳 Mejores ofertas de China', zh: '🇨🇳 中国好物优惠', ar: '🇨🇳 أفضل العروض من الصين', ja: '🇨🇳 中国のお得情報', it: '🇨🇳 Migliori offerte dalla Cina', pt: '🇨🇳 Melhores ofertas da China' },
       items: [
         { name: 'AliExpress Choice (free shipping)', url: 'https://www.aliexpress.com/ssr/300000512/choiceMain', desc: { en: 'Curated products with FREE fast shipping (5-10 days to EU)', az: 'PULSUZ sürətli çatdırılma ilə seçilmiş məhsullar (AB-yə 5-10 gün)', de: 'Kuratierte Produkte mit GRATIS Schnellversand (5-10 Tage EU)', ru: 'Товары с БЕСПЛАТНОЙ быстрой доставкой (5-10 дней)' }, type: 'free', important: true },
         { name: 'Temu (90% off retail)', url: 'https://www.temu.com', desc: { en: 'Ultra-cheap everything - 90% cheaper than retail, free ship', az: 'Ultra ucuz hər şey - pərakəndədən 90% ucuz, pulsuz çatdırılma', de: 'Ultra-günstig alles - 90% unter Einzelhandel, Gratisversand', ru: 'Ультра-дёшево всё - на 90% дешевле, бесплатная доставка' }, saving: '90% off', type: 'discount', important: true },
@@ -254,7 +254,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'china-tech',
-      title: { en: '📱 Cheap Tech from China', az: '📱 Çindən Ucuz Texnologiya', de: '📱 Günstige Technik aus China', ru: '📱 Дешёвая техника из Китая' },
+      title: { en: '📱 Cheap Tech from China', az: '📱 Çindən Ucuz Texnologiya', de: '📱 Günstige Technik aus China', ru: '📱 Дешёвая техника из Китая', tr: '📱 Çin’den ucuz teknoloji', fr: '📱 Tech pas chère de Chine', es: '📱 Tecnología barata de China', zh: '📱 中国平价数码', ar: '📱 تقنية رخيصة من الصين', ja: '📱 中国の格安ガジェット', it: '📱 Tecnologia economica dalla Cina', pt: '📱 Tecnologia barata da China' },
       items: [
         { name: 'Xiaomi Official (EU warranty)', url: 'https://www.mi.com/de', desc: { en: 'Flagship quality at half price - EU warranty & support', az: 'Yarı qiymətə flaqman keyfiyyət - AB zəmanəti & dəstəyi', de: 'Flagship-Qualität zum halben Preis - EU-Garantie', ru: 'Флагманское качество за полцены - гарантия ЕС' }, saving: '50% vs Samsung', type: 'discount', important: true },
         { name: 'AliExpress Tech Week', url: 'https://www.aliexpress.com/category/44/consumer-electronics.html', desc: { en: 'Weekly tech deals - phones, tablets, earbuds from $15', az: 'Həftəlik texno təkliflər - telefonlar, planşetlər, qulaqlıqlar $15-dən', de: 'Wöchentliche Tech-Deals - Phones, Tablets, Earbuds ab $15', ru: 'Еженедельные техно-скидки - от $15' }, saving: 'from $15', type: 'discount' },
@@ -266,7 +266,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   platforms: [
     {
       id: 'platform-deals',
-      title: { en: '🛒 German Platform Deals', az: '🛒 Alman Platform Endirimləri', de: '🛒 Deutsche Plattform-Deals', ru: '🛒 Скидки немецких платформ' },
+      title: { en: '🛒 German Platform Deals', az: '🛒 Alman Platform Endirimləri', de: '🛒 Deutsche Plattform-Deals', ru: '🛒 Скидки немецких платформ', tr: '🛒 Alman platformlarında fırsatlar', fr: '🛒 Offres des plateformes allemandes', es: '🛒 Ofertas de plataformas alemanas', zh: '🛒 德国平台优惠', ar: '🛒 عروض المنصات الألمانية', ja: '🛒 ドイツのサイトのお得情報', it: '🛒 Offerte delle piattaforme tedesche', pt: '🛒 Ofertas de plataformas alemãs' },
       items: [
         { name: 'Amazon Warehouse (30% off)', url: 'https://www.amazon.de/deals', desc: { en: 'Open-box/returned items 20-40% cheaper - Amazon quality checked', az: 'Açılmış/qaytarılmış məhsullar 20-40% ucuz - Amazon keyfiyyət yoxlanılmış', de: 'Geöffnete/retournierte Ware 20-40% günstiger - Amazon geprüft', ru: 'Вскрытые/возвращённые товары -20-40% - проверено Amazon' }, saving: '20-40% off', type: 'discount', important: true },
         { name: 'mydealz.de (Community Deals)', url: 'https://www.mydealz.de', desc: { en: 'Community-curated best deals in Germany - live updated', az: 'Almaniyada icma tərəfindən seçilmiş ən yaxşı təkliflər', de: 'Community-kuratierte Deals in Deutschland - live aktualisiert', ru: 'Лучшие акции Германии от сообщества - live' }, type: 'free', important: true },
@@ -278,7 +278,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
     },
     {
       id: 'cashback',
-      title: { en: '💸 Cashback & Vouchers', az: '💸 Cashback & Kuponlar', de: '💸 Cashback & Gutscheine', ru: '💸 Кэшбэк и купоны' },
+      title: { en: '💸 Cashback & Vouchers', az: '💸 Cashback & Kuponlar', de: '💸 Cashback & Gutscheine', ru: '💸 Кэшбэк и купоны', tr: '💸 Nakit iade ve kuponlar', fr: '💸 Cashback & bons de réduction', es: '💸 Cashback y cupones', zh: '💸 返现与优惠券', ar: '💸 استرداد نقدي وقسائم', ja: '💸 キャッシュバック・クーポン', it: '💸 Cashback e buoni', pt: '💸 Cashback e cupons' },
       items: [
         { name: 'TopCashback DE', url: 'https://www.topcashback.de', desc: { en: 'Highest cashback rates in Germany - up to 15% back', az: 'Almaniyada ən yüksək cashback dərəcələri - 15%-ə qədər geri', de: 'Höchste Cashback-Raten in DE - bis 15% zurück', ru: 'Максимальный кэшбэк в Германии - до 15% назад' }, saving: 'up to 15%', type: 'earn', important: true },
         { name: 'Shoop.de', url: 'https://www.shoop.de', desc: { en: 'German cashback portal - 2-10% back on 2000+ shops', az: 'Alman cashback portalı - 2000+ mağazada 2-10% geri', de: 'Deutsches Cashback-Portal - 2-10% bei 2000+ Shops', ru: 'Немецкий кэшбэк - 2-10% в 2000+ магазинах' }, saving: '2-10% back', type: 'earn', important: true },
@@ -291,7 +291,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   shopping: [
     {
       id: 'shopping-hacks',
-      title: { en: '🛍️ Shopping Hacks', az: '🛍️ Alış-veriş Hiylələri', de: '🛍️ Shopping-Tricks', ru: '🛍️ Лайфхаки для покупок' },
+      title: { en: '🛍️ Shopping Hacks', az: '🛍️ Alış-veriş Hiylələri', de: '🛍️ Shopping-Tricks', ru: '🛍️ Лайфхаки для покупок', tr: '🛍️ Alışveriş ipuçları', fr: '🛍️ Astuces shopping', es: '🛍️ Trucos de compras', zh: '🛍️ 购物技巧', ar: '🛍️ حيل التسوق', ja: '🛍️ 買い物の裏ワザ', it: '🛍️ Trucchi per lo shopping', pt: '🛍️ Dicas de compras' },
       items: [
         { name: 'CamelCamelCamel (Amazon)', url: 'https://camelcamelcamel.com', desc: { en: 'Amazon price history - see if deal is real or fake', az: 'Amazon qiymət tarixi - təklifin real və ya saxta olduğunu gör', de: 'Amazon-Preisverlauf - echte oder falsche Deals erkennen', ru: 'История цен Amazon - настоящая ли скидка?' }, type: 'free', important: true },
         { name: 'Keepa (Price Tracker)', url: 'https://keepa.com', desc: { en: 'Amazon price drop alerts - never miss a deal', az: 'Amazon qiymət düşüşü xəbərdarlıqları - heç bir təklifi qaçırma', de: 'Amazon-Preisfall-Alerts - kein Deal verpassen', ru: 'Уведомления о снижении цен Amazon' }, type: 'free', important: true },
@@ -305,7 +305,7 @@ export const BENEFITS_DATA: Record<string, BenefitsSection[]> = {
   viral: [
     {
       id: 'earn-content',
-      title: { en: '💰 Earn from Viral Content', az: '💰 Viral Məzmundan Pul Qazan', de: '💰 Mit viralen Inhalten verdienen', ru: '💰 Заработай на вирусном контенте' },
+      title: { en: '💰 Earn from Viral Content', az: '💰 Viral Məzmundan Pul Qazan', de: '💰 Mit viralen Inhalten verdienen', ru: '💰 Заработай на вирусном контенте', tr: '💰 Viral içerikten kazan', fr: '💰 Gagner avec du contenu viral', es: '💰 Gana con contenido viral', zh: '💰 靠爆款内容赚钱', ar: '💰 اربح من المحتوى الرائج', ja: '💰 バズるコンテンツで稼ぐ', it: '💰 Guadagna con contenuti virali', pt: '💰 Ganhe com conteúdo viral' },
       items: [
         { name: 'YouTube Shorts Fund', url: 'https://support.google.com/youtube/answer/10923658', desc: { en: 'Earn $100-10,000/month from YouTube Shorts views', az: 'YouTube Shorts baxışlarından aylıq $100-10,000 qazan', de: 'Mit YouTube Shorts Views $100-10.000/Monat verdienen', ru: 'Заработай $100-10,000/мес с YouTube Shorts' }, saving: '$100-10K/mo', type: 'earn', important: true },
         { name: 'TikTok Creator Fund', url: 'https://www.tiktok.com/creators/creator-portal/', desc: { en: 'Monetize TikTok - 10K+ followers = $0.02-0.04 per 1K views', az: 'TikTok-u monetizasiya et - 10K+ izləyici = 1K baxışa $0.02-0.04', de: 'TikTok monetarisieren - 10K+ Follower = $0.02-0.04 pro 1K Views', ru: 'Монетизация TikTok - 10K+ подписчиков' }, saving: '$0.02-0.04/1K', type: 'earn', important: true },
@@ -434,12 +434,12 @@ export default function BenefitsWidget({ section }: { section: string }) {
       {/* Search + type filters */}
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
-          <Search className="w-3.5 h-3.5 text-[#6b6b80] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-[#7c7c92] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder={t.search}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white placeholder-[#6b6b80] focus:outline-none focus:border-amber-500/40 transition"
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white placeholder-[#7c7c92] focus:outline-none focus:border-amber-500/40 transition"
           />
         </div>
         <div className="flex gap-1 overflow-x-auto scrollbar-thin">
@@ -451,7 +451,7 @@ export default function BenefitsWidget({ section }: { section: string }) {
                 key={ft}
                 onClick={() => setTypeFilter(ft)}
                 className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold whitespace-nowrap border transition ${
-                  active ? (cfg ? cfg.color : 'bg-white/[0.1] text-white border-white/20') : 'bg-transparent text-[#6b6b80] border-white/[0.06] hover:text-white'
+                  active ? (cfg ? cfg.color : 'bg-white/[0.1] text-white border-white/20') : 'bg-transparent text-[#7c7c92] border-white/[0.06] hover:text-white'
                 }`}
               >
                 {ft === 'all' ? t.all : cfg!.label}

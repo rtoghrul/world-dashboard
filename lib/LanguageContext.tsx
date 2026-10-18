@@ -32,6 +32,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const langConfig = LANGUAGES.find(l => l.code === lang)
   const dir = langConfig?.dir === 'rtl' ? 'rtl' : 'ltr'
 
+  // Keep <html lang> in sync so screen readers and browser translation use the chosen language.
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
   return (
     <LanguageContext.Provider value={{ lang, setLang, tr: t[lang], dir }}>
       <div dir={dir}>{children}</div>

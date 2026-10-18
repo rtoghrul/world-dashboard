@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { translateTexts } from '@/lib/translate'
+import { fetchWithTimeout } from '@/lib/http'
 
 export const revalidate = 3600
 
@@ -35,7 +36,7 @@ async function tmdbFetch(path: string, params: Record<string, string | number | 
   if (TMDB_KEY) url.searchParams.set('api_key', TMDB_KEY)
   const headers: HeadersInit = {}
   if (TMDB_TOKEN) headers.Authorization = `Bearer ${TMDB_TOKEN}`
-  try { const res = await fetch(url.toString(), { headers, next: { revalidate: 3600 } }); return res.ok ? await res.json() : null } catch { return null }
+  try { const res = await fetchWithTimeout(url.toString(), { headers, next: { revalidate: 3600 } }); return res.ok ? await res.json() : null } catch { return null }
 }
 
 function tmdbItem(row: any, type: MediaType, genreMap: Record<number, string>): Item {
@@ -64,7 +65,7 @@ async function getTmdb(type: MediaType, mode: string, l: string, q: string, genr
 async function getTvMaze(q: string, page: number): Promise<Item[]> {
   try {
     const url = q ? H + 'api.tvmaze.com/search/shows?q=' + encodeURIComponent(q) : H + 'api.tvmaze.com/shows?page=' + String(Math.max(0, page - 1))
-    const data = await (await fetch(url, { next: { revalidate: 3600 } })).json()
+    const data = await (await fetchWithTimeout(url, { next: { revalidate: 3600 } })).json()
     const rows = q ? (Array.isArray(data) ? data.map((x: any) => x.show) : []) : (Array.isArray(data) ? data : [])
     return rows.slice(0, 80).map((show: any): Item => ({ id: `tvmaze-${show.id}`, type: 'series', title: show.name, originalTitle: show.name, year: show.premiered ? String(show.premiered).slice(0, 4) : '', image: show.image?.original || show.image?.medium || fallback({ type: 'series', title: show.name, year: 0, genres: show.genres || [] }), summary: strip(show.summary), genres: show.genres || [], rating: show.rating?.average || null, url: show.officialSite || show.url, trailerUrl: H + 'www.youtube.com/results?search_query=' + encodeURIComponent(show.name + ' official trailer'), source: 'TVMaze' }))
   } catch { return [] }
@@ -73,14 +74,14 @@ async function getTvMaze(q: string, page: number): Promise<Item[]> {
 async function getJikan(q: string, mode: string, page: number): Promise<Item[]> {
   try {
     const url = q ? H + 'api.jikan.moe/v4/anime?q=' + encodeURIComponent(q) + '&limit=24&page=' + String(page) : H + 'api.jikan.moe/v4/top/anime?limit=24&page=' + String(page) + (mode === 'anticipated' ? '&filter=upcoming' : '')
-    const data = await (await fetch(url, { next: { revalidate: 3600 } })).json()
+    const data = await (await fetchWithTimeout(url, { next: { revalidate: 3600 } })).json()
     return (Array.isArray(data?.data) ? data.data : []).map((anime: any): Item => ({ id: `jikan-${anime.mal_id}`, type: 'cartoon', title: anime.title_english || anime.title, originalTitle: anime.title, year: anime.year ? String(anime.year) : (anime.aired?.from ? String(anime.aired.from).slice(0, 4) : ''), image: anime.images?.jpg?.large_image_url || anime.images?.webp?.large_image_url || fallback({ type: 'cartoon', title: anime.title, year: 0, genres: ['Animation'] }), summary: strip(anime.synopsis), genres: ['Animation', ...(anime.genres || []).map((g: any) => g.name).slice(0, 2)], rating: anime.score || null, url: anime.url, trailerUrl: anime.trailer?.url || H + 'www.youtube.com/results?search_query=' + encodeURIComponent(anime.title + ' trailer'), source: 'Jikan' }))
   } catch { return [] }
 }
 
-async function wiki(seed: Seed) { for (const title of [seed.title, `${seed.title} (film)`, `${seed.title} (TV series)`]) { try { const res = await fetch(H + 'en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title), { next: { revalidate: 3600 } }); if (!res.ok) continue; const data = await res.json(); return { image: data?.thumbnail?.source || data?.originalimage?.source, summary: strip(data?.extract), url: data?.content_urls?.desktop?.page } } catch {} } return null }
+async function wiki(seed: Seed) { for (const title of [seed.title, `${seed.title} (film)`, `${seed.title} (TV series)`]) { try { const res = await fetchWithTimeout(H + 'en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title), { next: { revalidate: 3600 } }); if (!res.ok) continue; const data = await res.json(); return { image: data?.thumbnail?.source || data?.originalimage?.source, summary: strip(data?.extract), url: data?.content_urls?.desktop?.page } } catch {} } return null }
 async function seedItems(type: MediaType, mode: string, q: string, genre: string, from: number | null, to: number | null): Promise<Item[]> { let seeds = SEEDS.filter((seed: Seed) => seed.type === type); if (mode === 'trending') seeds = seeds.filter((seed: Seed) => seed.trend); if (mode === 'anticipated') seeds = seeds.filter((seed: Seed) => seed.anticipated || seed.year >= new Date().getFullYear()); seeds = seeds.filter((seed: Seed) => (!q || seed.title.toLowerCase().includes(q.toLowerCase())) && (!genre || seed.genres.some((g: string) => g.toLowerCase() === genre.toLowerCase())) && (!from || seed.year >= from) && (!to || seed.year <= to)); return Promise.all(seeds.map(async (seed: Seed): Promise<Item> => { const w = await wiki(seed); return { id: `seed-${seed.type}-${norm(seed.title)}`, type: seed.type, title: seed.title, originalTitle: seed.title, year: String(seed.year), image: w?.image || fallback(seed), summary: w?.summary || `${seed.title} · ${seed.year}`, genres: seed.genres, rating: null, url: w?.url || H + 'www.google.com/search?q=' + encodeURIComponent(seed.title), trailerUrl: H + 'www.youtube.com/results?search_query=' + encodeURIComponent(seed.title + ' trailer'), source: w?.image ? 'Wikipedia' : 'Local' } })) }
-async function enrich(item: Item): Promise<Item> { if (!OMDB_KEY) return item; try { const url = new URL(H + 'www.omdbapi.com/'); url.searchParams.set('apikey', OMDB_KEY); url.searchParams.set('t', item.originalTitle || item.title); if (item.year) url.searchParams.set('y', item.year); const data = await (await fetch(url.toString(), { next: { revalidate: 3600 } })).json(); if (data?.Response === 'False') return item; return { ...item, image: item.image.startsWith('data:') && data.Poster && data.Poster !== 'N/A' ? data.Poster : item.image, summary: item.summary || data.Plot || item.summary, rating: item.rating || (data.imdbRating && data.imdbRating !== 'N/A' ? Number(data.imdbRating) : null), url: data.imdbID ? H + `www.imdb.com/title/${data.imdbID}/` : item.url, source: `${item.source}+OMDb` } } catch { return item } }
+async function enrich(item: Item): Promise<Item> { if (!OMDB_KEY) return item; try { const url = new URL(H + 'www.omdbapi.com/'); url.searchParams.set('apikey', OMDB_KEY); url.searchParams.set('t', item.originalTitle || item.title); if (item.year) url.searchParams.set('y', item.year); const data = await (await fetchWithTimeout(url.toString(), { next: { revalidate: 3600 } })).json(); if (data?.Response === 'False') return item; return { ...item, image: item.image.startsWith('data:') && data.Poster && data.Poster !== 'N/A' ? data.Poster : item.image, summary: item.summary || data.Plot || item.summary, rating: item.rating || (data.imdbRating && data.imdbRating !== 'N/A' ? Number(data.imdbRating) : null), url: data.imdbID ? H + `www.imdb.com/title/${data.imdbID}/` : item.url, source: `${item.source}+OMDb` } } catch { return item } }
 function unique(items: Item[]) { const seen = new Set<string>(); return items.filter((item: Item) => { const key = `${item.type}-${norm(item.originalTitle || item.title)}-${item.year}`; if (seen.has(key)) return false; seen.add(key); return true }) }
 export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams

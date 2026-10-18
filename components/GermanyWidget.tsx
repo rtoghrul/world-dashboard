@@ -6,23 +6,23 @@ import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
   title: { en: 'Life in Germany 🇩🇪', az: 'Almaniyada Həyat 🇩🇪', ru: 'Жизнь в Германии 🇩🇪', de: 'Leben in Deutschland 🇩🇪', tr: "Almanya'da Yaşam 🇩🇪" },
-  subtitle: { en: 'Government, housing, education, work, healthcare & more', az: 'Dövlət, mənzil, təhsil, iş, səhiyyə və daha çox', ru: 'Государство, жильё, образование, работа, медицина', de: 'Behörden, Wohnung, Bildung, Arbeit, Gesundheit & mehr', tr: 'Devlet, konut, eğitim, iş, sağlık ve daha fazlası' },
+  subtitle: { en: 'Government, housing, education, work, healthcare & more', az: 'Dövlət, mənzil, təhsil, iş, səhiyyə və daha çox', ru: 'Государство, жильё, образование, работа, медицина', de: 'Behörden, Wohnung, Bildung, Arbeit, Gesundheit & mehr', tr: 'Devlet, konut, eğitim, iş, sağlık ve daha fazlası', fr: 'Administration, logement, éducation, travail, santé et plus', es: 'Administración, vivienda, educación, trabajo, salud y más', zh: '政务、住房、教育、工作、医疗等', ar: 'الحكومة والسكن والتعليم والعمل والرعاية الصحية والمزيد', ja: '行政・住まい・教育・仕事・医療など', it: 'Burocrazia, casa, istruzione, lavoro, sanità e altro', pt: 'Governo, moradia, educação, trabalho, saúde e mais' },
 }
 
 const tabs = [
-  { id: 'behoerden', label: { en: 'Government', az: 'Dövlət', de: 'Behörden', ru: 'Гос. органы', tr: 'Devlet' }, icon: Landmark },
-  { id: 'wohnung', label: { en: 'Housing', az: 'Mənzil', de: 'Wohnung', ru: 'Жильё', tr: 'Konut' }, icon: Home },
-  { id: 'bildung', label: { en: 'Education', az: 'Təhsil', de: 'Bildung', ru: 'Образование', tr: 'Eğitim' }, icon: GraduationCap },
-  { id: 'arbeit', label: { en: 'Work', az: 'İş', de: 'Arbeit', ru: 'Работа', tr: 'İş' }, icon: Briefcase },
-  { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər 2025', de: 'Änderungen 2025', ru: 'Изменения 2025', tr: 'Değişiklikler 2025' }, icon: CalendarClock },
-  { id: 'tools', label: { en: 'Tools', az: 'Alətlər', de: 'Tools', ru: 'Инструменты', tr: 'Araçlar' }, icon: Wrench },
-  { id: 'auto', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', de: 'Auto & Verkehr', ru: 'Авто и ПДД', tr: 'Oto & Trafik' }, icon: Car },
-  { id: 'familie', label: { en: 'Family', az: 'Ailə', de: 'Familie', ru: 'Семья', tr: 'Aile' }, icon: Users },
-  { id: 'miete', label: { en: 'Tenant & Landlord', az: 'Kirayəçi & Ev sahibi', de: 'Mieter & Vermieter', ru: 'Аренда', tr: 'Kiracı & Ev sahibi' }, icon: Home },
-  { id: 'gesundheit', label: { en: 'Healthcare', az: 'Səhiyyə', de: 'Gesundheit', ru: 'Здоровье', tr: 'Sağlık' }, icon: HeartPulse },
-  { id: 'versicherung', label: { en: 'Insurance', az: 'Sığorta', de: 'Versicherung', ru: 'Страхование', tr: 'Sigorta' }, icon: Umbrella },
-  { id: 'rechte', label: { en: 'Your Rights', az: 'Hüquqlarınız', de: 'Ihre Rechte', ru: 'Ваши права', tr: 'Haklarınız' }, icon: Scale },
-  { id: 'deutsch', label: { en: 'German Language', az: 'Alman dili', de: 'Deutsch lernen', ru: 'Немецкий язык', tr: 'Almanca' }, icon: BookOpen },
+  { id: 'behoerden', label: { en: 'Government', az: 'Dövlət', de: 'Behörden', ru: 'Гос. органы', tr: 'Devlet', fr: 'Administration', es: 'Administración', zh: '政府机构', ar: 'الجهات الحكومية', ja: '行政', it: 'Uffici pubblici', pt: 'Órgãos públicos' }, icon: Landmark },
+  { id: 'wohnung', label: { en: 'Housing', az: 'Mənzil', de: 'Wohnung', ru: 'Жильё', tr: 'Konut', fr: 'Logement', es: 'Vivienda', zh: '住房', ar: 'السكن', ja: '住まい', it: 'Casa', pt: 'Moradia' }, icon: Home },
+  { id: 'bildung', label: { en: 'Education', az: 'Təhsil', de: 'Bildung', ru: 'Образование', tr: 'Eğitim', fr: 'Éducation', es: 'Educación', zh: '教育', ar: 'التعليم', ja: '教育', it: 'Istruzione', pt: 'Educação' }, icon: GraduationCap },
+  { id: 'arbeit', label: { en: 'Work', az: 'İş', de: 'Arbeit', ru: 'Работа', tr: 'İş', fr: 'Travail', es: 'Trabajo', zh: '工作', ar: 'العمل', ja: '仕事', it: 'Lavoro', pt: 'Trabalho' }, icon: Briefcase },
+  { id: 'aenderungen', label: { en: 'Changes 2025', az: 'Dəyişikliklər 2025', de: 'Änderungen 2025', ru: 'Изменения 2025', tr: 'Değişiklikler 2025', fr: 'Changements 2025', es: 'Cambios 2025', zh: '2025 年变化', ar: 'تغييرات 2025', ja: '2025年の変更点', it: 'Novità 2025', pt: 'Mudanças 2025' }, icon: CalendarClock },
+  { id: 'tools', label: { en: 'Tools', az: 'Alətlər', de: 'Tools', ru: 'Инструменты', tr: 'Araçlar', fr: 'Outils', es: 'Herramientas', zh: '工具', ar: 'الأدوات', ja: 'ツール', it: 'Strumenti', pt: 'Ferramentas' }, icon: Wrench },
+  { id: 'auto', label: { en: 'Auto & Traffic', az: 'Avtomobil & Trafik', de: 'Auto & Verkehr', ru: 'Авто и ПДД', tr: 'Oto & Trafik', fr: 'Auto & circulation', es: 'Coche y tráfico', zh: '汽车与交通', ar: 'السيارات والمرور', ja: '車・交通', it: 'Auto e traffico', pt: 'Carro e trânsito' }, icon: Car },
+  { id: 'familie', label: { en: 'Family', az: 'Ailə', de: 'Familie', ru: 'Семья', tr: 'Aile', fr: 'Famille', es: 'Familia', zh: '家庭', ar: 'الأسرة', ja: '家族', it: 'Famiglia', pt: 'Família' }, icon: Users },
+  { id: 'miete', label: { en: 'Tenant & Landlord', az: 'Kirayəçi & Ev sahibi', de: 'Mieter & Vermieter', ru: 'Аренда', tr: 'Kiracı & Ev sahibi', fr: 'Locataire & propriétaire', es: 'Inquilino y casero', zh: '租客与房东', ar: 'المستأجر والمالك', ja: '借主・大家', it: 'Inquilino e proprietario', pt: 'Inquilino e proprietário' }, icon: Home },
+  { id: 'gesundheit', label: { en: 'Healthcare', az: 'Səhiyyə', de: 'Gesundheit', ru: 'Здоровье', tr: 'Sağlık', fr: 'Santé', es: 'Sanidad', zh: '医疗', ar: 'الرعاية الصحية', ja: '医療', it: 'Sanità', pt: 'Saúde' }, icon: HeartPulse },
+  { id: 'versicherung', label: { en: 'Insurance', az: 'Sığorta', de: 'Versicherung', ru: 'Страхование', tr: 'Sigorta', fr: 'Assurance', es: 'Seguros', zh: '保险', ar: 'التأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguros' }, icon: Umbrella },
+  { id: 'rechte', label: { en: 'Your Rights', az: 'Hüquqlarınız', de: 'Ihre Rechte', ru: 'Ваши права', tr: 'Haklarınız', fr: 'Vos droits', es: 'Tus derechos', zh: '你的权利', ar: 'حقوقك', ja: 'あなたの権利', it: 'I tuoi diritti', pt: 'Seus direitos' }, icon: Scale },
+  { id: 'deutsch', label: { en: 'German Language', az: 'Alman dili', de: 'Deutsch lernen', ru: 'Немецкий язык', tr: 'Almanca', fr: 'Langue allemande', es: 'Idioma alemán', zh: '德语', ar: 'اللغة الألمانية', ja: 'ドイツ語', it: 'Lingua tedesca', pt: 'Língua alemã' }, icon: BookOpen },
 ]
 
 interface GermanyItem {
@@ -163,14 +163,14 @@ export default function GermanyWidget({ initialTab }: { initialTab?: string }) {
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1 scrollbar-thin">
         {tabs.map(tab => {
           const Icon = tab.icon
           return (
             <button key={tab.id} onClick={() => { setActiveTab(tab.id); setExpanded(false) }}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
               {tab.label[lang as keyof typeof tab.label] || tab.label.en}
             </button>
@@ -186,7 +186,7 @@ export default function GermanyWidget({ initialTab }: { initialTab?: string }) {
               <h3 className="font-semibold text-sm group-hover:text-yellow-700 dark:group-hover:text-yellow-400 leading-tight">{item.name}</h3>
               <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1" />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
             <div className="flex items-center gap-1.5">
               <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${typeColors[item.type]}`}>
                 {typeLabels[item.type]}

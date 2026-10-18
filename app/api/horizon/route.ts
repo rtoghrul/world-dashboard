@@ -159,6 +159,6 @@ export async function GET() {
     if (briefing.items.length === 0) throw new Error('No sources reachable')
     return NextResponse.json(briefing, { headers: { 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800' } })
   } catch {
-    return NextResponse.json({ error: 'Failed to load briefing' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to load briefing' }, { status: 502 })
   }
 }

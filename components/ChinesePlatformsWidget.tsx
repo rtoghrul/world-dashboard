@@ -1,25 +1,26 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { ExternalLink, Star, Truck, ShieldCheck, Clock, Package, Shirt, Cpu, Home, Baby, Gamepad2, Wrench } from 'lucide-react'
 import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
-  title: { en: 'Chinese Platforms 🇨🇳→🇩🇪', az: 'Çin Platformaları 🇨🇳→🇩🇪', ru: 'Китайские платформы 🇨🇳→🇩🇪', de: 'Chinesische Plattformen 🇨🇳→🇩🇪', tr: 'Çin Platformları 🇨🇳→🇩🇪' },
-  subtitle: { en: 'Ships to Germany • Prices incl. EU customs', az: 'Almaniyaya çatdırılır • Qiymətlərə gömrük daxildir', ru: 'Доставка в Германию • Цены с таможней ЕС', de: 'Lieferung nach Deutschland • Preise inkl. EU-Zoll', tr: 'Almanya\u2019ya gönderim • Fiyatlar AB gümrük dahil' },
-  delivery: { en: 'Delivery', az: 'Çatdırılma', ru: 'Доставка', de: 'Lieferung', tr: 'Teslimat' },
-  warehouse: { en: 'EU Warehouse', az: 'AB Anbarı', ru: 'Склад в ЕС', de: 'EU-Lager', tr: 'AB Deposu' },
-  days: { en: 'days', az: 'gün', ru: 'дней', de: 'Tage', tr: 'gün' },
+  title: { en: 'Chinese Platforms 🇨🇳→🇩🇪', az: 'Çin Platformaları 🇨🇳→🇩🇪', ru: 'Китайские платформы 🇨🇳→🇩🇪', de: 'Chinesische Plattformen 🇨🇳→🇩🇪', tr: 'Çin Platformları 🇨🇳→🇩🇪', fr: 'Plateformes chinoises 🇨🇳→🇩🇪', es: 'Plataformas chinas 🇨🇳→🇩🇪', zh: '中国平台 🇨🇳→🇩🇪', ar: 'المنصات الصينية 🇨🇳→🇩🇪', ja: '中国の通販サイト 🇨🇳→🇩🇪', it: 'Piattaforme cinesi 🇨🇳→🇩🇪', pt: 'Plataformas chinesas 🇨🇳→🇩🇪' },
+  subtitle: { en: 'Ships to Germany • Prices incl. EU customs', az: 'Almaniyaya çatdırılır • Qiymətlərə gömrük daxildir', ru: 'Доставка в Германию • Цены с таможней ЕС', de: 'Lieferung nach Deutschland • Preise inkl. EU-Zoll', tr: 'Almanya\u2019ya gönderim • Fiyatlar AB gümrük dahil', fr: 'Livraison en Allemagne • Prix avec douane UE', es: 'Envío a Alemania • Precios con aduana UE', zh: '可寄往德国 • 价格含欧盟关税', ar: 'الشحن إلى ألمانيا • الأسعار تشمل جمارك الاتحاد الأوروبي', ja: 'ドイツへ発送 • EU関税込み価格', it: 'Spedizione in Germania • Prezzi incl. dogana UE', pt: 'Envio para a Alemanha • Preços com alfândega da UE' },
+  delivery: { en: 'Delivery', az: 'Çatdırılma', ru: 'Доставка', de: 'Lieferung', tr: 'Teslimat', fr: 'Livraison', es: 'Entrega', zh: '配送', ar: 'التوصيل', ja: '配送', it: 'Consegna', pt: 'Entrega' },
+  warehouse: { en: 'EU Warehouse', az: 'AB Anbarı', ru: 'Склад в ЕС', de: 'EU-Lager', tr: 'AB Deposu', fr: 'Entrepôt UE', es: 'Almacén UE', zh: '欧盟仓', ar: 'مستودع أوروبي', ja: 'EU倉庫', it: 'Magazzino UE', pt: 'Armazém UE' },
+  days: { en: 'days', az: 'gün', ru: 'дней', de: 'Tage', tr: 'gün', fr: 'jours', es: 'días', zh: '天', ar: 'أيام', ja: '日', it: 'giorni', pt: 'dias' },
 }
 
 const categories = [
-  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü' }, icon: Package },
-  { id: 'general', label: { en: 'General', az: 'Ümumi', de: 'Allgemein', ru: 'Общие', tr: 'Genel' }, icon: Package },
-  { id: 'fashion', label: { en: 'Fashion', az: 'Moda', de: 'Mode', ru: 'Мода', tr: 'Moda' }, icon: Shirt },
-  { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', de: 'Elektronik', ru: 'Электроника', tr: 'Elektronik' }, icon: Cpu },
-  { id: 'home', label: { en: 'Home & Garden', az: 'Ev & Bağ', de: 'Haus & Garten', ru: 'Дом и сад', tr: 'Ev & Bahçe' }, icon: Home },
-  { id: 'kids', label: { en: 'Kids & Baby', az: 'Uşaq', de: 'Kinder', ru: 'Дети', tr: 'Çocuk' }, icon: Baby },
-  { id: 'hobby', label: { en: 'Hobby & Tools', az: 'Hobbi & Alətlər', de: 'Hobby & Werkzeug', ru: 'Хобби', tr: 'Hobi' }, icon: Wrench },
+  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' }, icon: Package },
+  { id: 'general', label: { en: 'General', az: 'Ümumi', de: 'Allgemein', ru: 'Общие', tr: 'Genel', fr: 'Général', es: 'General', zh: '综合', ar: 'عام', ja: '総合', it: 'Generale', pt: 'Geral' }, icon: Package },
+  { id: 'fashion', label: { en: 'Fashion', az: 'Moda', de: 'Mode', ru: 'Мода', tr: 'Moda', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'الأزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' }, icon: Shirt },
+  { id: 'electronics', label: { en: 'Electronics', az: 'Elektronika', de: 'Elektronik', ru: 'Электроника', tr: 'Elektronik', fr: 'Électronique', es: 'Electrónica', zh: '电子产品', ar: 'الإلكترونيات', ja: '家電', it: 'Elettronica', pt: 'Eletrônicos' }, icon: Cpu },
+  { id: 'home', label: { en: 'Home & Garden', az: 'Ev & Bağ', de: 'Haus & Garten', ru: 'Дом и сад', tr: 'Ev & Bahçe', fr: 'Maison & jardin', es: 'Hogar y jardín', zh: '家居园艺', ar: 'المنزل والحديقة', ja: 'ホーム・ガーデン', it: 'Casa e giardino', pt: 'Casa e jardim' }, icon: Home },
+  { id: 'kids', label: { en: 'Kids & Baby', az: 'Uşaq', de: 'Kinder', ru: 'Дети', tr: 'Çocuk', fr: 'Enfants & bébé', es: 'Niños y bebés', zh: '儿童与婴儿', ar: 'الأطفال والرضع', ja: 'キッズ・ベビー', it: 'Bambini e neonati', pt: 'Crianças e bebês' }, icon: Baby },
+  { id: 'hobby', label: { en: 'Hobby & Tools', az: 'Hobbi & Alətlər', de: 'Hobby & Werkzeug', ru: 'Хобби', tr: 'Hobi', fr: 'Loisirs & outils', es: 'Hobbies y herramientas', zh: '爱好与工具', ar: 'الهوايات والأدوات', ja: 'ホビー・工具', it: 'Hobby e attrezzi', pt: 'Hobbies e ferramentas' }, icon: Wrench },
 ]
 
 interface Platform {
@@ -106,16 +107,16 @@ export default function ChinesePlatformsWidget({ initialCategory }: { initialCat
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
         {categories.map(c => {
           const Icon = c.icon
           return (
             <button key={c.id} onClick={() => setTab(c.id)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
-              {c.label[lang] || c.label.en}
+              {pickLabel(c.label, lang)}
             </button>
           )
         })}
@@ -132,7 +133,7 @@ export default function ChinesePlatformsWidget({ initialCategory }: { initialCat
               </h3>
               <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
             <div className="flex items-center justify-between flex-wrap gap-1">
               <div className="flex items-center gap-1.5">
                 <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300">

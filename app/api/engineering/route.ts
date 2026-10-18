@@ -55,6 +55,6 @@ export async function GET(req: Request) {
 
     return NextResponse.json(items)
   } catch {
-    return NextResponse.json({ error: 'Failed to fetch engineering news' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch engineering news' }, { status: 502 })
   }
 }

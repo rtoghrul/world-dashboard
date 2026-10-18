@@ -71,7 +71,7 @@ export default function WhatsNew() {
                 <Sparkles className="w-4 h-4 text-indigo-400" />
                 <h2 className="text-white font-semibold text-sm">{"What's New"}</h2>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#4a4a5e]">
+              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#7c7c92]">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -81,7 +81,7 @@ export default function WhatsNew() {
                 <div key={release.version}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-bold text-white px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">v{release.version}</span>
-                    <span className="text-[10px] text-[#4a4a5e]">{release.date}</span>
+                    <span className="text-[10px] text-[#7c7c92]">{release.date}</span>
                   </div>
                   <div className="space-y-1.5">
                     {release.items.map((item, i) => (

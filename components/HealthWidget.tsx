@@ -4,16 +4,16 @@ import { useLang } from '@/lib/LanguageContext'
 import { Pill, Stethoscope, ShieldPlus, Dumbbell, ExternalLink, Star } from 'lucide-react'
 
 const COPY: Record<string, Record<string, string>> = {
-  title: { en: 'Health', az: 'Sağlamlıq', ru: 'Здоровье', de: 'Gesundheit', tr: 'Sağlık' },
-  subtitle: { en: 'Pharmacy prices, symptoms, insurance & fitness', az: 'Aptek qiymətləri, simptomlar, sığorta və fitness', ru: 'Цены в аптеках, симптомы, страхование и фитнес', de: 'Apothekenpreise, Symptome, Versicherung & Fitness', tr: 'Eczane fiyatları, belirtiler, sigorta ve fitness' },
+  title: { en: 'Health', az: 'Sağlamlıq', ru: 'Здоровье', de: 'Gesundheit', tr: 'Sağlık', fr: 'Santé', es: 'Salud', zh: '健康', ar: 'الصحة', ja: '健康', it: 'Salute', pt: 'Saúde' },
+  subtitle: { en: 'Pharmacy prices, symptoms, insurance & fitness', az: 'Aptek qiymətləri, simptomlar, sığorta və fitness', ru: 'Цены в аптеках, симптомы, страхование и фитнес', de: 'Apothekenpreise, Symptome, Versicherung & Fitness', tr: 'Eczane fiyatları, belirtiler, sigorta ve fitness', fr: 'Prix en pharmacie, symptômes, assurance & fitness', es: 'Precios de farmacia, síntomas, seguros y fitness', zh: '药价、症状、保险与健身', ar: 'أسعار الصيدليات والأعراض والتأمين واللياقة', ja: '薬の価格・症状・保険・フィットネス', it: 'Prezzi in farmacia, sintomi, assicurazione e fitness', pt: 'Preços de farmácia, sintomas, seguros e fitness' },
 }
 
 const tabs = [
-  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü' }, icon: Star },
-  { id: 'pharmacy', label: { en: 'Pharmacy', az: 'Aptek', de: 'Apotheke', ru: 'Аптека', tr: 'Eczane' }, icon: Pill },
-  { id: 'symptoms', label: { en: 'Symptoms & Info', az: 'Simptomlar', de: 'Symptome', ru: 'Симптомы', tr: 'Belirtiler' }, icon: Stethoscope },
-  { id: 'insurance', label: { en: 'Insurance', az: 'Sığorta', de: 'Versicherung', ru: 'Страхование', tr: 'Sigorta' }, icon: ShieldPlus },
-  { id: 'fitness', label: { en: 'Fitness & Wellness', az: 'Fitness', de: 'Fitness', ru: 'Фитнес', tr: 'Fitness' }, icon: Dumbbell },
+  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' }, icon: Star },
+  { id: 'pharmacy', label: { en: 'Pharmacy', az: 'Aptek', de: 'Apotheke', ru: 'Аптека', tr: 'Eczane', fr: 'Pharmacie', es: 'Farmacia', zh: '药店', ar: 'صيدلية', ja: '薬局', it: 'Farmacia', pt: 'Farmácia' }, icon: Pill },
+  { id: 'symptoms', label: { en: 'Symptoms & Info', az: 'Simptomlar', de: 'Symptome', ru: 'Симптомы', tr: 'Belirtiler', fr: 'Symptômes & infos', es: 'Síntomas e información', zh: '症状与信息', ar: 'الأعراض والمعلومات', ja: '症状と情報', it: 'Sintomi e info', pt: 'Sintomas e informações' }, icon: Stethoscope },
+  { id: 'insurance', label: { en: 'Insurance', az: 'Sığorta', de: 'Versicherung', ru: 'Страхование', tr: 'Sigorta', fr: 'Assurance', es: 'Seguros', zh: '保险', ar: 'التأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguros' }, icon: ShieldPlus },
+  { id: 'fitness', label: { en: 'Fitness & Wellness', az: 'Fitness', de: 'Fitness', ru: 'Фитнес', tr: 'Fitness', fr: 'Fitness & bien-être', es: 'Fitness y bienestar', zh: '健身与养生', ar: 'اللياقة والعافية', ja: 'フィットネス・ウェルネス', it: 'Fitness e benessere', pt: 'Fitness e bem-estar' }, icon: Dumbbell },
 ]
 
 interface HealthItem {
@@ -131,7 +131,7 @@ export default function HealthWidget({ initialCategory }: { initialCategory?: st
         </button>
       )}
 
-      <p className="text-[10px] text-[#5b5b70] px-1">
+      <p className="text-[10px] text-[#7c7c92] px-1">
         {lang === 'az' ? '⚠️ Bu məlumat tibbi məsləhət deyil. Ciddi simptomlarda həkimə müraciət edin.' : lang === 'de' ? '⚠️ Keine medizinische Beratung. Bei ernsten Symptomen einen Arzt aufsuchen.' : lang === 'ru' ? '⚠️ Это не медицинская консультация. При серьёзных симптомах обратитесь к врачу.' : '⚠️ Not medical advice. See a doctor for serious symptoms.'}
       </p>
     </div>

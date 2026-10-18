@@ -1,14 +1,16 @@
 import { NextResponse } from 'next/server'
+import { fetchWithTimeout, clampInt } from '@/lib/http'
 
 export const revalidate = 60
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const page = searchParams.get('page') || '1'
-  const per_page = searchParams.get('per_page') || '20'
+  // Clamp user input before it goes into the upstream URL.
+  const page = clampInt(searchParams.get('page'), 1, 1, 50)
+  const per_page = clampInt(searchParams.get('per_page'), 20, 1, 250)
 
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${per_page}&page=${page}&sparkline=true&price_change_percentage=24h`,
       { next: { revalidate: 60 } }
     )
@@ -18,7 +20,7 @@ export async function GET(req: Request) {
   } catch {
     // CoinGecko free tier rate-limits (429) — fall back to CoinPaprika (keyless)
     try {
-      const res = await fetch('https://api.coinpaprika.com/v1/tickers?quotes=USD', { next: { revalidate: 120 } })
+      const res = await fetchWithTimeout('https://api.coinpaprika.com/v1/tickers?quotes=USD', { next: { revalidate: 120 } })
       if (!res.ok) throw new Error('CoinPaprika error')
       const tickers = await res.json()
       const start = (Number(page) - 1) * Number(per_page)
@@ -39,7 +41,7 @@ export async function GET(req: Request) {
         }))
       return NextResponse.json(data)
     } catch {
-      return NextResponse.json({ error: 'Failed to fetch crypto data' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch crypto data' }, { status: 502 })
     }
   }
 }

@@ -85,7 +85,7 @@ export default function KeyboardShortcuts() {
             <Keyboard className="w-4 h-4 text-indigo-400" />
             <h2 className="text-white font-semibold text-sm">{c('title')}</h2>
           </div>
-          <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#4a4a5e]">
+          <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#7c7c92]">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -100,7 +100,7 @@ export default function KeyboardShortcuts() {
                     <kbd className="px-2 py-1 bg-white/[0.05] border border-white/[0.08] rounded-md text-[10px] text-white font-mono">
                       {k}
                     </kbd>
-                    {j < s.keys.length - 1 && <span className="text-[#4a4a5e] text-[10px] mx-0.5">+</span>}
+                    {j < s.keys.length - 1 && <span className="text-[#7c7c92] text-[10px] mx-0.5">+</span>}
                   </span>
                 ))}
               </div>
@@ -109,7 +109,7 @@ export default function KeyboardShortcuts() {
         </div>
 
         <div className="p-3 border-t border-white/[0.05] text-center">
-          <p className="text-[10px] text-[#4a4a5e]">
+          <p className="text-[10px] text-[#7c7c92]">
             {c('press').split('{k}').map((part, idx, arr) => (
               <span key={idx}>
                 {part}

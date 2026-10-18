@@ -1,21 +1,22 @@
 'use client'
 import { useState } from 'react'
 import { useLang } from '@/lib/LanguageContext'
+import { pickLabel } from '@/lib/translations'
 import { Heart, Sparkles, Baby, Dumbbell, Palette, Apple, ExternalLink, Star } from 'lucide-react'
 import SectionNews from './SectionNews'
 
 const COPY: Record<string, Record<string, string>> = {
-  title: { en: 'Women’s Corner', az: 'Qadınlar Bölməsi', ru: 'Женский раздел', de: 'Frauenbereich', tr: 'Kadınlar Köşesi' },
-  subtitle: { en: 'Beauty, health, parenting & lifestyle', az: 'Gözəllik, sağlamlıq, uşaq baxımı', ru: 'Красота, здоровье, материнство', de: 'Schönheit, Gesundheit, Elternschaft', tr: 'Güzellik, sağlık, ebeveynlik' },
+  title: { en: 'Women’s Corner', az: 'Qadınlar Bölməsi', ru: 'Женский раздел', de: 'Frauenbereich', tr: 'Kadınlar Köşesi', fr: 'Espace femmes', es: 'Rincón de mujeres', zh: '女性专区', ar: 'ركن المرأة', ja: '女性向けコーナー', it: 'Angolo donna', pt: 'Cantinho da mulher' },
+  subtitle: { en: 'Beauty, health, parenting & lifestyle', az: 'Gözəllik, sağlamlıq, uşaq baxımı', ru: 'Красота, здоровье, материнство', de: 'Schönheit, Gesundheit, Elternschaft', tr: 'Güzellik, sağlık, ebeveynlik', fr: 'Beauté, santé, parentalité & lifestyle', es: 'Belleza, salud, crianza y estilo de vida', zh: '美容、健康、育儿与生活', ar: 'الجمال والصحة والأمومة ونمط الحياة', ja: '美容・健康・子育て・ライフスタイル', it: 'Bellezza, salute, genitorialità e lifestyle', pt: 'Beleza, saúde, maternidade e estilo de vida' },
 }
 
 const tabs = [
-  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü' }, icon: Heart },
-  { id: 'beauty', label: { en: 'Beauty', az: 'Gözəllik', de: 'Schönheit', ru: 'Красота', tr: 'Güzellik' }, icon: Sparkles },
-  { id: 'diet', label: { en: 'Diet', az: 'Dieta', de: 'Ernährung', ru: 'Диета', tr: 'Diyet' }, icon: Apple },
-  { id: 'fitness', label: { en: 'Fitness', az: 'Fitness', de: 'Fitness', ru: 'Фитнес', tr: 'Fitness' }, icon: Dumbbell },
-  { id: 'parenting', label: { en: 'Parenting', az: 'Uşaq Baxımı', de: 'Elternschaft', ru: 'Материнство', tr: 'Ebeveynlik' }, icon: Baby },
-  { id: 'fashion', label: { en: 'Fashion', az: 'Moda', de: 'Mode', ru: 'Мода', tr: 'Moda' }, icon: Palette },
+  { id: 'all', label: { en: 'All', az: 'Hamısı', de: 'Alle', ru: 'Все', tr: 'Tümü', fr: 'Tout', es: 'Todo', zh: '全部', ar: 'الكل', ja: 'すべて', it: 'Tutti', pt: 'Todos' }, icon: Heart },
+  { id: 'beauty', label: { en: 'Beauty', az: 'Gözəllik', de: 'Schönheit', ru: 'Красота', tr: 'Güzellik', fr: 'Beauté', es: 'Belleza', zh: '美容', ar: 'الجمال', ja: '美容', it: 'Bellezza', pt: 'Beleza' }, icon: Sparkles },
+  { id: 'diet', label: { en: 'Diet', az: 'Dieta', de: 'Ernährung', ru: 'Диета', tr: 'Diyet', fr: 'Alimentation', es: 'Dieta', zh: '饮食', ar: 'الحمية', ja: 'ダイエット', it: 'Dieta', pt: 'Dieta' }, icon: Apple },
+  { id: 'fitness', label: { en: 'Fitness', az: 'Fitness', de: 'Fitness', ru: 'Фитнес', tr: 'Fitness', fr: 'Fitness', es: 'Fitness', zh: '健身', ar: 'اللياقة', ja: 'フィットネス', it: 'Fitness', pt: 'Fitness' }, icon: Dumbbell },
+  { id: 'parenting', label: { en: 'Parenting', az: 'Uşaq Baxımı', de: 'Elternschaft', ru: 'Материнство', tr: 'Ebeveynlik', fr: 'Parentalité', es: 'Crianza', zh: '育儿', ar: 'تربية الأطفال', ja: '子育て', it: 'Genitorialità', pt: 'Maternidade' }, icon: Baby },
+  { id: 'fashion', label: { en: 'Fashion', az: 'Moda', de: 'Mode', ru: 'Мода', tr: 'Moda', fr: 'Mode', es: 'Moda', zh: '时尚', ar: 'الأزياء', ja: 'ファッション', it: 'Moda', pt: 'Moda' }, icon: Palette },
 ]
 
 interface WomenItem {
@@ -77,7 +78,7 @@ export default function WomenWidget({ initialCategory }: { initialCategory?: str
     app: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300',
     shop: 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300',
     tool: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
-    site: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300',
+    site: 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-300',
   }
 
   return (
@@ -88,7 +89,7 @@ export default function WomenWidget({ initialCategory }: { initialCategory?: str
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       {/* Tabs */}
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
@@ -96,9 +97,9 @@ export default function WomenWidget({ initialCategory }: { initialCategory?: str
           const Icon = c.icon
           return (
             <button key={c.id} onClick={() => setTab(c.id)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
-              {c.label[lang] || c.label.en}
+              {pickLabel(c.label, lang)}
             </button>
           )
         })}
@@ -113,7 +114,7 @@ export default function WomenWidget({ initialCategory }: { initialCategory?: str
               <h3 className="font-semibold text-sm group-hover:text-pink-600 dark:group-hover:text-pink-400">{item.name}</h3>
               <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang] || item.desc.en}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang] || item.desc.en}</p>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${typeColors[item.type]}`}>
