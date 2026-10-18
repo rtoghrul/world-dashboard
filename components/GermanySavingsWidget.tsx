@@ -170,7 +170,7 @@ export default function GermanySavingsWidget() {
         </div>
         <div>
           <h2 className="text-2xl font-bold gradient-text-static">Germany Savings Hub</h2>
-          <p className="text-xs text-[#8b8b9e]">Savings, real estate, benefits, finance, utilities, auctions and family tools</p>
+          <p className="text-xs text-ink-3">Savings, real estate, benefits, finance, utilities, auctions and family tools</p>
         </div>
       </div>
 
@@ -178,24 +178,24 @@ export default function GermanySavingsWidget() {
         {groups.map(group => {
           const Icon = group.icon
           return (
-            <section key={group.title} className="rounded-2xl border border-white/[0.06] bg-[#0a0a10]/80 p-4">
+            <section key={group.title} className="rounded-2xl border border-line bg-surface-1/80 p-4">
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-fg/[0.04] border border-line flex items-center justify-center shrink-0">
                   <Icon className="w-5 h-5 text-emerald-300" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-sm">{group.title}</h3>
-                  <p className="text-[#7c7c92] text-xs mt-0.5">{group.subtitle}</p>
+                  <h3 className="text-ink-1 font-semibold text-sm">{group.title}</h3>
+                  <p className="text-ink-4 text-xs mt-0.5">{group.subtitle}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {group.items.map(item => (
-                  <a key={item.name} href={item.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-emerald-500/25 p-3 transition-all">
+                  <a key={item.name} href={item.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-line bg-fg/[0.02] hover:bg-fg/[0.04] hover:border-emerald-500/25 p-3 transition-all">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="text-white text-xs font-semibold">{item.name}</h4>
-                      <ExternalLink className="w-3.5 h-3.5 text-[#7c7c92] group-hover:text-emerald-300" />
+                      <h4 className="text-ink-1 text-xs font-semibold">{item.name}</h4>
+                      <ExternalLink className="w-3.5 h-3.5 text-ink-4 group-hover:text-emerald-300" />
                     </div>
-                    <p className="text-[#8b8b9e] text-[11px] mt-1 leading-relaxed">{item.note}</p>
+                    <p className="text-ink-3 text-[11px] mt-1 leading-relaxed">{item.note}</p>
                   </a>
                 ))}
               </div>

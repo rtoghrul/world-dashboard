@@ -137,25 +137,25 @@ function VideoCard({ video, showEmbed, onToggleEmbed, size = 'compact' }: { vide
         <img src={video.thumbnail} alt={video.title} loading="lazy" className="w-full aspect-video object-cover transition-opacity group-hover:opacity-80" />
         <span className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
           <span className={`${size === 'wide' ? 'h-11 w-11' : 'h-9 w-9'} flex items-center justify-center rounded-full bg-red-600/90`}>
-            <Play className={`${size === 'wide' ? 'h-5 w-5' : 'h-4 w-4'} ml-0.5 text-white`} fill="white" aria-hidden="true" />
+            <Play className={`${size === 'wide' ? 'h-5 w-5' : 'h-4 w-4'} ml-0.5 text-ink-1`} fill="white" aria-hidden="true" />
           </span>
         </span>
       </button>
       {showEmbed && (
-        <div className="mb-2 overflow-hidden rounded-lg border border-gray-700">
+        <div className="mb-2 overflow-hidden rounded-lg border border-line-strong">
           <iframe src={`https://www.youtube.com/embed/${video.id}?autoplay=1`} className="w-full aspect-video" allowFullScreen allow="autoplay" title={video.title} />
         </div>
       )}
       <div className="flex items-start justify-between gap-1">
-        <p className={`min-w-0 flex-1 break-words font-medium text-white ${size === 'wide' ? 'text-sm line-clamp-2' : 'text-xs line-clamp-2'}`}>{video.title}</p>
-        <a href={video.url} target="_blank" rel="noopener noreferrer" aria-label="Open video on YouTube" className="mt-0.5 flex-shrink-0 text-gray-400 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+        <p className={`min-w-0 flex-1 break-words font-medium text-ink-1 ${size === 'wide' ? 'text-sm line-clamp-2' : 'text-xs line-clamp-2'}`}>{video.title}</p>
+        <a href={video.url} target="_blank" rel="noopener noreferrer" aria-label="Open video on YouTube" className="mt-0.5 flex-shrink-0 text-ink-3 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
           <ExternalLink className="h-3 w-3" aria-hidden="true" />
         </a>
       </div>
-      <p className="mt-0.5 truncate text-xs text-gray-400">{video.channel}</p>
+      <p className="mt-0.5 truncate text-xs text-ink-3">{video.channel}</p>
       <div className="mt-0.5 flex items-center gap-2">
-        <span className="flex items-center gap-0.5 text-xs text-gray-400"><Eye className="h-2.5 w-2.5" aria-hidden="true" />{formatViews(video.views)}</span>
-        <span className="flex items-center gap-0.5 text-xs text-gray-400"><ThumbsUp className="h-2.5 w-2.5" aria-hidden="true" />{formatViews(video.likes)}</span>
+        <span className="flex items-center gap-0.5 text-xs text-ink-3"><Eye className="h-2.5 w-2.5" aria-hidden="true" />{formatViews(video.views)}</span>
+        <span className="flex items-center gap-0.5 text-xs text-ink-3"><ThumbsUp className="h-2.5 w-2.5" aria-hidden="true" />{formatViews(video.likes)}</span>
       </div>
     </div>
   )
@@ -233,48 +233,48 @@ export default function ViralWidget({ defaultExpanded = false }: { defaultExpand
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-800 bg-gray-900">
-      <div className="cursor-pointer select-none border-b border-gray-800 px-5 py-3 transition-colors hover:bg-gray-800/20" onClick={() => setCollapsed(c => !c)}>
+    <div className="overflow-hidden rounded-2xl border border-line bg-surface-1">
+      <div className="cursor-pointer select-none border-b border-line px-5 py-3 transition-colors hover:bg-surface-2/20" onClick={() => setCollapsed(c => !c)}>
         <div className="mb-0 flex items-center justify-between">
           <div>
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-white">
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-ink-1">
               <TrendingUp className="h-4 w-4 text-red-400" aria-hidden="true" />
               {tr.viral}
             </h2>
-            <p className="text-xs text-gray-400">{tr.viralDesc} · {region}</p>
+            <p className="text-xs text-ink-3">{tr.viralDesc} · {region}</p>
           </div>
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             {!collapsed && (
               <>
-                <div className="flex items-center gap-1.5 rounded-lg bg-gray-800 px-2 py-1 focus-within:ring-2 focus-within:ring-red-500">
-                  <Search className="h-3 w-3 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                  <input type="text" name="youtube-search" value={query} onChange={e => setQuery(e.target.value)} placeholder={`${tr.search}…`} autoComplete="off" className="w-20 bg-transparent text-xs text-white outline-none placeholder-gray-600" />
+                <div className="flex items-center gap-1.5 rounded-lg bg-surface-2 px-2 py-1 focus-within:ring-2 focus-within:ring-red-500">
+                  <Search className="h-3 w-3 flex-shrink-0 text-ink-3" aria-hidden="true" />
+                  <input type="text" name="youtube-search" value={query} onChange={e => setQuery(e.target.value)} placeholder={`${tr.search}…`} autoComplete="off" className="w-20 bg-transparent text-xs text-ink-1 outline-none placeholder-ink-4" />
                 </div>
-                <button type="button" onClick={refresh} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-800 hover:text-white" aria-label={text.refresh}>
+                <button type="button" onClick={refresh} className="rounded-lg p-1.5 text-ink-3 hover:bg-surface-2 hover:text-ink-1" aria-label={text.refresh}>
                   <RefreshCw className="h-3.5 w-3.5" />
                 </button>
               </>
             )}
-            <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} aria-hidden="true" />
+            <ChevronDown className={`h-4 w-4 text-ink-3 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} aria-hidden="true" />
           </div>
         </div>
         {!collapsed && (
           <div className="mt-3 space-y-2" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[11px] text-gray-400">{text.region}</p>
+              <p className="text-[11px] text-ink-3">{text.region}</p>
               <button type="button" onClick={autoRegion} className="text-[11px] text-red-400 hover:text-red-300">{text.autoRegion}</button>
             </div>
             <div className="flex flex-wrap gap-1">
               {REGIONS.map(r => (
-                <button type="button" key={r.code} onClick={() => selectRegion(r.code)} className={`rounded-lg px-2 py-1 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${region === r.code ? 'border border-red-500/30 bg-red-500/20 text-red-400' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}>
+                <button type="button" key={r.code} onClick={() => selectRegion(r.code)} className={`rounded-lg px-2 py-1 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${region === r.code ? 'border border-red-500/30 bg-red-500/20 text-red-400' : 'text-ink-3 hover:bg-surface-2 hover:text-ink-1'}`}>
                   {r.label}
                 </button>
               ))}
             </div>
-            <p className="text-[11px] text-gray-400">{text.category}</p>
+            <p className="text-[11px] text-ink-3">{text.category}</p>
             <div className="flex gap-1 overflow-x-auto pb-1">
               {CATEGORY_IDS.map(id => (
-                <button type="button" key={id || 'all'} onClick={() => selectCategory(id)} className={`flex-shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${category === id ? 'border border-red-500/30 bg-red-500/20 text-red-400' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}>
+                <button type="button" key={id || 'all'} onClick={() => selectCategory(id)} className={`flex-shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${category === id ? 'border border-red-500/30 bg-red-500/20 text-red-400' : 'text-ink-3 hover:bg-surface-2 hover:text-ink-1'}`}>
                   {text.categories[id || 'all']}
                 </button>
               ))}
@@ -285,23 +285,23 @@ export default function ViralWidget({ defaultExpanded = false }: { defaultExpand
 
       {collapsed && (
         <div className="flex items-center gap-3 px-5 py-3">
-          {isLoading && <div className="flex w-full animate-pulse items-center gap-3"><div className="h-12 w-20 flex-shrink-0 rounded-lg bg-gray-800" /><div className="flex-1 space-y-2"><div className="h-3 w-3/4 rounded bg-gray-800" /><div className="h-2 w-1/2 rounded bg-gray-800" /></div></div>}
-          {top && <><div className="relative flex-shrink-0"><img loading="lazy" decoding="async" src={top.thumbnail} alt={top.title} className="h-12 w-20 rounded-lg object-cover" /><div className="absolute inset-0 flex items-center justify-center"><div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-600/90"><Play className="ml-0.5 h-3 w-3 text-white" fill="white" aria-hidden="true" /></div></div></div><div className="min-w-0"><p className="line-clamp-1 text-xs font-medium text-white">{top.title}</p><p className="mt-0.5 flex items-center gap-2 text-xs text-gray-400">{top.channel}<span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" aria-hidden="true" />{formatViews(top.views)}</span></p></div></>}
+          {isLoading && <div className="flex w-full animate-pulse items-center gap-3"><div className="h-12 w-20 flex-shrink-0 rounded-lg bg-surface-2" /><div className="flex-1 space-y-2"><div className="h-3 w-3/4 rounded bg-surface-2" /><div className="h-2 w-1/2 rounded bg-surface-2" /></div></div>}
+          {top && <><div className="relative flex-shrink-0"><img loading="lazy" decoding="async" src={top.thumbnail} alt={top.title} className="h-12 w-20 rounded-lg object-cover" /><div className="absolute inset-0 flex items-center justify-center"><div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-600/90"><Play className="ml-0.5 h-3 w-3 text-ink-1" fill="white" aria-hidden="true" /></div></div></div><div className="min-w-0"><p className="line-clamp-1 text-xs font-medium text-ink-1">{top.title}</p><p className="mt-0.5 flex items-center gap-2 text-xs text-ink-3">{top.channel}<span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" aria-hidden="true" />{formatViews(top.views)}</span></p></div></>}
         </div>
       )}
 
       {!collapsed && (
         <div className="p-4">
-          {isLoading && <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="animate-pulse"><div className="mb-2 aspect-video w-full rounded-lg bg-gray-800" /><div className="mb-1 h-2.5 w-3/4 rounded bg-gray-800" /><div className="h-2 w-1/2 rounded bg-gray-800" /></div>)}</div>}
+          {isLoading && <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="animate-pulse"><div className="mb-2 aspect-video w-full rounded-lg bg-surface-2" /><div className="mb-1 h-2.5 w-3/4 rounded bg-surface-2" /><div className="h-2 w-1/2 rounded bg-surface-2" /></div>)}</div>}
           {error && <div className="p-6 text-center text-sm text-red-400">{tr.error}</div>}
           {filtered && !error && (
             <div className="space-y-5">
-              {featured && <section><div className="mb-2 flex items-center justify-between"><h3 className="flex items-center gap-1.5 text-xs font-semibold text-white"><Flame className="h-3.5 w-3.5 text-red-400" aria-hidden="true" />{text.featured}</h3><span className="text-[11px] text-gray-400">{region}</span></div><div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1.25fr)_minmax(220px,0.75fr)]"><VideoCard video={featured} showEmbed={showEmbed === featured.id} onToggleEmbed={() => setShowEmbed(showEmbed === featured.id ? null : featured.id)} size="wide" /><div className="hidden flex-col justify-center border-l border-gray-800 pl-4 md:flex"><p className="text-xs leading-5 text-gray-400">{text.featuredNote}</p><a href={featured.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-red-400 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">{text.open}<ExternalLink className="h-3 w-3" aria-hidden="true" /></a></div></div></section>}
-              {trendingVideos.length > 0 && <section><h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-white"><TrendingUp className="h-3.5 w-3.5 text-red-400" aria-hidden="true" />{text.trending}</h3><div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{trendingVideos.map(video => <VideoCard key={video.id} video={video} showEmbed={showEmbed === video.id} onToggleEmbed={() => setShowEmbed(showEmbed === video.id ? null : video.id)} />)}</div></section>}
-              {moreVideos.length > 0 && <section><h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-white"><Clapperboard className="h-3.5 w-3.5 text-red-400" aria-hidden="true" />{text.more}</h3><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{moreVideos.map(video => <VideoCard key={video.id} video={video} showEmbed={showEmbed === video.id} onToggleEmbed={() => setShowEmbed(showEmbed === video.id ? null : video.id)} />)}</div></section>}
+              {featured && <section><div className="mb-2 flex items-center justify-between"><h3 className="flex items-center gap-1.5 text-xs font-semibold text-ink-1"><Flame className="h-3.5 w-3.5 text-red-400" aria-hidden="true" />{text.featured}</h3><span className="text-[11px] text-ink-3">{region}</span></div><div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1.25fr)_minmax(220px,0.75fr)]"><VideoCard video={featured} showEmbed={showEmbed === featured.id} onToggleEmbed={() => setShowEmbed(showEmbed === featured.id ? null : featured.id)} size="wide" /><div className="hidden flex-col justify-center border-l border-line pl-4 md:flex"><p className="text-xs leading-5 text-ink-3">{text.featuredNote}</p><a href={featured.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-red-400 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">{text.open}<ExternalLink className="h-3 w-3" aria-hidden="true" /></a></div></div></section>}
+              {trendingVideos.length > 0 && <section><h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-ink-1"><TrendingUp className="h-3.5 w-3.5 text-red-400" aria-hidden="true" />{text.trending}</h3><div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{trendingVideos.map(video => <VideoCard key={video.id} video={video} showEmbed={showEmbed === video.id} onToggleEmbed={() => setShowEmbed(showEmbed === video.id ? null : video.id)} />)}</div></section>}
+              {moreVideos.length > 0 && <section><h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-ink-1"><Clapperboard className="h-3.5 w-3.5 text-red-400" aria-hidden="true" />{text.more}</h3><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{moreVideos.map(video => <VideoCard key={video.id} video={video} showEmbed={showEmbed === video.id} onToggleEmbed={() => setShowEmbed(showEmbed === video.id ? null : video.id)} />)}</div></section>}
             </div>
           )}
-          <div className="mt-4 border-t border-gray-800 pt-4"><p className="mb-2 text-xs text-gray-400">{tr.otherPlatforms}</p><div className="flex flex-wrap gap-2">{SOCIAL.map(s => <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${s.bg} ${s.color}`}><span>{s.icon}</span>{s.name}</a>)}</div></div>
+          <div className="mt-4 border-t border-line pt-4"><p className="mb-2 text-xs text-ink-3">{tr.otherPlatforms}</p><div className="flex flex-wrap gap-2">{SOCIAL.map(s => <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${s.bg} ${s.color}`}><span>{s.icon}</span>{s.name}</a>)}</div></div>
           <SectionNews section="viral" tab="all" accentColor="red" darkMode />
         </div>
       )}

@@ -152,10 +152,10 @@ export default function WeatherWidget() {
 
   if (loading && !w) {
     return (
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 animate-pulse">
+      <div className="bg-surface-1 border border-line rounded-xl p-4 animate-pulse">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gray-800" />
-          <div className="flex-1 space-y-2"><div className="h-3 bg-gray-800 rounded w-24" /><div className="h-2 bg-gray-800 rounded w-16" /></div>
+          <div className="w-10 h-10 rounded-full bg-surface-2" />
+          <div className="flex-1 space-y-2"><div className="h-3 bg-surface-2 rounded w-24" /><div className="h-2 bg-surface-2 rounded w-16" /></div>
         </div>
       </div>
     )
@@ -165,22 +165,22 @@ export default function WeatherWidget() {
   const locale = lang === 'az' ? 'az-AZ' : lang === 'ru' ? 'ru-RU' : lang === 'tr' ? 'tr-TR' : lang === 'de' ? 'de-DE' : 'en-US'
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+    <div className="bg-surface-1 border border-line rounded-xl overflow-hidden">
       {/* Collapsed header */}
-      <button onClick={() => setExpanded(e => !e)} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 transition text-left">
+      <button onClick={() => setExpanded(e => !e)} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-2/40 transition text-left">
         <span className="text-3xl leading-none">{icon(w.code)}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2">
-            <span className="text-white text-xl font-bold">{w.temp}\u00b0</span>
-            <span className="text-gray-400 text-xs">{desc(w.code, lang)}</span>
+            <span className="text-ink-1 text-xl font-bold">{w.temp}\u00b0</span>
+            <span className="text-ink-3 text-xs">{desc(w.code, lang)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-400 text-[11px] mt-0.5">
+          <div className="flex items-center gap-1.5 text-ink-3 text-[11px] mt-0.5">
             <MapPin className="w-3 h-3" />
             <span>{w.city}</span>
             {time && <><span>\u00b7</span><span>{time}</span></>}
           </div>
         </div>
-        <div className="flex items-center gap-3 text-gray-400 text-[11px]">
+        <div className="flex items-center gap-3 text-ink-3 text-[11px]">
           <span className="flex items-center gap-1"><Wind className="w-3 h-3" />{w.wind}</span>
           <span className="flex items-center gap-1"><Droplets className="w-3 h-3" />{w.humidity}%</span>
           <ChevronDown className={`w-4 h-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
@@ -188,44 +188,44 @@ export default function WeatherWidget() {
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-800">
+        <div className="border-t border-line">
           {/* Location selector */}
           <div className="px-4 py-2.5 flex items-center justify-between">
             <div className="relative">
-              <button onClick={() => setPickerOpen(p => !p)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-800 border border-gray-700 text-xs text-gray-300 hover:text-white hover:border-gray-600 transition">
+              <button onClick={() => setPickerOpen(p => !p)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-2 border border-line-strong text-xs text-ink-2 hover:text-ink-1 hover:border-line-strong transition">
                 <MapPin className="w-3 h-3" />
                 {locId === 'auto' ? `Auto (${w.city})` : loc.name}
                 <ChevronUp className={`w-3 h-3 transition ${pickerOpen ? '' : 'rotate-180'}`} />
               </button>
               {pickerOpen && (
-                <div className="absolute top-full left-0 mt-1 z-20 bg-gray-900 border border-gray-700 rounded-lg shadow-xl p-2 grid grid-cols-2 gap-1 w-64 max-h-60 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 z-20 bg-surface-1 border border-line-strong rounded-lg shadow-xl p-2 grid grid-cols-2 gap-1 w-64 max-h-60 overflow-y-auto">
                   {LOCATIONS.map(l => (
                     <button key={l.id} onClick={() => { setLocId(l.id); setPickerOpen(false) }}
-                      className={`text-left px-2 py-1.5 rounded text-xs transition ${locId === l.id ? 'bg-blue-500/20 text-blue-300' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}>
-                      {l.name} {l.country && <span className="text-gray-400">{l.country}</span>}
+                      className={`text-left px-2 py-1.5 rounded text-xs transition ${locId === l.id ? 'bg-blue-500/20 text-blue-300' : 'text-ink-3 hover:text-ink-1 hover:bg-surface-2'}`}>
+                      {l.name} {l.country && <span className="text-ink-3">{l.country}</span>}
                     </button>
                   ))}
                 </div>
               )}
             </div>
             {/* Tab toggle */}
-            <div className="flex gap-1 bg-gray-800 rounded-lg p-0.5">
-              <button onClick={() => setTab('hours')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'hours' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-gray-300'}`}>12h</button>
-              <button onClick={() => setTab('days')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'days' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-gray-300'}`}>7d</button>
+            <div className="flex gap-1 bg-surface-2 rounded-lg p-0.5">
+              <button onClick={() => setTab('hours')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'hours' ? 'bg-surface-3 text-ink-1' : 'text-ink-3 hover:text-ink-2'}`}>12h</button>
+              <button onClick={() => setTab('days')} className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${tab === 'days' ? 'bg-surface-3 text-ink-1' : 'text-ink-3 hover:text-ink-2'}`}>7d</button>
             </div>
           </div>
 
           {/* Hourly */}
           {tab === 'hours' && (
-            <div className="overflow-x-auto border-t border-gray-800/50">
+            <div className="overflow-x-auto border-t border-line">
               <div className="flex px-2 py-3 gap-0.5 min-w-max">
                 {w.hourly.map((h, i) => {
                   const hr = new Date(h.time).toLocaleTimeString(locale, { timeZone: tz, hour: '2-digit', minute: '2-digit' })
                   return (
-                    <div key={i} className="flex flex-col items-center gap-1 w-14 py-1.5 rounded-lg hover:bg-gray-800/50">
-                      <span className="text-gray-400 text-[10px]">{hr}</span>
+                    <div key={i} className="flex flex-col items-center gap-1 w-14 py-1.5 rounded-lg hover:bg-surface-2/50">
+                      <span className="text-ink-3 text-[10px]">{hr}</span>
                       <span className="text-lg leading-none">{icon(h.code)}</span>
-                      <span className="text-white text-xs font-medium">{h.temp}\u00b0</span>
+                      <span className="text-ink-1 text-xs font-medium">{h.temp}\u00b0</span>
                     </div>
                   )
                 })}
@@ -235,21 +235,21 @@ export default function WeatherWidget() {
 
           {/* Daily */}
           {tab === 'days' && (
-            <div className="border-t border-gray-800/50">
+            <div className="border-t border-line">
               {w.daily.map((day, i) => {
                 const d = new Date(day.date + 'T12:00:00')
                 const label = i === 0 ? (lang === 'az' ? 'Bu g\u00fcn' : lang === 'ru' ? '\u0421\u0435\u0433\u043e\u0434\u043d\u044f' : lang === 'tr' ? 'Bug\u00fcn' : lang === 'de' ? 'Heute' : 'Today') : d.toLocaleDateString(locale, { weekday: 'short' })
                 return (
-                  <div key={day.date} className="flex items-center px-4 py-2 hover:bg-gray-800/30 transition">
-                    <span className="text-gray-400 text-xs w-12">{label}</span>
+                  <div key={day.date} className="flex items-center px-4 py-2 hover:bg-surface-2/30 transition">
+                    <span className="text-ink-3 text-xs w-12">{label}</span>
                     <span className="text-base w-8 text-center">{icon(day.code)}</span>
                     <div className="flex-1 mx-3">
-                      <div className="h-1 rounded-full bg-gray-800 relative overflow-hidden">
+                      <div className="h-1 rounded-full bg-surface-2 relative overflow-hidden">
                         <div className="absolute inset-y-0 bg-gradient-to-r from-blue-500 to-orange-400 rounded-full" style={{ left: '10%', right: '10%' }} />
                       </div>
                     </div>
-                    <span className="text-gray-400 text-xs w-8 text-right">{day.min}\u00b0</span>
-                    <span className="text-white text-xs font-medium w-8 text-right">{day.max}\u00b0</span>
+                    <span className="text-ink-3 text-xs w-8 text-right">{day.min}\u00b0</span>
+                    <span className="text-ink-1 text-xs font-medium w-8 text-right">{day.max}\u00b0</span>
                   </div>
                 )
               })}

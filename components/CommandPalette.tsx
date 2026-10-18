@@ -12,10 +12,14 @@ const sectionIcons: Record<string, any> = {
   germany: Globe2, platforms: ShoppingBag, benefits: Gift, health: Stethoscope,
 }
 
+import { uiAll } from '@/lib/i18n/ui'
 type L10n = Record<string, string>
 type PaletteItem = { href: string; label: L10n; group: L10n; section: string }
 
 const PAGES: { href: string; section: string; label: L10n }[] = [
+  { href: '/news', section: 'news', label: uiAll('news.title') },
+  { href: '/links', section: 'links', label: uiAll('links.title') },
+  { href: '/section/horizon/all', section: 'horizon', label: uiAll('home.radar') },
   { href: '/benefits', section: 'benefits', label: { en: 'Benefits Hub — subsidies, discounts & free tools', az: 'Güzəşt Mərkəzi — subsidiyalar, endirimlər və pulsuz alətlər', ru: 'Льготы — субсидии, скидки и бесплатные инструменты', de: 'Vorteile — Zuschüsse, Rabatte & kostenlose Tools', tr: 'Avantajlar — destekler, indirimler ve ücretsiz araçlar', fr: 'Avantages — aides, réductions et outils gratuits', es: 'Beneficios — ayudas, descuentos y herramientas gratis', zh: '福利中心 — 补贴、折扣和免费工具', ar: 'مركز المزايا — دعم وخصومات وأدوات مجانية', ja: '特典ハブ — 補助金・割引・無料ツール', it: 'Vantaggi — sussidi, sconti e strumenti gratuiti', pt: 'Benefícios — subsídios, descontos e ferramentas grátis' } },
   { href: '/crypto', section: 'markets', label: { en: 'Crypto markets', az: 'Kripto bazarları', ru: 'Крипторынки', de: 'Kryptomärkte', tr: 'Kripto piyasaları', fr: 'Marchés crypto', es: 'Mercados cripto', zh: '加密货币市场', ar: 'أسواق العملات المشفرة', ja: '暗号資産市場', it: 'Mercati crypto', pt: 'Mercados cripto' } },
   { href: '/stocks', section: 'markets', label: { en: 'Stock markets', az: 'Səhm bazarları', ru: 'Фондовые рынки', de: 'Aktienmärkte', tr: 'Borsalar', fr: 'Marchés boursiers', es: 'Mercados bursátiles', zh: '股票市场', ar: 'أسواق الأسهم', ja: '株式市場', it: 'Mercati azionari', pt: 'Mercado de ações' } },
@@ -118,10 +122,10 @@ export default function CommandPalette() {
   return (
     <div className="fixed inset-0 z-[99999] flex items-start justify-center pt-[15vh]" role="dialog" aria-modal="true" aria-label={pick(COPY.dialog, lang)}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
-      <div className="relative w-full max-w-lg mx-4 rounded-2xl bg-[#111118] border border-white/[0.08] shadow-2xl shadow-black/80 overflow-hidden animate-scale-in">
+      <div className="relative w-full max-w-lg mx-4 rounded-2xl bg-surface-1 border border-line-strong shadow-2xl shadow-black/80 overflow-hidden animate-scale-in">
         {/* Search input */}
-        <div className="flex items-center gap-3 px-4 py-4 border-b border-white/[0.06]">
-          <Search className="w-5 h-5 text-[#7c7c92] shrink-0" />
+        <div className="flex items-center gap-3 px-4 py-4 border-b border-line">
+          <Search className="w-5 h-5 text-ink-4 shrink-0" />
           <input
             ref={inputRef}
             value={query}
@@ -133,15 +137,15 @@ export default function CommandPalette() {
             aria-controls="command-palette-results"
             aria-activedescendant={filtered[selectedIndex] ? `command-palette-option-${selectedIndex}` : undefined}
             placeholder={pick(COPY.placeholder, lang)}
-            className="flex-1 bg-transparent text-white text-sm placeholder-[#7c7c92] outline-none"
+            className="flex-1 bg-transparent text-ink-1 text-sm placeholder-ink-4 outline-none"
           />
-          <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] text-[10px] text-[#7c7c92]">ESC</kbd>
+          <kbd className="px-1.5 py-0.5 rounded bg-fg/[0.06] text-[10px] text-ink-4">ESC</kbd>
         </div>
 
         {/* Results */}
         <div id="command-palette-results" role="listbox" className="max-h-[50vh] overflow-y-auto py-2">
           {filtered.length === 0 && (
-            <p className="text-center text-[#7c7c92] text-sm py-8">{pick(COPY.noResults, lang)}</p>
+            <p className="text-center text-ink-4 text-sm py-8">{pick(COPY.noResults, lang)}</p>
           )}
           {filtered.map((item, i) => {
             const Icon = sectionIcons[item.section] || Globe2
@@ -155,17 +159,17 @@ export default function CommandPalette() {
                 onClick={() => navigate(item)}
                 onMouseEnter={() => setSelectedIndex(i)}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                  i === selectedIndex ? 'bg-indigo-500/10 text-white' : 'text-[#a0a0b0] hover:bg-white/[0.04] hover:text-white'
+                  i === selectedIndex ? 'bg-indigo-500/10 text-ink-1' : 'text-ink-3 hover:bg-fg/[0.04] hover:text-ink-1'
                 }`}
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  i === selectedIndex ? 'bg-indigo-500/20' : 'bg-white/[0.04]'
+                  i === selectedIndex ? 'bg-indigo-500/20' : 'bg-fg/[0.04]'
                 }`}>
                   <Icon className="w-4 h-4" aria-hidden="true" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{pick(item.label, lang)}</p>
-                  <p className="text-[10px] text-[#8b8b9e]">{pick(item.group, lang)}</p>
+                  <p className="text-[10px] text-ink-3">{pick(item.group, lang)}</p>
                 </div>
                 <ArrowRight className={`w-4 h-4 shrink-0 transition-opacity ${i === selectedIndex ? 'opacity-100' : 'opacity-0'}`} />
               </button>
@@ -174,7 +178,7 @@ export default function CommandPalette() {
         </div>
 
         {/* Footer hint */}
-        <div className="flex items-center gap-4 px-4 py-2.5 border-t border-white/[0.06] text-[10px] text-[#8b8b9e]">
+        <div className="flex items-center gap-4 px-4 py-2.5 border-t border-line text-[10px] text-ink-3">
           <span>↑↓ {pick(COPY.navigate, lang)}</span>
           <span>↵ {pick(COPY.select, lang)}</span>
           <span>esc {pick(COPY.close, lang)}</span>

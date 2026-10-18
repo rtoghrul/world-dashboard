@@ -6,7 +6,7 @@ import { useLang } from '@/lib/LanguageContext'
 
 const tabs = [
   { id: '/', icon: Home, label: { en: 'Home', az: 'Ana', de: 'Start', ru: 'Главная', tr: 'Ana sayfa', fr: 'Accueil', es: 'Inicio', zh: '首页', ar: 'الرئيسية', ja: 'ホーム', it: 'Home', pt: 'Início' } },
-  { id: '/section/news/top', icon: Newspaper, label: { en: 'News', az: 'Xəbər', de: 'News', ru: 'Новости', tr: 'Haberler', fr: 'Actus', es: 'Noticias', zh: '新闻', ar: 'الأخبار', ja: 'ニュース', it: 'Notizie', pt: 'Notícias' } },
+  { id: '/news', icon: Newspaper, label: { en: 'News', az: 'Xəbər', de: 'News', ru: 'Новости', tr: 'Haberler', fr: 'Actus', es: 'Noticias', zh: '新闻', ar: 'الأخبار', ja: 'ニュース', it: 'Notizie', pt: 'Notícias' } },
   { id: '/section/markets/crypto-top', icon: Bitcoin, label: { en: 'Markets', az: 'Bazar', de: 'Märkte', ru: 'Рынки', tr: 'Piyasalar', fr: 'Marchés', es: 'Mercados', zh: '市场', ar: 'الأسواق', ja: 'マーケット', it: 'Mercati', pt: 'Mercados' } },
   { id: '/section/entertainment/movies', icon: Film, label: { en: 'Movies', az: 'Film', de: 'Filme', ru: 'Фильмы', tr: 'Filmler', fr: 'Films', es: 'Películas', zh: '电影', ar: 'الأفلام', ja: '映画', it: 'Film', pt: 'Filmes' } },
   { id: '/section/facts/astronomy', icon: Lightbulb, label: { en: 'Facts', az: 'Faktlar', de: 'Fakten', ru: 'Факты', tr: 'Bilgiler', fr: 'Faits', es: 'Datos', zh: '趣闻', ar: 'حقائق', ja: '雑学', it: 'Curiosità', pt: 'Fatos' } },
@@ -21,7 +21,7 @@ export default function MobileBottomNav() {
   const { lang } = useLang()
 
   return (
-    <nav aria-label={pick(NAV_LABEL, lang)} className="md:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-[#07070b]/95 backdrop-blur-xl border-t border-white/[0.06] safe-area-bottom">
+    <nav aria-label={pick(NAV_LABEL, lang)} className="md:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-surface-1/95 backdrop-blur-xl border-t border-line safe-area-bottom">
       <div className="flex items-center justify-around h-14 px-1">
         {tabs.map(tab => {
           const Icon = tab.icon
@@ -32,7 +32,7 @@ export default function MobileBottomNav() {
               href={tab.id}
               aria-current={active ? 'page' : undefined}
               className={`flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-lg transition-colors ${
-                active ? 'text-indigo-400' : 'text-[#8b8b9e]'
+                active ? 'text-indigo-400' : 'text-ink-3'
               }`}
             >
               <Icon aria-hidden="true" className={`w-5 h-5 ${active ? 'drop-shadow-[0_0_6px_rgba(99,102,241,0.5)]' : ''}`} />
@@ -43,7 +43,7 @@ export default function MobileBottomNav() {
         <button
           type="button"
           onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
-          className="flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-lg text-[#8b8b9e]"
+          className="flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-lg text-ink-3"
         >
           <Search className="w-5 h-5" aria-hidden="true" />
           <span className="text-[9px] font-medium">{pick(SEARCH_LABEL, lang)}</span>

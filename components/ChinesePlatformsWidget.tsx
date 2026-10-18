@@ -107,14 +107,14 @@ export default function ChinesePlatformsWidget({ initialCategory }: { initialCat
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-ink-3 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
         {categories.map(c => {
           const Icon = c.icon
           return (
             <button key={c.id} onClick={() => setTab(c.id)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${tab === c.id ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300' : 'bg-gray-100 dark:bg-gray-800 text-ink-3 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
               {pickLabel(c.label, lang)}
             </button>
@@ -131,9 +131,9 @@ export default function ChinesePlatformsWidget({ initialCategory }: { initialCat
                 {p.name}
                 {p.popular && <span className="text-[10px]">🔥</span>}
               </h3>
-              <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+              <ExternalLink className="w-3.5 h-3.5 text-ink-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
+            <p className="text-xs text-ink-3 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
             <div className="flex items-center justify-between flex-wrap gap-1">
               <div className="flex items-center gap-1.5">
                 <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300">

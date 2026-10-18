@@ -154,7 +154,7 @@ export default function NotificationCenter() {
       <button
         ref={bellRef}
         onClick={() => { setShowPanel(!showPanel); markAllRead() }}
-        className="relative p-2 rounded-lg text-[#7c7c92] hover:text-white hover:bg-white/[0.04] transition"
+        className="relative p-2 rounded-lg text-ink-4 hover:text-ink-1 hover:bg-fg/[0.04] transition"
         title="Notifications & Alerts"
       >
         <Bell className="w-4 h-4" />
@@ -170,11 +170,11 @@ export default function NotificationCenter() {
         <div
           ref={panelRef}
           style={{ position: 'fixed', top: 60, right: 16, zIndex: 99998 }}
-          className="w-[340px] max-h-[500px] rounded-2xl bg-[#0f0f15] border border-white/[0.08] shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
+          className="w-[340px] max-h-[500px] rounded-2xl bg-surface-1 border border-line-strong shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-          <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-line">
+          <h3 className="text-ink-1 font-semibold text-sm">{c('title')}</h3>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowAddAlert(true)}
@@ -183,21 +183,21 @@ export default function NotificationCenter() {
                 <Plus className="w-3 h-3" /> Alert
               </button>
               {notifications.length > 0 && (
-          <button onClick={clearNotifications} className="text-[10px] text-[#7c7c92] hover:text-white transition">{c('clear')}</button>
+          <button onClick={clearNotifications} className="text-[10px] text-ink-4 hover:text-ink-1 transition">{c('clear')}</button>
               )}
             </div>
           </div>
 
           {/* Active Alerts */}
           {alerts.length > 0 && (
-            <div className="px-4 py-2.5 border-b border-white/[0.04] bg-white/[0.01]">
-              <p className="text-[10px] text-[#7c7c92] uppercase tracking-wider font-semibold mb-2">Active Alerts ({alerts.length})</p>
+            <div className="px-4 py-2.5 border-b border-line bg-fg/[0.01]">
+              <p className="text-[10px] text-ink-4 uppercase tracking-wider font-semibold mb-2">Active Alerts ({alerts.length})</p>
               {alerts.map(a => (
                 <div key={a.id} className="flex items-center justify-between py-1.5 group">
-                  <span className="text-xs text-[#a0a0b0]">
+                  <span className="text-xs text-ink-3">
                     {a.coin.toUpperCase()} {a.condition === 'above' ? '↑' : '↓'} ${a.target.toLocaleString()}
                   </span>
-                  <button onClick={() => removeAlert(a.id)} className="opacity-0 group-hover:opacity-100 text-[#7c7c92] hover:text-red-400 transition">
+                  <button onClick={() => removeAlert(a.id)} className="opacity-0 group-hover:opacity-100 text-ink-4 hover:text-red-400 transition">
                     <Trash2 className="w-3 h-3" />
                   </button>
                 </div>
@@ -209,15 +209,15 @@ export default function NotificationCenter() {
           <div className="flex-1 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="px-4 py-10 text-center">
-                <Bell className="w-6 h-6 text-[#7c7c92] mx-auto mb-2" />
-          <p className="text-xs text-[#7c7c92]">{c('empty')}</p>
-          <p className="text-[10px] text-[#7c7c92] mt-1">{c('emptyHint')}</p>
+                <Bell className="w-6 h-6 text-ink-4 mx-auto mb-2" />
+          <p className="text-xs text-ink-4">{c('empty')}</p>
+          <p className="text-[10px] text-ink-4 mt-1">{c('emptyHint')}</p>
               </div>
             ) : (
               notifications.slice(0, 20).map(notif => (
-                <div key={notif.id} className={`px-4 py-3 border-b border-white/[0.03] ${!notif.read ? 'bg-indigo-500/[0.03]' : ''}`}>
-                  <p className="text-xs text-[#d0d0e0]">{notif.message}</p>
-                  <p className="text-[10px] text-[#7c7c92] mt-1">
+                <div key={notif.id} className={`px-4 py-3 border-b border-line ${!notif.read ? 'bg-indigo-500/[0.03]' : ''}`}>
+                  <p className="text-xs text-ink-2">{notif.message}</p>
+                  <p className="text-[10px] text-ink-4 mt-1">
                     {new Date(notif.timestamp).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' })}
                   </p>
                 </div>
@@ -232,20 +232,20 @@ export default function NotificationCenter() {
       {showAddAlert && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAddAlert(false)} />
-          <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-[#0f0f15] border border-white/[0.08] p-6 shadow-2xl">
+          <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-surface-1 border border-line-strong p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-          <h3 className="text-white font-semibold text-sm">{c('newAlert')}</h3>
-              <button onClick={() => setShowAddAlert(false)} className="text-[#7c7c92] hover:text-white">
+          <h3 className="text-ink-1 font-semibold text-sm">{c('newAlert')}</h3>
+              <button onClick={() => setShowAddAlert(false)} className="text-ink-4 hover:text-ink-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-                        <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('coin')}</label>
+                        <label className="text-[11px] text-ink-4 mb-1 block">{c('coin')}</label>
                 <select
                   value={newAlert.coin}
                   onChange={e => setNewAlert(p => ({ ...p, coin: e.target.value }))}
-                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none"
+                  className="w-full px-3 py-2.5 rounded-lg bg-fg/[0.04] border border-line text-ink-1 text-sm outline-none"
                 >
                   <option value="bitcoin">Bitcoin (BTC)</option>
                   <option value="ethereum">Ethereum (ETH)</option>
@@ -257,30 +257,30 @@ export default function NotificationCenter() {
                 </select>
               </div>
               <div>
-                <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('condition')}</label>
+                <label className="text-[11px] text-ink-4 mb-1 block">{c('condition')}</label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setNewAlert(p => ({ ...p, condition: 'above' }))}
-                    className={`flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg text-xs font-medium border transition ${newAlert.condition === 'above' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-white/[0.02] border-white/[0.06] text-[#7c7c92]'}`}
+                    className={`flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg text-xs font-medium border transition ${newAlert.condition === 'above' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-fg/[0.02] border-line text-ink-4'}`}
                   >
                     <TrendingUp className="w-3.5 h-3.5" /> {c('above')}
                   </button>
                   <button
                     onClick={() => setNewAlert(p => ({ ...p, condition: 'below' }))}
-                    className={`flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg text-xs font-medium border transition ${newAlert.condition === 'below' ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-white/[0.02] border-white/[0.06] text-[#7c7c92]'}`}
+                    className={`flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg text-xs font-medium border transition ${newAlert.condition === 'below' ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-fg/[0.02] border-line text-ink-4'}`}
                   >
                     <TrendingDown className="w-3.5 h-3.5" /> {c('below')}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('targetPrice')}</label>
+                <label className="text-[11px] text-ink-4 mb-1 block">{c('targetPrice')}</label>
                 <input
                   type="number"
                   value={newAlert.target}
                   onChange={e => setNewAlert(p => ({ ...p, target: e.target.value }))}
                   placeholder="100000"
-                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
+                  className="w-full px-3 py-2.5 rounded-lg bg-fg/[0.04] border border-line text-ink-1 text-sm outline-none focus:border-indigo-500/30 placeholder-ink-4"
                 />
               </div>
               <button

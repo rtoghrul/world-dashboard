@@ -89,19 +89,19 @@ const groups = [
 
 export default function SavingsPage() {
   return (
-    <div className="min-h-screen relative z-[1] bg-gray-950">
+    <div className="min-h-screen relative z-[1] bg-surface-0">
       <Header />
       <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] transition-all">
-            <ArrowLeft className="w-5 h-5 text-white/80" />
+          <Link href="/" className="w-10 h-10 rounded-xl bg-fg/[0.04] border border-line flex items-center justify-center hover:bg-fg/[0.08] transition-all">
+            <ArrowLeft className="w-5 h-5 text-ink-1/80" />
           </Link>
           <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
             <PiggyBank className="w-5 h-5 text-emerald-300" />
           </div>
           <div>
             <h1 className="text-2xl font-bold gradient-text-static">Germany Savings Apps</h1>
-            <p className="text-xs text-[#8b8b9e]">Food, pharmacies, clothes, family, car and cashback tools</p>
+            <p className="text-xs text-ink-3">Food, pharmacies, clothes, family, car and cashback tools</p>
           </div>
         </div>
 
@@ -109,24 +109,24 @@ export default function SavingsPage() {
           {groups.map(group => {
             const Icon = group.icon
             return (
-              <section key={group.title} className="rounded-2xl border border-white/[0.06] bg-[#0a0a10]/80 p-4">
+              <section key={group.title} className="rounded-2xl border border-line bg-surface-1/80 p-4">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-fg/[0.04] border border-line flex items-center justify-center shrink-0">
                     <Icon className="w-5 h-5 text-emerald-300" />
                   </div>
                   <div>
-                    <h2 className="text-white font-semibold text-sm">{group.title}</h2>
-                    <p className="text-[#7c7c92] text-xs mt-0.5">{group.subtitle}</p>
+                    <h2 className="text-ink-1 font-semibold text-sm">{group.title}</h2>
+                    <p className="text-ink-4 text-xs mt-0.5">{group.subtitle}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {group.items.map(item => (
-                    <a key={item.name} href={item.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-emerald-500/25 p-3 transition-all">
+                    <a key={item.name} href={item.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-line bg-fg/[0.02] hover:bg-fg/[0.04] hover:border-emerald-500/25 p-3 transition-all">
                       <div className="flex items-center justify-between gap-2">
-                        <h3 className="text-white text-xs font-semibold">{item.name}</h3>
-                        <ExternalLink className="w-3.5 h-3.5 text-[#7c7c92] group-hover:text-emerald-300" />
+                        <h3 className="text-ink-1 text-xs font-semibold">{item.name}</h3>
+                        <ExternalLink className="w-3.5 h-3.5 text-ink-4 group-hover:text-emerald-300" />
                       </div>
-                      <p className="text-[#8b8b9e] text-[11px] mt-1 leading-relaxed">{item.note}</p>
+                      <p className="text-ink-3 text-[11px] mt-1 leading-relaxed">{item.note}</p>
                     </a>
                   ))}
                 </div>

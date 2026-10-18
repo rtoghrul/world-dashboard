@@ -22,20 +22,20 @@ export default function BenefitsPage() {
   const t = labels[lang] || labels.en
 
   return (
-    <div className="min-h-screen relative z-[1] bg-gray-950">
+    <div className="min-h-screen relative z-[1] bg-surface-0">
       <Header />
 
       <main id="main-content" className="max-w-screen-2xl mx-auto px-5 py-6">
         <div className="flex items-center gap-3 mb-6 animate-slide-up">
-          <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] hover:border-amber-500/20 transition-all">
-            <ArrowLeft className="w-5 h-5 text-white/80" />
+          <Link href="/" className="w-10 h-10 rounded-xl bg-fg/[0.04] border border-line flex items-center justify-center hover:bg-fg/[0.08] hover:border-amber-500/20 transition-all">
+            <ArrowLeft className="w-5 h-5 text-ink-1/80" />
           </Link>
           <div className="section-icon bg-amber-500/10 border border-amber-500/20">
             <Gift className="w-5 h-5 text-amber-400" />
           </div>
           <div>
             <h1 className="text-xl font-bold gradient-text-static">{t.title}</h1>
-            <p className="text-xs text-[#7c7c92]">{t.subtitle}</p>
+            <p className="text-xs text-ink-4">{t.subtitle}</p>
           </div>
         </div>
 

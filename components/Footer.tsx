@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Globe } from 'lucide-react'
 import { useLang } from '@/lib/LanguageContext'
 
+import { uiAll } from '@/lib/i18n/ui'
 type L10n = { en: string } & Partial<Record<string, string>>
 const pick = (m: L10n, lang: string) => m[lang] || m.en
 
@@ -39,6 +40,9 @@ const footerSections: { title: L10n; links: { label: L10n; href: string }[] }[] 
   {
     title: { en: 'More', az: 'Daha çox', ru: 'Ещё', de: 'Mehr', tr: 'Daha fazla', fr: 'Plus', es: 'Más', zh: '更多', ar: 'المزيد', ja: 'その他', it: 'Altro', pt: 'Mais' },
     links: [
+      { label: uiAll('news.title'), href: '/news' },
+      { label: uiAll('links.title'), href: '/links' },
+      { label: uiAll('home.radar'), href: '/section/horizon/all' },
       { label: { en: 'YouTube', ar: 'يوتيوب' }, href: '/section/viral/youtube' },
       { label: { en: 'Weather', az: 'Hava', ru: 'Погода', de: 'Wetter', tr: 'Hava durumu', fr: 'Météo', es: 'Tiempo', zh: '天气', ar: 'الطقس', ja: '天気', it: 'Meteo', pt: 'Clima' }, href: '/section/weather/current' },
       { label: { en: 'Travel', az: 'Səyahət', ru: 'Путешествия', de: 'Reisen', tr: 'Seyahat', fr: 'Voyages', es: 'Viajes', zh: '旅行', ar: 'السفر', ja: '旅行', it: 'Viaggi', pt: 'Viagens' }, href: '/section/travel/flight' },
@@ -51,19 +55,19 @@ export default function Footer() {
   const { lang } = useLang()
 
   return (
-    <footer className="border-t border-white/[0.04] bg-[#050508] mt-12 pb-20 md:pb-0">
+    <footer className="border-t border-line bg-surface-0 mt-12 pb-20 md:pb-0">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Links grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {footerSections.map((section, i) => (
             <div key={i}>
-              <h2 className="text-white text-xs font-semibold mb-3 uppercase tracking-wider">
+              <h2 className="text-ink-1 text-xs font-semibold mb-3 uppercase tracking-wider">
                 {pick(section.title, lang)}
               </h2>
               <ul className="space-y-2">
                 {section.links.map(link => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-[#8b8b9e] text-xs hover:text-white transition-colors">
+                    <Link href={link.href} className="text-ink-3 text-xs hover:text-ink-1 transition-colors">
                       {pick(link.label, lang)}
                     </Link>
                   </li>
@@ -74,14 +78,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.04]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-line">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <Globe className="w-3 h-3 text-white" aria-hidden="true" />
+              <Globe className="w-3 h-3 text-ink-1" aria-hidden="true" />
             </div>
-            <span className="text-[#8b8b9e] text-xs">World Dashboard</span>
+            <span className="text-ink-3 text-xs">World Dashboard</span>
           </div>
-          <p className="text-[#8b8b9e] text-[10px] text-center sm:text-right">
+          <p className="text-ink-3 text-[10px] text-center sm:text-right">
             © {new Date().getFullYear()} World Dashboard. {pick(DISCLAIMER, lang)}
           </p>
         </div>

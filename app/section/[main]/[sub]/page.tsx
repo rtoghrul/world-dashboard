@@ -1,6 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { LEGACY_SOURCE_IDS } from '@/lib/horizonIds'
+import { uiAll } from '@/lib/i18n/ui'
 import dynamic from 'next/dynamic'
 import { ArrowLeft, CloudSun, Film, Newspaper, Plane, Play, BarChart2, BookOpen, Share2, Bitcoin, Heart, HeartPulse, ShoppingBag, Store, PiggyBank } from 'lucide-react'
 import Header from '@/components/Header'
@@ -11,25 +13,25 @@ import { useLang } from '@/lib/LanguageContext'
 
 function WidgetLoader() {
   return (
-    <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-6">
+    <div className="rounded-xl border border-line bg-surface-1/80 p-6">
       <div className="flex items-center gap-3 animate-pulse">
-        <div className="w-10 h-10 rounded-lg bg-white/[0.04]" />
+        <div className="w-10 h-10 rounded-lg bg-fg/[0.04]" />
         <div className="flex-1 space-y-2">
-          <div className="h-3 bg-white/[0.04] rounded w-1/3" />
-          <div className="h-2 bg-white/[0.04] rounded w-1/2" />
+          <div className="h-3 bg-fg/[0.04] rounded w-1/3" />
+          <div className="h-2 bg-fg/[0.04] rounded w-1/2" />
         </div>
       </div>
       <div className="mt-4 space-y-3">
-        <div className="h-8 bg-white/[0.04] rounded" />
-        <div className="h-8 bg-white/[0.04] rounded" />
-        <div className="h-8 bg-white/[0.04] rounded" />
+        <div className="h-8 bg-fg/[0.04] rounded" />
+        <div className="h-8 bg-fg/[0.04] rounded" />
+        <div className="h-8 bg-fg/[0.04] rounded" />
       </div>
     </div>
   )
 }
 
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false, loading: WidgetLoader })
-const NewsWidget = dynamic(() => import('@/components/NewsWidget'), { ssr: false, loading: WidgetLoader })
+const NewsHub = dynamic(() => import('@/components/news/NewsHub'), { ssr: false, loading: WidgetLoader })
 const CryptoWidget = dynamic(() => import('@/components/CryptoWidget'), { ssr: false, loading: WidgetLoader })
 const TravelComparisonWidget = dynamic(() => import('@/components/TravelComparisonWidget'), { ssr: false, loading: WidgetLoader })
 const ViralWidget = dynamic(() => import('@/components/ViralWidget'), { ssr: false, loading: WidgetLoader })
@@ -46,7 +48,7 @@ const ChinesePlatformsWidget = dynamic(() => import('@/components/ChinesePlatfor
 const GermanyWidget = dynamic(() => import('@/components/GermanyWidget'), { ssr: false, loading: WidgetLoader })
 const GermanySavingsWidget = dynamic(() => import('@/components/GermanySavingsWidget'), { ssr: false, loading: WidgetLoader })
 const BenefitsWidget = dynamic(() => import('@/components/BenefitsWidget'), { ssr: false, loading: WidgetLoader })
-const HorizonSourceWidget = dynamic(() => import('@/components/HorizonSourceWidget'), { ssr: false, loading: WidgetLoader })
+const HorizonBoard = dynamic(() => import('@/components/horizon/HorizonBoard'), { ssr: false, loading: WidgetLoader })
 
 const icons: Record<string, any> = { weather: CloudSun, crypto: Bitcoin, news: Newspaper, travel: Plane, viral: Play, entertainment: Film, social: Share2, stocks: BarChart2, education: BookOpen, markets: BarChart2, aitools: BookOpen, software: BookOpen, women: Heart, health: HeartPulse, shopping: ShoppingBag, platforms: Store, chinese: ShoppingBag, germany: Newspaper, horizon: Newspaper, savings: PiggyBank }
 
@@ -92,10 +94,14 @@ const localSubLabels: Record<string, Record<string, string>> = {
   insurance: { en: 'Insurance', az: 'Sığorta', ru: 'Страхование', de: 'Versicherung', tr: 'Sigorta', fr: 'Assurance', es: 'Seguros', zh: '保险', ar: 'التأمين', ja: '保険', it: 'Assicurazione', pt: 'Seguros' },
 }
 
+// Region sub-tabs share the /news labels
+for (const r of ['world', 'azerbaijan', 'caucasus', 'europe', 'mideast', 'asia', 'africa', 'americas', 'local'] as const) localSubLabels[r] = uiAll(`news.${r}`)
+if (!localSubLabels.all) localSubLabels.all = uiAll('common.all')
+
 const submenuMap: Record<string, string[]> = {
   weather: ['current', 'hourly', 'weekly'],
   crypto: ['top', 'bitcoin', 'ethereum', 'fear-greed', 'benefits'],
-  news: ['top', 'war', 'politics', 'economy', 'tech', 'ai', 'science', 'sports', 'health', 'industry'],
+  news: ['top', 'world', 'azerbaijan', 'caucasus', 'europe', 'mideast', 'asia', 'africa', 'americas', 'local', 'war', 'politics', 'economy', 'tech', 'ai', 'science', 'sports', 'health', 'industry'],
   markets: ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed', 'stocks-top', 'gainers', 'losers', 'benefits'],
   travel: ['flight-hotel', 'flight', 'hotel', 'last-minute', 'benefits'],
   viral: ['youtube', 'tiktok', 'instagram', 'music', 'shorts', 'trending', 'benefits'],
@@ -113,7 +119,7 @@ const submenuMap: Record<string, string[]> = {
   germany: ['behoerden', 'wohnung', 'bildung', 'arbeit', 'aenderungen', 'tools', 'savings', 'auto', 'familie', 'miete', 'gesundheit', 'versicherung', 'rechte', 'deutsch', 'benefits'],
 }
 
-const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'technology', social: 'social' }
+const newsCat: Record<string, string> = { top: 'top', war: 'war', politics: 'politics', economy: 'economy', tech: 'technology', ai: 'ai', science: 'science', sports: 'sports', health: 'health', industry: 'industry', social: 'social', world: 'world', azerbaijan: 'azerbaijan', caucasus: 'caucasus', europe: 'europe', mideast: 'mideast', asia: 'asia', africa: 'africa', americas: 'americas', local: 'local' }
 
 const educationMap: Record<string, { mode: 'science' | 'engineering'; subject?: string }> = {
   science: { mode: 'science', subject: 'physics' },
@@ -143,7 +149,7 @@ function Content({ main, sub }: { main: string; sub: string }) {
     if (main === 'crypto') return <CryptoWidget defaultExpanded />
     if (main === 'markets' && ['crypto-top', 'bitcoin', 'ethereum', 'fear-greed'].includes(sub)) return <CryptoWidget defaultExpanded />
     if (main === 'markets' && ['stocks-top', 'gainers', 'losers'].includes(sub)) return <StocksWidget defaultExpanded />
-    if (main === 'news') return <NewsWidget defaultExpanded initialTab={newsCat[sub] || 'top'} />
+    if (main === 'news') return <NewsHub embedded initialCategory={newsCat[sub] || 'top'} />
     if (main === 'travel') return <TravelComparisonWidget defaultExpanded />
     if (main === 'viral') return <ViralWidget defaultExpanded />
     if (main === 'entertainment') return <EntertainmentWidget />
@@ -158,17 +164,17 @@ function Content({ main, sub }: { main: string; sub: string }) {
     if (main === 'chinese') return <ChinesePlatformsWidget initialCategory={sub || 'all'} />
     if (main === 'germany' && sub === 'savings') return <GermanySavingsWidget />
     if (main === 'germany') return <GermanyWidget initialTab={sub || 'behoerden'} />
-    if (main === 'horizon') return <HorizonSourceWidget source={sub || 'hackernews'} />
+    if (main === 'horizon') return <HorizonBoard initialSource={LEGACY_SOURCE_IDS[sub] || sub || 'all'} />
     if (main === 'education') {
       const eduConfig = educationMap[sub] || { mode: 'science' as const, subject: 'physics' }
       return <EducationWidget defaultExpanded initialMode={eduConfig.mode} initialSubject={eduConfig.subject} />
     }
-    return <NewsWidget defaultExpanded />
+    return <NewsHub embedded />
   } catch (err) {
     return (
       <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center">
         <p className="text-red-400 text-sm">Widget render error</p>
-        <button onClick={() => window.location.reload()} className="mt-3 px-4 py-2 rounded-lg bg-white/[0.06] text-white text-sm">Reload</button>
+        <button onClick={() => window.location.reload()} className="mt-3 px-4 py-2 rounded-lg bg-fg/[0.06] text-ink-1 text-sm">Reload</button>
       </div>
     )
   }
@@ -191,10 +197,10 @@ export default function SectionPage() {
   }
 
   return (
-    <div className="min-h-screen relative z-[1] bg-gray-950">
+    <div className="min-h-screen relative z-[1] bg-surface-0">
       <Header />
 
-      <div className="border-b border-white/[0.04] bg-[#07070b]/90 backdrop-blur-xl sticky top-14 z-30">
+      <div className="border-b border-line bg-surface-1/90 backdrop-blur-xl sticky top-14 z-30">
         <div className="max-w-screen-2xl mx-auto px-5">
           <div className="flex items-center gap-1 py-2 overflow-x-auto scrollbar-thin">
             {subs.map(s => (
@@ -203,8 +209,8 @@ export default function SectionPage() {
                 href={`/section/${main}/${s}`}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   s === sub
-                    ? 'bg-white/[0.08] text-white'
-                    : 'text-[#7c7c92] hover:text-white hover:bg-white/[0.03]'
+                    ? 'bg-fg/[0.08] text-ink-1'
+                    : 'text-ink-4 hover:text-ink-1 hover:bg-fg/[0.03]'
                 }`}
               >
               {getSubLabel(s)}
@@ -216,15 +222,15 @@ export default function SectionPage() {
 
       <main id="main-content" className="max-w-screen-2xl mx-auto px-5 py-6">
         <div className="flex items-center gap-3 mb-6 animate-slide-up">
-          <Link href="/" className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-white/[0.08] hover:border-indigo-500/20 transition-all">
-            <ArrowLeft className="w-5 h-5 text-white/80" />
+          <Link href="/" className="w-10 h-10 rounded-xl bg-fg/[0.04] border border-line flex items-center justify-center hover:bg-fg/[0.08] hover:border-indigo-500/20 transition-all">
+            <ArrowLeft className="w-5 h-5 text-ink-1/80" />
           </Link>
           <div className="section-icon bg-indigo-500/10 border border-indigo-500/20">
-            <Icon className="w-5 h-5 text-white/80" />
+            <Icon className="w-5 h-5 text-ink-1/80" />
           </div>
           <div>
             <h1 className="text-xl font-bold gradient-text-static">{title}</h1>
-            <p className="text-xs text-[#7c7c92]">{getSubLabel(sub)}</p>
+            <p className="text-xs text-ink-4">{getSubLabel(sub)}</p>
           </div>
         </div>
 

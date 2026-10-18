@@ -1,0 +1,64 @@
+/*
+ * Light theme: accent text.
+ * The dark design uses pale accent shades (-300/-400) that are unreadable on white.
+ * In the light theme they switch to the -700/-800 shade of the same hue (WCAG AA on white).
+ * Generated from the classes used in app/ and components/; regenerate if new pale accent
+ * text classes are added (see scripts/gen-light-accents.py).
+ */
+html.light .text-amber-100\/80 { color: rgb(146 64 14 / 0.8); }
+html.light .text-amber-300 { color: #b45309; }
+html.light .text-amber-300\/50 { color: rgb(180 83 9 / 0.75); }
+html.light .text-amber-400 { color: #b45309; }
+html.light .text-amber-400\/40 { color: rgb(180 83 9 / 0.75); }
+html.light .text-blue-300 { color: #1d4ed8; }
+html.light .text-blue-400 { color: #1d4ed8; }
+html.light .text-cyan-200 { color: #155e75; }
+html.light .text-cyan-300 { color: #0e7490; }
+html.light .text-cyan-400 { color: #0e7490; }
+html.light .text-emerald-200 { color: #065f46; }
+html.light .text-emerald-300 { color: #047857; }
+html.light .text-emerald-400 { color: #047857; }
+html.light .text-fuchsia-300 { color: #a21caf; }
+html.light .text-green-400 { color: #15803d; }
+html.light .text-indigo-100 { color: #3730a3; }
+html.light .text-indigo-200 { color: #3730a3; }
+html.light .text-indigo-300 { color: #4338ca; }
+html.light .text-indigo-400 { color: #4338ca; }
+html.light .text-indigo-400\/80 { color: rgb(67 56 202 / 0.8); }
+html.light .text-lime-400 { color: #4d7c0f; }
+html.light .text-orange-300 { color: #c2410c; }
+html.light .text-orange-400 { color: #c2410c; }
+html.light .text-pink-300 { color: #be185d; }
+html.light .text-pink-400 { color: #be185d; }
+html.light .text-purple-200 { color: #6b21a8; }
+html.light .text-purple-300 { color: #7e22ce; }
+html.light .text-purple-400 { color: #7e22ce; }
+html.light .text-red-300 { color: #b91c1c; }
+html.light .text-red-400 { color: #b91c1c; }
+html.light .text-rose-300 { color: #be123c; }
+html.light .text-rose-400 { color: #be123c; }
+html.light .text-sky-300 { color: #0369a1; }
+html.light .text-sky-400 { color: #0369a1; }
+html.light .text-teal-300 { color: #0f766e; }
+html.light .text-teal-400 { color: #0f766e; }
+html.light .text-violet-300 { color: #6d28d9; }
+html.light .text-violet-400 { color: #6d28d9; }
+html.light .text-yellow-400 { color: #a16207; }
+html.light .group:hover .group-hover\:text-amber-300 { color: #b45309; }
+html.light .group:hover .group-hover\:text-amber-400 { color: #b45309; }
+html.light .group:hover .group-hover\:text-cyan-300 { color: #0e7490; }
+html.light .group:hover .group-hover\:text-emerald-300 { color: #047857; }
+html.light .group:hover .group-hover\:text-indigo-100 { color: #3730a3; }
+html.light .group:hover .group-hover\:text-indigo-300 { color: #4338ca; }
+html.light .group:hover .group-hover\:text-purple-300 { color: #7e22ce; }
+html.light .group:hover .group-hover\:text-purple-400 { color: #7e22ce; }
+html.light .group:hover .group-hover\:text-rose-300 { color: #be123c; }
+html.light .group:hover .group-hover\:text-rose-400 { color: #be123c; }
+html.light .group:hover .group-hover\:text-violet-300 { color: #6d28d9; }
+html.light .hover\:text-emerald-200:hover { color: #065f46; }
+html.light .hover\:text-emerald-300:hover { color: #047857; }
+html.light .hover\:text-indigo-200:hover { color: #3730a3; }
+html.light .hover\:text-indigo-300:hover { color: #4338ca; }
+html.light .hover\:text-indigo-400:hover { color: #4338ca; }
+html.light .hover\:text-red-300:hover { color: #b91c1c; }
+html.light .hover\:text-red-400:hover { color: #b91c1c; }

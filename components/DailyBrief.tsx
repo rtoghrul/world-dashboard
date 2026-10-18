@@ -135,15 +135,15 @@ export default function DailyBrief() {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-white/[0.06] p-6">
+      <div className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-line p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 w-48 bg-white/[0.06] rounded-lg" />
-          <div className="h-4 w-32 bg-white/[0.04] rounded" />
+          <div className="h-6 w-48 bg-fg/[0.06] rounded-lg" />
+          <div className="h-4 w-32 bg-fg/[0.04] rounded" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-            <div className="h-32 bg-white/[0.04] rounded-xl" />
-            <div className="h-32 bg-white/[0.04] rounded-xl" />
-            <div className="h-32 bg-white/[0.04] rounded-xl" />
-            <div className="h-32 bg-white/[0.04] rounded-xl" />
+            <div className="h-32 bg-fg/[0.04] rounded-xl" />
+            <div className="h-32 bg-fg/[0.04] rounded-xl" />
+            <div className="h-32 bg-fg/[0.04] rounded-xl" />
+            <div className="h-32 bg-fg/[0.04] rounded-xl" />
           </div>
         </div>
       </div>
@@ -153,14 +153,14 @@ export default function DailyBrief() {
   const allFailed = !data || (!data.topNews && !data.cryptoMovers && !data.weather && !data.trending && data.aiRadar.length === 0)
   if (allFailed) {
     return (
-      <div role="status" className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-white/[0.06] p-6 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <p className="text-sm text-[#a0a0b0] flex items-center gap-2">
+      <div role="status" className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-line p-6 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <p className="text-sm text-ink-3 flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" aria-hidden="true" /> {c('failed')}
         </p>
         <button
           type="button"
           onClick={() => setAttempt(a => a + 1)}
-          className="inline-flex items-center gap-1.5 self-start sm:self-auto px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-xs text-white hover:bg-white/[0.1] transition"
+          className="inline-flex items-center gap-1.5 self-start sm:self-auto px-3 py-1.5 rounded-lg bg-fg/[0.06] border border-line-strong text-xs text-ink-1 hover:bg-fg/[0.1] transition"
         >
           <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" /> {c('retry')}
         </button>
@@ -172,26 +172,26 @@ export default function DailyBrief() {
   const time = new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
   const fmtPrice = (n: number) => `$${n.toLocaleString(locale, { maximumFractionDigits: n < 1 ? 4 : 2 })}`
   const wKey = data.weather ? weatherKey(data.weather.code) : null
-  const unavailable = <p className="text-xs text-[#7c7c92]">{c('unavailable')}</p>
+  const unavailable = <p className="text-xs text-ink-4">{c('unavailable')}</p>
 
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-white/[0.06] p-6 mb-6">
+    <div className="rounded-2xl bg-gradient-to-br from-indigo-500/[0.08] to-purple-500/[0.05] border border-line p-6 mb-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+          <h2 className="text-xl font-semibold text-ink-1 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-indigo-400" />
             {c(greetingKey())}
           </h2>
-          <p className="text-sm text-[#7c7c92] mt-0.5 flex items-center gap-1.5">
+          <p className="text-sm text-ink-4 mt-0.5 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
             {time} • {c('brief')} • {c('minRead')}
           </p>
         </div>
         {data.weather && (
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-fg/[0.04] border border-line">
             <Cloud className="w-3.5 h-3.5 text-blue-400" aria-hidden="true" />
-            <span className="text-xs text-[#a0a0b0]">{c('baku')} {Math.round(data.weather.temp)}°C{wKey && tr[wKey] ? ` · ${tr[wKey]}` : ''}</span>
+            <span className="text-xs text-ink-3">{c('baku')} {Math.round(data.weather.temp)}°C{wKey && tr[wKey] ? ` · ${tr[wKey]}` : ''}</span>
           </div>
         )}
       </div>
@@ -199,8 +199,8 @@ export default function DailyBrief() {
       {/* Content grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Top News */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-          <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="rounded-xl bg-fg/[0.03] border border-line p-4">
+          <h3 className="text-xs font-semibold text-ink-4 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Newspaper className="w-3.5 h-3.5" /> {c('topStories')}
           </h3>
           {data.topNews ? (
@@ -208,8 +208,8 @@ export default function DailyBrief() {
               {data.topNews.map((news, i) => {
                 const body = (
                   <>
-                    <p className="text-sm text-[#d0d0e0] leading-snug group-hover:text-white transition-colors">{news.title}</p>
-                    {news.source && <p className="text-[11px] text-[#8a8aa0] mt-0.5">{news.source}</p>}
+                    <p className="text-sm text-ink-2 leading-snug group-hover:text-ink-1 transition-colors">{news.title}</p>
+                    {news.source && <p className="text-[11px] text-ink-3 mt-0.5">{news.source}</p>}
                   </>
                 )
                 return news.link
@@ -221,8 +221,8 @@ export default function DailyBrief() {
         </div>
 
         {/* Crypto Movers */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-          <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="rounded-xl bg-fg/[0.03] border border-line p-4">
+          <h3 className="text-xs font-semibold text-ink-4 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5" /> {c('cryptoMovers')}
           </h3>
           {data.cryptoMovers ? (
@@ -230,8 +230,8 @@ export default function DailyBrief() {
             {data.cryptoMovers.map((coin, i) => (
               <div key={i} className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm text-white font-medium">{coin.symbol}</span>
-                  <span className="text-[11px] text-[#8a8aa0] ml-1.5">{fmtPrice(coin.price)}</span>
+                  <span className="text-sm text-ink-1 font-medium">{coin.symbol}</span>
+                  <span className="text-[11px] text-ink-3 ml-1.5">{fmtPrice(coin.price)}</span>
                 </div>
                 <span className={`text-xs font-medium flex items-center gap-0.5 ${coin.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                   {coin.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
@@ -245,15 +245,15 @@ export default function DailyBrief() {
 
         {/* AI & Tech Radar */}
         {data.aiRadar.length > 0 && (
-          <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-            <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <div className="rounded-xl bg-fg/[0.03] border border-line p-4">
+            <h3 className="text-xs font-semibold text-ink-4 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5" /> {c('aiRadar')}
             </h3>
             <div className="space-y-3">
               {data.aiRadar.map((item, i) => (
                 <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block group">
-                  <p className="text-sm text-[#d0d0e0] leading-snug group-hover:text-white transition-colors">{item.title}</p>
-                  <p className="text-[11px] text-[#8a8aa0] mt-0.5">{item.source}</p>
+                  <p className="text-sm text-ink-2 leading-snug group-hover:text-ink-1 transition-colors">{item.title}</p>
+                  <p className="text-[11px] text-ink-3 mt-0.5">{item.source}</p>
                 </a>
               ))}
             </div>
@@ -261,21 +261,21 @@ export default function DailyBrief() {
         )}
 
         {/* Trending */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4">
-          <h3 className="text-xs font-semibold text-[#7c7c92] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="rounded-xl bg-fg/[0.03] border border-line p-4">
+          <h3 className="text-xs font-semibold text-ink-4 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <TrendingUp className="w-3.5 h-3.5" /> {c('trending')}
           </h3>
           {data.trending ? (
             <div className="flex flex-wrap gap-2">
               {data.trending.map((topic, i) => (
-                <span key={i} className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-[#a0a0b0]">
+                <span key={i} className="px-2.5 py-1.5 rounded-lg bg-fg/[0.04] border border-line text-xs text-ink-3">
                   #{topic}
                 </span>
               ))}
             </div>
           ) : unavailable}
-          <div className="mt-4 pt-3 border-t border-white/[0.04]">
-            <p className="text-[11px] text-[#8a8aa0]">💡 {c('tip')} <kbd className="px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd> {c('quickSearch')}</p>
+          <div className="mt-4 pt-3 border-t border-line">
+            <p className="text-[11px] text-ink-3">💡 {c('tip')} <kbd className="px-1 py-0.5 rounded bg-fg/[0.06] text-[10px]">⌘K</kbd> {c('quickSearch')}</p>
           </div>
         </div>
       </div>

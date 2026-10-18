@@ -31,7 +31,7 @@ export default function ScrollProgress() {
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-[99990] p-3 rounded-full bg-[#0f0f1a]/90 border border-white/[0.08] shadow-xl text-white hover:bg-white/[0.08] transition-all hover:scale-110 animate-fade-in"
+          className="fixed bottom-6 right-6 z-[99990] p-3 rounded-full bg-surface-1/90 border border-line-strong shadow-xl text-ink-1 hover:bg-fg/[0.08] transition-all hover:scale-110 animate-fade-in"
         >
           <ArrowUp className="w-4 h-4" />
         </button>

@@ -100,7 +100,7 @@ export default function StocksPage() {
     const active = sortKey === col
     return (
       <th scope="col" aria-sort={active ? (sortAsc ? 'ascending' : 'descending') : 'none'} className={`px-4 py-2.5 ${align === 'left' ? 'text-left' : 'text-right'}`}>
-        <button type="button" onClick={() => toggleSort(col)} className="inline-flex items-center gap-1 select-none hover:text-white transition">
+        <button type="button" onClick={() => toggleSort(col)} className="inline-flex items-center gap-1 select-none hover:text-ink-1 transition">
           <span className={active ? 'text-emerald-400' : ''}>{label}</span>
           {active && <span aria-hidden="true" className="text-xs">{sortAsc ? '↑' : '↓'}</span>}
         </button>
@@ -114,19 +114,19 @@ export default function StocksPage() {
       <main id="main-content" className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-1.5 text-[#a0a0b0] hover:text-white transition text-sm">
+            <Link href="/" className="flex items-center gap-1.5 text-ink-3 hover:text-ink-1 transition text-sm">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" /> {c('dashboard')}
             </Link>
-            <span className="text-[#7c7c92]" aria-hidden="true">/</span>
+            <span className="text-ink-4" aria-hidden="true">/</span>
             <div className="flex items-center gap-2">
               <BarChart2 className="w-5 h-5 text-emerald-400" aria-hidden="true" />
-              <h1 className="text-white font-bold text-lg">{c('title')}</h1>
+              <h1 className="text-ink-1 font-bold text-lg">{c('title')}</h1>
             </div>
           </div>
           <button
             type="button"
             onClick={() => mutate()}
-            className="flex items-center gap-1.5 text-xs text-[#a0a0b0] hover:text-white transition"
+            className="flex items-center gap-1.5 text-xs text-ink-3 hover:text-ink-1 transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isValidating ? 'animate-spin' : ''}`} aria-hidden="true" /> {c('refresh')}
           </button>
@@ -142,7 +142,7 @@ export default function StocksPage() {
               className={`px-4 py-2 rounded-xl text-sm font-medium transition border ${
                 activeGroup === key
                   ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                  : 'text-[#a0a0b0] border-white/[0.08] hover:text-white hover:bg-white/[0.04]'
+                  : 'text-ink-3 border-line-strong hover:text-ink-1 hover:bg-fg/[0.04]'
               }`}
             >
               {GROUP_LABELS[key]?.[lang] || GROUP_LABELS[key]?.en || STOCK_GROUPS[key].label}
@@ -150,27 +150,27 @@ export default function StocksPage() {
           ))}
         </div>
 
-        <div className="bg-[#0a0a10] rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div className="bg-surface-1 rounded-2xl border border-line overflow-hidden">
           {isLoading && (
-            <div role="status" className="p-10 text-center text-[#a0a0b0] animate-pulse text-sm">{c('loading')}</div>
+            <div role="status" className="p-10 text-center text-ink-3 animate-pulse text-sm">{c('loading')}</div>
           )}
           {error && !isLoading && (
             <div role="alert" className="p-10 text-center text-sm">
               <p className="text-red-400 mb-3">{c('failed')}</p>
-              <button type="button" onClick={() => mutate()} className="px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-xs text-white hover:bg-white/[0.1] transition">
+              <button type="button" onClick={() => mutate()} className="px-3 py-1.5 rounded-lg bg-fg/[0.06] border border-line-strong text-xs text-ink-1 hover:bg-fg/[0.1] transition">
                 {c('refresh')}
               </button>
             </div>
           )}
           {!isLoading && !error && quotes.length === 0 && (
-            <div className="p-10 text-center text-[#a0a0b0] text-sm">{c('empty')}</div>
+            <div className="p-10 text-center text-ink-3 text-sm">{c('empty')}</div>
           )}
           {!isLoading && !error && quotes.length > 0 && (
             <>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-[#8b8b9e] text-xs border-b border-white/[0.06]">
+                    <tr className="text-ink-3 text-xs border-b border-line">
                       <SortHeader col="symbol" label={c('symbol')} align="left" />
                       <th scope="col" className="px-4 py-2.5 text-left">{c('name')}</th>
                       <SortHeader col="price" label={c('price')} />
@@ -182,10 +182,10 @@ export default function StocksPage() {
                     {paged.map(q => {
                       const up = q.changePercent >= 0
                       return (
-                        <tr key={q.symbol} className="border-t border-white/[0.04] hover:bg-white/[0.03] transition">
+                        <tr key={q.symbol} className="border-t border-line hover:bg-fg/[0.03] transition">
                           <td className="px-4 py-3 font-mono font-bold text-indigo-300 whitespace-nowrap">{q.symbol}</td>
-                          <td className="px-4 py-3 text-[#c0c0d0] whitespace-nowrap">{q.name}</td>
-                          <td className="px-4 py-3 text-right font-mono text-white whitespace-nowrap">
+                          <td className="px-4 py-3 text-ink-2 whitespace-nowrap">{q.name}</td>
+                          <td className="px-4 py-3 text-right font-mono text-ink-1 whitespace-nowrap">
                             {q.price?.toLocaleString(lang === 'zh' ? 'zh-CN' : lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </td>
                           <td className={`px-4 py-3 text-right font-mono whitespace-nowrap ${up ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -205,14 +205,14 @@ export default function StocksPage() {
               </div>
 
               {totalPages > 1 && (
-                <nav aria-label={c('page')} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-t border-white/[0.06]">
-                  <span className="text-xs text-[#8b8b9e]">{quotes.length} {c('symbols')} · {c('page')} {page} {c('of')} {totalPages}</span>
+                <nav aria-label={c('page')} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-t border-line">
+                  <span className="text-xs text-ink-3">{quotes.length} {c('symbols')} · {c('page')} {page} {c('of')} {totalPages}</span>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setPage(p => Math.max(1, p - 1))}
                       disabled={page === 1}
-                      className="px-3 py-1 rounded-lg text-xs text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="px-3 py-1 rounded-lg text-xs text-ink-3 hover:text-ink-1 hover:bg-fg/[0.06] transition disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {c('prev')}
                     </button>
@@ -223,7 +223,7 @@ export default function StocksPage() {
                         aria-current={p === page ? 'page' : undefined}
                         onClick={() => setPage(p)}
                         className={`w-7 h-7 rounded-lg text-xs transition ${
-                          p === page ? 'bg-emerald-500/20 text-emerald-300' : 'text-[#8b8b9e] hover:text-white hover:bg-white/[0.06]'
+                          p === page ? 'bg-emerald-500/20 text-emerald-300' : 'text-ink-3 hover:text-ink-1 hover:bg-fg/[0.06]'
                         }`}
                       >
                         {p}
@@ -233,7 +233,7 @@ export default function StocksPage() {
                       type="button"
                       onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                       disabled={page === totalPages}
-                      className="px-3 py-1 rounded-lg text-xs text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="px-3 py-1 rounded-lg text-xs text-ink-3 hover:text-ink-1 hover:bg-fg/[0.06] transition disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {c('next')}
                     </button>
@@ -244,7 +244,7 @@ export default function StocksPage() {
           )}
         </div>
 
-        <p className="text-center text-[#8b8b9e] text-xs mt-4">{c('source')}</p>
+        <p className="text-center text-ink-3 text-xs mt-4">{c('source')}</p>
       </main>
       <Footer />
       <MobileBottomNav />

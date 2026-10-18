@@ -84,18 +84,18 @@ export default function CalendarWidget() {
     .slice(0, 5)
 
   return (
-    <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+    <div className="rounded-xl border border-line bg-surface-1/80 p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-indigo-400" />
-          <h3 className="text-white font-semibold text-sm">{c('title')}</h3>
+          <h3 className="text-ink-1 font-semibold text-sm">{c('title')}</h3>
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={prevMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#7c7c92]">
+          <button onClick={prevMonth} className="p-1 rounded hover:bg-fg/[0.05] text-ink-4">
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
-          <span className="text-[11px] text-[#8b8b9e] min-w-[100px] text-center">{monthNames[month]} {year}</span>
-          <button onClick={nextMonth} className="p-1 rounded hover:bg-white/[0.05] text-[#7c7c92]">
+          <span className="text-[11px] text-ink-3 min-w-[100px] text-center">{monthNames[month]} {year}</span>
+          <button onClick={nextMonth} className="p-1 rounded hover:bg-fg/[0.05] text-ink-4">
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -104,7 +104,7 @@ export default function CalendarWidget() {
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-0.5 mb-3">
         {dayNames.map(d => (
-          <div key={d} className="text-center text-[9px] text-[#7c7c92] py-1">{d}</div>
+          <div key={d} className="text-center text-[9px] text-ink-4 py-1">{d}</div>
         ))}
         {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
         {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -120,8 +120,8 @@ export default function CalendarWidget() {
               onClick={() => setSelectedDate(dateStr === selectedDate ? null : dateStr)}
               className={`relative p-1.5 rounded-md text-[10px] transition ${
                 isToday ? 'bg-indigo-500/20 text-indigo-300 font-bold' :
-                isSelected ? 'bg-white/[0.08] text-white' :
-                'text-[#8b8b9e] hover:bg-white/[0.04]'
+                isSelected ? 'bg-fg/[0.08] text-ink-1' :
+                'text-ink-3 hover:bg-fg/[0.04]'
               }`}
             >
               {day}
@@ -142,26 +142,26 @@ export default function CalendarWidget() {
         {Object.entries(typeColors).map(([type, color]) => (
           <div key={type} className="flex items-center gap-1">
             <span className={`w-2 h-2 rounded-full ${color}`} />
-            <span className="text-[9px] text-[#7c7c92]">{c(type)}</span>
+            <span className="text-[9px] text-ink-4">{c(type)}</span>
           </div>
         ))}
       </div>
 
       {/* Upcoming events */}
-      <div className="border-t border-white/[0.04] pt-3">
-        <p className="text-[10px] text-[#7c7c92] uppercase tracking-wider mb-2">{c('upcoming')}</p>
+      <div className="border-t border-line pt-3">
+        <p className="text-[10px] text-ink-4 uppercase tracking-wider mb-2">{c('upcoming')}</p>
         <div className="space-y-1.5">
           {upcomingEvents.map((e, i) => {
             const Icon = typeIcons[e.type]
             return (
-              <div key={i} className="flex items-center gap-2 p-1.5 rounded-md hover:bg-white/[0.03] transition">
+              <div key={i} className="flex items-center gap-2 p-1.5 rounded-md hover:bg-fg/[0.03] transition">
                 <div className={`w-5 h-5 rounded flex items-center justify-center ${typeColors[e.type]}/10`}>
                   <Icon className="w-3 h-3" style={{ color: typeColors[e.type].replace('bg-', '').replace('-400', '') }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-[11px] truncate">{e.title}</p>
+                  <p className="text-ink-1 text-[11px] truncate">{e.title}</p>
                 </div>
-                <span className="text-[9px] text-[#7c7c92]">{e.date.slice(5)}</span>
+                <span className="text-[9px] text-ink-4">{e.date.slice(5)}</span>
               </div>
             )
           })}

@@ -17,12 +17,12 @@ function ErrorFallback({ message }: { message?: string }) {
       <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
         <AlertTriangle className="w-8 h-8 text-red-400" aria-hidden="true" />
       </div>
-      <h2 className="text-lg font-semibold text-white mb-2">{c('title')}</h2>
-      <p className="text-sm text-[#a0a0b0] mb-6 max-w-md">{message || c('body')}</p>
+      <h2 className="text-lg font-semibold text-ink-1 mb-2">{c('title')}</h2>
+      <p className="text-sm text-ink-3 mb-6 max-w-md">{message || c('body')}</p>
       <button
         type="button"
         onClick={() => window.location.reload()}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.06] border border-white/[0.08] text-sm text-white hover:bg-white/[0.1] transition"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-fg/[0.06] border border-line-strong text-sm text-ink-1 hover:bg-fg/[0.1] transition"
       >
         <RefreshCw className="w-4 h-4" aria-hidden="true" />
         {c('reload')}

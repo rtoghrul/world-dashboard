@@ -149,16 +149,16 @@ export default function FactsCategoryTranslated({ id, page }: { id: string; page
           <ArrowLeft className="w-3.5 h-3.5" /> {t.back}
         </Link>
 
-        <section className="rounded-2xl border border-white/[0.06] bg-[#0a0a10]/80 overflow-hidden p-5 sm:p-8 relative mb-6">
+        <section className="rounded-2xl border border-line bg-surface-1/80 overflow-hidden p-5 sm:p-8 relative mb-6">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.03] to-transparent pointer-events-none" />
           <div className="relative max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-indigo-200 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-fg/[0.04] border border-line-strong text-xs text-indigo-200 mb-4">
               <Sparkles className="w-3.5 h-3.5" /> {t.chip}
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-bold text-ink-1 tracking-tight">
               {category.emoji} {titleCase(categoryName)}
             </h1>
-            <p className="text-[#9a9aae] text-sm sm:text-base mt-3 leading-7">
+            <p className="text-ink-3 text-sm sm:text-base mt-3 leading-7">
               {t.page(currentPage, totalPages, cards.length, facts.length)}
             </p>
           </div>
@@ -166,12 +166,12 @@ export default function FactsCategoryTranslated({ id, page }: { id: string; page
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {cards.map(card => (
-            <article key={card.number} className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-5 hover:border-indigo-400/25 hover:bg-white/[0.025] transition">
+            <article key={card.number} className="rounded-xl border border-line bg-surface-1/80 p-5 hover:border-indigo-400/25 hover:bg-fg/[0.025] transition">
               <div className="inline-flex items-center gap-1.5 text-[11px] text-indigo-200 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-2.5 py-1 mb-4">
                 {category.emoji} {categoryName} · #{card.number}
               </div>
-              <h2 className="text-white text-lg font-semibold leading-snug">{card.title}</h2>
-              <p className="text-[#9a9aae] text-sm leading-6 mt-3">{card.text}</p>
+              <h2 className="text-ink-1 text-lg font-semibold leading-snug">{card.title}</h2>
+              <p className="text-ink-3 text-sm leading-6 mt-3">{card.text}</p>
               <a href={card.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-4 text-sm text-indigo-400 hover:text-indigo-300 transition">
                 {t.learnMore} <ExternalLink className="w-3.5 h-3.5" />
               </a>
@@ -180,18 +180,18 @@ export default function FactsCategoryTranslated({ id, page }: { id: string; page
         </section>
 
         <nav className="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Facts pagination">
-          <Link href={`/facts/${id}?page=${Math.max(1, currentPage - 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === 1 ? 'pointer-events-none border-white/[0.04] text-[#7c7c92]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.previous}</Link>
+          <Link href={`/facts/${id}?page=${Math.max(1, currentPage - 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === 1 ? 'pointer-events-none border-line text-ink-4' : 'border-line-strong text-ink-2 hover:border-indigo-400/30 hover:text-ink-1'}`}>{t.previous}</Link>
           {visiblePages.map((pageNumber, index) => {
             const previousPage = visiblePages[index - 1]
             const showDots = previousPage && pageNumber - previousPage > 1
             return (
               <span key={pageNumber} className="flex items-center gap-2">
-                {showDots && <span className="text-[#7c7c92]">...</span>}
-                <Link href={`/facts/${id}?page=${pageNumber}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === pageNumber ? 'border-indigo-400/40 bg-indigo-500/15 text-indigo-100' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{pageNumber}</Link>
+                {showDots && <span className="text-ink-4">...</span>}
+                <Link href={`/facts/${id}?page=${pageNumber}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === pageNumber ? 'border-indigo-400/40 bg-indigo-500/15 text-indigo-100' : 'border-line-strong text-ink-2 hover:border-indigo-400/30 hover:text-ink-1'}`}>{pageNumber}</Link>
               </span>
             )
           })}
-          <Link href={`/facts/${id}?page=${Math.min(totalPages, currentPage + 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === totalPages ? 'pointer-events-none border-white/[0.04] text-[#7c7c92]' : 'border-white/[0.08] text-[#c7c7d8] hover:border-indigo-400/30 hover:text-white'}`}>{t.next}</Link>
+          <Link href={`/facts/${id}?page=${Math.min(totalPages, currentPage + 1)}`} className={`rounded-lg border px-3 py-2 text-sm transition ${currentPage === totalPages ? 'pointer-events-none border-line text-ink-4' : 'border-line-strong text-ink-2 hover:border-indigo-400/30 hover:text-ink-1'}`}>{t.next}</Link>
         </nav>
       </main>
       <Footer />

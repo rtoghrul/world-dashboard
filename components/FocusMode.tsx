@@ -29,7 +29,7 @@ export default function FocusMode() {
     <>
       <button
         onClick={() => setActive(!active)}
-        className={`p-2 rounded-lg transition ${active ? 'bg-indigo-500/20 text-indigo-400' : 'text-[#8b8b9e] hover:text-white hover:bg-white/[0.05]'}`}
+        className={`p-2 rounded-lg transition ${active ? 'bg-indigo-500/20 text-indigo-400' : 'text-ink-3 hover:text-ink-1 hover:bg-fg/[0.05]'}`}
         title="Focus Mode (⌘/)"
       >
         {active ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
