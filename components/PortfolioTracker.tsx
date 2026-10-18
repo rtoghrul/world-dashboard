@@ -117,12 +117,12 @@ export default function PortfolioTracker() {
   const totalPnlPercent = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0
 
   return (
-    <div className="rounded-2xl bg-[#0a0a10] border border-white/[0.06] overflow-hidden">
+    <div className="rounded-2xl bg-surface-1 border border-line overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.04]">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-line">
         <div className="flex items-center gap-2">
           <Wallet className="w-4 h-4 text-emerald-400" />
-          <h2 className="text-white font-semibold text-sm">{c('title')}</h2>
+          <h2 className="text-ink-1 font-semibold text-sm">{c('title')}</h2>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -134,27 +134,27 @@ export default function PortfolioTracker() {
 
       {/* Summary */}
       {pricedHoldings.length > 0 && (
-        <div className="px-5 py-4 border-b border-white/[0.04] bg-white/[0.01]">
+        <div className="px-5 py-4 border-b border-line bg-fg/[0.01]">
           <div className="flex items-baseline gap-3">
-            <span className="text-2xl font-bold text-white">${totalValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+            <span className="text-2xl font-bold text-ink-1">${totalValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             <span className={`text-sm font-medium flex items-center gap-0.5 ${totalPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
               {totalPnl >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
               {totalPnl >= 0 ? '+' : ''}{totalPnlPercent.toFixed(2)}% (${Math.abs(totalPnl).toLocaleString(undefined, { maximumFractionDigits: 2 })})
             </span>
           </div>
-          <p className="text-[11px] text-[#7c7c92] mt-1">{c('totalValue')} • {c('costBasis')}: ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+          <p className="text-[11px] text-ink-4 mt-1">{c('totalValue')} • {c('costBasis')}: ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
         </div>
       )}
 
       {/* Holdings list */}
-      <div className="divide-y divide-white/[0.03]">
+      <div className="divide-y divide-line">
         {pricedHoldings.length === 0 && (
           <div className="px-5 py-10 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-emerald-500/10 border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
-              <PieChart className="w-6 h-6 text-[#7c7c92]" />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-emerald-500/10 border border-line flex items-center justify-center mx-auto mb-4">
+              <PieChart className="w-6 h-6 text-ink-4" />
             </div>
-              <p className="text-sm text-[#7c7c92] font-medium">{c('empty')}</p>
-            <p className="text-xs text-[#7c7c92] mt-1.5 max-w-[230px] mx-auto leading-relaxed">{c('emptyHint')}</p>
+              <p className="text-sm text-ink-4 font-medium">{c('empty')}</p>
+            <p className="text-xs text-ink-4 mt-1.5 max-w-[230px] mx-auto leading-relaxed">{c('emptyHint')}</p>
             <button
               onClick={() => setShowAddModal(true)}
               className="mt-4 px-4 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 text-xs font-medium border border-indigo-500/20 hover:bg-indigo-500/20 transition"
@@ -164,24 +164,24 @@ export default function PortfolioTracker() {
           </div>
         )}
         {pricedHoldings.map(h => (
-          <div key={h.symbol} className="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.02] transition group">
+          <div key={h.symbol} className="flex items-center gap-3 px-5 py-3.5 hover:bg-fg/[0.02] transition group">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center text-xs font-bold text-amber-400">
               {h.symbol.slice(0, 2)}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-white font-medium">{h.symbol}</span>
-                <span className="text-[11px] text-[#7c7c92]">{h.amount} coins</span>
+                <span className="text-sm text-ink-1 font-medium">{h.symbol}</span>
+                <span className="text-[11px] text-ink-4">{h.amount} coins</span>
               </div>
-              <span className="text-[11px] text-[#7c7c92]">Buy: ${h.buyPrice.toLocaleString()}</span>
+              <span className="text-[11px] text-ink-4">Buy: ${h.buyPrice.toLocaleString()}</span>
             </div>
             <div className="text-right">
-              <p className="text-sm text-white font-mono">${h.value.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+              <p className="text-sm text-ink-1 font-mono">${h.value.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
               <p className={`text-[10px] font-medium ${h.pnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {h.pnl >= 0 ? '+' : ''}{h.pnlPercent.toFixed(1)}%
               </p>
             </div>
-            <button onClick={() => removeHolding(h.symbol)} className="opacity-0 group-hover:opacity-100 p-1 text-[#7c7c92] hover:text-red-400 transition">
+            <button onClick={() => removeHolding(h.symbol)} className="opacity-0 group-hover:opacity-100 p-1 text-ink-4 hover:text-red-400 transition">
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -192,53 +192,53 @@ export default function PortfolioTracker() {
       {showAddModal && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAddModal(false)} />
-          <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-[#0f0f15] border border-white/[0.08] p-6 shadow-2xl">
+          <div className="relative w-full max-w-sm mx-4 rounded-2xl bg-surface-1 border border-line-strong p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-          <h3 className="text-white font-semibold text-sm">{c('addHolding')}</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-[#7c7c92] hover:text-white">
+          <h3 className="text-ink-1 font-semibold text-sm">{c('addHolding')}</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-ink-4 hover:text-ink-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('coinId')}</label>
+            <label className="text-[11px] text-ink-4 mb-1 block">{c('coinId')}</label>
                 <input
                   type="text"
                   value={newHolding.symbol}
                   onChange={e => setNewHolding(p => ({ ...p, symbol: e.target.value }))}
                   placeholder="bitcoin, ethereum, solana..."
-                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
+                  className="w-full px-3 py-2.5 rounded-lg bg-fg/[0.04] border border-line text-ink-1 text-sm outline-none focus:border-indigo-500/30 placeholder-ink-4"
                 />
               </div>
               <div>
-            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('displayName')}</label>
+            <label className="text-[11px] text-ink-4 mb-1 block">{c('displayName')}</label>
                 <input
                   type="text"
                   value={newHolding.name}
                   onChange={e => setNewHolding(p => ({ ...p, name: e.target.value }))}
                   placeholder="Bitcoin"
-                  className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
+                  className="w-full px-3 py-2.5 rounded-lg bg-fg/[0.04] border border-line text-ink-1 text-sm outline-none focus:border-indigo-500/30 placeholder-ink-4"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('amount')}</label>
+            <label className="text-[11px] text-ink-4 mb-1 block">{c('amount')}</label>
                   <input
                     type="number"
                     value={newHolding.amount}
                     onChange={e => setNewHolding(p => ({ ...p, amount: e.target.value }))}
                     placeholder="0.5"
-                    className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
+                    className="w-full px-3 py-2.5 rounded-lg bg-fg/[0.04] border border-line text-ink-1 text-sm outline-none focus:border-indigo-500/30 placeholder-ink-4"
                   />
                 </div>
                 <div>
-            <label className="text-[11px] text-[#7c7c92] mb-1 block">{c('buyPrice')}</label>
+            <label className="text-[11px] text-ink-4 mb-1 block">{c('buyPrice')}</label>
                   <input
                     type="number"
                     value={newHolding.buyPrice}
                     onChange={e => setNewHolding(p => ({ ...p, buyPrice: e.target.value }))}
                     placeholder="60000"
-                    className="w-full px-3 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm outline-none focus:border-indigo-500/30 placeholder:text-[#7c7c92]"
+                    className="w-full px-3 py-2.5 rounded-lg bg-fg/[0.04] border border-line text-ink-1 text-sm outline-none focus:border-indigo-500/30 placeholder-ink-4"
                   />
                 </div>
               </div>

@@ -166,19 +166,19 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
   const current = PLATFORMS.find(p => p.id === platform)!
 
   return (
-    <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+    <div className="bg-surface-1 rounded-2xl border border-line overflow-hidden">
       {/* Header */}
       <div
-        className="px-5 py-3 border-b border-gray-800 cursor-pointer select-none hover:bg-gray-800/20 transition"
+        className="px-5 py-3 border-b border-line cursor-pointer select-none hover:bg-surface-2/20 transition"
         onClick={() => setCollapsed(c => !c)}
       >
         <div className="flex items-center justify-between mb-0">
           <div>
-            <h2 className="text-white font-semibold text-sm flex items-center gap-2">
+            <h2 className="text-ink-1 font-semibold text-sm flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-pink-400" />
               {tr.social}
             </h2>
-            <p className="text-gray-400 text-xs">{tr.socialDesc}</p>
+            <p className="text-ink-3 text-xs">{tr.socialDesc}</p>
           </div>
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             {!collapsed && (
@@ -188,7 +188,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
                     key={p.id}
                     onClick={() => setPlatform(p.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
-                      platform === p.id ? p.activeBg + ' ' + p.color : 'text-gray-400 hover:text-white border-transparent hover:bg-gray-800'
+                      platform === p.id ? p.activeBg + ' ' + p.color : 'text-ink-3 hover:text-ink-1 border-transparent hover:bg-surface-2'
                     }`}
                   >
                     <span>{p.icon}</span> {p.name}
@@ -196,7 +196,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
                 ))}
               </div>
             )}
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+            <ChevronDown className={`w-4 h-4 text-ink-3 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
           </div>
         </div>
       </div>
@@ -205,11 +205,11 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
       {collapsed && (
         <div className="px-5 py-3 flex items-center gap-3">
           {PLATFORMS.map(p => (
-            <span key={p.id} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium bg-white/[0.03] border-white/[0.08] ${p.color}`}>
+            <span key={p.id} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium bg-fg/[0.03] border-line-strong ${p.color}`}>
               {p.icon} {p.name}
             </span>
           ))}
-          <span className="text-gray-400 text-xs">· {tr.trending} tags & links</span>
+          <span className="text-ink-3 text-xs">· {tr.trending} tags & links</span>
         </div>
       )}
 
@@ -219,7 +219,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Quick Links */}
             <div>
-              <p className="text-gray-400 text-xs mb-2 font-medium uppercase tracking-wide">Quick Links</p>
+              <p className="text-ink-3 text-xs mb-2 font-medium uppercase tracking-wide">Quick Links</p>
               <div className="space-y-1.5">
                 {current.links.map(link => (
                   <a
@@ -227,10 +227,10 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between px-3 py-2 rounded-lg border transition bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] group"
+                    className="flex items-center justify-between px-3 py-2 rounded-lg border transition bg-fg/[0.03] border-line-strong hover:bg-fg/[0.06] group"
                   >
                     <span className={`text-xs font-medium ${current.color}`}>{link.label}</span>
-                    <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-gray-400" />
+                    <ExternalLink className="w-3 h-3 text-ink-3 group-hover:text-ink-3" />
                   </a>
                 ))}
               </div>
@@ -238,7 +238,7 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
 
             {/* Trending Tags */}
             <div>
-              <p className="text-gray-400 text-xs mb-2 font-medium uppercase tracking-wide">Trending Tags</p>
+              <p className="text-ink-3 text-xs mb-2 font-medium uppercase tracking-wide">Trending Tags</p>
               <div className="flex flex-wrap gap-2">
                 {current.tags.map(t => (
                   <a
@@ -253,8 +253,8 @@ export default function SocialWidget({ defaultExpanded = false, initialPlatform 
                 ))}
               </div>
 
-              <div className="mt-4 p-3 rounded-xl border border-gray-800 bg-gray-800/50">
-                <p className="text-gray-400 text-xs">
+              <div className="mt-4 p-3 rounded-xl border border-line bg-surface-2/50">
+                <p className="text-ink-3 text-xs">
                   {current.note}
                 </p>
               </div>

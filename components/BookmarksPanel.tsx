@@ -62,8 +62,8 @@ export function BookmarkButton({ title, url, source }: { title: string; url: str
   }
 
   return (
-    <button onClick={toggle} className="p-1 rounded hover:bg-white/[0.05] transition" title={saved ? 'Remove bookmark' : 'Save for later'}>
-      {saved ? <BookmarkCheck className="w-3.5 h-3.5 text-indigo-400" /> : <Bookmark className="w-3.5 h-3.5 text-[#7c7c92]" />}
+    <button onClick={toggle} className="p-1 rounded hover:bg-fg/[0.05] transition" title={saved ? 'Remove bookmark' : 'Save for later'}>
+      {saved ? <BookmarkCheck className="w-3.5 h-3.5 text-indigo-400" /> : <Bookmark className="w-3.5 h-3.5 text-ink-4" />}
     </button>
   )
 }
@@ -100,7 +100,7 @@ export default function BookmarksPanel() {
       <button
         ref={btnRef}
         onClick={() => setOpen(!open)}
-        className="p-2 rounded-lg hover:bg-white/[0.05] transition text-[#8b8b9e] hover:text-white relative"
+        className="p-2 rounded-lg hover:bg-fg/[0.05] transition text-ink-3 hover:text-ink-1 relative"
         title="Bookmarks (⌘⇧B)"
       >
         <Bookmark className="w-4 h-4" />
@@ -115,16 +115,16 @@ export default function BookmarksPanel() {
         <div className="fixed inset-0 z-[99998] flex justify-end" onClick={() => setOpen(false)}>
           <div className="fixed inset-0 bg-black/40" />
           <div
-            className="relative w-80 max-w-full h-full bg-[#0a0a12] border-l border-white/[0.06] shadow-2xl animate-slide-in-right overflow-hidden flex flex-col"
+            className="relative w-80 max-w-full h-full bg-surface-1 border-l border-line shadow-2xl animate-slide-in-right overflow-hidden flex flex-col"
             onClick={e => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 border-b border-white/[0.05]">
+            <div className="flex items-center justify-between p-4 border-b border-line">
               <div className="flex items-center gap-2">
                 <Bookmark className="w-4 h-4 text-indigo-400" />
-            <h2 className="text-white font-semibold text-sm">{c('title')}</h2>
-                <span className="text-[10px] text-[#7c7c92]">{bookmarks.length} saved</span>
+            <h2 className="text-ink-1 font-semibold text-sm">{c('title')}</h2>
+                <span className="text-[10px] text-ink-4">{bookmarks.length} saved</span>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#7c7c92]">
+              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-fg/[0.05] text-ink-4">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -132,29 +132,29 @@ export default function BookmarksPanel() {
             <div className="flex-1 overflow-y-auto">
               {bookmarks.length === 0 ? (
                 <div className="p-8 text-center">
-                  <Bookmark className="w-8 h-8 text-[#7c7c92] mx-auto mb-3" />
-              <p className="text-[#8b8b9e] text-xs">{c('empty')}</p>
-              <p className="text-[#7c7c92] text-[10px] mt-1">{c('hint')}</p>
+                  <Bookmark className="w-8 h-8 text-ink-4 mx-auto mb-3" />
+              <p className="text-ink-3 text-xs">{c('empty')}</p>
+              <p className="text-ink-4 text-[10px] mt-1">{c('hint')}</p>
                 </div>
               ) : (
-                <div className="divide-y divide-white/[0.03]">
+                <div className="divide-y divide-line">
                   {bookmarks.map(b => (
-                    <div key={b.id} className="p-3 hover:bg-white/[0.02] transition group">
+                    <div key={b.id} className="p-3 hover:bg-fg/[0.02] transition group">
                       <div className="flex items-start gap-2">
                         <div className="flex-1 min-w-0">
-                          <a href={b.url} target="_blank" rel="noopener" className="text-white text-xs font-medium hover:text-indigo-300 transition line-clamp-2">
+                          <a href={b.url} target="_blank" rel="noopener" className="text-ink-1 text-xs font-medium hover:text-indigo-300 transition line-clamp-2">
                             {b.title}
                           </a>
                           <div className="flex items-center gap-2 mt-1">
-                            {b.source && <span className="text-[10px] text-[#7c7c92]">{b.source}</span>}
-                            <span className="text-[10px] text-[#7c7c92] flex items-center gap-0.5">
+                            {b.source && <span className="text-[10px] text-ink-4">{b.source}</span>}
+                            <span className="text-[10px] text-ink-4 flex items-center gap-0.5">
                               <Clock className="w-2.5 h-2.5" /> {timeAgo(b.savedAt)}
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-                          <a href={b.url} target="_blank" rel="noopener" className="p-1 rounded hover:bg-white/[0.05]">
-                            <ExternalLink className="w-3 h-3 text-[#7c7c92]" />
+                          <a href={b.url} target="_blank" rel="noopener" className="p-1 rounded hover:bg-fg/[0.05]">
+                            <ExternalLink className="w-3 h-3 text-ink-4" />
                           </a>
                           <button onClick={() => removeBookmark(b.id)} className="p-1 rounded hover:bg-red-500/10">
                             <Trash2 className="w-3 h-3 text-red-400" />

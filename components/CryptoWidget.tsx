@@ -52,7 +52,7 @@ export function CryptoTable({ coins }: { coins: Coin[] }) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-gray-400 text-xs">
+          <tr className="text-ink-3 text-xs">
             <th className="px-4 py-2 text-left">#</th>
             <th className="px-4 py-2 text-left">{tr.rank}</th>
             <th className="px-4 py-2 text-right">{tr.price}</th>
@@ -65,18 +65,18 @@ export function CryptoTable({ coins }: { coins: Coin[] }) {
           {coins.map((coin) => {
             const up = coin.price_change_percentage_24h >= 0
             return (
-              <tr key={coin.id} className="border-t border-gray-800/50 hover:bg-gray-800/30 transition">
-                <td className="px-4 py-2 text-gray-400 text-xs">{coin.market_cap_rank}</td>
+              <tr key={coin.id} className="border-t border-line hover:bg-surface-2/30 transition">
+                <td className="px-4 py-2 text-ink-3 text-xs">{coin.market_cap_rank}</td>
                 <td className="px-4 py-2">
                   <div className="flex items-center gap-2">
                     <img loading="lazy" decoding="async" src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" />
                     <div>
-                      <div className="text-white font-medium text-xs">{coin.name}</div>
-                      <div className="text-gray-400 text-xs uppercase">{coin.symbol}</div>
+                      <div className="text-ink-1 font-medium text-xs">{coin.name}</div>
+                      <div className="text-ink-3 text-xs uppercase">{coin.symbol}</div>
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-2 text-right text-white font-mono text-xs">
+                <td className="px-4 py-2 text-right text-ink-1 font-mono text-xs">
                   ${coin.current_price.toLocaleString()}
                 </td>
                 <td className="px-4 py-2 text-right">
@@ -85,7 +85,7 @@ export function CryptoTable({ coins }: { coins: Coin[] }) {
                     {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
                   </span>
                 </td>
-                <td className="px-4 py-2 text-right text-gray-400 text-xs hidden md:table-cell">
+                <td className="px-4 py-2 text-right text-ink-3 text-xs hidden md:table-cell">
                   {formatNum(coin.market_cap)}
                 </td>
                 <td className="px-4 py-2 text-right hidden lg:table-cell">
@@ -114,27 +114,27 @@ export default function CryptoWidget({ defaultExpanded = false }: { defaultExpan
   const btc = coins.find(c => c.id === 'bitcoin') ?? coins[0]
 
   return (
-    <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+    <div className="bg-surface-1 rounded-2xl border border-line overflow-hidden">
       {/* Header — always visible, clickable */}
       <div
-        className="px-5 py-3 flex items-center justify-between border-b border-gray-800 gap-3 cursor-pointer select-none hover:bg-gray-800/20 transition"
+        className="px-5 py-3 flex items-center justify-between border-b border-line gap-3 cursor-pointer select-none hover:bg-surface-2/20 transition"
         onClick={() => setCollapsed(c => !c)}
       >
         <div>
-          <h2 className="text-white font-semibold text-sm">₿ {tr.crypto}</h2>
-          <p className="text-gray-400 text-xs">{tr.cryptoDesc}</p>
+          <h2 className="text-ink-1 font-semibold text-sm">₿ {tr.crypto}</h2>
+          <p className="text-ink-3 text-xs">{tr.cryptoDesc}</p>
         </div>
         <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
           {!collapsed && (
             <>
-              <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
-                <Search className="w-3 h-3 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center gap-1.5 bg-surface-2 rounded-lg px-2 py-1">
+                <Search className="w-3 h-3 text-ink-3 flex-shrink-0" />
                 <input
                   type="text"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="BTC..."
-                  className="bg-transparent text-white text-xs outline-none w-16 placeholder-gray-600"
+                  className="bg-transparent text-ink-1 text-xs outline-none w-16 placeholder-ink-4"
                 />
               </div>
               <button onClick={() => mutate()} className="text-xs text-indigo-400 hover:text-indigo-300 transition">
@@ -143,18 +143,18 @@ export default function CryptoWidget({ defaultExpanded = false }: { defaultExpan
             </>
           )}
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+        <ChevronDown className={`w-4 h-4 text-ink-3 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
       </div>
 
       {/* Collapsed preview */}
       {collapsed && (
         <div className="px-5 py-3 flex items-center gap-3">
-          {isLoading && <div className="h-4 bg-gray-800 rounded w-48 animate-pulse" />}
+          {isLoading && <div className="h-4 bg-surface-2 rounded w-48 animate-pulse" />}
           {btc && (
             <>
               <img loading="lazy" decoding="async" src={btc.image} alt="BTC" className="w-6 h-6 rounded-full flex-shrink-0" />
-              <span className="text-white text-sm font-medium">{btc.name}</span>
-              <span className="text-white font-mono text-sm">${btc.current_price.toLocaleString()}</span>
+              <span className="text-ink-1 text-sm font-medium">{btc.name}</span>
+              <span className="text-ink-1 font-mono text-sm">${btc.current_price.toLocaleString()}</span>
               <span className={`text-xs font-semibold ${btc.price_change_percentage_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {btc.price_change_percentage_24h >= 0 ? '+' : ''}{btc.price_change_percentage_24h.toFixed(2)}%
               </span>
@@ -166,10 +166,10 @@ export default function CryptoWidget({ defaultExpanded = false }: { defaultExpan
       {/* Expanded content */}
       {!collapsed && (
         <>
-          {isLoading && <div className="p-6 text-center text-gray-400 animate-pulse text-sm">{tr.loading}</div>}
+          {isLoading && <div className="p-6 text-center text-ink-3 animate-pulse text-sm">{tr.loading}</div>}
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
           {data && !error && <CryptoTable coins={filtered.slice(0, 8)} />}
-          <div className="px-5 py-3 border-t border-gray-800/50">
+          <div className="px-5 py-3 border-t border-line">
             <Link href="/crypto" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
               {tr.viewAll} <ArrowRight className="w-3 h-3" />
             </Link>

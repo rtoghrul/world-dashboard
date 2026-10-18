@@ -114,7 +114,7 @@ function ToolsSection({ toolKey }: { toolKey: string }) {
   if (!tools.length) return null
   return (
     <div>
-      <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+      <p className="text-ink-3 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
         <Wrench className="w-3 h-3" /> Useful Tools
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -123,9 +123,9 @@ function ToolsSection({ toolKey }: { toolKey: string }) {
             className={`flex items-center justify-between p-3 rounded-xl border transition hover:opacity-80 group ${t.bg}`}>
             <div>
               <p className={`text-xs font-semibold ${t.color}`}>{t.name}</p>
-              <p className="text-gray-400 text-xs mt-0.5">{t.desc}</p>
+              <p className="text-ink-3 text-xs mt-0.5">{t.desc}</p>
             </div>
-            <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-gray-400 flex-shrink-0" />
+            <ExternalLink className="w-3 h-3 text-ink-3 group-hover:text-ink-3 flex-shrink-0" />
           </a>
         ))}
       </div>
@@ -139,21 +139,21 @@ function ScienceArticleCard({ article }: { article: ModalItem }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="w-full text-left flex gap-3 px-2 py-3 hover:bg-gray-800/40 transition group rounded-xl"
+        className="w-full text-left flex gap-3 px-2 py-3 hover:bg-surface-2/40 transition group rounded-xl"
       >
         {article.thumbnail ? (
           <img src={article.thumbnail} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0" loading="lazy"
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
         ) : (
-          <div className="w-14 h-14 rounded-lg bg-gray-800 flex-shrink-0" />
+          <div className="w-14 h-14 rounded-lg bg-surface-2 flex-shrink-0" />
         )}
         <div className="flex-1 min-w-0">
-          <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</h3>
-          <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">{article.description}</p>
+          <h3 className="text-ink-1 text-xs font-medium line-clamp-2 group-hover:text-violet-300 transition">{article.title}</h3>
+          <p className="text-ink-3 text-xs mt-0.5 line-clamp-1">{article.description}</p>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-gray-400 text-xs">{article.source || 'ScienceDaily'}</span>
-            <span className="text-gray-400 text-xs">·</span>
-            <span className="text-gray-400 text-xs">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''}</span>
+            <span className="text-ink-3 text-xs">{article.source || 'ScienceDaily'}</span>
+            <span className="text-ink-3 text-xs">·</span>
+            <span className="text-ink-3 text-xs">{article.pubDate ? new Date(article.pubDate).toLocaleDateString() : ''}</span>
           </div>
         </div>
       </button>
@@ -202,31 +202,31 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
   ]
 
   return (
-    <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+    <div className="bg-surface-1 rounded-2xl border border-line overflow-hidden">
       {/* Header */}
       <div
-        className="px-5 py-3 flex items-center justify-between border-b border-gray-800 cursor-pointer select-none hover:bg-gray-800/20 transition"
+        className="px-5 py-3 flex items-center justify-between border-b border-line cursor-pointer select-none hover:bg-surface-2/20 transition"
         onClick={() => setCollapsed(c => !c)}
       >
         <div className="flex items-center gap-2">
           <GraduationCap className="w-4 h-4 text-violet-400" />
           <div>
-            <h2 className="text-white font-semibold text-sm">{tr.education}</h2>
-            <p className="text-gray-400 text-xs">{tr.educationDesc}</p>
+            <h2 className="text-ink-1 font-semibold text-sm">{tr.education}</h2>
+            <p className="text-ink-3 text-xs">{tr.educationDesc}</p>
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
+        <ChevronDown className={`w-4 h-4 text-ink-3 flex-shrink-0 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} />
       </div>
 
       {/* Collapsed preview */}
       {collapsed && (
         <div className="px-5 py-3 flex items-center gap-3 flex-wrap">
           {SUBJECTS.slice(0, 5).map(s => (
-            <span key={s.id} className="text-xs text-gray-400 flex items-center gap-1">
+            <span key={s.id} className="text-xs text-ink-3 flex items-center gap-1">
               {s.emoji} {s.label}
             </span>
           ))}
-          <span className="text-gray-400 text-xs">· Engineering &amp; more</span>
+          <span className="text-ink-3 text-xs">· Engineering &amp; more</span>
         </div>
       )}
 
@@ -241,7 +241,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition border ${
                 mode === 'science'
                   ? 'bg-violet-500/20 text-violet-300 border-violet-500/40'
-                  : 'text-gray-400 border-gray-700 hover:text-white hover:bg-gray-800'
+                  : 'text-ink-3 border-line-strong hover:text-ink-1 hover:bg-surface-2'
               }`}
             >
               <BookOpen className="w-3 h-3" /> Science
@@ -251,7 +251,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition border ${
                 mode === 'engineering'
                   ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
-                  : 'text-gray-400 border-gray-700 hover:text-white hover:bg-gray-800'
+                  : 'text-ink-3 border-line-strong hover:text-ink-1 hover:bg-surface-2'
               }`}
             >
               <Cog className="w-3 h-3" /> Engineering
@@ -270,7 +270,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
                     className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition border ${
                       subject === s.id
                         ? 'bg-violet-500/20 text-violet-300 border-violet-500/40'
-                        : 'text-gray-400 hover:text-white border-transparent hover:bg-gray-800'
+                        : 'text-ink-3 hover:text-ink-1 border-transparent hover:bg-surface-2'
                     }`}
                   >
                     {s.emoji} {s.label}
@@ -280,14 +280,14 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
 
               {/* Latest Research News */}
               <div>
-                <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <p className="text-ink-3 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <BookOpen className="w-3 h-3" /> {tr.latestResearch} — {currentSubject.emoji} {currentSubject.label}
                 </p>
                 <div className="space-y-2">
                   {isLoading && Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="animate-pulse p-3 bg-gray-800/40 rounded-xl">
-                      <div className="h-3 bg-gray-700 rounded w-3/4 mb-1.5" />
-                      <div className="h-2 bg-gray-700 rounded w-full" />
+                    <div key={i} className="animate-pulse p-3 bg-surface-2/40 rounded-xl">
+                      <div className="h-3 bg-surface-3 rounded w-3/4 mb-1.5" />
+                      <div className="h-2 bg-surface-3 rounded w-full" />
                     </div>
                   ))}
                   {error && <div className="p-4 text-center text-red-400 text-sm">{tr.error}</div>}
@@ -310,14 +310,14 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
                   <button
                     key={topic.id}
                     onClick={() => setActiveEngTopic(prev => prev === topic.id ? null : topic.id)}
-                    className={`rounded-xl border p-3 transition group text-left ${topic.styles} ${activeEngTopic === topic.id ? 'ring-1 ring-white/20' : ''}`}
+                    className={`rounded-xl border p-3 transition group text-left ${topic.styles} ${activeEngTopic === topic.id ? 'ring-1 ring-fg/20' : ''}`}
                   >
                     <div className="flex items-center justify-between gap-2">
                       {topic.icon}
-                      <ChevronDown className={`w-3 h-3 text-gray-400 group-hover:text-gray-300 flex-shrink-0 transition-transform duration-200 ${activeEngTopic === topic.id ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-3 h-3 text-ink-3 group-hover:text-ink-2 flex-shrink-0 transition-transform duration-200 ${activeEngTopic === topic.id ? 'rotate-180' : ''}`} />
                     </div>
-                    <p className="text-white text-sm font-semibold mt-2">{topic.title}</p>
-                    <p className="text-gray-400 text-xs mt-1 line-clamp-2">{topic.desc}</p>
+                    <p className="text-ink-1 text-sm font-semibold mt-2">{topic.title}</p>
+                    <p className="text-ink-3 text-xs mt-1 line-clamp-2">{topic.desc}</p>
                   </button>
                 ))}
               </div>
@@ -344,7 +344,7 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
 
           {/* Free Courses */}
           <div>
-            <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <p className="text-ink-3 text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <GraduationCap className="w-3 h-3" /> {tr.freeCourses}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -358,9 +358,9 @@ export default function EducationWidget({ defaultExpanded = false, initialMode =
                 >
                   <div>
                     <p className={`text-xs font-semibold ${c.color}`}>{c.name}</p>
-                    <p className="text-gray-400 text-xs mt-0.5">{c.desc}</p>
+                    <p className="text-ink-3 text-xs mt-0.5">{c.desc}</p>
                   </div>
-                  <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-gray-400 flex-shrink-0" />
+                  <ExternalLink className="w-3 h-3 text-ink-3 group-hover:text-ink-3 flex-shrink-0" />
                 </a>
               ))}
             </div>

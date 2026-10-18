@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
+import './light-accents.css'
 import { LanguageProvider } from '@/lib/LanguageContext'
 import { ThemeProvider } from '@/lib/ThemeContext'
 import AIAssistant from '@/components/AIAssistant'
@@ -14,8 +15,15 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-body' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' })
 
 export const viewport: Viewport = {
-  themeColor: '#0891b2',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#050810' },
+    { media: '(prefers-color-scheme: light)', color: '#f4f6fa' },
+  ],
 }
+
+// Runs before first paint so a saved light/auto theme never flashes dark.
+// Mirrors the resolution logic in lib/ThemeContext.tsx (localStorage key 'wd-theme').
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('wd-theme')||'dark';var r=t==='auto'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):(t==='light'?'light':'dark');var d=document.documentElement;d.classList.remove('dark','light');d.classList.add(r);}catch(e){}})();`
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -48,13 +56,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/api/icon?size=180" />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} min-h-screen`} style={{ background: '#050810', minHeight: '100vh' }}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} min-h-screen bg-surface-0 text-ink-1`}>
         <ThemeProvider>
           <LanguageProvider>
             <SkipLink />

@@ -22,13 +22,13 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   }, [error])
 
   return (
-    <main id="main-content" className="min-h-screen flex items-center justify-center bg-[#050507] p-6">
+    <main id="main-content" className="min-h-screen flex items-center justify-center bg-surface-0 p-6">
       <div className="max-w-md w-full text-center" role="alert">
         <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
           <AlertTriangle className="w-8 h-8 text-red-400" aria-hidden="true" />
         </div>
-        <h1 className="text-xl font-bold text-white mb-2">{c('title')}</h1>
-        <p className="text-sm text-[#a0a0b0] mb-6">{c('body')}</p>
+        <h1 className="text-xl font-bold text-ink-1 mb-2">{c('title')}</h1>
+        <p className="text-sm text-ink-3 mb-6">{c('body')}</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
             type="button"
@@ -38,13 +38,13 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             <RefreshCw className="w-4 h-4" aria-hidden="true" />
             {c('retry')}
           </button>
-          <Link href="/" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] text-[#c0c0d0] text-sm font-medium hover:text-white hover:bg-white/[0.04] transition">
+          <Link href="/" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-line-strong text-ink-2 text-sm font-medium hover:text-ink-1 hover:bg-fg/[0.04] transition">
             <Home className="w-4 h-4" aria-hidden="true" />
             {c('home')}
           </Link>
         </div>
         {error.digest && (
-          <p className="mt-6 text-[11px] text-[#8b8b9e]">{c('ref')}: <code>{error.digest}</code></p>
+          <p className="mt-6 text-[11px] text-ink-3">{c('ref')}: <code>{error.digest}</code></p>
         )}
       </div>
     </main>

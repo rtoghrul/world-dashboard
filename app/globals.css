@@ -12,58 +12,80 @@
   }
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
+    scrollbar-color: rgb(var(--fg) / 0.12) transparent;
   }
   .scrollbar-thin::-webkit-scrollbar {
     height: 4px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
+    background: rgb(var(--fg) / 0.12);
     border-radius: 2px;
   }
 }
 
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+   Colours are RGB triplets so Tailwind can apply opacity
+   (see tailwind.config.ts: surface-*, line, ink-*, fg, brand).
+   Every component that uses tokens follows the light/dark theme
+   automatically; html.light swaps the values.
+   ═══════════════════════════════════════════ */
 :root {
-  --bg-primary: #050810;
-  --bg-secondary: #0a0f1d;
-  --bg-card: rgba(13, 18, 32, 0.7);
-  --bg-card-hover: rgba(19, 26, 44, 0.85);
-  --border-subtle: rgba(148, 163, 184, 0.08);
-  --border-hover: rgba(148, 163, 184, 0.16);
+  color-scheme: dark;
+  --surface-0: 5 8 16;        /* page */
+  --surface-1: 12 14 22;      /* cards */
+  --surface-2: 22 25 36;      /* raised / inputs */
+  --surface-3: 36 40 54;      /* hover / pressed */
+  --line: 30 34 47;           /* hairline borders */
+  --line-strong: 46 51 68;
+  --fg: 241 245 251;          /* overlays & primary text */
+  --ink-1: 241 245 251;
+  --ink-2: 200 206 218;
+  --ink-3: 155 163 181;
+  --ink-4: 124 133 152;
+  --brand: 99 102 241;
+  --brand-ink: 129 140 248;   /* brand colour for text on surfaces */
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 10px 30px -12px rgb(0 0 0 / 0.6);
+
+  /* legacy variables, kept for older components */
+  --bg-primary: rgb(var(--surface-0));
+  --bg-secondary: rgb(var(--surface-1));
+  --bg-card: rgb(var(--surface-1) / 0.7);
+  --bg-card-hover: rgb(var(--surface-2) / 0.85);
+  --border-subtle: rgb(var(--line));
+  --border-hover: rgb(var(--line-strong));
   --accent-primary: #6366f1;
   --accent-secondary: #22d3ee;
   --accent-glow: rgba(34, 211, 238, 0.12);
-  --text-primary: #f1f5fb;
-  --text-secondary: #94a0b8;
-  --text-muted: #556077;
-  --glass-bg: rgba(148, 163, 184, 0.03);
-  --glass-border: rgba(148, 163, 184, 0.09);
+  --text-primary: rgb(var(--ink-1));
+  --text-secondary: rgb(var(--ink-3));
+  --text-muted: rgb(var(--ink-4));
+  --glass-bg: rgb(var(--fg) / 0.03);
+  --glass-border: rgb(var(--fg) / 0.09);
   --radius-lg: 18px;
   --radius-xl: 26px;
+}
+
+html.light {
+  color-scheme: light;
+  --surface-0: 244 246 250;
+  --surface-1: 255 255 255;
+  --surface-2: 238 241 246;
+  --surface-3: 226 231 239;
+  --line: 226 231 238;
+  --line-strong: 203 211 223;
+  --fg: 15 23 42;
+  --ink-1: 15 23 42;
+  --ink-2: 51 65 85;
+  --ink-3: 71 85 105;
+  --ink-4: 91 101 119;
+  --brand-ink: 79 70 229;
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 8px 24px -14px rgb(15 23 42 / 0.18);
 }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-display), 'Inter', sans-serif;
   letter-spacing: -0.02em;
-}
-
-html.light {
-  --bg-primary: #f8f9fc;
-  --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.9);
-  --bg-card-hover: rgba(240, 242, 248, 0.95);
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-hover: rgba(0, 0, 0, 0.1);
-  --text-primary: #1a1a2e;
-  --text-secondary: #5a5a7a;
-  --text-muted: #9a9ab0;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.06);
-}
-
-html.light body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
 }
 
 * {
@@ -129,10 +151,11 @@ body::after {
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(15, 15, 25, 0.8), rgba(10, 10, 18, 0.9));
+  background: rgb(var(--surface-1) / 0.9);
+  box-shadow: var(--shadow-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgb(var(--line));
   border-radius: var(--radius-lg);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -145,7 +168,7 @@ body::after {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent, rgba(255,255,255,0.02));
+  background: linear-gradient(135deg, rgb(var(--fg) / 0.06), transparent, rgb(var(--fg) / 0.02));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -153,12 +176,9 @@ body::after {
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgb(var(--line-strong));
   transform: translateY(-2px);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-card), 0 18px 40px -18px rgb(0 0 0 / 0.35);
 }
 
 /* ═══════════════════════════════════════════
@@ -248,7 +268,7 @@ body::after {
    SKELETON LOADERS
    ═══════════════════════════════════════════ */
 .skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
+  background: linear-gradient(90deg, rgb(var(--fg) / 0.04) 25%, rgb(var(--fg) / 0.08) 50%, rgb(var(--fg) / 0.04) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: 8px;
@@ -267,12 +287,12 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(var(--fg) / 0.12);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(var(--fg) / 0.22);
 }
 
 /* ═══════════════════════════════════════════
@@ -314,7 +334,7 @@ body::after {
 }
 
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgb(var(--fg) / 0.04);
   color: var(--text-primary);
   border-color: var(--border-hover);
 }
@@ -337,11 +357,11 @@ body::after {
 
 .nav-pill:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgb(var(--fg) / 0.05);
 }
 
 .nav-pill.active {
-  color: white;
+  color: rgb(var(--ink-1));
   background: rgba(99, 102, 241, 0.15);
   border-color: rgba(99, 102, 241, 0.3);
 }
@@ -419,8 +439,9 @@ body::after {
   position: relative;
   padding: 24px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(145deg, rgba(15, 15, 25, 0.7), rgba(8, 8, 15, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgb(var(--surface-1) / 0.9);
+  border: 1px solid rgb(var(--line));
+  box-shadow: var(--shadow-card);
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
@@ -433,7 +454,7 @@ body::after {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--fg) / 0.1), transparent);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -445,10 +466,7 @@ body::after {
 .section-card:hover {
   transform: translateY(-4px) scale(1.01);
   border-color: rgba(34, 211, 238, 0.25);
-  box-shadow:
-    0 25px 50px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(34, 211, 238, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-card), 0 0 0 1px rgba(34, 211, 238, 0.12), 0 24px 48px -20px rgb(0 0 0 / 0.4);
 }
 
 /* Icon container in section cards */
@@ -489,11 +507,52 @@ body.focus-mode footer {
   animation: gradient-shift 6s ease infinite;
 }
 
+html.light .gradient-text {
+  background-image: linear-gradient(135deg, #0f172a 0%, #3730a3 45%, #0e7490 75%, #4f46e5 100%);
+}
+
 .gradient-text-static {
   background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 50%, #67e8f9 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+html.light .gradient-text-static {
+  background-image: linear-gradient(135deg, #0f172a 0%, #3730a3 60%, #0e7490 100%);
+}
+html.light .value-up { color: #047857; text-shadow: none; }
+html.light .value-down { color: #b91c1c; text-shadow: none; }
+html.light body::after { opacity: 0; }
+
+/* ═══════════════════════════════════════════
+   UI PRIMITIVES (refresh)
+   One card, one section header, one chip: used by the
+   refreshed home, Horizon, news and links pages.
+   ═══════════════════════════════════════════ */
+@layer components {
+  .wd-card {
+    @apply rounded-2xl border border-line bg-surface-1/90;
+    box-shadow: var(--shadow-card);
+  }
+  .wd-card-hover {
+    @apply transition-colors hover:border-line-strong hover:bg-surface-2/60;
+  }
+  .wd-section-title {
+    @apply flex items-center gap-2 text-sm font-semibold text-ink-1;
+  }
+  .wd-link {
+    @apply text-xs font-medium text-brand-ink hover:underline underline-offset-2;
+  }
+  .wd-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2/60 px-3 py-1 text-xs font-medium text-ink-3 transition-colors hover:text-ink-1 hover:border-line-strong;
+  }
+  .wd-chip[aria-pressed="true"], .wd-chip[aria-selected="true"], .wd-chip[aria-current="page"] {
+    @apply border-brand/50 bg-brand/15 text-ink-1;
+  }
+  .wd-input {
+    @apply rounded-xl border border-line bg-surface-2/70 px-3 py-2 text-sm text-ink-1 placeholder:text-ink-4 focus:border-brand/60 focus:outline-none;
+  }
 }
 
 /* ═══════════════════════════════════════════

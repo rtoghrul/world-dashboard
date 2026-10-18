@@ -163,14 +163,14 @@ export default function GermanyWidget({ initialTab }: { initialTab?: string }) {
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-ink-3 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1 scrollbar-thin">
         {tabs.map(tab => {
           const Icon = tab.icon
           return (
             <button key={tab.id} onClick={() => { setActiveTab(tab.id); setExpanded(false) }}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300' : 'bg-gray-100 dark:bg-gray-800 text-ink-3 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
               {tab.label[lang as keyof typeof tab.label] || tab.label.en}
             </button>
@@ -184,9 +184,9 @@ export default function GermanyWidget({ initialTab }: { initialTab?: string }) {
             className={`group block p-3 rounded-lg border transition-all bg-white dark:bg-gray-800/50 ${item.important ? 'border-yellow-200 dark:border-yellow-800/50 hover:border-yellow-400 dark:hover:border-yellow-600' : 'border-gray-200 dark:border-gray-700 hover:border-yellow-300 dark:hover:border-yellow-700'} hover:shadow-md`}>
             <div className="flex items-start justify-between mb-1">
               <h3 className="font-semibold text-sm group-hover:text-yellow-700 dark:group-hover:text-yellow-400 leading-tight">{item.name}</h3>
-              <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1" />
+              <ExternalLink className="w-3.5 h-3.5 text-ink-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1" />
             </div>
-            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
+            <p className="text-xs text-ink-3 dark:text-gray-400 mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
             <div className="flex items-center gap-1.5">
               <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${typeColors[item.type]}`}>
                 {typeLabels[item.type]}

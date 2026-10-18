@@ -69,14 +69,14 @@ function DropdownPortal({ sectionId, section, lang, buttonRect, onClose }: Dropd
     <div
       ref={dropdownRef}
       style={{ position: 'fixed', top: position.top, left: position.left, zIndex: 99999 }}
-      className="min-w-[200px] max-h-[70vh] overflow-y-auto py-1.5 rounded-xl bg-[#111118] border border-white/[0.08] shadow-2xl shadow-black/60"
+      className="min-w-[200px] max-h-[70vh] overflow-y-auto py-1.5 rounded-xl bg-surface-1 border border-line-strong shadow-2xl shadow-black/60"
     >
       {section.items.map(item => (
         <Link
           key={item.id}
           href={item.href || `/section/${item.section || sectionId}/${item.id}`}
           onClick={onClose}
-          className="block px-4 py-2.5 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.06] transition-colors"
+          className="block px-4 py-2.5 text-sm text-ink-3 hover:text-ink-1 hover:bg-fg/[0.06] transition-colors"
         >
           {item.label[lang] || item.label.en}
         </Link>
@@ -135,14 +135,14 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-[#07070b]/90 backdrop-blur-xl border-b border-white/[0.04]">
+      <header className="sticky top-0 z-50 bg-surface-1/90 backdrop-blur-xl border-b border-line">
         <div className="max-w-screen-2xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <Link href="/" className="flex items-center gap-2 group shrink-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-shadow">
-                <Globe className="w-4 h-4 text-white" />
+                <Globe className="w-4 h-4 text-ink-1" />
               </div>
-              <span className="text-white font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
+              <span className="text-ink-1 font-semibold text-[15px] tracking-tight hidden xl:block">World Dashboard</span>
             </Link>
 
             <nav className="hidden md:flex items-center mx-2 flex-1 overflow-x-auto scrollbar-thin">
@@ -152,7 +152,7 @@ export default function Header() {
                   <button
                     key={id}
                     onClick={(e) => toggleMenu(id, e)}
-                    className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-white bg-white/[0.06]' : 'text-[#8b8b9e] hover:text-white'}`}
+                    className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-colors ${openMenu === id ? 'text-ink-1 bg-fg/[0.06]' : 'text-ink-3 hover:text-ink-1'}`}
                   >
                     {section.label[lang] || section.label.en}
                     <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${openMenu === id ? 'rotate-180' : ''}`} />
@@ -166,10 +166,10 @@ export default function Header() {
                 type="button"
                 aria-label={UI.search[lang] || UI.search.en}
                 onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[11px] text-[#7c7c92] hover:text-white hover:border-white/[0.1] transition"
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-fg/[0.03] border border-line text-[11px] text-ink-4 hover:text-ink-1 hover:border-line-strong transition"
               >
                 <Search className="w-3.5 h-3.5" aria-hidden="true" />
-                <kbd className="ml-1 px-1 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
+                <kbd className="ml-1 px-1 py-0.5 rounded bg-fg/[0.06] text-[10px]">⌘K</kbd>
               </button>
               <LanguagePicker />
               <ThemeToggle />
@@ -184,15 +184,15 @@ export default function Header() {
               )}
               <NotificationCenter />
               {loggedIn ? (
-                <button type="button" onClick={handleLogout} className="p-2 rounded-lg text-[#8b8b9e] hover:text-white hover:bg-white/[0.04] transition" title={UI.logout[lang] || UI.logout.en} aria-label={UI.logout[lang] || UI.logout.en}>
+                <button type="button" onClick={handleLogout} className="p-2 rounded-lg text-ink-3 hover:text-ink-1 hover:bg-fg/[0.04] transition" title={UI.logout[lang] || UI.logout.en} aria-label={UI.logout[lang] || UI.logout.en}>
                   <LogOut className="w-4 h-4" aria-hidden="true" />
                 </button>
               ) : (
-                <Link href="/login" className="p-2 rounded-lg text-[#8b8b9e] hover:text-white hover:bg-white/[0.04] transition" title={UI.login[lang] || UI.login.en} aria-label={UI.login[lang] || UI.login.en}>
+                <Link href="/login" className="p-2 rounded-lg text-ink-3 hover:text-ink-1 hover:bg-fg/[0.04] transition" title={UI.login[lang] || UI.login.en} aria-label={UI.login[lang] || UI.login.en}>
                   <LogIn className="w-4 h-4" aria-hidden="true" />
                 </Link>
               )}
-              <button type="button" onClick={() => setMobileOpen(true)} aria-label={UI.menu[lang] || UI.menu.en} aria-expanded={mobileOpen} aria-controls="mobile-menu" className="md:hidden p-2 rounded-lg text-[#8b8b9e] hover:text-white hover:bg-white/[0.04] transition">
+              <button type="button" onClick={() => setMobileOpen(true)} aria-label={UI.menu[lang] || UI.menu.en} aria-expanded={mobileOpen} aria-controls="mobile-menu" className="md:hidden p-2 rounded-lg text-ink-3 hover:text-ink-1 hover:bg-fg/[0.04] transition">
                 <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
             </div>
@@ -213,10 +213,10 @@ export default function Header() {
       {mobileOpen && (
         <div className="fixed inset-0 z-[99998] md:hidden" role="dialog" aria-modal="true" aria-label={UI.menu[lang] || UI.menu.en}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} aria-hidden="true" />
-          <nav id="mobile-menu" aria-label={UI.menu[lang] || UI.menu.en} className="absolute right-0 top-0 bottom-0 w-[80vw] max-w-xs bg-[#0a0a10] border-l border-white/[0.04] overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b border-white/[0.04]">
-              <span className="text-white font-semibold text-sm">{UI.menu[lang] || UI.menu.en}</span>
-              <button type="button" onClick={() => setMobileOpen(false)} aria-label={UI.close[lang] || UI.close.en} className="p-2 text-[#8b8b9e] hover:text-white">
+          <nav id="mobile-menu" aria-label={UI.menu[lang] || UI.menu.en} className="absolute right-0 top-0 bottom-0 w-[80vw] max-w-xs bg-surface-1 border-l border-line overflow-y-auto">
+            <div className="flex items-center justify-between p-4 border-b border-line">
+              <span className="text-ink-1 font-semibold text-sm">{UI.menu[lang] || UI.menu.en}</span>
+              <button type="button" onClick={() => setMobileOpen(false)} aria-label={UI.close[lang] || UI.close.en} className="p-2 text-ink-3 hover:text-ink-1">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -230,7 +230,7 @@ export default function Header() {
                 <div key={id}>
                   <button
                     onClick={() => setMobileExpandedSection(mobileExpandedSection === id ? null : id)}
-                    className="w-full flex items-center justify-between px-5 py-3 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/[0.03] transition"
+                    className="w-full flex items-center justify-between px-5 py-3 text-sm text-ink-3 hover:text-ink-1 hover:bg-fg/[0.03] transition"
                   >
                     {section.label[lang] || section.label.en}
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileExpandedSection === id ? 'rotate-180' : ''}`} />
@@ -242,7 +242,7 @@ export default function Header() {
                           key={item.id}
                           href={item.href || `/section/${item.section || id}/${item.id}`}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-2.5 text-xs text-[#7c7c92] hover:text-white transition"
+                          className="block px-4 py-2.5 text-xs text-ink-4 hover:text-ink-1 transition"
                         >
                           {item.label[lang] || item.label.en}
                         </Link>

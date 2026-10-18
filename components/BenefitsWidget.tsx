@@ -401,7 +401,7 @@ export default function BenefitsWidget({ section }: { section: string }) {
     return (
       <div className="rounded-xl border border-amber-500/10 bg-amber-500/[0.02] p-8 text-center">
         <Gift className="w-8 h-8 text-amber-400/40 mx-auto mb-3" />
-        <p className="text-sm text-[#8b8b9e] mb-4">{t.empty}</p>
+        <p className="text-sm text-ink-3 mb-4">{t.empty}</p>
         <a href="/benefits" className="inline-block px-4 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/20 transition">
           {t.hub}
         </a>
@@ -424,22 +424,22 @@ export default function BenefitsWidget({ section }: { section: string }) {
         </div>
         {/* Progress */}
         <div className="flex items-center gap-2">
-          <div className="w-24 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+          <div className="w-24 h-1.5 rounded-full bg-fg/[0.06] overflow-hidden">
             <div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all" style={{ width: `${totalItems ? (claimedCount / totalItems) * 100 : 0}%` }} />
           </div>
-          <span className="text-[10px] text-[#8b8b9e] font-mono">{claimedCount}/{totalItems} {t.claimed}</span>
+          <span className="text-[10px] text-ink-3 font-mono">{claimedCount}/{totalItems} {t.claimed}</span>
         </div>
       </div>
 
       {/* Search + type filters */}
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
-          <Search className="w-3.5 h-3.5 text-[#7c7c92] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-ink-4 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder={t.search}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white placeholder-[#7c7c92] focus:outline-none focus:border-amber-500/40 transition"
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-fg/[0.03] border border-line text-xs text-ink-1 placeholder-ink-4 focus:outline-none focus:border-amber-500/40 transition"
           />
         </div>
         <div className="flex gap-1 overflow-x-auto scrollbar-thin">
@@ -451,7 +451,7 @@ export default function BenefitsWidget({ section }: { section: string }) {
                 key={ft}
                 onClick={() => setTypeFilter(ft)}
                 className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold whitespace-nowrap border transition ${
-                  active ? (cfg ? cfg.color : 'bg-white/[0.1] text-white border-white/20') : 'bg-transparent text-[#7c7c92] border-white/[0.06] hover:text-white'
+                  active ? (cfg ? cfg.color : 'bg-fg/[0.1] text-ink-1 border-fg/20') : 'bg-transparent text-ink-4 border-line hover:text-ink-1'
                 }`}
               >
                 {ft === 'all' ? t.all : cfg!.label}
@@ -462,7 +462,7 @@ export default function BenefitsWidget({ section }: { section: string }) {
       </div>
 
       {filtered.length === 0 && (
-        <div className="rounded-xl border border-white/[0.04] bg-white/[0.01] p-8 text-center text-xs text-[#8b8b9e]">
+        <div className="rounded-xl border border-line bg-fg/[0.01] p-8 text-center text-xs text-ink-3">
           {t.noResults}
         </div>
       )}
@@ -473,7 +473,7 @@ export default function BenefitsWidget({ section }: { section: string }) {
 
         return (
           <div key={sec.id} className="rounded-xl border border-amber-500/10 bg-amber-500/[0.02] overflow-hidden">
-            <h3 className="text-sm font-semibold text-white px-4 pt-3 pb-2">
+            <h3 className="text-sm font-semibold text-ink-1 px-4 pt-3 pb-2">
               {sec.title[lang as keyof typeof sec.title] || sec.title.en}
             </h3>
 
@@ -491,15 +491,15 @@ export default function BenefitsWidget({ section }: { section: string }) {
                         ? 'border-emerald-500/25 bg-emerald-500/[0.04]'
                         : item.important
                         ? 'border-amber-500/20 bg-amber-500/[0.03] hover:border-amber-400/40'
-                        : 'border-white/[0.04] bg-white/[0.01] hover:border-amber-500/20'
+                        : 'border-line bg-fg/[0.01] hover:border-amber-500/20'
                     }`}
                   >
                     <a href={item.url} target="_blank" rel="noopener noreferrer" className="block">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h4 className={`text-xs font-semibold transition-colors leading-tight ${isClaimed ? 'text-emerald-300' : 'text-white group-hover:text-amber-300'}`}>{item.name}</h4>
-                        <ExternalLink className="w-3 h-3 text-white/20 group-hover:text-amber-400 transition shrink-0 mt-0.5" />
+                        <h4 className={`text-xs font-semibold transition-colors leading-tight ${isClaimed ? 'text-emerald-300' : 'text-ink-1 group-hover:text-amber-300'}`}>{item.name}</h4>
+                        <ExternalLink className="w-3 h-3 text-ink-1/20 group-hover:text-amber-400 transition shrink-0 mt-0.5" />
                       </div>
-                      <p className="text-[10px] text-[#8b8b9e] mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
+                      <p className="text-[10px] text-ink-3 mb-2 line-clamp-2">{item.desc[lang as keyof typeof item.desc] || item.desc.en}</p>
                     </a>
                     <div className="flex items-center gap-1.5">
                       <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold border ${config.color}`}>
@@ -515,11 +515,11 @@ export default function BenefitsWidget({ section }: { section: string }) {
                       <button
                         onClick={e => { e.preventDefault(); toggle(claimId) }}
                         title={isClaimed ? 'Mark as not used' : 'Mark as used / claimed'}
-                        className="ml-auto p-0.5 rounded hover:bg-white/[0.06] transition"
+                        className="ml-auto p-0.5 rounded hover:bg-fg/[0.06] transition"
                       >
                         {isClaimed
                           ? <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                          : <Circle className="w-4 h-4 text-white/20 group-hover:text-white/40" />}
+                          : <Circle className="w-4 h-4 text-ink-1/20 group-hover:text-ink-1/40" />}
                       </button>
                     </div>
                   </div>

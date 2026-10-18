@@ -7,7 +7,7 @@ import { SITE_URL } from '@/lib/site'
 // and removed ones (which used to 404 here) drop out.
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date().toISOString()
-  const pages = ['/benefits', '/crypto', '/stocks', '/polymarket', '/savings', '/nearby', '/facts']
+  const pages = ['/news', '/links', '/benefits', '/crypto', '/stocks', '/polymarket', '/savings', '/nearby', '/facts']
   const sectionPaths = Array.from(new Set(
     Object.entries(menus).flatMap(([id, section]) =>
       section.items.map(item => item.href || `/section/${item.section || id}/${item.id}`)

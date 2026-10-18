@@ -58,13 +58,13 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
   const chartColor = isPositive ? '#34d399' : '#f87171'
 
   return (
-    <div className="rounded-2xl bg-[#0a0a10] border border-white/[0.06] p-5">
+    <div className="rounded-2xl bg-surface-1 border border-line p-5">
       {/* Header */}
       <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-4">
         <div className="min-w-0">
-          <h3 className="text-white font-semibold text-sm">{coinName}</h3>
+          <h3 className="text-ink-1 font-semibold text-sm">{coinName}</h3>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-xl font-bold text-white">
+            <span className="text-xl font-bold text-ink-1">
               ${currentPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </span>
             <span className={`text-xs font-medium flex items-center gap-0.5 ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -74,14 +74,14 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
           </div>
         </div>
         {/* Time range selector */}
-        <div role="group" aria-label={`${coinName} chart range`} className="flex items-center gap-1 bg-white/[0.03] rounded-lg p-0.5 border border-white/[0.04]">
+        <div role="group" aria-label={`${coinName} chart range`} className="flex items-center gap-1 bg-fg/[0.03] rounded-lg p-0.5 border border-line">
           {timeRanges.map(r => (
             <button
               key={r.days}
               type="button"
               aria-pressed={range === r.days}
               onClick={() => setRange(r.days)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition ${range === r.days ? 'bg-white/[0.08] text-white' : 'text-[#8b8b9e] hover:text-white'}`}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition ${range === r.days ? 'bg-fg/[0.08] text-ink-1' : 'text-ink-3 hover:text-ink-1'}`}
             >
               {r.label}
             </button>
@@ -93,7 +93,7 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
       <div className="h-[200px]">
         {loading ? (
           <div className="w-full h-full flex items-center justify-center">
-            <div className="w-6 h-6 border-2 border-white/10 border-t-indigo-400 rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-line-strong border-t-indigo-400 rounded-full animate-spin" />
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
@@ -108,7 +108,7 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
                 dataKey="time"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#7c7c92', fontSize: 10 }}
+                tick={{ fill: 'rgb(var(--ink-4))', fontSize: 10 }}
                 interval="preserveStartEnd"
                 minTickGap={50}
               />
@@ -116,19 +116,19 @@ export default function PriceChart({ coinId = 'bitcoin', coinName = 'Bitcoin' }:
                 domain={['auto', 'auto']}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#7c7c92', fontSize: 10 }}
+                tick={{ fill: 'rgb(var(--ink-4))', fontSize: 10 }}
                 width={60}
                 tickFormatter={(v) => `$${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v.toFixed(0)}`}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#111118',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  backgroundColor: 'rgb(var(--surface-1))',
+                  border: '1px solid rgb(var(--line))',
                   borderRadius: '12px',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                  boxShadow: 'var(--shadow-card)',
                 }}
-                labelStyle={{ color: '#6b6b80', fontSize: 11 }}
-                itemStyle={{ color: '#fff', fontSize: 12 }}
+                labelStyle={{ color: 'rgb(var(--ink-3))', fontSize: 11 }}
+                itemStyle={{ color: 'rgb(var(--ink-1))', fontSize: 12 }}
                 formatter={(value) => [`$${Number(value ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`, 'Price']}
               />
               <Area

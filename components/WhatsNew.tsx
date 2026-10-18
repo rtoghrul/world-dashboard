@@ -52,7 +52,7 @@ export default function WhatsNew() {
     <>
       <button
         onClick={handleOpen}
-        className="p-2 rounded-lg hover:bg-white/[0.05] transition text-[#8b8b9e] hover:text-white relative"
+        className="p-2 rounded-lg hover:bg-fg/[0.05] transition text-ink-3 hover:text-ink-1 relative"
         title="What's New"
       >
         <Sparkles className="w-4 h-4" />
@@ -63,15 +63,15 @@ export default function WhatsNew() {
         <div className="fixed inset-0 z-[99999] flex items-center justify-center" onClick={() => setOpen(false)}>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
           <div
-            className="relative w-[440px] max-w-[90vw] max-h-[80vh] bg-[#0f0f1a] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden animate-fade-in flex flex-col"
+            className="relative w-[440px] max-w-[90vw] max-h-[80vh] bg-surface-1 border border-line-strong rounded-2xl shadow-2xl overflow-hidden animate-fade-in flex flex-col"
             onClick={e => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 border-b border-white/[0.05]">
+            <div className="flex items-center justify-between p-4 border-b border-line">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-indigo-400" />
-                <h2 className="text-white font-semibold text-sm">{"What's New"}</h2>
+                <h2 className="text-ink-1 font-semibold text-sm">{"What's New"}</h2>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.05] text-[#7c7c92]">
+              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-fg/[0.05] text-ink-4">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -80,14 +80,14 @@ export default function WhatsNew() {
               {changelog.map(release => (
                 <div key={release.version}>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-bold text-white px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">v{release.version}</span>
-                    <span className="text-[10px] text-[#7c7c92]">{release.date}</span>
+                    <span className="text-xs font-bold text-ink-1 px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">v{release.version}</span>
+                    <span className="text-[10px] text-ink-4">{release.date}</span>
                   </div>
                   <div className="space-y-1.5">
                     {release.items.map((item, i) => (
                       <div key={i} className="flex items-start gap-2 pl-1">
                         <CheckCircle2 className="w-3 h-3 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-[#8b8b9e] text-xs">{item}</span>
+                        <span className="text-ink-3 text-xs">{item}</span>
                       </div>
                     ))}
                   </div>

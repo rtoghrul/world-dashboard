@@ -45,36 +45,36 @@ export default function CryptoPage() {
   const totalPages = 5
 
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col">
+    <div className="min-h-screen bg-surface-0 flex flex-col">
       <Header />
       <main id="main-content" className="max-w-screen-xl w-full mx-auto px-4 py-6 pb-24 md:pb-6 flex-1">
         <div className="flex flex-wrap items-center gap-3 mb-5">
-          <Link href="/" aria-label={c('back')} className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
+          <Link href="/" aria-label={c('back')} className="p-1.5 rounded-lg text-ink-3 hover:text-ink-1 hover:bg-surface-2 transition">
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           </Link>
           <div>
-            <h1 className="text-white font-bold text-xl">₿ {c('title')}</h1>
-            <p className="text-gray-400 text-xs">{tr.cryptoDesc}</p>
+            <h1 className="text-ink-1 font-bold text-xl">₿ {c('title')}</h1>
+            <p className="text-ink-3 text-xs">{tr.cryptoDesc}</p>
           </div>
-          <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-1.5 bg-gray-800 rounded-lg px-3 py-2">
-            <Search className="w-3.5 h-3.5 text-gray-400" aria-hidden="true" />
+          <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-1.5 bg-surface-2 rounded-lg px-3 py-2">
+            <Search className="w-3.5 h-3.5 text-ink-3" aria-hidden="true" />
             <input
               type="search"
               aria-label={c('search')}
               value={query}
               onChange={e => { setQuery(e.target.value); setPage(1) }}
               placeholder="Bitcoin, ETH..."
-              className="bg-transparent text-white text-sm outline-none flex-1 sm:w-36 placeholder-gray-400"
+              className="bg-transparent text-ink-1 text-sm outline-none flex-1 sm:w-36 placeholder-ink-4"
             />
           </div>
         </div>
 
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-          {isLoading && <div className="p-12 text-center text-gray-400 animate-pulse">{tr.loading}</div>}
+        <div className="bg-surface-1 rounded-2xl border border-line overflow-hidden">
+          {isLoading && <div className="p-12 text-center text-ink-3 animate-pulse">{tr.loading}</div>}
           {error && (
             <div role="alert" className="p-12 text-center">
               <p className="text-red-400">{tr.error}</p>
-              <button onClick={() => mutate()} className="mt-3 px-4 py-2 rounded-lg bg-gray-800 text-gray-200 text-sm hover:bg-gray-700">{c('retry')}</button>
+              <button onClick={() => mutate()} className="mt-3 px-4 py-2 rounded-lg bg-surface-2 text-ink-1 text-sm hover:bg-surface-3">{c('retry')}</button>
             </div>
           )}
           {data && !error && <CryptoTable coins={filtered} />}
@@ -88,7 +88,7 @@ export default function CryptoPage() {
                 onClick={() => setPage(p)}
                 aria-current={page === p ? 'page' : undefined}
                 className={`w-8 h-8 rounded-lg text-sm font-medium transition ${
-                  page === p ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                  page === p ? 'bg-indigo-600 text-white' : 'text-ink-3 hover:text-ink-1 hover:bg-surface-2'
                 }`}
               >
                 {p}

@@ -38,7 +38,7 @@ export default function ThemeToggle() {
       <button
         ref={btnRef}
         onClick={() => setOpen(!open)}
-        className="p-2 rounded-lg hover:bg-white/[0.05] transition text-[#8b8b9e] hover:text-white"
+        className="p-2 rounded-lg hover:bg-fg/[0.05] transition text-ink-3 hover:text-ink-1"
         title="Theme"
       >
         <Palette className="w-4 h-4" />
@@ -50,9 +50,9 @@ export default function ThemeToggle() {
           style={{ top: rect.bottom + 8, right: window.innerWidth - rect.right }}
           onClick={e => e.stopPropagation()}
         >
-          <div className="w-56 bg-[#0f0f1a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden animate-fade-in">
-            <div className="p-3 border-b border-white/[0.05]">
-              <p className="text-[10px] uppercase tracking-wider text-[#7c7c92] font-medium mb-2">Theme</p>
+          <div className="w-56 bg-surface-1 border border-line-strong rounded-xl shadow-2xl overflow-hidden animate-fade-in">
+            <div className="p-3 border-b border-line">
+              <p className="text-[10px] uppercase tracking-wider text-ink-4 font-medium mb-2">Theme</p>
               <div className="flex gap-1">
                 {themes.map(t => {
                   const TIcon = t.icon
@@ -62,8 +62,8 @@ export default function ThemeToggle() {
                       onClick={() => setTheme(t.value)}
                       className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition ${
                         theme === t.value
-                          ? 'bg-white/[0.08] text-white'
-                          : 'text-[#8b8b9e] hover:text-white hover:bg-white/[0.04]'
+                          ? 'bg-fg/[0.08] text-ink-1'
+                          : 'text-ink-3 hover:text-ink-1 hover:bg-fg/[0.04]'
                       }`}
                     >
                       <TIcon className="w-3.5 h-3.5" />
@@ -75,14 +75,14 @@ export default function ThemeToggle() {
             </div>
 
             <div className="p-3">
-              <p className="text-[10px] uppercase tracking-wider text-[#7c7c92] font-medium mb-2">Accent Color</p>
+              <p className="text-[10px] uppercase tracking-wider text-ink-4 font-medium mb-2">Accent Color</p>
               <div className="flex gap-2 flex-wrap">
                 {accents.map(a => (
                   <button
                     key={a}
                     onClick={() => setAccent(a)}
                     className={`w-7 h-7 rounded-full transition-all ${
-                      accent === a ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0f0f1a] scale-110' : 'hover:scale-110'
+                      accent === a ? 'ring-2 ring-fg ring-offset-2 ring-offset-[#0f0f1a] scale-110' : 'hover:scale-110'
                     }`}
                     style={{ background: accentColors[a].primary }}
                     title={a}

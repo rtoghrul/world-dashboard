@@ -146,11 +146,11 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
           {t('title')}
         </h2>
       </div>
-      <p className="text-xs text-gray-400 dark:text-gray-400 mb-3">{t('subtitle')}</p>
+      <p className="text-xs text-ink-3 dark:text-gray-400 mb-3">{t('subtitle')}</p>
 
       {/* Search */}
       <div className="relative mb-3">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3" />
         <input
           type="text" value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Search platforms..."
@@ -164,7 +164,7 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
           const Icon = c.icon
           return (
             <button key={c.id} onClick={() => setCategory(c.id)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${category === c.id ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${category === c.id ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-800 text-ink-3 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               <Icon className="w-3.5 h-3.5" />
               {pickLabel(c.label, lang)}
             </button>
@@ -179,11 +179,11 @@ export default function PlatformsWidget({ initialCategory }: { initialCategory?:
             className={`group block p-3 rounded-lg border transition-all hover:shadow-md bg-white dark:bg-gray-800/50 ${p.highlight ? 'border-blue-200 dark:border-blue-700 ring-1 ring-blue-100 dark:ring-blue-900/30' : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'}`}>
             <div className="flex items-start justify-between mb-1">
               <h3 className="font-semibold text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400">{p.name}</h3>
-              <ExternalLink className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+              <ExternalLink className="w-3.5 h-3.5 text-ink-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <p className="text-xs text-gray-400 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
+            <p className="text-xs text-ink-3 dark:text-gray-400 mb-2 line-clamp-2">{p.desc[lang] || p.desc.en}</p>
             <div className="flex items-center justify-between flex-wrap gap-1">
-              <span className="text-[10px] text-gray-400">{p.origin}</span>
+              <span className="text-[10px] text-ink-3">{p.origin}</span>
               {p.freeShipping && (
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
                   🚚 {p.freeShipping === 'Always' ? t('free_shipping') : `Free ${p.freeShipping}`}

@@ -40,7 +40,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main id="main-content" className="min-h-screen overflow-hidden bg-gray-950 text-white">
+    <main id="main-content" className="min-h-screen overflow-hidden bg-surface-0 text-ink-1">
       <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative flex items-center px-6 py-12 sm:px-10 lg:px-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(79,70,229,0.28),transparent_32%),radial-gradient(circle_at_80%_10%,rgba(16,185,129,0.16),transparent_28%),linear-gradient(135deg,rgba(15,23,42,0.9),rgba(3,7,18,1))]" />
@@ -53,10 +53,10 @@ export default function RegisterPage() {
               <Globe2 className="h-4 w-4" aria-hidden="true" />
               World Dashboard
             </div>
-            <h1 className="max-w-xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            <h1 className="max-w-xl text-4xl font-bold tracking-tight text-ink-1 sm:text-5xl">
               {tr.registerHeroTitle}
             </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-gray-300">
+            <p className="mt-5 max-w-lg text-base leading-7 text-ink-2">
               {tr.registerHeroDesc}
             </p>
             <div className="mt-8 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
@@ -65,9 +65,9 @@ export default function RegisterPage() {
                 { icon: BarChart3, label: tr.registerFeature2 },
                 { icon: PlayCircle, label: tr.registerFeature3 },
               ].map(item => (
-                <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                <div key={item.label} className="rounded-xl border border-line-strong bg-fg/[0.03] px-4 py-3">
                   <item.icon className="mb-2 h-5 w-5 text-emerald-300" aria-hidden="true" />
-                  <p className="text-sm font-medium text-gray-100">{item.label}</p>
+                  <p className="text-sm font-medium text-ink-1">{item.label}</p>
                 </div>
               ))}
             </div>
@@ -78,15 +78,15 @@ export default function RegisterPage() {
           <div className="w-full max-w-sm">
             <div className="mb-8">
               <p className="text-sm font-medium text-emerald-300">{tr.authRegister}</p>
-              <h2 className="mt-2 text-2xl font-bold text-white">{tr.authRegister}</h2>
-              <p className="mt-1 text-sm text-gray-400">{tr.authRegisterHint}</p>
+              <h2 className="mt-2 text-2xl font-bold text-ink-1">{tr.authRegister}</h2>
+              <p className="mt-1 text-sm text-ink-3">{tr.authRegisterHint}</p>
             </div>
 
-            <form onSubmit={handleRegister} className="space-y-4 rounded-2xl border border-gray-800 bg-gray-900/80 p-6 shadow-2xl shadow-black/30">
+            <form onSubmit={handleRegister} className="space-y-4 rounded-2xl border border-line bg-surface-1/80 p-6 shadow-2xl shadow-black/30">
               <div>
-                <label htmlFor="email" className="mb-1 block text-sm text-gray-300">{tr.authEmail}</label>
-                <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
-                  <Mail className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                <label htmlFor="email" className="mb-1 block text-sm text-ink-2">{tr.authEmail}</label>
+                <div className="flex items-center gap-2 rounded-lg border border-line-strong bg-surface-2 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
+                  <Mail className="h-4 w-4 flex-shrink-0 text-ink-3" aria-hidden="true" />
                   <input
                     id="email"
                     name="email"
@@ -96,15 +96,15 @@ export default function RegisterPage() {
                     required
                     autoComplete="email"
                     spellCheck={false}
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-400"
+                    className="w-full bg-transparent text-sm text-ink-1 outline-none placeholder-ink-4"
                     placeholder="name@example.com"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="password" className="mb-1 block text-sm text-gray-300">{tr.authPasswordMin}</label>
-                <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
-                  <LockKeyhole className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                <label htmlFor="password" className="mb-1 block text-sm text-ink-2">{tr.authPasswordMin}</label>
+                <div className="flex items-center gap-2 rounded-lg border border-line-strong bg-surface-2 px-3 py-2 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/30">
+                  <LockKeyhole className="h-4 w-4 flex-shrink-0 text-ink-3" aria-hidden="true" />
                   <input
                     id="password"
                     name="password"
@@ -114,7 +114,7 @@ export default function RegisterPage() {
                     required
                     minLength={6}
                     autoComplete="new-password"
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-gray-400"
+                    className="w-full bg-transparent text-sm text-ink-1 outline-none placeholder-ink-4"
                     placeholder="••••••••"
                   />
                 </div>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
               >
                 {loading ? tr.authLoading : tr.authSubmitRegister}
               </button>
-              <p className="text-center text-xs text-gray-400">
+              <p className="text-center text-xs text-ink-3">
                 {tr.authHaveAccount}{' '}
                 <Link href="/login" className="font-medium text-emerald-300 hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">{tr.authLogin}</Link>
               </p>

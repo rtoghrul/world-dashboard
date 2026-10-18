@@ -130,32 +130,32 @@ export default function AIAssistant() {
       </button>
 
       {open && (
-        <div className="fixed bottom-[8.5rem] md:bottom-24 right-3 md:right-5 z-[10000] flex h-[32rem] max-h-[calc(100dvh-10rem)] w-[24rem] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-2xl border border-gray-800 bg-gray-950 shadow-2xl">
-          <div className="border-b border-gray-800 px-4 py-3">
-            <p className="text-sm font-semibold text-white">{c('title')}</p>
-            <p className="mt-1 text-xs text-gray-400">{c('subtitle')}</p>
+        <div className="fixed bottom-[8.5rem] md:bottom-24 right-3 md:right-5 z-[10000] flex h-[32rem] max-h-[calc(100dvh-10rem)] w-[24rem] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-2xl border border-line bg-surface-0 shadow-2xl">
+          <div className="border-b border-line px-4 py-3">
+            <p className="text-sm font-semibold text-ink-1">{c('title')}</p>
+            <p className="mt-1 text-xs text-ink-3">{c('subtitle')}</p>
           </div>
 
-          <div className="flex flex-wrap gap-2 border-b border-gray-800 px-4 py-3">
+          <div className="flex flex-wrap gap-2 border-b border-line px-4 py-3">
             {QUICK_PROMPT_KEYS.map(k => c(k)).map(prompt => (
               <button
                 key={prompt}
                 onClick={() => sendMessage(prompt)}
-                className="rounded-full border border-gray-700 bg-gray-900 px-3 py-1 text-xs text-gray-200 transition hover:border-indigo-500 hover:text-white"
+                className="rounded-full border border-line-strong bg-surface-1 px-3 py-1 text-xs text-ink-1 transition hover:border-indigo-500 hover:text-ink-1"
               >
                 {prompt}
               </button>
             ))}
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto bg-gray-950/80 px-4 py-4">
+          <div className="flex-1 space-y-3 overflow-y-auto bg-surface-0/80 px-4 py-4">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
                 className={`max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm leading-6 ${
                   msg.role === 'user'
                     ? 'ml-auto bg-indigo-600 text-white'
-                    : 'border border-gray-800 bg-gray-900 text-gray-100'
+                    : 'border border-line bg-surface-1 text-ink-1'
                 }`}
               >
                 {idx === 0 && msg.content === COPY.greeting.en ? c('greeting') : msg.content}
@@ -163,21 +163,21 @@ export default function AIAssistant() {
             ))}
 
             {animatedReply && (
-              <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl border border-gray-800 bg-gray-900 px-3 py-2 text-sm leading-6 text-gray-100">
+              <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl border border-line bg-surface-1 px-3 py-2 text-sm leading-6 text-ink-1">
                 {animatedReply}
                 <span className="ml-1 inline-block h-4 w-[2px] animate-pulse bg-indigo-400 align-middle" />
               </div>
             )}
 
             {loading && !animatedReply && (
-              <div className="max-w-[85%] rounded-2xl border border-gray-800 bg-gray-900 px-3 py-2 text-sm text-gray-300">
+              <div className="max-w-[85%] rounded-2xl border border-line bg-surface-1 px-3 py-2 text-sm text-ink-2">
                 Thinking...
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="border-t border-gray-800 p-3">
+          <div className="border-t border-line p-3">
             <div className="flex items-end gap-2">
               <textarea
                 ref={textareaRef}
@@ -191,7 +191,7 @@ export default function AIAssistant() {
                   }
                 }}
             placeholder={c('placeholder')}
-                className="max-h-[140px] min-h-[44px] flex-1 resize-none overflow-y-auto rounded-xl border border-gray-700 bg-gray-900 px-3 py-2 text-sm leading-6 text-white outline-none placeholder:text-gray-400 focus:border-indigo-500"
+                className="max-h-[140px] min-h-[44px] flex-1 resize-none overflow-y-auto rounded-xl border border-line-strong bg-surface-1 px-3 py-2 text-sm leading-6 text-ink-1 outline-none placeholder-ink-4 focus:border-indigo-500"
               />
               <button
                 onClick={() => void sendMessage()}
@@ -201,7 +201,7 @@ export default function AIAssistant() {
                 Send
               </button>
             </div>
-            <p className="mt-2 text-[11px] text-gray-400">{c('hint')}</p>
+            <p className="mt-2 text-[11px] text-ink-3">{c('hint')}</p>
           </div>
         </div>
       )}

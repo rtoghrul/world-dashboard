@@ -3,7 +3,7 @@ import { fearGreedLabel } from '@/lib/fearGreed'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
-import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Globe2, Search, Film, Zap, GraduationCap, Plane, ShoppingBag, Gift, Cpu, MonitorSmartphone, Landmark, Lightbulb, MapPin, Stethoscope } from 'lucide-react'
+import { TrendingUp, TrendingDown, ArrowRight, Newspaper, Bitcoin, BarChart2, Radar, Link2, Search, Film, Zap, GraduationCap, Plane, ShoppingBag, Gift, Cpu, MonitorSmartphone, Landmark, Lightbulb, MapPin, Stethoscope } from 'lucide-react'
 import Header from '@/components/Header'
 import MarketTicker from '@/components/MarketTicker'
 import DailyBrief from '@/components/DailyBrief'
@@ -12,7 +12,9 @@ import Footer from '@/components/Footer'
 import { useLang } from '@/lib/LanguageContext'
 import { createClient } from '@/lib/supabase'
 import PortfolioTracker from '@/components/PortfolioTracker'
-import { NewsItem, NewsCard } from '@/components/NewsWidget'
+import HomeNews from '@/components/home/HomeNews'
+import QuickLinks from '@/components/links/QuickLinks'
+import { ui, uiAll } from '@/lib/i18n/ui'
 import { Coin, formatNum } from '@/components/CryptoWidget'
 import TrendingWidget from '@/components/TrendingWidget'
 import CalendarWidget from '@/components/CalendarWidget'
@@ -25,7 +27,7 @@ import dynamic from 'next/dynamic'
 // recharts is the heaviest client dependency; load the charts after first paint.
 const PriceChart = dynamic(() => import('@/components/PriceChart'), {
   ssr: false,
-  loading: () => <div className="rounded-2xl bg-[#0a0a10] border border-white/[0.06] p-5 h-[284px] animate-pulse" aria-hidden="true" />,
+  loading: () => <div className="rounded-2xl bg-surface-1 border border-line p-5 h-[284px] animate-pulse" aria-hidden="true" />,
 })
 
 const HERO: Record<string, { tagline: string; search: string }> = {
@@ -61,7 +63,7 @@ const BENEFITS_BANNER: Record<string, { title: string; desc: string }> = {
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 function StatPulse() {
-  return <div className="w-16 h-3 bg-white/[0.05] rounded animate-pulse" />
+  return <div className="w-16 h-3 bg-fg/[0.05] rounded animate-pulse" />
 }
 
 type MarketData = {
@@ -76,7 +78,6 @@ type MarketData = {
 
 export default function HomePage() {
   const { lang, tr } = useLang()
-  const { data: news } = useSWR<NewsItem[]>(`/api/news?category=top&lang=${lang}`, fetcher, { refreshInterval: 300000 })
   const { data: coins } = useSWR<Coin[]>('/api/crypto', fetcher, { refreshInterval: 60000 })
   const { data: market } = useSWR<MarketData>('/api/market', fetcher, { refreshInterval: 300000 })
   const { data: stocks } = useSWR<any[]>('/api/stocks', fetcher, { refreshInterval: 300000 })
@@ -92,7 +93,6 @@ export default function HomePage() {
     init()
   }, [])
 
-  const newsItems = Array.isArray(news) ? news.slice(0, 6) : []
   const topCoins = Array.isArray(coins) ? coins.slice(0, 5) : []
 
   // Extract stock data
@@ -122,7 +122,7 @@ export default function HomePage() {
       <Header />
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative overflow-hidden border-b border-white/[0.03]">
+      <section className="relative overflow-hidden border-b border-line">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.06] via-transparent to-transparent" />
           <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-indigo-600/10 blur-3xl" />
@@ -136,23 +136,23 @@ export default function HomePage() {
                 {new Date().toLocaleDateString(lang === 'en' ? 'en-US' : lang, { weekday: 'long', day: 'numeric', month: 'long' })}
               </p>
               <h1 className="gradient-text text-3xl sm:text-5xl font-extrabold tracking-tight">World Dashboard</h1>
-              <p className="text-[#8b8b9e] text-sm sm:text-base mt-2 max-w-lg">{(HERO[lang] || HERO.en).tagline}</p>
+              <p className="text-ink-3 text-sm sm:text-base mt-2 max-w-lg">{(HERO[lang] || HERO.en).tagline}</p>
               <button
                 type="button"
                 onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-[#8b8b9e] hover:text-white hover:border-indigo-500/40 transition-all"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-fg/[0.04] border border-line-strong text-sm text-ink-3 hover:text-ink-1 hover:border-indigo-500/40 transition-all"
               >
                 <Search className="w-4 h-4" aria-hidden="true" />
                 {(HERO[lang] || HERO.en).search}
-                <kbd className="ml-2 px-1.5 py-0.5 rounded bg-white/[0.06] text-[10px]">⌘K</kbd>
+                <kbd className="ml-2 px-1.5 py-0.5 rounded bg-fg/[0.06] text-[10px]">⌘K</kbd>
               </button>
             </div>
             <div className="flex items-center gap-3 sm:gap-4">
               {/* KPI Pills */}
               {market?.total_market_cap && (
                 <div className="glass px-3 py-1.5 rounded-full flex items-center gap-2">
-                  <span className="text-[10px] text-[#8b8b9e]">{tr.marketCap || 'Market cap'}</span>
-                  <span className="text-xs text-white font-mono font-medium">{formatNum(market.total_market_cap)}</span>
+                  <span className="text-[10px] text-ink-3">{tr.marketCap || 'Market cap'}</span>
+                  <span className="text-xs text-ink-1 font-mono font-medium">{formatNum(market.total_market_cap)}</span>
                   {market.market_cap_change_24h !== null && (
                     <span className={`text-[10px] font-medium ${market.market_cap_change_24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {market.market_cap_change_24h >= 0 ? '+' : ''}{market.market_cap_change_24h.toFixed(1)}%
@@ -162,7 +162,7 @@ export default function HomePage() {
               )}
               {sp500 && (
                 <div className="hidden sm:flex glass px-3 py-1.5 rounded-full items-center gap-2">
-                  <span className="text-[10px] text-[#8b8b9e]">S&amp;P 500</span>
+                  <span className="text-[10px] text-ink-3">S&amp;P 500</span>
                   <span className={`text-xs font-mono font-medium ${sp500.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                     {sp500.change >= 0 ? '+' : ''}{sp500.changePercent?.toFixed(2)}%
                   </span>
@@ -170,7 +170,7 @@ export default function HomePage() {
               )}
               {market?.fear_greed && (
                 <div className="hidden md:flex glass px-3 py-1.5 rounded-full items-center gap-2">
-                  <span className="text-[10px] text-[#8b8b9e]">{t.fearGreed}</span>
+                  <span className="text-[10px] text-ink-3">{t.fearGreed}</span>
                   <span className={`text-xs font-mono font-bold ${
                     market.fear_greed <= 25 ? 'text-red-400' : market.fear_greed <= 45 ? 'text-orange-400' :
                     market.fear_greed <= 55 ? 'text-yellow-400' : market.fear_greed <= 75 ? 'text-lime-400' : 'text-emerald-400'
@@ -186,9 +186,10 @@ export default function HomePage() {
 
       <main id="main-content" className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         {/* ═══ EXPLORE GRID ═══ */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-8">
+        <h2 className="sr-only">{ui('home.explore', lang)}</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-5">
           {[
-            { href: '/section/news/top', icon: Newspaper, label: {en:'News',az:'Xəbərlər',ru:'Новости',de:'Nachrichten',tr:'Haberler',fr:'Actualités',es:'Noticias',zh:'新闻',ar:'أخبار',ja:'ニュース',it:'Notizie',pt:'Notícias'} as Record<string,string>, accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
+            { href: '/news', icon: Newspaper, label: {en:'News',az:'Xəbərlər',ru:'Новости',de:'Nachrichten',tr:'Haberler',fr:'Actualités',es:'Noticias',zh:'新闻',ar:'أخبار',ja:'ニュース',it:'Notizie',pt:'Notícias'} as Record<string,string>, accent: 'from-rose-500/20 to-rose-500/5 border-rose-500/20 hover:border-rose-400/50', iconColor: 'text-rose-400' },
             { href: '/section/markets/crypto-top', icon: Bitcoin, label: {en:'Markets',az:'Bazarlar',ru:'Рынки',de:'Märkte',tr:'Piyasalar',fr:'Marchés',es:'Mercados',zh:'市场',ar:'أسواق',ja:'市場',it:'Mercati',pt:'Mercados'} as Record<string,string>, accent: 'from-amber-500/20 to-amber-500/5 border-amber-500/20 hover:border-amber-400/50', iconColor: 'text-amber-400' },
             { href: '/section/entertainment/movies', icon: Film, label: {en:'Entertainment',az:'Əyləncə',ru:'Развлечения',de:'Unterhaltung',tr:'Eğlence',fr:'Divertissement',es:'Entretenimiento',zh:'娱乐',ar:'ترفيه',ja:'エンタメ',it:'Intrattenimento',pt:'Entretenimento'} as Record<string,string>, accent: 'from-purple-500/20 to-purple-500/5 border-purple-500/20 hover:border-purple-400/50', iconColor: 'text-purple-400' },
             { href: '/section/aitools/chatbots', icon: Cpu, label: {en:'AI Tools',az:'AI Alətlər',ru:'ИИ-инструменты',de:'KI-Tools',tr:'YZ Araçları',fr:'Outils IA',es:'Herramientas IA',zh:'AI工具',ar:'أدوات الذكاء',ja:'AIツール',it:'Strumenti IA',pt:'Ferramentas IA'} as Record<string,string>, accent: 'from-violet-500/20 to-violet-500/5 border-violet-500/20 hover:border-violet-400/50', iconColor: 'text-violet-400' },
@@ -198,7 +199,8 @@ export default function HomePage() {
             { href: '/section/travel/flight-hotel', icon: Plane, label: {en:'Travel',az:'Səyahət',ru:'Путешествия',de:'Reisen',tr:'Seyahat',fr:'Voyage',es:'Viajes',zh:'旅行',ar:'سفر',ja:'旅行',it:'Viaggi',pt:'Viagens'} as Record<string,string>, accent: 'from-sky-500/20 to-sky-500/5 border-sky-500/20 hover:border-sky-400/50', iconColor: 'text-sky-400' },
             { href: '/section/germany/behoerden', icon: Landmark, label: {en:'Germany 🇩🇪',az:'Almaniya 🇩🇪',ru:'Германия 🇩🇪',de:'Deutschland 🇩🇪',tr:'Almanya 🇩🇪',fr:'Allemagne 🇩🇪',es:'Alemania 🇩🇪',zh:'德国 🇩🇪',ar:'ألمانيا 🇩🇪',ja:'ドイツ 🇩🇪',it:'Germania 🇩🇪',pt:'Alemanha 🇩🇪'} as Record<string,string>, accent: 'from-yellow-500/20 to-yellow-500/5 border-yellow-500/20 hover:border-yellow-400/50', iconColor: 'text-yellow-400' },
             { href: '/section/chinese/all', icon: ShoppingBag, label: {en:'China 🇨🇳',az:'Çin 🇨🇳',ru:'Китай 🇨🇳',de:'China 🇨🇳',tr:'Çin 🇨🇳',fr:'Chine 🇨🇳',es:'China 🇨🇳',zh:'中国 🇨🇳',ar:'الصين 🇨🇳',ja:'中国 🇨🇳',it:'Cina 🇨🇳',pt:'China 🇨🇳'} as Record<string,string>, accent: 'from-red-500/20 to-red-500/5 border-red-500/20 hover:border-red-400/50', iconColor: 'text-red-400' },
-            { href: '/section/horizon/hackernews', icon: Globe2, label: {en:'Horizon',az:'Horizon',ru:'Horizon',de:'Horizon',tr:'Horizon',fr:'Horizon',es:'Horizon',zh:'Horizon',ar:'Horizon',ja:'Horizon',it:'Horizon',pt:'Horizon'} as Record<string,string>, accent: 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20 hover:border-indigo-400/50', iconColor: 'text-indigo-400' },
+            { href: '/section/horizon/all', icon: Radar, label: {en:'Horizon',az:'Horizon',ru:'Horizon',de:'Horizon',tr:'Horizon',fr:'Horizon',es:'Horizon',zh:'Horizon',ar:'Horizon',ja:'Horizon',it:'Horizon',pt:'Horizon'} as Record<string,string>, accent: 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20 hover:border-indigo-400/50', iconColor: 'text-indigo-400' },
+            { href: '/links', icon: Link2, label: uiAll('home.links'), accent: 'from-blue-500/20 to-blue-500/5 border-blue-500/20 hover:border-blue-400/50', iconColor: 'text-blue-400' },
             { href: '/benefits', icon: Gift, label: {en:'Benefits',az:'Güzəştlər',ru:'Льготы',de:'Vorteile',tr:'Avantajlar',fr:'Avantages',es:'Beneficios',zh:'福利',ar:'مزايا',ja:'特典',it:'Vantaggi',pt:'Benefícios'} as Record<string,string>, accent: 'from-orange-500/20 to-orange-500/5 border-orange-500/20 hover:border-orange-400/50', iconColor: 'text-orange-400' },
             { href: '/facts', icon: Lightbulb, label: {en:'Facts',az:'Faktlar',ru:'Факты',de:'Fakten',tr:'Bilgiler',fr:'Faits',es:'Datos',zh:'趣闻',ar:'حقائق',ja:'豆知識',it:'Fatti',pt:'Fatos'} as Record<string,string>, accent: 'from-lime-500/20 to-lime-500/5 border-lime-500/20 hover:border-lime-400/50', iconColor: 'text-lime-400' },
             { href: '/nearby', icon: MapPin, label: {en:'Nearby',az:'Yaxınlıqda',ru:'Рядом',de:'In der Nähe',tr:'Yakınımda',fr:'À proximité',es:'Cerca',zh:'附近',ar:'بالقرب',ja:'近く',it:'Nelle vicinanze',pt:'Por perto'} as Record<string,string>, accent: 'from-teal-500/20 to-teal-500/5 border-teal-500/20 hover:border-teal-400/50', iconColor: 'text-teal-400' },
@@ -210,50 +212,25 @@ export default function HomePage() {
               className={`group flex flex-col items-center gap-2 py-4 px-2 rounded-2xl border bg-gradient-to-b ${tile.accent} transition-all hover:scale-[1.03] hover:-translate-y-0.5`}
             >
               <tile.icon className={`w-6 h-6 ${tile.iconColor} group-hover:scale-110 transition-transform`} />
-              <span className="text-xs font-semibold text-white/90 text-center leading-tight">{tile.label[lang] || tile.label.en}</span>
+              <span className="text-xs font-semibold text-ink-1/90 text-center leading-tight">{tile.label[lang] || tile.label.en}</span>
             </Link>
           ))}
         </div>
 
+        <QuickLinks />
+
         {/* AI Daily Brief */}
         <DailyBrief />
-
-        {/* Price Charts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <PriceChart coinId="bitcoin" coinName="Bitcoin" />
-          <PriceChart coinId="ethereum" coinName="Ethereum" />
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* News - takes 2 columns */}
           <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Newspaper className="w-4 h-4 text-rose-400" />
-                <h2 className="text-white font-semibold text-sm">{t.breaking}</h2>
-                <span className="live-dot" />
-              </div>
-              <Link href="/section/news/top" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
-                {t.viewAll} <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 overflow-hidden divide-y divide-white/[0.03]">
-              {newsItems.length === 0 && (
-                <div className="p-8 space-y-3">
-                  {[1,2,3].map(i => (
-                    <div key={i} className="flex gap-3 animate-pulse">
-                      <div className="w-14 h-14 bg-white/[0.03] rounded-lg flex-shrink-0" />
-                      <div className="flex-1 space-y-2 py-1">
-                        <div className="h-3 bg-white/[0.03] rounded w-full" />
-                        <div className="h-2 bg-white/[0.03] rounded w-3/4" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {newsItems.map((item, i) => (
-                <NewsCard key={i} item={item} />
-              ))}
+            <HomeNews />
+
+            {/* Price Charts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+              <PriceChart coinId="bitcoin" coinName="Bitcoin" />
+              <PriceChart coinId="ethereum" coinName="Ethereum" />
             </div>
           </div>
 
@@ -267,20 +244,20 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Bitcoin className="w-4 h-4 text-amber-400" />
-                  <h2 className="text-white font-semibold text-sm">{t.topCoins}</h2>
+                  <h2 className="text-ink-1 font-semibold text-sm">{t.topCoins}</h2>
                 </div>
                 <Link href="/section/crypto/top" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
                   {t.viewAll} <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
-              <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 overflow-hidden">
+              <div className="wd-card overflow-hidden">
                 {topCoins.length === 0 && (
                   <div className="p-6 space-y-4">
                     {[1,2,3,4,5].map(i => (
                       <div key={i} className="flex items-center gap-3 animate-pulse">
-                        <div className="w-8 h-8 bg-white/[0.03] rounded-full" />
-                        <div className="flex-1 h-3 bg-white/[0.03] rounded" />
-                        <div className="w-16 h-3 bg-white/[0.03] rounded" />
+                        <div className="w-8 h-8 bg-fg/[0.03] rounded-full" />
+                        <div className="flex-1 h-3 bg-fg/[0.03] rounded" />
+                        <div className="w-16 h-3 bg-fg/[0.03] rounded" />
                       </div>
                     ))}
                   </div>
@@ -288,14 +265,14 @@ export default function HomePage() {
                 {topCoins.map(coin => {
                   const up = coin.price_change_percentage_24h >= 0
                   return (
-                    <Link key={coin.id} href="/section/crypto/top" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition border-b border-white/[0.03] last:border-0">
+                    <Link key={coin.id} href="/section/crypto/top" className="flex items-center gap-3 px-4 py-3 hover:bg-fg/[0.02] transition border-b border-line last:border-0">
                       <img loading="lazy" decoding="async" src={coin.image} alt={coin.name} className="w-7 h-7 rounded-full" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-white text-xs font-medium">{coin.name}</p>
-                        <p className="text-[#7c7c92] text-[10px] uppercase">{coin.symbol}</p>
+                        <p className="text-ink-1 text-xs font-medium">{coin.name}</p>
+                        <p className="text-ink-4 text-[10px] uppercase">{coin.symbol}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-white text-xs font-mono">${coin.current_price.toLocaleString()}</p>
+                        <p className="text-ink-1 text-xs font-mono">${coin.current_price.toLocaleString()}</p>
                         <p className={`text-[10px] font-medium flex items-center justify-end gap-0.5 ${up ? 'text-emerald-400' : 'text-red-400'}`}>
                           {up ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
                           {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
@@ -321,49 +298,49 @@ export default function HomePage() {
           <CalendarWidget />
           <PolymarketWidget />
           <div className="hidden lg:block">
-            <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+            <div className="wd-card p-4">
               <div className="flex items-center gap-2 mb-3">
                 <BarChart2 className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-white font-semibold text-sm">{t.quickStats}</h3>
+                <h3 className="text-ink-1 font-semibold text-sm">{t.quickStats}</h3>
                 <span className="live-dot" />
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">{t.btcDom}</span>
-                  <span className="text-white text-xs font-mono">
+                  <span className="text-ink-3 text-xs">{t.btcDom}</span>
+                  <span className="text-ink-1 text-xs font-mono">
                     {market === undefined ? <StatPulse /> : (market?.btc_dominance ? `${market.btc_dominance.toFixed(1)}%` : '—')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">{t.volume}</span>
-                  <span className="text-white text-xs font-mono">
+                  <span className="text-ink-3 text-xs">{t.volume}</span>
+                  <span className="text-ink-1 text-xs font-mono">
                     {market === undefined ? <StatPulse /> : (market?.total_volume ? formatNum(market.total_volume) : '—')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">{t.activeCoins}</span>
-                  <span className="text-white text-xs font-mono">
+                  <span className="text-ink-3 text-xs">{t.activeCoins}</span>
+                  <span className="text-ink-1 text-xs font-mono">
                     {market === undefined ? <StatPulse /> : (market?.active_coins ? market.active_coins.toLocaleString() : '—')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">S&amp;P 500</span>
+                  <span className="text-ink-3 text-xs">S&amp;P 500</span>
                   {stocks === undefined ? <StatPulse /> : (sp500 ? (
                     <span className={`text-xs font-mono ${sp500.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {sp500.change >= 0 ? '+' : ''}{sp500.changePercent?.toFixed(2) || sp500.change?.toFixed(2)}%
                     </span>
-                  ) : <span className="text-[#7c7c92] text-xs font-mono">—</span>)}
+                  ) : <span className="text-ink-4 text-xs font-mono">—</span>)}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">NASDAQ</span>
+                  <span className="text-ink-3 text-xs">NASDAQ</span>
                   {stocks === undefined ? <StatPulse /> : (nasdaq ? (
                     <span className={`text-xs font-mono ${nasdaq.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {nasdaq.change >= 0 ? '+' : ''}{nasdaq.changePercent?.toFixed(2) || nasdaq.change?.toFixed(2)}%
                     </span>
-                  ) : <span className="text-[#7c7c92] text-xs font-mono">—</span>)}
+                  ) : <span className="text-ink-4 text-xs font-mono">—</span>)}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8b8b9e] text-xs">{t.fearGreed}</span>
+                  <span className="text-ink-3 text-xs">{t.fearGreed}</span>
                   {market === undefined ? <StatPulse /> : (market?.fear_greed ? (
                     <span className={`text-xs font-mono font-bold ${
                       market.fear_greed <= 25 ? 'text-red-400' :
@@ -373,7 +350,7 @@ export default function HomePage() {
                     }`}>
                       {market.fear_greed} · {fearGreedLabel(market.fear_greed_label, lang)}
                     </span>
-                  ) : <span className="text-[#7c7c92] text-xs font-mono">—</span>)}
+                  ) : <span className="text-ink-4 text-xs font-mono">—</span>)}
                 </div>
               </div>
             </div>
@@ -388,8 +365,8 @@ export default function HomePage() {
                 <Sparkles className="w-5 h-5 text-amber-400" />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm group-hover:text-amber-300 transition-colors">{(BENEFITS_BANNER[lang] || BENEFITS_BANNER.en).title}</h3>
-                <p className="text-xs text-[#8b8b9e]">{(BENEFITS_BANNER[lang] || BENEFITS_BANNER.en).desc}</p>
+                <h3 className="text-ink-1 font-semibold text-sm group-hover:text-amber-300 transition-colors">{(BENEFITS_BANNER[lang] || BENEFITS_BANNER.en).title}</h3>
+                <p className="text-xs text-ink-3">{(BENEFITS_BANNER[lang] || BENEFITS_BANNER.en).desc}</p>
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform" />
@@ -399,11 +376,11 @@ export default function HomePage() {
         {/* AI Tools & Software Preview Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
           {/* AI Tools Preview */}
-          <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+          <div className="wd-card p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-purple-400" />
-                <h3 className="text-white font-semibold text-sm">{t.aiTools}</h3>
+                <h3 className="text-ink-1 font-semibold text-sm">{t.aiTools}</h3>
                 <span className="px-1.5 py-0.5 rounded bg-purple-500/15 text-[10px] font-semibold text-purple-300">+100</span>
               </div>
               <Link href="/section/aitools/chatbots" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
@@ -411,9 +388,9 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {[['ChatGPT', '/section/aitools/chatbots'], ['Claude', '/section/aitools/chatbots'], ['Gemini', '/section/aitools/chatbots'], ['Midjourney', '/section/aitools/image']].map(([name, href]) => (
-                <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-purple-500/30 transition">
-                  <p className="text-xs text-white font-medium">{name}</p>
+              {[['ChatGPT', '/section/aitools/chatbots'], ['Claude', '/section/aitools/chatbots'], ['Gemini', '/section/aitools/chatbots'], ['Midjourney', '/section/aitools/image-gen']].map(([name, href]) => (
+                <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-fg/[0.02] border border-line hover:border-purple-500/30 transition">
+                  <p className="text-xs text-ink-1 font-medium">{name}</p>
                   <p className="text-[10px] text-emerald-400">🆓 Free</p>
                 </Link>
               ))}
@@ -421,11 +398,11 @@ export default function HomePage() {
           </div>
 
           {/* Software Preview */}
-          <div className="rounded-xl border border-white/[0.04] bg-[#0a0a10]/80 p-4">
+          <div className="wd-card p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Download className="w-4 h-4 text-cyan-400" />
-                <h3 className="text-white font-semibold text-sm">{t.software}</h3>
+                <h3 className="text-ink-1 font-semibold text-sm">{t.software}</h3>
                 <span className="px-1.5 py-0.5 rounded bg-cyan-500/15 text-[10px] font-semibold text-cyan-300">+70</span>
               </div>
               <Link href="/section/software/android" className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
@@ -434,8 +411,8 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-2 gap-2">
               {[['ReVanced', '/section/software/android'], ['TrollStore', '/section/software/ios'], ['uBlock Origin', '/section/software/browser-ext'], ['MAS', '/section/software/windows']].map(([name, href]) => (
-                <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-cyan-500/30 transition">
-                  <p className="text-xs text-white font-medium">{name}</p>
+                <Link key={name} href={href} className="px-3 py-2 rounded-lg bg-fg/[0.02] border border-line hover:border-cyan-500/30 transition">
+                  <p className="text-xs text-ink-1 font-medium">{name}</p>
                   <p className="text-[10px] text-emerald-400">🆓 Free</p>
                 </Link>
               ))}

@@ -24,7 +24,7 @@ function TopicNewsCard({ item }: { item: ModalItem }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="w-full text-left flex gap-3 px-5 py-3 hover:bg-gray-800/40 transition group"
+        className="w-full text-left flex gap-3 px-5 py-3 hover:bg-surface-2/40 transition group"
       >
         {item.thumbnail && (
           <img
@@ -36,12 +36,12 @@ function TopicNewsCard({ item }: { item: ModalItem }) {
           />
         )}
         <div className="flex-1 min-w-0">
-          <h3 className="text-white text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
-          <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">{item.description}</p>
+          <h3 className="text-ink-1 text-xs font-medium line-clamp-2 group-hover:text-indigo-300 transition">{item.title}</h3>
+          <p className="text-ink-3 text-xs mt-0.5 line-clamp-1">{item.description}</p>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-gray-400 text-xs">{item.source}</span>
-            <span className="text-gray-400 text-xs">·</span>
-            <span className="text-gray-400 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
+            <span className="text-ink-3 text-xs">{item.source}</span>
+            <span className="text-ink-3 text-xs">·</span>
+            <span className="text-ink-3 text-xs">{item.pubDate ? new Date(item.pubDate).toLocaleDateString() : ''}</span>
           </div>
         </div>
       </button>
@@ -84,31 +84,31 @@ export default function TopicNewsWidget({
   const top = items[0]
 
   return (
-    <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+    <div className="bg-surface-1 rounded-2xl border border-line overflow-hidden">
       <div
-        className="px-5 py-3 border-b border-gray-800 cursor-pointer select-none hover:bg-gray-800/20 transition"
+        className="px-5 py-3 border-b border-line cursor-pointer select-none hover:bg-surface-2/20 transition"
         onClick={() => setCollapsed(c => !c)}
       >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span className={accentClass}>{icon}</span>
             <div>
-              <h2 className="text-white font-semibold text-sm">{title}</h2>
-              <p className="text-gray-400 text-xs">{desc}</p>
+              <h2 className="text-ink-1 font-semibold text-sm">{title}</h2>
+              <p className="text-ink-3 text-xs">{desc}</p>
             </div>
           </div>
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             {!collapsed && (
               <>
-                <div className="flex items-center gap-1.5 bg-gray-800 rounded-lg px-2 py-1">
-                  <Search className="w-3 h-3 text-gray-400 flex-shrink-0" aria-hidden="true" />
+                <div className="flex items-center gap-1.5 bg-surface-2 rounded-lg px-2 py-1">
+                  <Search className="w-3 h-3 text-ink-3 flex-shrink-0" aria-hidden="true" />
                   <input
                     type="text"
                     name={`${topic}-search`}
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                     placeholder={tr.search}
-                    className="bg-transparent text-white text-xs outline-none w-20 placeholder-gray-600"
+                    className="bg-transparent text-ink-1 text-xs outline-none w-20 placeholder-ink-4"
                     autoComplete="off"
                   />
                 </div>
@@ -117,7 +117,7 @@ export default function TopicNewsWidget({
                 </button>
               </>
             )}
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} aria-hidden="true" />
+            <ChevronDown className={`w-4 h-4 text-ink-3 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`} aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -126,10 +126,10 @@ export default function TopicNewsWidget({
         <div className="px-5 py-3">
           {isLoading && (
             <div className="flex gap-3 animate-pulse">
-              <div className="w-14 h-14 bg-gray-800 rounded-lg flex-shrink-0" />
+              <div className="w-14 h-14 bg-surface-2 rounded-lg flex-shrink-0" />
               <div className="flex-1 space-y-2 py-1">
-                <div className="h-3 bg-gray-800 rounded w-full" />
-                <div className="h-2 bg-gray-800 rounded w-3/4" />
+                <div className="h-3 bg-surface-2 rounded w-full" />
+                <div className="h-2 bg-surface-2 rounded w-3/4" />
               </div>
             </div>
           )}
@@ -144,13 +144,13 @@ export default function TopicNewsWidget({
                   onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
                 />
               ) : (
-                <div className="w-14 h-14 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">
+                <div className="w-14 h-14 rounded-lg bg-surface-2 flex items-center justify-center flex-shrink-0 text-xl">
                   {icon}
                 </div>
               )}
               <div className="min-w-0">
-                <p className="text-white text-xs font-medium line-clamp-2">{top.title}</p>
-                <p className="text-gray-400 text-xs mt-0.5">{top.source}</p>
+                <p className="text-ink-1 text-xs font-medium line-clamp-2">{top.title}</p>
+                <p className="text-ink-3 text-xs mt-0.5">{top.source}</p>
               </div>
             </div>
           )}
@@ -158,11 +158,11 @@ export default function TopicNewsWidget({
       )}
 
       {!collapsed && (
-        <div className="divide-y divide-gray-800/50">
+        <div className="divide-y divide-line">
           {isLoading && Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="px-5 py-3 animate-pulse">
-              <div className="h-3 bg-gray-800 rounded w-3/4 mb-1.5" />
-              <div className="h-2 bg-gray-800 rounded w-full" />
+              <div className="h-3 bg-surface-2 rounded w-3/4 mb-1.5" />
+              <div className="h-2 bg-surface-2 rounded w-full" />
             </div>
           ))}
           {error && <div className="p-6 text-center text-red-400 text-sm">{tr.error}</div>}
