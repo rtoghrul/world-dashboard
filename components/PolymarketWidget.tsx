@@ -66,10 +66,10 @@ export function MarketList({ markets, tr }: { markets: Market[]; tr: Record<stri
 }
 
 export default function PolymarketWidget() {
-  const { tr } = useLang()
+  const { tr, lang } = useLang()
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState(true)
-  const { data, error, isLoading, mutate } = useSWR<Market[]>('/api/polymarket', fetcher, { refreshInterval: 120000 })
+  const { data, error, isLoading, mutate } = useSWR<Market[]>(`/api/polymarket?lang=${lang}`, fetcher, { refreshInterval: 120000 })
 
   const markets = Array.isArray(data)
     ? data.filter(m => m.question && (!query || m.question.toLowerCase().includes(query.toLowerCase())))

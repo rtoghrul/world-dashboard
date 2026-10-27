@@ -23,14 +23,14 @@ export default function TrendingWidget() {
   const fetchTrends = async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/trending')
+      const res = await fetch(`/api/trending?lang=${lang}`)
       const data = await res.json()
       if (Array.isArray(data)) setTrends(data)
     } catch {}
     setLoading(false)
   }
 
-  useEffect(() => { fetchTrends() }, [])
+  useEffect(() => { fetchTrends() }, [lang])
 
   const sourceColors = {
     google: 'text-blue-400 bg-blue-400/10',

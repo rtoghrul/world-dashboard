@@ -17,7 +17,7 @@ const fetcher = async (url: string) => {
 /** Home-page teaser: the five strongest stories on the Horizon radar. */
 export default function HorizonWidget() {
   const { lang } = useLang()
-  const { data, error, isLoading } = useSWR('/api/horizon', fetcher, { refreshInterval: 900000, revalidateOnFocus: false, dedupingInterval: 60000 })
+  const { data, error, isLoading } = useSWR(`/api/horizon?lang=${lang}`, fetcher, { refreshInterval: 900000, revalidateOnFocus: false, dedupingInterval: 60000 })
   const items = data?.items.slice(0, 5) || []
 
   return (

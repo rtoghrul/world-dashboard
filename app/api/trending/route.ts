@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { fetchWithTimeout } from '@/lib/http'
+import { translateTexts } from '@/lib/translate'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 300
@@ -43,15 +44,24 @@ async function getRedditTrending() {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const lang = (new URL(req.url).searchParams.get('lang') || 'en').slice(0, 5)
   const [google, reddit] = await Promise.all([
     getGoogleTrends(),
     getRedditTrending(),
   ])
 
-  const combined = [...google, ...reddit]
+  let combined = [...google, ...reddit]
     .sort(() => Math.random() - 0.5)
     .slice(0, 10)
 
-  return NextResponse.json(combined)
+  // Trending queries are English by source; translate them for non-English readers.
+  if (lang !== 'en' && combined.length > 0) {
+    const titles = await translateTexts(combined.map(item => item.title), lang)
+    combined = combined.map((item, i) => ({ ...item, title: titles[i] || item.title }))
+  }
+
+  return NextResponse.json(combined, {
+    headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=900' },
+  })
 }

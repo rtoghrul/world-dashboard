@@ -30,7 +30,8 @@ type View = 'top' | 'latest' | 'saved'
 export default function HorizonBoard({ initialSource = 'all' }: { initialSource?: string }) {
   const { lang } = useLang()
   const [edition, setEdition] = useState<'daily' | 'live'>('daily')
-  const { data, error, isLoading, isValidating, mutate } = useSWR(edition === 'live' ? '/api/horizon?live=1' : '/api/horizon', fetcher, { revalidateOnFocus: false, refreshInterval: edition === 'live' ? 600000 : 1800000, keepPreviousData: true })
+  const apiUrl = edition === 'live' ? `/api/horizon?live=1&lang=${lang}` : `/api/horizon?lang=${lang}`
+  const { data, error, isLoading, isValidating, mutate } = useSWR(apiUrl, fetcher, { revalidateOnFocus: false, refreshInterval: edition === 'live' ? 600000 : 1800000, keepPreviousData: true })
   const [view, setView] = useState<View>('top')
   const [topic, setTopic] = useState<HorizonTopic | 'all'>('all')
   const [source, setSource] = useState(initialSource)

@@ -84,10 +84,10 @@ export default function DailyBrief() {
       setLoading(true)
       const [cryptoData, newsData, wData, tData, hData] = await Promise.all([
         getJSON<any[]>('/api/crypto?per_page=5'),
-        getJSON<any>('/api/news?category=top'),
+        getJSON<any>(`/api/news?category=top&lang=${lang}`),
         getJSON<any>('https://api.open-meteo.com/v1/forecast?latitude=40.41&longitude=49.87&current=temperature_2m,weather_code&timezone=auto'),
-        getJSON<any[]>('/api/trending'),
-        getJSON<any>('/api/horizon'),
+        getJSON<any[]>(`/api/trending?lang=${lang}`),
+        getJSON<any>(`/api/horizon?lang=${lang}`),
       ])
 
       const movers = Array.isArray(cryptoData) && cryptoData.length > 0
@@ -129,7 +129,7 @@ export default function DailyBrief() {
     }
     fetchBrief()
     return () => { cancelled = true }
-  }, [attempt])
+  }, [attempt, lang])
 
   const c = (key: string) => COPY[key]?.[lang] || EXTRA[key]?.[lang] || COPY[key]?.en || EXTRA[key]?.en || key
 
